@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Custom Code</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+
+    <ion-text color="danger">
+      <p>Please contact support team after updating this, it will not work in real time</p>
+    </ion-text>
+    <br />
+
+    <div style="display: flex;">
+      <p>Custom Meta Tags</p>&nbsp;&nbsp;
+      <ion-text color="danger">
+        <p>( add any custom meta tags for your website )</p>
+      </ion-text>
+    </div>
+    <textarea type="text" [(ngModel)]='settings.meta'></textarea>
+    <br><br>
+
+    <div style="display: flex;">
+      <p>Custom Scripts</p>&nbsp;&nbsp;
+      <ion-text color="danger">
+        <p>( add any custom scripts like google analytics, google tag manager, facebook pixel etc )</p>
+      </ion-text>
+    </div>
+    <textarea type="text" [(ngModel)]='settings.scripts'></textarea>
+    <br><br>
+
+    <div style="display: flex;">
+      <p>Custom Css</p>&nbsp;&nbsp;
+      <ion-text color="danger">
+        <p>( use it for minor designing changes )</p>
+      </ion-text>
+    </div>
+    <textarea type="text" [(ngModel)]='settings.css'></textarea>
+    <br><br>
+
+    <div style="display: flex;">
+      <p>Custom Head Tags</p>&nbsp;&nbsp;
+    </div>
+    <textarea type="text" [(ngModel)]='settings.head'></textarea>
+    <br><br>
+
+    <div style="display: flex;">
+      <p>Custom Body Tags</p>&nbsp;&nbsp;
+      <!-- <ion-text color="danger">
+        <p>( use it for minor designing changes )</p>
+      </ion-text> -->
+    </div>
+    <textarea type="text" [(ngModel)]='settings.body'></textarea>
+    <br><br>
+
+    <ion-button size="large" (click)='saveSettings()'><i class="flaticon-null-20"></i>&nbsp;Save</ion-button>
+
+  </div>
+</ion-content>

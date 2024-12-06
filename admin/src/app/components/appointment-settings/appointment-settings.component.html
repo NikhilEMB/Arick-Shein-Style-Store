@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Schedules Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <h3>Make Default Schedules</h3>
+    <br>
+    <div class="flex">
+      <p>Max number of days for booking:</p>&nbsp;&nbsp;
+      <input placeholder="Enter days" type="number" [(ngModel)]='maxDays'>
+    </div>
+    <br>
+    <ng-container *ngIf="scheduleData">
+      <div class="schedulesBox" *ngFor="let item of scheduleData; index as i">
+        <div class="firstHalf">
+          <div class="flex">
+            <input type='checkbox' (click)="changeSchedule(i)" [checked]='item.active' />&nbsp;&nbsp;
+            <p><strong>{{item.day | uppercase}}</strong></p>
+          </div>
+          <ng-container *ngIf="item.schedule && item.schedule.length > 0">
+            <div class="slotWrapper">
+              <div class="scheduleList" *ngFor="let time of item.schedule; index as j">
+                <div class="inputWrapper">
+                  <input class="slotInput" type="time" [(ngModel)]='time.start'>
+                  <span>-</span>
+                  <input class="slotInput" type="time" [(ngModel)]='time.end'>
+                  <input class="slotInput" type="number" [(ngModel)]='time.slotLimit' placeholder="Slot Limit">
+                </div>
+                <ion-button class="slotBtn" (click)="removeSlot(i,j)" fill="clear">
+                  <i class="flaticon-null-21"></i>
+                </ion-button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="secondHalf">
+          <ion-button class="slotBtn" (click)="addSlot(i)" fill="clear">
+            <i class="flaticon-null-28"></i>
+          </ion-button>
+
+          <ion-item>
+            <ion-label>copy</ion-label>
+            <ion-select class="copyList" [interfaceOptions]="customActionSheetOptions"
+              (ionChange)="getSelectOption(i,$event.target.value)" multiple="true" mode="ios" okText="Apply"
+              cancelText="Dismiss">
+              <ion-select-option *ngFor="let data of scheduleData, index as k;" [value]="k"
+                [disabled]="item.day == data.day">
+                {{data.day}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveSchedule()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save Schedules
+    </ion-button>
+  </div>
+</ion-footer>

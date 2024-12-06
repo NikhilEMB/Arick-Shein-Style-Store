@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>multi Countries</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <div style="margin-bottom: 2rem;">
+      <h2>Auto Convert</h2>
+
+      <div style="display: flex;">
+        <div class="toggle-btn">
+          <label class="switch">
+            <input type="checkbox" (click)="activeAutoExchange()" [checked]="countryData.settings.autoExchange">
+            <span class="slider round"></span>
+          </label>
+        </div>&nbsp;&nbsp;
+        <div>Auto convert prices based on current exchange rates.</div>
+      </div>
+    </div>
+
+    <div class="flex-label">
+      <span class="">
+        <ion-select class="form-input" [value]="countryData.settings.defaultCountry?.countryCode"
+          placeholder="Select Default Country" (ionChange)="onChangeDefaultCountry($event)">
+          <ng-container *ngFor="let country of countryData.countries">
+            <ion-select-option [value]="country.countryCode" *ngIf="country.active">
+              {{country.countryName}}
+            </ion-select-option>
+          </ng-container>
+        </ion-select>
+      </span>&nbsp;&nbsp;
+      <span class="heading">Default Country</span>
+    </div>
+
+    <div class="">
+      <h2>Select Countries</h2>
+      <!-- List of Countries -->
+      <ion-list>
+        <ion-item *ngFor="let item of countryData?.countries,index as i">
+          <div class="toggle">
+            <div class="toggle-btn">
+              <label class="switch">
+                <input type="checkbox" (click)="activeCountry(i)" [checked]="item.active">
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <p>{{item.countryName | uppercase}}</p>
+          </div>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <div style="text-align: center;">
+    <ion-button (click)="saveMultiCountry()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

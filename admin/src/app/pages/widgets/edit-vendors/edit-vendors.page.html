@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button" defaultHref="homepage-setting"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Edit Vendors</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+
+    <ion-col size="12">
+      <div class="input-wrap">
+        <ion-label>Section Name</ion-label>
+        <ion-input class="form-input" [(ngModel)]="sectionName"></ion-input>
+      </div>
+    </ion-col>
+
+    <div *ngIf="isLoading; else dataLoaded;" class="spinner">
+      <ion-spinner name="dots"></ion-spinner>
+    </div>
+  
+    <ng-template #dataLoaded>
+      <div *ngIf="!dataList.length">
+        <p class="no-data-txt">No data</p>
+      </div>
+  
+      <div *ngIf="dataList.length > 0">
+        <ion-list class="s-c-list" *ngFor="let data of dataList; let i=index">
+          <ion-item lines="none" (click)="selectParent(i)">
+            <ion-label>{{data.name}}</ion-label>
+            <ion-checkbox slot="end" [checked]="data.active"></ion-checkbox>
+          </ion-item>
+          <hr class="line">
+        </ion-list>
+      </div>
+      <br>
+      <ion-button (click)="onClickSave()">
+        Save
+      </ion-button>
+    </ng-template>
+  </div>
+</ion-content>

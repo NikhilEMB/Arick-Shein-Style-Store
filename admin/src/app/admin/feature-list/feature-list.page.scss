@@ -1,0 +1,50 @@
+.usage-item-wrapper {
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.usage-item {
+    text-align: center;
+    width: 60vw;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    padding: 14px;
+    box-shadow: 1px 2px 2px #ccc;
+    &-name {
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+}
+
+.listItems{
+    display: flex; 
+    justify-content: space-between;
+    padding: 10px
+}
+
+.statusTextEnabled{
+    color: white;
+    padding: 5px;
+    margin-top: -5px;
+    font-weight: bold;
+    background: green;
+    width: 80px
+}
+
+.statusTextDisabled{
+    color: white;
+    padding: 5px;
+    margin-top: -5px;
+    font-weight: bold;
+    background: red;
+    width: 80px
+}
+
+p{
+    font-size: 15px;
+    padding: 15px;
+    border: none;
+    background: #f1f1f1;
+}

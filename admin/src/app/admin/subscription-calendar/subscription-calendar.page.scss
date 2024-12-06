@@ -1,0 +1,118 @@
+ion-content {
+}
+
+.calenderDiv{
+  [_nghost-hro-c7] .title[_ngcontent-hro-c7] {
+    padding: 0 60px 0 60px;
+    overflow: hidden;
+}
+    background: #ffffff;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 12px;
+    // overflow: hidden;
+    position: relative;
+    height: 100%;
+    .flaticon-back{
+      position: absolute;
+      top: 40px;
+      left: 55px;
+    }
+    .flaticon-back::before{
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .flaticon-next {
+        top: 40px;
+        right: 55px;
+        position: absolute;
+    }
+    .flaticon-next::before{
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+	.date-specifiers {
+		padding: 5px;
+		margin-left: 20px;
+		background: #ffffff;
+
+		.specifiers {
+			margin-bottom: 7px;
+			display: flex;
+    		align-items: center;
+		}
+
+		.specifier-date {
+			font-weight: 700;
+			padding: 6px;
+			width: 33px;
+			height: 33px;
+			border-radius: 50%;
+			color: rgb(100, 100, 100);
+			display: inline-block;
+
+			.specifier-date-text {
+				// position: relative;
+				// top: -2px;
+				// left: 1.5px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		}
+		#delivery-date {
+			border: 2px solid #d8f3e7 !important;
+			color: #a9afb3;
+			font-weight: 400;
+			box-shadow: 0px 1px 5px 2px #d9d9d9;
+		}
+		.delivery-txt{
+			color: #a9afb3;
+      		font-weight: 400;
+		}
+
+		#leave-date {
+			// border: 3px solid rgb(160, 60, 60);
+			border: 1px solid #f4b6b6;
+			color: #fe2568;
+			box-shadow: 0px 0px 4px 2px #f0f0f0;
+			font-weight: 500;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.leave-txt{
+			color: #fe2568;
+		}
+
+		#not-delivered-date {
+			// border: 3px solid red;
+			background-color: #f3d8d8;
+      		color: #fe2568;
+			font-weight: 500;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.not-delivered-txt{
+			color: #fe2568;
+		}
+
+		#delivered-date {
+			// border: 3px solid rgb(70, 227, 70);
+			background-color: #d8f3e7;
+			color: #00c289;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.delivered-txt{
+			color: #00c289;
+		}
+	}
+}
+.flaticon-letter-x{
+  cursor: pointer;
+  color: white;
+}

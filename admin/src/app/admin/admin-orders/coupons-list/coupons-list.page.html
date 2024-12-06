@@ -1,0 +1,76 @@
+<ion-content class="coup-list-content">
+
+  <div class="coup-list-header">
+    <p>{{'apply coupon'}}</p>
+    <ion-icon name="close" (click)="closeModal()"></ion-icon>
+  </div>
+
+  <div class="enter-code">
+    <ion-item lines="none">
+      <ion-input type="text" placeholder="enter coupon code" [(ngModel)]="couponName"
+        (ngModelChange)="couponName = $event.toLocaleUpperCase()"></ion-input>
+      <ion-button (click)="applyCoupon()" fill="clear" slot="end" [disabled]="!couponName">
+        {{'apply'}}
+      </ion-button>
+    </ion-item>
+  </div>
+
+  <ng-container *ngIf="isLoading; else couponsLoaded;">
+    <div class="spinner">
+      <ion-spinner name="dots"></ion-spinner>
+    </div>
+  </ng-container>
+
+  <ng-template #couponsLoaded>
+    <ng-container *ngIf="!coupons.length; else couponsAvailable;">
+      <p class="no-data-txt">{{'no coupons available'}}</p>
+    </ng-container>
+
+    <ng-template #couponsAvailable>
+      <div class="coupons-wrapper">
+        <div class="coupon" *ngFor="let coupon of coupons; let i=index;">
+          <div class="coupon-main">
+            <div class="coupon-name">
+              {{coupon.name}}
+            </div>
+            <ion-button (click)="applyCoupon(coupon.name)" fill="clear" slot="end">
+              {{'apply'}}
+            </ion-button>
+          </div>
+  
+          <div class="coupon-info">
+            <h6 class="coupon-info-main" *ngIf="coupon.type === 'flat'">
+              Coupon Type: {{coupon.type}}
+            </h6>
+            <h6 class="coupon-info-main" *ngIf="coupon.type === 'percentage'">
+              Coupon Type: {{coupon.type}}
+            </h6>
+            
+            <div class="coupon-info-tnc">
+              <h6>{{'terms and conditions'}}</h6>
+              <ul>
+                <li>Min order amount should be {{coupon.minOrderAmount| currency: currencyCode:true}} to avail this offer.</li>
+                <li *ngIf="coupon.maxDiscount">Max Discount: {{coupon.maxDiscount| currency: currencyCode:true}}</li>
+                <li>You can apply this coupon only {{coupon.perUser}} times.</li>
+                <li>Offer valid till {{coupon.validUpto | date:'dd MMMM yyyy'}}</li>
+                <li *ngIf="!coupon.codAvailable">{{'COD payment mode is unavailable for this coupon.' }}</li>
+                <li *ngIf="coupon.specificUsers.isAllowed">{{'tnc_coupon_valid_for_specific_users' }}</li>
+              </ul>
+            </div>
+
+            <div class="coupon-info-desc" *ngIf="coupon.description">
+              <h6>{{'Description'}}</h6>
+              <p>
+                {{coupon.description}}
+              </p>
+            </div>
+          </div>
+
+          <hr class="line" *ngIf="i !== (coupons.length - 1)">
+        </div>
+      </div>
+    </ng-template>
+
+  </ng-template>
+
+</ion-content>

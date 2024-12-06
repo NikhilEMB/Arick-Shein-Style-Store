@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="admin-orders" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Products to Deliver</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="exportProducts()">
+      Export Products to Deliver
+    </ion-button>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <div *ngIf="showProductsNeedToDeliverLoader" class="spinner">
+      <ion-spinner color="primary"></ion-spinner>
+    </div>
+    <div class="no-data"
+      *ngIf="noProductsNeedToDeliver && !showProductsNeedToDeliverLoader && !uniqueProductsQtyPerOrder.length; else showProductsNeedToDeliver"
+      text-center>
+      <img src="assets/img/no-product.png" alt="">
+      <h6>No products need to deliver</h6>
+    </div>
+
+
+    <ng-template #showProductsNeedToDeliver>
+
+      <div class="ion-padding ion-text-center border-bottom">
+        List of products you need to deliver
+      </div>
+
+      <div *ngIf="uniqueProductsQtyPerOrder.length > 0">
+
+
+        <ng-container *ngFor="let productObj of uniqueProductsQtyPerOrder; let i=index">
+
+          <ion-row *ngFor="let item of productObj | keyvalue" class="border-bottom">
+            <ion-col size="1">
+              <div
+                [ngStyle]="{'background': 'url(' + item.value.img.mob + ') no-repeat center', 'background-size': 'contain'}"
+                class="ao-product-image"></div>
+            </ion-col>
+            <ion-col size="5" class="product-name-col">
+              <p class="name ion-text-wrap">{{item.value.name}}</p>
+              <p class="total-qty ion-text-wrap" *ngIf="!showVariantsQty(item.value.quantityPerOrder); else showVariants;">Total Qty:
+                {{calcTotalQtyPerOrder(item.value.quantityPerOrder)}}</p>
+
+                <ng-template #showVariants>
+                  <ul>
+                    <li class="ion-text-wrap" *ngFor="let variant of getVariantsQty(item.value.quantityPerOrder)">
+                      Total {{variant.weight}} Qty: {{variant.qty}}
+                    </li>
+                  </ul>
+                </ng-template>
+              
+            </ion-col>
+            <ion-col size="6">
+              <ng-container *ngFor="let qty of item.value.quantityPerOrder; let q = index">
+                <ion-chip (click)="onClickViewDetails(qty.orderId)">
+                  <ion-label>ORD{{qty.orderId}} - <strong>{{qty.quantity}}</strong></ion-label>
+                  &nbsp;
+                  <ion-label *ngIf="qty.weight">({{qty.weight}})</ion-label>
+                </ion-chip>
+                <span *ngIf="q !== item.value.quantityPerOrder.length - 1" class="qtys-plus">+</span>
+              </ng-container>
+
+
+            </ion-col>
+
+          </ion-row>
+
+        </ng-container>
+
+      </div>
+    </ng-template>
+
+  </div>
+</ion-content>

@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="order-summary" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center>Select Address</ion-title>
+  </ion-toolbar>
+  <div class="add-address-toolbar" (click)="goToPage('new-address')" *ngIf="showAddAddressBtn">
+    <p>
+      + Add a new address
+    </p>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="spinner" *ngIf="showLoader">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <ion-list lines="none" *ngIf="!showLoader && addressesData">
+    <ion-radio-group [value]="addressesData[0]" (ionChange)="radioSelect($event)">
+      <div class="selectable-address-item" *ngFor="let address of addressesData; let i=index">
+        <ion-item>
+          <ion-label>
+            <p class="s-user-name ion-text-wrap">{{address.name}}</p>
+            <p class="s-address ion-text-wrap">{{address.address}}</p>
+            <p class="s-phone-no">{{address.phoneNo}}</p>
+          </ion-label>
+          <ion-radio slot="start" color="primary" mode="ios" [value]="addressesData[i]"></ion-radio>
+        </ion-item>
+        <div style="text-align: end;margin: -10px;">
+          <ion-button (click)="editAddress(address)" fill="clear">
+            edit
+          </ion-button>
+        </div>
+      </div>
+    </ion-radio-group>
+  </ion-list>
+</ion-content>
+<ion-footer (click)="onClickDeliverHere()">
+  <ion-grid>
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <div class="app-footer-text">
+        Deliver Here<span><i class="flaticon-null-20 app-footer-icon"></i></span>
+    </div>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

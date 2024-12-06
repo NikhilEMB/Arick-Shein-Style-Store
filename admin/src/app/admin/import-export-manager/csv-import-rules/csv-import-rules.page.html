@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>CSV Import Rules</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <ol style="margin-top: 10px;">
+      <li style="font-weight: bold">Before Importing</li>
+      <ol>
+        <li>Format of CSV will be exactly similar to sample CSV which you can download
+        by clicking on Download CSV FORMAT Button.</li>
+        <li>SKU is mandatory. Rest all fields you can leave empty. Don't delete or
+        change order of any column. If you don't want to add data, just leave those
+        fields empty.
+        Example: - if you want to update just price and discount price, just fill data
+        in those 2 columns. </li>
+        <li>First row will be same header row present in sample and from 2nd row, your
+        data will be entered. No other information.</li>
+        <li>Max 5000 products can be added or updated in a single process. </li>
+        <li>SKU should be unique and you need to maintain that in your csv. It would be
+        easier for you to create different csv for different groups. </li>
+      </ol>
+      <li style="font-weight: bold">CSV Formatting</li>
+      <ol>
+        <li>SKU : Mandatory
+          Unique Id like 1,2,3 or alphanumeric like PRD001, PRD 002 or VEG1,VEG2…FRUITS1,FRUITS2…. Or you can use unique product ids if you have.
+          Please keep these ids as safe because next time time when you update the product you will use only these ids to update. Make it according to your convenience. Keep short CSV for upto 500 products separated by categories or brands. It will be easy for you to manage.
+          Make sure these values are different for all csvs like for pulses csv, you can start with PUL1, PUL2…</li>
+        <li>NAME: Name of the product</li>
+        <li>BARCODE: Barcode no. of the product</li>
+        <li>ACTIVE: YES or NO. If YES, product will show to customer, if NO, product will not show to customer. You can change this anytime from admin panel</li>
+        <li>IS VARIANT: YES or NO. 
+          No - for single price product
+          Yes - for variants
+          This option is to create multiple variants of the product like multiple weights, sizes, pieces, packs  or any other variants you like to create</li>
+        <li>VARIANT TYPE : YES or NO. Empty if variants is NO. If Variants is yes, choose weight, size, pieces, other.</li>
+        <li>VARIANT NAME : Empty if variants is NO. Variants separated by comma.
+          Weight example :                    1 Kg, 2 Kg, 3 Kg, 5 kg, 10 Kg
+          Size example : XXS, XS, S, M, L, XL, XXL, XXXL
+          Pieces example: 100, 200, 500, 1000.  For pieces, just specify numbers and in case of variant as pieces, price will be per piece price.
+          Other example: pack of 2, pack of 3, pack of 10</li>
+        <li>PRICE : Numeric (Incl GST), If variants is YES, all prices by comma separated like 100,200,300,400,500 where price is for respective variant</li>
+        <li>VENDOR PHONE NO: Phone no. of the vendor for the specific product (vendor should already be registered)</li>
+        <li>DISCOUNTED PRICE :  Numeric (Incl GST)
+          Discount % will be calculated automatically based on this price
+          If variants is yes, all discounted prices by comma separated like 80,180,280,380,480</li>
+        <li>PURCHASE PRICE : Numeric. Optional
+          Will be used for displaying profit reports in coming release. </li>
+        <li>SHIPPING WEIGHT : (in Grams)
+          If variants is yes, all shipping weights by comma separated like 50,100,150, 200, 250</li>
+        <li>QUANTITY :For inventory management
+          If variants is yes, all quantities by comma separated like 10,5,20,15,30,40</li>
+        <li>MIN QUANTITY : In number should be greater than 0. A customer has to order at least this number to buy this product.
+          If variants is yes, it will be same for all variants</li>
+        <li>MAX QUANTITY :In number should be greater than 0 and minimum quantity. A Customer can't buy more than this number for this product.
+          If variants is yes, it will be same for all variants</li>
+        <li>DESCRIPTION : Text / HTML, Please note just basic HTML, no video or external scripts.</li>
+        <li>HSN CODE : FOR TAX Return Management</li>
+        <li>GST: In Number , example:  5. Don't add % to this number.</li>
+        <li>COLOR: Name, hex code
+          Example :Red, #FF0000</li>
+        <li>KEYWORDS: All Keywords Separated by comma
+          Example: Aata, Flour, పిండి….. You can use any language. Add ing names in native language will help users to search with those names</li>
+        <li>OUT OF STOCK : YES /  No, if this is yes, system will show out of stock when quantity is 0. Please note, this will not work if there is no value in quantity.
+          Default value is NO</li>
+        <li>CATEGORIES - SUBCATEGORIES : All categories and subcategories semi colon separated. While writing subcategories add "category-" to subcategories.
+          Category Name 1; Category Name 1-Subcategory 1;  Category Name 1-Subcategory 2;  Category Name 2; Category Name 2-Subcategory 1;  Category Name 2-Subcategory 2;...
+          Please use exact names of categories and subcategories which you have created in admin panel. Make sure you don't have multiple categories with same name.</li>
+        <li>BRANDS: Name of brands semi colon separated
+          brand1;brand2;brand3
+          Please use exact names of brands which you have created in admin panel.</li>
+      </ol>
+    </ol>
+  </div>
+</ion-content>

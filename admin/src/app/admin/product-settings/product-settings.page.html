@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Product Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+          <div class="dFlex">
+            <ion-label>Show price slab to users</ion-label>
+            <div class="toggle-btn">
+              <label class="switch">
+                <input type="checkbox" (click)="toggleCheckbox()" [checked]="showPriceSlab">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="sub-heading">
+            <h3>Product Subheading</h3>
+            <div class="setting">
+              
+              <div class="setting-text dFlex">
+                <p>Text</p>&nbsp;&nbsp;
+                <ion-input type="text" placeholder="please enter your sub-heading" class="form-input" [(ngModel)]="subheading.text"></ion-input>
+              </div>
+              <div class="setting-img dFlex">
+                <p>Img</p>
+                <div class="upload-btn-wrapper">
+                  <button class="upload-btn btn-1 i-start"> <i class="flaticon-null-16"></i>Upload SubHeading Image</button>
+                  <input type="file" name="myfile" (change)="uploadLogo($event.target.files)" />
+                </div>
+              </div>
+              <div *ngIf="subheading.img">
+                <div class="dFlex">
+                  <p>Image Preview</p>
+                  <ion-button shape="round" size="small" color="danger" (click)="deleteWidgetBgImage()">
+                    <i class="flaticon-null-21"></i>&nbsp;
+                    Delete image
+                  </ion-button>
+                </div>
+                <br>
+                <img id='widgetImage' class="widgetImage" [src]='subheading.img'>
+              </div>
+  
+  
+  
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveSettings()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save Settings
+    </ion-button>
+  </div>
+</ion-footer>

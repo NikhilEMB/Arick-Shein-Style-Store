@@ -1,0 +1,214 @@
+{
+  "project_info": {
+    "project_number": "256665431161",
+    "project_id": "bwi-organic-d579d",
+    "storage_bucket": "bwi-organic-d579d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:256665431161:android:0fe8c3a8184dd9d2d578a8",
+        "android_client_info": {
+          "package_name": "com.app.shein"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "256665431161-2hcslvopt1f83n99567pf07r91mq9j1u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.shein",
+            "certificate_hash": "bcd085f8a13a854cccf6d559c934c37bceed29e3"
+          }
+        },
+        {
+          "client_id": "256665431161-7s30mc4gp5re46ro9jn4cao5m5uu8kk5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.shein",
+            "certificate_hash": "3ce2bd4d14ffa11e0030a7cc24972de9baafd5d8"
+          }
+        },
+        {
+          "client_id": "256665431161-ipsivvomldcoubtb663i67uogf83qg85.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.shein",
+            "certificate_hash": "cf74f6aa7a64513a08ea974df14407dae20f3ebb"
+          }
+        },
+        {
+          "client_id": "256665431161-nebml7us664fe0rch1leg3c4g2ttbfkc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.shein",
+            "certificate_hash": "6fb70193f36d8df5cf3784e55cdbdc9322ec3a58"
+          }
+        },
+        {
+          "client_id": "256665431161-oknuue5j82nc8p4lldbi2jgf2ib4rp0g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.shein",
+            "certificate_hash": "80ae6f1d1f125430a1a98bae0dbde2ba55f92236"
+          }
+        },
+        {
+          "client_id": "256665431161-rfa71gbl4tmuvgjueeplgc6jre3rqleb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEcATmYCn1YpcbSs-fVC2irZz_g0mm2UE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "256665431161-rfa71gbl4tmuvgjueeplgc6jre3rqleb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "256665431161-f7e7j5kqrk2ucbonq9uf73qq8ftub4v6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.Crystalicious"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:256665431161:android:aa45f94179637ff7d578a8",
+        "android_client_info": {
+          "package_name": "com.app.crystalicious_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "256665431161-ajria251nh8a4v7fh60oas4agv3g7o0r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.crystalicious_admin",
+            "certificate_hash": "80ae6f1d1f125430a1a98bae0dbde2ba55f92236"
+          }
+        },
+        {
+          "client_id": "256665431161-rtc5406ihlail33b57ruot0jdeqol13k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.crystalicious_admin",
+            "certificate_hash": "3ce2bd4d14ffa11e0030a7cc24972de9baafd5d8"
+          }
+        },
+        {
+          "client_id": "256665431161-ua7pgitscfg9b79rj0h9uckaaltsq5b9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.crystalicious_admin",
+            "certificate_hash": "bcd085f8a13a854cccf6d559c934c37bceed29e3"
+          }
+        },
+        {
+          "client_id": "256665431161-rfa71gbl4tmuvgjueeplgc6jre3rqleb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEcATmYCn1YpcbSs-fVC2irZz_g0mm2UE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "256665431161-rfa71gbl4tmuvgjueeplgc6jre3rqleb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "256665431161-f7e7j5kqrk2ucbonq9uf73qq8ftub4v6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.Crystalicious"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:256665431161:android:05fcb1eaf6a1bbe6d578a8",
+        "android_client_info": {
+          "package_name": "com.app.crystalicious_vendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "256665431161-k237maj0q7ill5ooncqseaimlsj0fi74.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.crystalicious_vendor",
+            "certificate_hash": "3ce2bd4d14ffa11e0030a7cc24972de9baafd5d8"
+          }
+        },
+        {
+          "client_id": "256665431161-pd06ieq6k947iglgae9vajcbd9a3tlhm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.crystalicious_vendor",
+            "certificate_hash": "80ae6f1d1f125430a1a98bae0dbde2ba55f92236"
+          }
+        },
+        {
+          "client_id": "256665431161-t4qkueb7pj1oapemb536vaiiavae3v05.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.crystalicious_vendor",
+            "certificate_hash": "b0b87b97f9865c70c6f91dff7e5c98783801c96e"
+          }
+        },
+        {
+          "client_id": "256665431161-v7vt6u2l8u9k0bj85hprktlosit234ne.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.crystalicious_vendor",
+            "certificate_hash": "bcd085f8a13a854cccf6d559c934c37bceed29e3"
+          }
+        },
+        {
+          "client_id": "256665431161-rfa71gbl4tmuvgjueeplgc6jre3rqleb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEcATmYCn1YpcbSs-fVC2irZz_g0mm2UE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "256665431161-rfa71gbl4tmuvgjueeplgc6jre3rqleb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "256665431161-f7e7j5kqrk2ucbonq9uf73qq8ftub4v6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.Crystalicious"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

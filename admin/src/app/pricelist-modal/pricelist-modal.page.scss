@@ -1,0 +1,77 @@
+.modal-header{
+    display: flex; 
+    justify-content: space-between;
+    margin: 12px;
+    text-transform: capitalize;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+}
+.flaticon-null-19 {
+    font-size: 18px;
+    opacity: .6;
+}
+.line{
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: rgb(238, 238, 238);
+    height: 1px;
+}
+
+ion-header{
+    border-bottom: 1px solid rgb(238, 238, 238);
+}
+
+.pricelist-element{
+    display: flex; 
+    justify-content: space-between;
+    border-bottom: 1px solid rgb(238, 238, 238);
+}
+
+.price{
+    font-size: 13px;
+    color: var(--ion-color-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cart-counter-value{
+    font-size: 15px;
+    margin: 0px 25px 0px 25px;
+}
+.cart-counter{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.cart-counter-minus{
+    background: var(--ion-color-primary);
+    color: white;
+    padding: 5px 5px 0px 5px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+.cart-counter-plus{
+    background: var(--ion-color-primary);
+    color: white;
+    padding: 5px 5px 0px 5px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+ion-footer{
+    box-shadow: none;
+    background-color: transparent;
+    text-align: center;
+}
+ion-footer::before {
+    background-image: none;
+}
+
+.del-price {
+    opacity: .6;
+    margin-left: 3%;
+    font-size: smaller;
+    color: black;
+}

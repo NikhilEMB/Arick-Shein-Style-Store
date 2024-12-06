@@ -1,0 +1,1461 @@
+{
+    "SHOP_CATEGORIES": {
+        "best_sellers": "Best Sellers",
+        "shop_by_categories": "Shop By Categories",
+        "services": "Services",
+        "shop_by_brands": "Shop By Brands",
+        "search_for_products": "Search for products",
+        "my_cart": "My Cart",
+        "off": "off",
+        "out_of_stock": "out of stock",
+        "add_to_cart": "Add to Cart",
+        "request_prices": "Request Prices",
+        "exit_app_msg": "Press back again to exit App.",
+        "login_again": "Login Again",
+        "app_update_alert_header": "Update App",
+        "app_update_alert_msg": "This app needs to be updated to access all the latest features. You need to close and reopen the app again after successful update.",
+        "app_update_alert_btn_text": "Update",
+        "sending_price_request": "Sending Price Request..."
+    },
+
+    "SHOP_SUB_CATEGORIES": {
+        "no_subcategories": "No subcategories"
+    },
+
+    "SHOP": {
+        "sort": "Sort",
+        "filter": "Filter",
+        "no_products": "No products",
+        "loading_more_products": "Loading more products...",
+        "cart_amount": "Cart Amount",
+        "add_more_to_place_order": "Add {{amount}} more to place order",
+        "go_to_cart": "go to cart",
+        "sort_modal_header": "Sort By",
+        "popularity": "Popularity",
+        "price_high_to_low": "Price - High to Low",
+        "price_low_to_high": "Price - Low to High",
+        "discount_high_to_low": "Discount - High to Low",
+        "name_a_to_z": "Name - A to Z",
+        "change_view": "Change View"
+    },
+
+    "SHOP_FILTERS": {
+        "header_text": "Filters",
+        "clear_all": "clear all",
+        "brands": "Brands",
+        "categories": "Categories",
+        "price_range": "Price Range",
+        "close": "close",
+        "apply": "apply"
+    },
+
+    "SIDEMENU": {
+        "login_signup": "login / signup",
+        "welcome": "welcome",
+        "delivery_agent": "Delivery Agent",
+        "admin": "admin",
+        "home": "Home",
+        "chat": "Chat",
+        "categories": "Categories",
+        "brands": "Brands",
+        "offers": "Offers",
+        "services": "Services",
+        "my_orders": "My Orders",
+        "my_cart": "My Cart",
+        "my_wishlist": "My Wishlist",
+        "my_wallet": "My Wallet",
+        "my_addresses": "My Addresses",
+        "profile": "Profile",
+        "language_settings": "Language Settings",
+        "call": "Call",
+        "share": "Share",
+        "feedback": "Feedback",
+        "terms_and_privacy": "Terms & Privacy",
+        "messages": "Messages",
+        "orders": "Orders",
+        "dashboard": "Dashboard",
+        "service_requests": "Service Requests",
+        "payment": "Payment",
+        "delivery": "Delivery",
+        "shop": "Shop",
+        "products": "Products",
+        "users": "Users",
+        "banners": "Banners",
+        "best_sellers": "Best Sellers",
+        "coupon_codes": "Coupon Codes",
+        "wallet": "Wallet",
+        "settings": "Settings",
+        "price_requests": "Price Requests",
+        "help": "Help",
+        "app_usage": "App Usage",
+        "logout": "Logout",
+        "app_version": "App Version",
+        "share_app_problem_msg": "There is some problem in sharing of app.",
+        "languages": "Languages",
+        "subscriptions": "Subscriptions"
+    },
+
+    "STATES_MODAL": {
+        "header_text": "States",
+        "search_any_state": "Search any state"
+    },
+
+    "TERMS_CONDITIONS": {
+        "header_text": "terms & conditions",
+        "i_accept": "I Accept"
+    },
+
+    "TERMS_PRIVACY": {
+        "header_text": "terms & privacy",
+        "terms": "Terms",
+        "privacy": "Privacy"
+    },
+
+    "USER_ADDRESSES": {
+        "header_text": "my addresses",
+        "add_a_new_address": "Add a new address",
+        "no_saved_addresses": "No saved addresses",
+        "saved_address": "saved address",
+        "saved_addresses": "saved addresses",
+        "edit": "edit",
+        "delete": "delete",
+        "address_deleted_msg": "Address deleted successfully",
+        "address_delete_sure_alert_msg": "Are you sure you want to delete this address?"
+    },
+
+    "USER_CART": {
+        "header_text": "My Cart",
+        "no_product_in_cart": "No product in cart",
+        "start_shopping": "Start Shopping",
+        "out_of_stock": "Out of stock",
+        "min_quantity_required": "Minimum quantity required is",
+        "checkout": "Checkout",
+        "total_amount": "Total Amount",
+        "min_amount_for_order_place_msg": "Minimum amount for placing order is",
+        "max_amount_for_order_place_msg": "Maximum amount for placing order is",
+        "min_qty_required_for_products_msg": "Minimum quantity is required for certain products.",
+        "delete_product_sure_alert_msg": "Are you sure you want to delete this product from cart?"
+    },
+
+    "USER_FEEDBACK": {
+        "header_text": "Feedback",
+        "share_feedback_text": "Please share your feedback regarding our products, services or app",
+        "add_images": "Add Images",
+        "save": "save",
+        "enter_feedback_placeholder_text": "Enter your feedback here...",
+        "feedback_submitted_msg": "Feedback has been submitted successfully.",
+        "max_images_upload_msg": "Maximum 5 images can be uploaded.",
+        "select_max_image_msg": "Please select maximum <strong>5</strong> images from gallery",
+        "enter_feedback_content_msg": "Please enter some feedback content.",
+        "saving_feedback": "Saving Feedback..."
+    },
+
+    "USER_ORDER_DETAILS": {
+        "header_text": "Order",
+        "do_payment": "do payment",
+        "payment_failed_retry_msg": "Payment has failed for this order. Please retry payment or contact the admin",
+        "retry_payment": "retry payment",
+        "delivery_address": "Delivery Address",
+        "delivery_schedule": "Delivery Schedule",
+        "not_set_by_you": "Not set by you",
+        "at_any_time": "at any time",
+        "at": "at",
+        "store_pickup_address": "Store Pickup Address",
+        "payment_info": "Payment Info",
+        "payment_is_successful": "Payment is successful",
+        "track_order": "Track order",
+        "delivery_not_started": "Delivery Not Started.",
+        "pay_to_delivery_agent": "Pay {{amount}} to delivery agent.",
+        "invoice": "Invoice",
+        "download_invoice": "Download Invoice",
+        "generating": "Generating...",
+        "dispatched_message": "Dispatched Message",
+        "products": "Products",
+        "qty": "QTY",
+        "your_message": "Your Message",
+        "price_details": "Price Details",
+        "total_mrp": "Total M.R.P.",
+        "offer_discount": "Offer Discount",
+        "coupon_discount": "Coupon Discount",
+        "store_pickup_charges": "Store Pickup Charges",
+        "delivery": "Delivery",
+        "free": "Free",
+        "total_amount": "Total amount",
+        "wallet_amount": "Wallet amount",
+        "amount_payable": "Amount Payable",
+        "amount_paid": "Amount Paid",
+        "cancel_order": "Cancel Order",
+        "order_cancelled_msg": "Order has been cancelled successfully",
+        "cancelling_the_order": "Cancelling the order...",
+        "cancel_sure_alert_msg": "Are you sure you want to cancel this order?",
+        "yes": "Yes"
+    },
+
+    "USER_ORDER_HISTORY": {
+        "header_text": "My Orders",
+        "no_orders": "No orders",
+        "order_id": "Order Id",
+        "placed_on": "Placed On",
+        "more": "more",
+        "view_order": "View Order",
+        "track_order": "Track Order"
+    },
+
+    "USER_WALLET": {
+        "header_text": "My wallet",
+        "my_balance": "My Balance",
+        "view_all_transactions": "view all transactions",
+        "add_money_to_your_wallet": "Add money to your wallet",
+        "enter_amount": "Enter Amount",
+        "enter_valid_amount": "Please enter a valid amount.",
+        "max_limit_for_adding_money_in_wallet": "Maximum limit for adding money in the wallet is"
+    },
+
+    "REQUEST_DETAILS": {
+        "header_text": "Details"
+    },
+
+    "SERVICE_RESPONSE": {
+        "description": "Description",
+        "upload_images": "Upload Images",
+        "submit": "Submit",
+        "write_details_here": "Write details here...",
+        "service_request_submitted_msg": "Service request submitted successfully. Any images submitted will be uploaded after some time.",
+        "service_request_submit_error_msg": "There is some problem in submitting service request. Please try again later.",
+        "max_image_upload_msg": "Maximum 10 images can be uploaded.",
+        "select_max_image_msg": "Please select maximum <strong>10</strong> images from gallery",
+        "provide_details_msg": "Please provide some details.",
+        "upload_images_msg": "Please upload some images.",
+        "submitting_response": "Submitting response..."
+    },
+
+    "USER_SERVICES": {
+        "header_text": "Services & Requests",
+        "services": "Services",
+        "requests": "Requests",
+        "no_services": "No services",
+        "no_requests": "No requests",
+        "call": "Call",
+        "view_details": "View Details"
+    },
+
+    "USER_WISHLIST": {
+        "header_text": "My Wishlist",
+        "no_products": "No products",
+        "cart_amount": "Cart Amount",
+        "add_more_to_place_order": "Add {{amount}} more to place order",
+        "go_to_cart": "go to cart"
+    },
+    "WALLET_TRANSACTIONS_MODAL": {
+        "header_text": "All transactions",
+        "no_transactions": "No transactions",
+        "my_balance": "My Balance",
+        "loading_more_transactions": "Loading more transactions..."
+    },
+
+    "SELECT_ADDRESS": {
+        "header_text": "Select Address",
+        "add_new_address": "Add a new address",
+        "edit": "edit",
+        "deliver_here": "Deliver Here",
+        "use_as_billing_address": "Use as Billing Address"
+    },
+
+    "SEARCH_ITEMS": {
+        "input_placeholder": "Search for products",
+        "no_products": "No products",
+        "loading_more_products": "Loading more products..."
+    },
+
+    "PROFILE": {
+        "header_text": "Profile",
+        "phone_number": "Phone Number",
+        "name": "Name",
+        "email_id": "Email Id",
+        "update": "Update",
+        "name_placeholder": "Enter your name",
+        "email_placeholder": "Enter your email id",
+        "image_uploaded_msg": "Image uploaded successfully",
+        "image_updated_msg": "Profile details updated successfully",
+        "enter_valid_email": "Please enter valid email id"
+    },
+
+    "PRODUCT_DETAILS": {
+        "header_text": "product details",
+        "out_of_stock": "Out of Stock",
+        "pc": "Pc",
+        "available_options": "Available Options",
+        "add_to_cart": "add to cart",
+        "go_to_cart": "go to cart",
+        "buy_now": "buy now",
+        "select": "select",
+        "off": "off",
+        "item_added_to_cart": "Item Added To Cart",
+        "must_be_user_to_use_wishlisht_msg": "You must logged in as user to use wishlist.",
+        "product_sharing_error": "There is some problem in sharing this product. Please try again later",
+        "check_out_this_product": "Check out this product",
+        "check_this_out": "Check this out on",
+        "on": "on",
+        "min_qty_required": "Minimmum quantity required to order this product is",
+        "continue_alert_btn": "Continue",
+        "go_to_cart_alert_btn": "Go To Cart"
+    },
+
+    "PRICELIST_MODAL": {
+        "out_of_stock": "out of stock",
+        "add_item": "Add Item",
+        "go_to_cart": "Go to Cart"
+    },
+
+    "ORDER_SUMMARY": {
+        "header_text": "Order Summary",
+        "shipping_address": "Shipping Address",
+        "billing_address": "Billing Address",
+        "change_or_add_address": "Change Or Add Address",
+        "same_as_shipping_address": "Same as shipping address",
+        "free_delivery_above_amount": "FREE Delivery above amount",
+        "coupon_discount": "Coupon discount",
+        "delivery_schedule": "Delivery Schedule",
+        "store_pickup": "Store Pickup",
+        "delivery_on": "Delivery on",
+        "time": "Time",
+        "store_address": "Store Address",
+        "charges": "Charges",
+        "apply": "Apply",
+        "remove": "Remove",
+        "coupon_applied": "Coupon Applied!",
+        "personal": "Personal",
+        "business": "Business",
+        "price_details": "Price Details",
+        "getting_price_details": "Getting price details...",
+        "item": "item",
+        "items": "items",
+        "view_price_details": "View Price Details",
+        "place_order": "Place Order",
+        "total_mrp": "Total M.R.P.",
+        "offer_discount": "Offer Discount",
+        "store_pickup_charges": "Store Pickup Charges",
+        "delivery": "Delivery",
+        "free": "Free",
+        "total_amount": "Total amount",
+        "delivery_charges": "Delivery Charges",
+        "save_msg": "You will save {{amount}} on this order",
+        "qty": "QTY",
+        "enter": "Enter",
+        "number": "Number",
+        "coupon_not_applicable": "Coupon is not applicable on this cart products.",
+        "order_not_deliverable": "Order is not deliverable at your address.",
+        "min_amount_for_placing_order": "Minimum amount for placing order is",
+        "max_amount_for_placing_order": "Maximum amount for placing order is",
+        "select_delivery_date_time": "Please select delivery Date and Time.",
+        "min_amount_for_placing_order_on_pincode": "Minimum amount for placing order on this Pincode is",
+        "max_amount_for_placing_order_on_pincode": "Maximum amount for placing order on this Pincode is",
+        "verifying_coupon_code": "Verifying coupon code...",
+        "order_placed_alert_header": "Your order has been placed",
+        "order_placed_alert_message": "We are reviewing your order. We will send you payment link once your order is confirmed.",
+        "removing_coupon_code": "Removing coupon code..."
+    },
+
+    "ORDER_PAYMENT": {
+        "order": "Order",
+        "price_details": "Price Details",
+        "total_mrp": "Total M.R.P.",
+        "offer_discount": "Offer Discount",
+        "coupon_discount": "Coupon Discount",
+        "store_pickup_charges": "Store Pickup Charges",
+        "delivery": "Delivery",
+        "free": "Free",
+        "total_amount": "Total amount",
+        "use_wallet_balance": "Use Wallet Balance",
+        "current_balance": "Current balance",
+        "min_amount_to_use_wallet_msg": "*Order amount must be greater than {{amount}} to use wallet.",
+        "you_pay": "You Pay",
+        "wallet_covers_payment": "Wallet balance covers the whole payment",
+        "complete_payment": "Complete Payment",
+        "payment_mode_set_msg": "Payment Mode has been set successfully",
+        "payment_mode_to_cash_msg": "Payment Mode has been set to cash successfully",
+        "payment_is_successful": "Payment is successful!",
+        "min_order_amount_to_use_wallet": "Minimum order amount required to use wallet is",
+        "try_again": "Try Again"
+    },
+
+    "NEW_ADDRESS": {
+        "new_address": "new address",
+        "edit_address": "edit address",
+        "use_current_location": "Use Current Location",
+        "name": "Name",
+        "complete_address": "Complete Address",
+        "city": "City",
+        "state": "State",
+        "select_state": "Select State",
+        "pincode": "Pincode",
+        "phone_no": "Phone No",
+        "make_as_default_address": "make as default address",
+        "save": "Save",
+        "edit": "Edit",
+        "deliver_here": "Deliver Here",
+        "use_as_billing_address": "Use as Billing Address",
+        "address_saved_successfully": "Address saved successfully",
+        "address_edited_successfully": "Address edited successfully",
+        "error_in_getting_address": "Error in getting address!",
+        "error_getting_location": "Error getting location",
+        "please_enter_name": "Please enter name",
+        "please_enter_address": "Please enter address",
+        "please_enter_city": "Please enter city",
+        "please_enter_state": "Please enter state",
+        "please_enter_pincode": "Please enter pincode",
+        "please_enter_phoneno": "Please enter phoneNo"
+    },
+
+    "LOCATION_MAP": {
+        "header_text": "Track Order",
+        "invalid_address_msg": "Invalid address, please check address. We could not find location for this address.",
+        "initializing_map": "Initializing Map..."
+    },
+
+    "HOME": {
+        "where_do_you_want_the_delivery": "where do you want the delivery?",
+        "please_enter_pincode": "Please Enter Pincode",
+        "delivery_not_available": "*Delivery is not available at this location",
+        "skip": "skip",
+        "phone_number": "phone number",
+        "sign_in_with": "sign in with",
+        "sign_in_with_otp": "Sign In With OTP",
+        "too_many_otp_attempts": "*Too Many OTP Attempts! Please try again later",
+        "please_enter_otp_sent_to": "please enter OTP sent to",
+        "resend_otp": "Resend OTP",
+        "personal_details": "personal details",
+        "full_name": "full name",
+        "email_address": "email address (optional)",
+        "submit": "Submit",
+        "save": "Save",
+        "sending_otp": "Sending OTP...",
+        "signing_in": "Signing In...",
+        "checking": "Checking...",
+        "verifying": "Verifying...",
+        "please_enter_email_address": "Please enter valid email address",
+        "saving": "Saving..."
+    },
+
+    "ALL_OFFERS": {
+        "header_text": "Offers",
+        "no_offers": "No offers"
+    },
+
+    "DELIVERY_NAVIGATION": {
+        "header_text": "Navigation",
+        "open_in_google_maps": "Open in Google Maps",
+        "finish_navigation": "Finish Navigation",
+        "initializing_map": "Initializing Map...",
+        "order_updated_as_delivered": "Order updated as delivered successfully!",
+        "error_getting_location": "Error in getting your location",
+        "invalid_address": "Invalid address, please check address. We could not find location for this address.",
+        "unable_to_open_google_maps": "Unable to open google maps.",
+        "sure_finish_naviagtion_alert_msg": "Are you sure you want to finish the navigation?",
+        "finish": "Finish"
+    },
+
+    "DELIVERY_ORDER_DETAILS": {
+        "order": "Order",
+        "delivery_address": "Delivery Address",
+        "open_in_google_maps": "open in google maps",
+        "delivery_schedule": "Delivery Schedule",
+        "not_set_by": "Not set by",
+        "at_any_time": "at any time",
+        "at": "at",
+        "payment_info": "Payment info",
+        "paid": "paid",
+        "using": "using",
+        "will_pay_using": "will pay using",
+        "update_status_if_paid": "Update status if paid",
+        "update": "Update",
+        "products": "Products",
+        "not_started": "Not Started",
+        "delivery_in_progress": "Delivery In Progress",
+        "delivered": "Delivered",
+        "qty": "QTY",
+        "start_navigation": "Start Navigation",
+        "continue_navigation": "Continue Navigation",
+        "payment_status_changed_successfully": "Payment status changed successfully",
+        "cancelling_the_order": "Cancelling the order..."
+    },
+
+    "DELIVERY_ORDERS": {
+        "header_text": "orders",
+        "pending": "Pending",
+        "delivered": "Delivered",
+        "no_orders": "No orders",
+        "no_pending_orders": "No pending orders",
+        "order_id": "Order Id",
+        "placed_on": "Placed On",
+        "more": "more",
+        "status": "Status",
+        "status_not_started": "Status: Not Started",
+        "status_delivery_in_progress": "Status: Delivery In Progress",
+        "status_delivered": "Status: Delivered",
+        "view_order": "View Order",
+        "start_delivery": "Start Delivery",
+        "continue_delivery": "Continue Delivery",
+        "no_delivery_orders": "No delivery orders"
+    },
+
+
+    "CO_CATEGORY_GRID": {
+        "must_be_user_to_access_services_msg": "You must logged in as user to access Services"
+    },
+
+    "CO_PRODUCT_GRID": {
+        "out_of_stock": "Out of stock",
+        "colors": "Colors",
+        "off": "off",
+        "add_item": "Add Item",
+        "select": "Select"
+    },
+
+    "CO_PRODUCT_LIST": {
+        "out_of_stock": "Out of stock",
+        "colors": "Colors",
+        "off": "off",
+        "add_item": "Add Item",
+        "select": "Select"
+    },
+
+    "CO_SERVICE_DETAILS": {
+        "details": "Details",
+        "attachments": "Attachments",
+        "complete": "Complete",
+        "request_has_been_completed_successfully": "Request has been completed successfully.",
+        "completing_request": "Completing Request..."
+    },
+
+    "AUTO_CONFIRM_PAYMENT": {
+        "header_text": "Order Payment",
+        "price_details": "Price Details",
+        "total_mrp": "Total M.R.P.",
+        "offer_discount": "Offer Discount",
+        "coupon_discount": "Coupon Discount",
+        "store_pickup_charges": "Store Pickup Charges",
+        "delivery": "Delivery",
+        "free": "Free",
+        "total_amount": "Total amount",
+        "use_wallet_balance": "Use Wallet Balance",
+        "current_balance": "Current balance",
+        "min_amount_to_use_wallet_msg": "*Order amount must be greater than {{amount}} to use wallet.",
+        "you_pay": "You Pay",
+        "wallet_covers_payment": "Wallet balance covers the whole payment",
+        "place_order": "Place Order",
+        "payment_mode_set_msg": "Payment Mode has been set successfully",
+        "order_placed_successfully": "Order has been placed successfully!",
+        "payment_mode_to_cash_msg": "Payment Mode has been set to cash successfully",
+        "payment_is_successful": "Payment is successful!",
+        "min_order_amount_to_use_wallet": "Minimum order amount required to use wallet is"
+    },
+
+    "BUYNOW_PRICELIST_MODAL": {
+        "out_of_stock": "out of stock",
+        "buy_now": "Buy Now",
+        "min_qty_required": "Minimmum quantity required to order this product is"
+    },
+
+    "CHAT_BOT": {
+        "header_text": "chat",
+        "search_any_message": "Search any message",
+        "no_more_messages": "No More Messages",
+        "your_order_is_rejected": "Your order is rejected",
+        "order_id": "Order Id",
+        "view_order": "View Order",
+        "your_order_is_confirmed_please_do_the_payment": "Your order is confirmed. Please do the payment",
+        "do_payment": "do Payment",
+        "please_do_the_payment_of_your_order": "Please do the payment of your order",
+        "your_order_is_cancelled": "Your order is cancelled",
+        "your_order_is_dispatched": "Your order is dispatched",
+        "your_order_is_delivered": "Your order is delivered",
+        "your_order_is_returned": "Your order is returned",
+        "delivery_has_started_for_this_order": "Delivery has started for this order",
+        "track_order": "Track Order",
+        "new_order_placed": "New Order Placed",
+        "order_is_cancelled": "Order is Cancelled",
+        "payment_is_successful": "Payment is successful",
+        "type_a_message": "Type a message..."
+    },
+
+
+    "ADD_COUPON_CODES": {
+        "new_coupon_code": "new coupon code",
+        "edit_coupon_code": "edit coupon code",
+        "details": "Details",
+        "products": "Products",
+        "code_name": "code name",
+        "qty": "qty",
+        "usage_per_user": "usage / user",
+        "applicable_above_order_amount": "Applicable above order amount",
+        "discount_type": "discount type",
+        "flat": "FLAT",
+        "amount": "Amount",
+        "max_discount": "Max Discount",
+        "valid_upto": "valid upto",
+        "this_can_be_access_when_coupon_code_is_saved": "This can be access when coupon code is saved",
+        "products_on_which_coupon_will_not_be_applied": "Products on which coupon will not be applied",
+        "no_products": "No Products",
+        "image": "image",
+        "name": "name",
+        "select_date": "Select Date",
+        "new_coupon_code_generated_successfully": "New Coupon Code generated successfully!",
+        "coupon_code_edited_successfully": "Coupon Code edited successfully!",
+        "coupon_code_deleted_successfully": "Coupon Code deleted successfully!",
+        "product_removed_successfully": "Product removed successfully!",
+        "already_exists": "already exists!",
+        "please_remove_space_from_the_code_name": "Please remove space from the code name",
+        "please_fill_all_the_details": "Please fill all the details!"
+    },
+
+    "ADD_SUBCATEGORIES": {
+        "new_subcategory": "new subcategory",
+        "edit_subcategory": "edit subcategory",
+        "show": "Show",
+        "subcategory_name": "Subcategory Name",
+        "subcategory_image": "Subcategory Image",
+        "add_image": "add image",
+        "no_attached_image": "No attached image",
+        "subcategory_banner": "Subcategory Banner",
+        "upload_banner": "upload banner",
+        "no_attached_banner": "No attached banner",
+        "information": "information",
+        "products": "products",
+        "no_products": "No products",
+        "image": "image",
+        "product": "product",
+        "reorder": "reorder",
+        "search_product": "Search product",
+        "subcatgeory_added_successfully": "Subcatgeory Added Successfully",
+        "subcategory_deleted_successfully": "Subcategory deleted successfully!",
+        "subcategory_edited_successfully": "Subcategory edited successfully!",
+        "please_enter_category_name": "Please enter category name",
+        "delete_subcategory_sure_alert_msg": "Are you sure you want to delete this category?"
+    },
+
+    "ADMIN_ALLUSERS": {
+        "header_text": "Users",
+        "users": "Users",
+        "search_user": "Search user",
+        "delivery": "delivery",
+        "admins": "Admins",
+        "no_users": "No users",
+        "total_users": "Total Users",
+        "profile": "profile",
+        "name": "name",
+        "phone": "phone",
+        "active": "active",
+        "make": "make",
+        "admin": "admin",
+        "user": "user",
+        "agent": "agent",
+        "message": "message",
+        "block": "Block",
+        "unblock": "Unblock",
+        "loading_more_users": "Loading more users...",
+        "sucessfully_made_as": "Sucessfully made as",
+        "sucessfully_blocked_the_user": "Sucessfully blocked the user",
+        "sucessfully_unblocked_the_user": "Sucessfully unblocked the user",
+        "sucessfully_blocked_and_deleted_the_user": "Sucessfully blocked and deleted the user",
+        "block_user_sure_alert_msg": "Are you sure you want to block this user or block and delete data of this user?",
+        "block_and_delete_data": "Block and Delete Data",
+        "unblock_user_sure_alert_msg": "Are you sure you want to unblock this user",
+        "are_you_sure_you_want_to_make": "Are you sure you want to make",
+        "as": "as"
+    },
+
+    "ADMIN_ALLUSERS_DETAILS": {
+        "orders": "Orders",
+        "addresses": "Addresses",
+        "wallet": "Wallet",
+        "no_orders": "No orders",
+        "order_id": "Order Id",
+        "placed_on": "Placed On",
+        "by": "by",
+        "more": "more",
+        "delivery_agent_has_started_delivery": "Delivery agent has started delivery",
+        "view_order": "View Order",
+        "track_order": "Track Order",
+        "no_saved_addresses": "No saved addresses",
+        "no_wallet_transactions": "No wallet transactions",
+        "wallet_balance": "Wallet Balance",
+        "charge_user": "Charge User",
+        "add_money": "Add money",
+        "loading_more_transactions": "Loading more transactions...",
+        "enter_amount": "Enter amount",
+        "enter_message": "Enter message",
+        "add": "Add",
+        "charge": "Charge",
+        "please_enter_valid_amount": "Please enter valid amount",
+        "adding_money": "Adding money...",
+        "please_enter_message": "Please enter message",
+        "charging_user": "Charging user..."
+    },
+
+    "ADMIN_BANNERS": {
+        "header_text": "banners",
+        "show_banners": "Show Banners",
+        "banner": "Banner",
+        "upload": "Upload",
+        "remove": "Remove",
+        "update": "Update",
+        "banner_uploaded_successfuly": "Banner uploaded successfuly",
+        "banners_status_changed_successfully": "Banners status changed successfully",
+        "banner_removed_successfully": "Banner removed successfully",
+        "banner_remove_alert_msg": "Are you sure you want to remove this banner?"
+    },
+
+    "ADMIN_BEST_SELLERS": {
+        "header_text": "best sellers",
+        "no_products": "No Products",
+        "show_best_sellers": "Show Best Sellers",
+        "image": "image",
+        "name": "name",
+        "reorder": "reorder",
+        "status_changed_successfully": "Status changed successfully",
+        "product_deleted_from_best_seller_successfully": "Product deleted from best seller successfully",
+        "delete_best_seller_alert_msg": "Are you sure you want to delete this best seller product?"
+    },
+
+
+    "ADD_BRAND": {
+        "edit_brand": "Edit Brand",
+        "new_brand": "New Brand",
+        "show": "Show",
+        "brand_name": "Brand Name",
+        "upload_image": "upload image",
+        "banner_image": "Banner image",
+        "brand_banner": "Brand Banner",
+        "upload_banner": "upload banner",
+        "brand_saved_successfully": "Brand Saved Successfully",
+        "brand_deleted_successfully": "Brand deleted successfully",
+        "please_enter_brand_name": "Please enter brand name",
+        "saving_brand_details": "Saving brand details...",
+        "are_you_sure_you_want_to_delete_this_brand": "Are you sure you want to delete this brand?",
+        "deleting_brand": "Deleting brand..."
+    },
+
+    "ALL_BRANDS": {
+        "header_text": "Brands",
+        "no_brands": "No brands",
+        "image": "image",
+        "name": "name",
+        "reorder": "reorder",
+        "brand_deleted_successfully": "Brand deleted successfully",
+        "delete_brand_alert_msg": "Are you sure you want to delete this brand?",
+        "deleting_brand": "Deleting brand..."
+    },
+
+    "ADMIN_CATEGORIES": {
+        "header_text": "Categories",
+        "search_category": "Search category",
+        "no_categories": "No categories",
+        "image": "image",
+        "name": "name",
+        "reorder": "reorder",
+        "category_deleted_successfully": "Category deleted successfully",
+        "category_not_deleted_successfully": "Category not deleted successfully",
+        "delete_category_alert_msg": "Are you sure you want to delete this category?"
+    },
+
+    "ADMIN_CHAT": {
+        "last_seen": "Last seen",
+        "search_any_message": "Search any message",
+        "no_more_messages": "No More Messages",
+        "your_order_is_rejected": "Your order is rejected",
+        "order_id": "Order Id",
+        "view_order": "View Order",
+        "your_order_is_confirmed_please_do_the_payment": "Your order is confirmed. Please do the payment",
+        "do_payment": "do Payment",
+        "please_do_the_payment_of_your_order": "Please do the payment of your order",
+        "your_order_is_cancelled": "Your order is cancelled",
+        "your_order_is_dispatched": "Your order is dispatched",
+        "your_order_is_delivered": "Your order is delivered",
+        "your_order_is_returned": "Your order is returned",
+        "delivery_has_started_for_this_order": "Delivery has started for this order",
+        "track_order": "Track Order",
+        "new_order_placed": "New Order Placed",
+        "order_is_cancelled": "Order is Cancelled",
+        "payment_is_successful": "Payment is successful",
+        "type_a_message": "Type a message..."
+    },
+
+    "BROADCAST_MSG": {
+        "header_text": "broadcast message",
+        "add_images": "add images",
+        "type_a_message": "Type a message",
+        "no_attached_images": "no attached images",
+        "send": "Send",
+        "message_send": "Message successfully broadcasted to all the active users.",
+        "message_send_problem": "There is some problem in sending message.",
+        "please_enter_message": "Please enter a message"
+    },
+
+
+    "ADMIN_HOME": {
+        "header_text": "Messages",
+        "loading_more_messages": "Loading more messages...",
+        "broadcast_message": "Broadcast Message"
+    },
+
+
+    "ADMIN_ORDERS": {
+        "header_text": "Orders",
+        "search_order": "Search order",
+        "pending": "Pending",
+        "completed": "Completed",
+        "products": "Products",
+        "no_pending_orders": "No pending orders",
+        "order_id": "Order Id",
+        "placed_on": "Placed On",
+        "by": "by",
+        "more": "more",
+        "delivery_agent_has_started_delivery": "Delivery agent has started delivery",
+        "view_order": "View Order",
+        "track_order": "Track Order",
+        "loading_more_pending_orders": "Loading more pending orders...",
+        "no_completed_orders": "No completed orders",
+        "loading_more_completed_orders": "Loading more completed orders...",
+        "no_products_need_to_deliver": "No products need to deliver",
+        "list_of_products_you_need_to_deliver": "List of products you need to deliver",
+        "total_qty": "Total Qty",
+        "loading_more_products_need_to_deliver": "Loading more products need to deliver..."
+    },
+
+    "ADMIN_PAYMENT_SETTINGS": {
+        "auto_confirm_order": "auto confirm order",
+        "applicable": "Applicable",
+        "no": "No.",
+        "pan_no": "PAN No.",
+        "minimum_order_amount": "Minimum order amount",
+        "maximum_order_amount": "Maximum order amount",
+        "cash_on_delivery": "Cash On Delivery",
+        "razorpay": "RazorPay",
+        "key_id": "Key Id",
+        "key_secret": "Key Secret",
+        "data_saved_successfully": "Data Saved Successfully"
+    },
+
+
+    "ADMIN_PRODUCTS": {
+        "header_text": "Products",
+        "search_product": "Search product",
+        "no_products": "No products",
+        "total_products": "Total Products",
+        "image": "image",
+        "product": "product",
+        "options": "Options",
+        "add_options": "Add Options",
+        "out_of_stock": "Out of stock",
+        "view": "View",
+        "next": "Next",
+        "previous": "Previous",
+        "loading_more_products": "Loading more products...",
+        "options_added_msg": "Options of the product has been added successfully.",
+        "options_adding_error_msg": "There is some problem in adding options of the product.",
+        "delete_product_alert_msg": "Are you sure you want to delete this product?",
+        "add_options_text_msg": "Use this to add different colors or patterns of this product.",
+        "enter_options_count": "Enter options count (max 10)",
+        "add": "Add",
+        "max_copies_allowed_msg": "Maximum 10 copies are allowed",
+        "enter_valid_number": "Please enter a valid number.",
+        "success": "Success",
+        "failure": "Failure"
+    },
+
+    "ADMIN_PRODUCT_OPTIONS": {
+        "header_text": "Options",
+        "no_options": "No options",
+        "image": "image",
+        "product": "product",
+        "out_of_stock": "Out of stock",
+        "options_usage_text": "Options can be used to add different colours and variants of a product. These would be displayed as alternate options in that product"
+    },
+
+    "ALL_SERVICES": {
+        "header_text": "Services",
+        "active": "Active",
+        "banner": "banner",
+        "name": "name",
+        "created_on": "Created On",
+        "no_services": "No Services",
+        "create_new_service": "Create New Service",
+        "services_active_status_changed_successfully": "Services active status changed successfully",
+        "service_has_been_deleted_successfully": "Service has been deleted successfully",
+        "changing_status": "Changing Status...",
+        "are_you_sure_you_want_to_delete_this_service": "Are you sure you want to delete this service?",
+        "deleting_service": "Deleting Service..."
+    },
+
+    "CREATE_SERVICE": {
+        "new_service": "New Service",
+        "edit_service": "Edit Service",
+        "name": "Name",
+        "banner": "Banner",
+        "upload_banner": "upload banner",
+        "description": "Description",
+        "image_mandatory_in_response": "Image Mandatory In Response",
+        "service_saved_successfully": "Service Saved Successfully",
+        "service_deleted_successfully": "Service deleted successfully",
+        "please_enter_all_service_details": "Please enter all service details",
+        "saving_service_details": "Saving service details...",
+        "are_you_sure_you_want_to_delete_this_service": "Are you sure you want to delete this service?",
+        "deleting_service": "Deleting service..."
+    },
+
+    "REQUEST_COMPLETE": {
+        "header_text": "Details"
+    },
+
+    "SERVICE_REQUESTS": {
+        "header_text": "Service Requests",
+        "pending": "Pending",
+        "completed": "Completed",
+        "no_requests": "No requests",
+        "no_pending_requests": "No pending requests",
+        "call": "Call",
+        "view_details": "View Details",
+        "no_completed_requests": "No completed requests"
+    },
+
+    "ADMIN_SETTINGS": {
+        "header_text": "settings",
+        "store_name": "store name",
+        "phone_number": "phone number",
+        "store_address": "store address",
+        "city": "City",
+        "state": "state",
+        "select_state": "Select State",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "welcome_message": "welcome message",
+        "allow_comment_with_order": "allow comment with order",
+        "message_for_comment": "message for comment",
+        "store_logo_for_invoice": "Store Logo (for invoice)",
+        "upload": "Upload",
+        "remove": "Remove",
+        "authorized_signatory": "authorized signatory",
+        "store_information": "Store Information",
+        "app_links": "App Links",
+        "play_store": "Play Store",
+        "app_store": "App Store",
+        "social_platforms_links": "Social Platforms Links",
+        "facebook": "Facebook",
+        "twitter": "Twitter",
+        "instagram": "Instagram",
+        "youtube": "Youtube",
+        "shop_status": "Shop Status",
+        "shop_inactive": "Shop Inactive",
+        "shop_inactive_message": "Shop Inactive Message",
+        "offers_message": "Offers Message (This will be displayed while placing order)",
+        "data_saved_successfully": "Data saved successfully",
+        "please_fill_all_the_details": "Please fill all the details"
+    },
+
+    "ORDER_DETAILS": {
+        "header_text": "Order",
+        "send_payment_request": "send payment request",
+        "delivery_address": "Delivery Address",
+        "name": "Name",
+        "address": "Address",
+        "contact_no": "Contact No",
+        "placed_on": "Placed On",
+        "open_in_google_maps": "open in google maps",
+        "delivery_schedule": "Delivery Schedule",
+        "not_set_by": "Not set by",
+        "at_any_time": "at any time",
+        "at": "at",
+        "store_pickup_address": "Store Pickup Address",
+        "payment_info": "Payment Info",
+        "paid_using": "paid using",
+        "will_pay_using": "will pay using",
+        "update_status_if_already_paid": "Update status if already paid",
+        "update": "Update",
+        "delivery_agent": "Delivery Agent",
+        "select_delivery_agent": "Select delivery agent",
+        "setup_delivery_agent": "Setup Delivery Agent",
+        "invoice": "Invoice",
+        "download_invoice": "Download Invoice",
+        "products": "Products",
+        "qty": "QTY",
+        "user_message": "{{user_name}}'s Message",
+        "sku_code": "SKU Code",
+        "price_details": "Price Details",
+        "total_mrp": "Total M.R.P.",
+        "offer_discount": "Offer Discount",
+        "coupon_discount": "Coupon Discount",
+        "store_pickup_charges": "Store Pickup Charges",
+        "delivery": "Delivery",
+        "free": "Free",
+        "total_amount": "Total amount",
+        "wallet_amount": "Wallet amount",
+        "amount_paid": "Amount Paid",
+        "dispatch_message": "Dispatch Message",
+        "enter_your_dispatch_message_here": "Enter your dispatch message here...",
+        "reject": "Reject",
+        "confirm": "Confirm",
+        "order_rejected_msg": "Order has been rejected successfully",
+        "order_confirmed_msg": "Order has been confirmed successfully",
+        "order_cancelled_msg": "Order has been cancelled successfully",
+        "order_dispatched_msg": "Order has been dispatched successfully",
+        "order_delivered_msg": "Order has been delivered successfully",
+        "order_returned_msg": "Order has been returned successfully",
+        "payment_request_send_msg": "Payment request has been send successfully",
+        "payment_status_changed_msg": "Payment status changed to completed successfully",
+        "delivery_agent_assigned_msg": "Delivery Agent has been assigned successfully",
+        "order_reject_sure_alert_msg": "Are you sure you want to reject this order?",
+        "yes": "Yes",
+        "order_cancel_sure_alert_msg": "Are you sure you want to cancel this order?",
+        "order_remove_sure_alert_msg": "Are you sure you want to remove this order?",
+        "unable_to_open_google_maps": "Unable to open google maps"
+    },
+
+    "CATEGORIES": {
+        "new_category": "new category",
+        "edit_category": "edit category",
+        "show": "Show",
+        "category_name": "Category Name",
+        "category_image": "Category Image",
+        "add_image": "add image",
+        "no_attached_image": "No attached image",
+        "category_banner": "Category Banner",
+        "upload_banner": "upload banner",
+        "no_attached_banner": "No attached banner",
+        "information": "information",
+        "subcategories": "Subcategories",
+        "products": "products",
+        "show_subcategories": "Show Subcategories",
+        "no_categories": "No categories",
+        "image": "image",
+        "name": "name",
+        "reorder": "reorder",
+        "product": "product",
+        "no_products": "No products",
+        "catgeory_added_successfully": "Catgeory Added Successfully",
+        "category_deleted_successfully": "Category deleted successfully",
+        "category_edited_successfully": "Category edited successfully",
+        "category_not_deleted_successfully": "Category not deleted successfully",
+        "category_not_edit_successfully": "Category not edit successfully",
+        "subcategories_status_changed_successfully": "Subcategories status changed successfully",
+        "please_enter_category_name": "Please enter category name",
+        "are_you_sure_you_want_to_delete_this_category": "Are you sure you want to delete this category?"
+    },
+
+    "NEW_PRODUCT": {
+        "new_product": "new product",
+        "edit_product": "edit product",
+        "basic": "Basic",
+        "details": "Details",
+        "categories_and_brands": "Categories & Brands",
+        "images": "Images",
+        "show": "show",
+        "product_name": "Product Name",
+        "single_price": "Single Price",
+        "variants": "Variants",
+        "prices_should_be_inclusive_of_all_taxes": "Prices should be inclusive of all taxes",
+        "price_mrp": "Price (MRP)",
+        "discounted_price": "Discounted Price",
+        "quantity": "Quantity",
+        "shipping_weight": "Shipping Weight",
+        "purchase_price": "Purchase Price",
+        "type": "Type",
+        "import_template": "import template",
+        "variant": "Variant",
+        "price": "Price",
+        "mrp": "(MRP)",
+        "per_pc": "/ pc",
+        "shipping_wt": "Shipping Wt",
+        "add_more": "Add more +",
+        "min_quantity": "Min Quantity",
+        "max_quantity": "Max Quantity",
+        "product_description": "Product Description",
+        "sku_code": "SKU Code",
+        "hsn_code": "HSN Code",
+        "color": "Color",
+        "select_color": "Select Color",
+        "update": "update",
+        "remove": "remove",
+        "show_out_of_stock_if_no_quantity_is_left": "Show out of stock if no quantity is left",
+        "keywords_search": "Keywords(Search)",
+        "add": "Add",
+        "barcode_per_qr_code": "Barcode / QR code",
+        "upload": "Upload",
+        "upload_for": "Upload For",
+        "add_some_data_to_price_list_for_uploading_barcodes": "Add some data to price list for uploading barcodes",
+        "no_categories": "No categories",
+        "search_category": "Search category",
+        "categories": "Categories",
+        "brands": "Brands",
+        "add_images": "add images",
+        "no_attached_images": "No attached images",
+        "make_as_cover_pic": "make as cover pic",
+        "cover_pic": "cover pic",
+        "option_deleted_successfully": "Option Deleted Successfully",
+        "please_enter_product_name": "Please enter product name",
+        "please_enter_product_price": "Please enter product price",
+        "please_enter_all_variants_data_of_product": "Please enter all variants data of product",
+        "please_enter_product_description": "Please enter product description",
+        "please_select_any_category_or_brand": "Please select any category or brand",
+        "please_make_any_one_image_as_cover_picture": "Please make any one image as cover picture",
+        "value_must_be_less_than_100": "value must be less than 100",
+        "are_you_sure_you_want_to_delete_this_product": "Are you sure you want to delete this product?",
+        "allow_subscriptions": "Allow Subscriptions",
+        "daily_discount": "Daily Discount",
+        "weekly_discount": "Weekly Discount",
+        "monthly_discount": "Monthly Discount"
+    },
+
+    "ADMIN_TERMS_SETTINGS": {
+        "header_text": "terms and privacy",
+        "terms": "Terms",
+        "privacy": "Privacy",
+        "data_saved_successfully": "Data Saved Successfully",
+        "please_enter_some_terms": "Please enter some Terms",
+        "please_enter_some_privacy": "Please enter some Privacy"
+    },
+
+    "ALL_FEEDBACKS": {
+        "header_text": "Feedbacks",
+        "no_feedbacks": "No feedbacks",
+        "view_details": "view details",
+        "by": "By"
+    },
+
+    "APP_USAGE": {
+        "header_text": "App Usage"
+    },
+
+    "BEST_SELLERS_MODAL": {
+        "search_for_products": "Search for products...",
+        "no_products": "No products",
+        "add": "add",
+        "previous": "Previous",
+        "next": "Next",
+        "product_saved_as_best_seller": "Product saved as best seller",
+        "Already_10_products_in_best_sellers": "Already 10 products in best sellers"
+    },
+
+    "COUPON_CODE_MODAL": {
+        "search_for_products": "Search for products...",
+        "no_products": "No products",
+        "add": "add",
+        "added": "added",
+        "next": "Next",
+        "coupon_code_will_not_be_applied_on_this_product": "Coupon code will not be applied on this product"
+    },
+
+    "COUPON_CODES": {
+        "header_text": "coupon codes",
+        "no_coupon_codes": "No Coupon Codes",
+        "code_name": "Code Name",
+        "qty": "Qty",
+        "amount": "Amount",
+        "coupon_code_deleted_successfully": "Coupon Code deleted successfully",
+        "delete_coupon_sure_alert_msg": "Are you sure you want to delete this coupon code?"
+    },
+
+    "DASHBOARD": {
+        "header_text": "Dashboard",
+        "out_of_stock": "Out of stock",
+        "no_products": "No products",
+        "image": "image",
+        "product": "product",
+        "edit": "Edit"
+    },
+
+    "DELIVERY_SETTINGS": {
+        "header_text": "delivery",
+        "details": "Details",
+        "pincodes": "Pincodes",
+        "default_delivery_amount": "default delivery amount",
+        "free_delivery_above_amount": "free delivery above amount",
+        "store_pickup": "store pickup",
+        "store_pickup_charges": "store pickup charges",
+        "delivery_based_on_km": "delivery based on Km",
+        "charges_per_km": "charges per km",
+        "maximum_delivery_charges": "maximum delivery charges",
+        "delivery_schedule": "delivery schedule",
+        "making_delivery_schedule_mandatory": "making delivery schedule mandatory",
+        "max_number_of_days_for_delivery": "Max number of days for Delivery",
+        "allow_same_day_delivery": "allow same day delivery",
+        "minimum_hours_required_to_prepare_order": "minimum hours required to prepare order",
+        "last_delivery_time": "last delivery time",
+        "days": "Days",
+        "time": "Time",
+        "add": "Add",
+        "allow_all_pincodes": "allow all pincodes",
+        "cost": "Cost",
+        "active": "Active",
+        "min_amount": "Min Amount",
+        "max_amount": "Max Amount",
+        "add_pincode": "Add Pincode",
+        "delivery_data_saved_successfully": "Delivery data saved successfully",
+        "please_fill_all_the_data_msg": "Please fill all the data of delivery pincodes or remove blank ones"
+    },
+
+    "FEEDBACK_DETAILS": {
+        "header_text": "Feedback",
+        "description": "Description",
+        "images": "Images"
+    },
+
+    "HELP": {
+        "header_text": "help",
+        "search": "Search",
+        "no_help_content": "No Help Content",
+        "watch_in_hindi": "watch in hindi",
+        "watch_in_english": "watch in english"
+    },
+
+    "OFFER_CREATE": {
+        "new_offer": "new offer",
+        "edit_offer": "edit offer",
+        "offer_name": "Offer Name",
+        "offer_description": "Offer Description",
+        "upload_images": "upload images",
+        "max_3": "(max 3)",
+        "best_size": "(Best size 1500px X 900px)",
+        "save_offer": "save offer",
+        "offer_data_saved": "Offer data saved successfully. Any images added will be uploaded after couple of minutes.",
+        "offer_deleted_successfully": "Offer deleted successfully",
+        "please_enter_offer_name": "Please enter offer name",
+        "saving_offer_data": "Saving offer data...",
+        "delete_offer_alert_msg": "Are you sure you want to delete this offer?",
+        "deleting_offer": "Deleting offer...",
+        "select_max_images_from_gallery": "Please select maximum <strong>3</strong> images from gallery"
+    },
+
+    "OFFER_SETTINGS": {
+        "header_text": "offers",
+        "no_offers": "No offers",
+        "image": "image",
+        "name": "name",
+        "reorder": "reorder",
+        "add_offer": "add offer",
+        "offer_deleted_successfully!": "Offer deleted successfully",
+        "delete_offer_alert_msg": "Are you sure you want to delete this offer?",
+        "deleting_offer": "Deleting offer..."
+    },
+
+    "PRICE_REQUESTS": {
+        "header_text": "Price Requests",
+        "search": "Search",
+        "no_price_requests": "No price requests",
+        "prices_are_inactive_for_user": "Prices are now inactive for this user."
+    },
+
+    "SUPPORT": {
+        "header_text": "support",
+        "call": "Call",
+        "plan_description": "Plan Description",
+        "plan_start_date": "Plan Start Date",
+        "address": "Address"
+    },
+
+    "COLORS_MODAL": {
+        "header_text": "Colors",
+        "name": "Name",
+        "color_image": "color image",
+        "upload": "upload",
+        "color": "color",
+        "add_color": "Add Color",
+        "or": "OR",
+        "search_colors": "Search colors",
+        "select": "select"
+    },
+
+    "TEMPLATES_MODAL": {
+        "header_text": "templates",
+        "no_templates_available": "No templates available",
+        "select_template": "Select Template",
+        "select": "Select",
+        "select_all": "Select All",
+        "add": "Add"
+    },
+
+    "WALLET_SETTINGS": {
+        "header_text": "wallet",
+        "settings": "Settings",
+        "cashbacks": "Cashbacks",
+        "active": "Active",
+        "maximum_amount_in_user_wallet": "Maximum amount in user wallet",
+        "minimum_order_amount_to_use_wallet": "Minimum order amount to use wallet",
+        "maximum_amount_can_be_used_from_wallet_in_a_order": "Maximum amount can be used from wallet in a order",
+        "amount_in_wallet_for_new_users": "Amount in wallet for new users",
+        "no_data_in_cashback_list": "No data in Cashback List",
+        "cashback_list": "Cashback List",
+        "cashback": "Cashback",
+        "order_amount": "Order Amount",
+        "no_of_times_cashback_issued_to_a_user": "No. of times cashback issued to a user",
+        "wallet_settings_saved_successfully": "Wallet settings saved successfully",
+        "cashback_added_successfully": "Cashback added successfully",
+        "cashback_deleted_successfully": "Cashback deleted successfully",
+        "maximum_amount_in_user_wallet_should_be_less_than_or_equal_to": "Maximum amount in user wallet should be less than or equal to",
+        "please_enter_maximum_amount_in_user_wallet": "Please enter Maximum amount in user wallet",
+        "adding_new_cashback": "Adding new cashback...",
+        "add_cashback": "Add cashback",
+        "enter_order_amount": "Enter order amount",
+        "enter_cashback_amount": "Enter cashback amount",
+        "no_of_times_it_issued_to_a_user": "No. of times it issued to a user",
+        "add": "Add",
+        "are_you_sure_you_want_to_delete_this_cashback": "Are you sure you want to delete this cashback?",
+        "no": "No",
+        "yes": "Yes",
+        "cashback_data_can_not_be_edit_delete_and_add_desired_cashback": "Cashback data can not be edit. Delete and add desired cashback",
+        "adding_money": "Adding money...",
+        "add_money": "Add money",
+        "enter_amount": "Enter amount",
+        "please_enter_valid_amount": "Please enter valid amount",
+        "please_enter_valid_data": "Please enter valid data"
+    },
+
+    "AUTH_SERVICE": {
+        "admin_has_blocked_you": "Admin has blocked you!",
+        "otp_did_not_match": "OTP did not match"
+    },
+
+    "DELIVERY_SERVICE": {
+        "delivery_address_not_existed": "Delivery Address is not existed!",
+        "fetching_address_location_error_msg": "There is some problem in fetching address location. Please try again later."
+    },
+
+    "ORDER_SERVICE": {
+        "payment_is_successful": "Payment is successful!",
+        "order_has_been_placed_successfully": "Order has been placed successfully!",
+        "payment_failed_msg": "Payment is failed! Any amount debited will be refunded in 4 - 5 working days.",
+        "try_again": "Try Again"
+    },
+
+    "PRICE_REQUEST_SERVICE": {
+        "request_send_succesfully":"Request has been send succesfully",
+        "request_already_send":"Request has been already send",
+        "problem_in_sending_request":"There is some problem in sending request. Please try again",
+        "prices_active_for_user":"Prices are now active for this user",
+        "some_problem_in_activating_prices":"There is some problem in activating prices. Please try again"
+     },
+
+     "PRODUCT_SERVICE": {
+        "success":"Success",
+        "failure":"Failure",
+        "product_added_successfully":"Product added successfully. The images will be uploaded in just couple of minutes.",
+        "product_not_added_successfully":"Product not added successfully!",
+        "product_edited_successfully":"Product edited successfully!",
+        "product_not_edited_successfully":"Product not edited successfully!",
+        "product_deleted_successfully":"Product deleted successfully!",
+        "product_not_deleted_successfully":"Product not deleted successfully!"
+     },
+
+     "PRODUCT_OPTIONS_SERVICE": {
+        "success":"Success",
+        "failure":"Failure",
+        "product_edited_successfully":"Product edited successfully!",
+        "product_not_edited_successfully":"Product not edited successfully!"
+     },
+
+     "WALLET_SERVICE": {
+         "added_to_users_wallet_successfully": "has been added to all users wallet successfully",
+         "problem_in_adding_money": "There is some problem in adding money to all users wallet. Please try again later.",
+         "successfully_added_to_your_wallet": "successfully added to your wallet",
+         "payment_failed_msg": "Payment failed. Any amount debited will be refunded in 4 - 5 working days.",
+         "deducted_user_wallet_success": "has been deducted from the user wallet successfully",
+         "problem_in_deducting_money": "There is some problem in deducting money from the user wallet. Please try again later.",
+         "try_again": "Try Again"
+     },
+
+     "CHAT_SERVICE": {
+         "your_order_is": "Your order is",
+         "payment_is_successful": "Payment is successful.",
+         "please_do_the_payment_of_your_order": "Please do the payment of your order.",
+         "delivery_has_started_of_this_order": "Delivery has started of this order."
+     },
+
+     "USER_SERVICE": {
+         "placing_order_error_msg": "There is some problem in placing order. Please try again later."
+     },
+
+     "SERVICES_FEATURE_SERVICE": {
+        "service_submit_request_msg": "I have sumbitted a request for service named",
+        "service_complete_msg": "I have completed your request for service named"
+     },
+
+     "ADD_LANGUAGES": {
+         "header_text": "Select Languages To Add",
+         "no_languages_available": "No languages available",
+         "languages_saved_success_msg": "Languages has been saved successfully."
+     },
+
+     "ALL_LANGUAGES": {
+         "header_text": "Languages",
+         "no_languages_added": "No languages added",
+         "language": "Language",
+         "reorder": "Reorder",
+         "make_default": "Make Default",
+         "make_default_success_msg": "has been made as default language successfully.",
+         "delete_lang_success_msg": "has been deleted successfully."
+     },
+
+     "SELECT_LANGUAGE": {
+         "header_text": "Select Language",
+         "no_languages_added": "No languages available to select",
+         "select": "select"
+     },
+
+     "PRODUCT_SUBSCRIPTIONS": {
+        "header_text": "Subscriptions",
+        "list": "List",
+        "settings": "Settings",
+        "active": "Active",
+        "cash_payment": "Cash Payment",
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "min_deliveries": "Minimum Deliveries",
+        "max_deliveries": "Maximum Deliveries",
+        "please_fill_all_the_details": "Please fill all the details",
+        "settings_has_been_saved_successfully": "Settings has been saved successfully"
+
+     },
+
+
+    "SHARED": {
+        "please_wait": "Please Wait...",
+        "ok": "Ok",
+        "admin_not_place_order_msg": "Admin can not place any order!",
+        "delivery_agent_not_place_order": "Delivery agent can not place any order!",
+        "max_quantity_reach_msg": "Sorry, you can not add more of this item",
+        "item_added_to_wishlist_msg": "Item is added to My Wishlist",
+        "item_removed_from_wishlist_msg": "Item is removed from My Wishlist",
+        "must_be_user_to_use_wishlisht_msg": "You must logged in as user to use wishlist.",
+        "admin_no_cart_available_msg": "Cart is available only for user not for admin.",
+        "delivery_agent_no_cart_available_msg": "Cart is available only for user not for delivery agent.",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "delete_sure_alert_msg": "Are you sure you want to delete",
+        "image_actionsheet_header_text": "Select any option",
+        "camera": "Camera",
+        "gallery": "Gallery",
+        "crop_and_upload_from_gallery": "Crop and upload from gallery",
+        "multiple_images_from_gallery": "Multiple images from gallery",
+        "pull_to_refresh": "Pull to refresh",
+        "placed": "Placed",
+        "rejected": "Rejected",
+        "confirmed": "Confirmed",
+        "cancelled": "Cancelled",
+        "dispatched": "Dispatched",
+        "delivered": "Delivered",
+        "returned": "Returned",
+        "payment_modes": "Payment Modes",
+        "cash_on_delivery": "Cash On Delivery",
+        "paytm": "Paytm",
+        "credit_debit_cards": "Credit/Debit Cards",
+        "wallets": "Wallets",
+        "upi": "UPI",
+        "netbanking": "Netbanking",
+        "pc": "Pc",
+        "save": "Save",
+        "edit": "Edit",
+        "add_new": "Add new",
+        "add": "Add"
+    }
+}

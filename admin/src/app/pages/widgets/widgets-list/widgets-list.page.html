@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center" >Widgets</ion-title>
+    
+  </ion-toolbar>
+ 
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+<ion-list class="widget-list">
+  <ion-item>
+    <ion-label (click)="opneBannerWidget('banner-slider')" detail>Banner Slider</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label (click)="opneBannerWidget('image-banner')" detail>Image Banner</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label (click)="opneProductWidget('product-carousel')" detail>Product Carousel</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label (click)="opneProductWidget('product-list')" detail>Product List</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label (click)="opneWidget('image-block-list')" detail>Image Block</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label (click)="opneWidget('video-block-list')" detail>Video Block</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label (click)="opneWidget('text-block-list')" detail>Text Block</ion-label>
+  </ion-item>
+</ion-list>
+</div>
+</ion-content>

@@ -1,0 +1,222 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button class="custom-back-button">
+        <img src="assets/img/menu-icon-white.png" class="menu-img">
+      </ion-menu-button>
+    </ion-buttons>
+    <ion-title text-center>orders</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs no-shadow no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Pending</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Delivered</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container>
+    <super-tab>
+      <ion-content>
+        <div *ngIf="showLoader" class="spinner">
+          <ion-spinner color="primary"></ion-spinner>
+        </div>
+        <div class="no-data" *ngIf="noDeliveryOrders && !showLoader && !allDeliveryOrders.length; else showPendingOrders"
+          text-center>
+          <img src="assets/img/no-orders.png" alt="">
+          <h6>No orders</h6>
+        </div>
+        <ng-template #showPendingOrders>
+          <div *ngFor="let order of allDeliveryOrders; let i=index">
+            <div *ngIf="(order.status !== 'Cancelled' && order.status !== 'Delivered') && (order.deliveryStatus === 'notStarted' || order.deliveryStatus === 'inProgress')">
+              <div class="do-order-id">
+                Order Id: ORD{{order.orderId}}
+              </div>
+              <div class="do-products-container">
+                <div class="do-placed-on">
+                  Placed On {{order.createdAt.toDate() | date}}
+                </div>
+                <ion-list class="ion-no-padding" lines="none" *ngIf="order?.products[0]">
+                  <ion-item class="do-order-data ion-no-padding">
+                    <div slot="start"
+                      [ngStyle]="{'background': 'url(' + order.products[0].img.mob + ') no-repeat center', 'background-size': 'contain'}"
+                      class="do-product-image">
+                      <div class="do-more" *ngIf="order.products.length > 1">+ {{order.products.length - 1}} more</div>
+                    </div>
+                    <ion-label>
+                      <h2 class="do-product-price ion-text-wrap">{{order.totalAmountToPaid | currency: 'INR':true}}</h2>
+                      <h3 class="do-product-name ion-text-wrap">{{order.products[0].name}} <span
+                          *ngIf="order.products.length > 1">+ {{order.products.length - 1}} more</span>
+                      </h3>
+                      <h5 *ngIf="(order.status === 'Cancelled' || order.status === 'Delivered'); else useDeliveryStatus;">
+                        Status: {{order.status}}</h5>
+                      <ng-template #useDeliveryStatus>
+                        <h5 *ngIf="order.deliveryStatus === 'notStarted'">Status: Not Started</h5>
+                        <h5 *ngIf="order.deliveryStatus === 'inProgress'">Status: Delivery In Progress</h5>
+                        <h5 *ngIf="order.deliveryStatus === 'delivered'">Status: Delivered</h5>
+                      </ng-template>
+                    </ion-label>
+                  </ion-item>
+                  <div class="do-view-details-btn"
+                    *ngIf="(order.status === 'Cancelled' || order.status === 'Delivered'); else useDeliveryStatusForAction;">
+                    <div class="do-view-details-btn">
+                      <ion-button (click)="onClickViewDetails(order.orderId)" fill="outline" shape="round" size="small">
+                        View Order
+                      </ion-button>
+                    </div>
+                  </div>
+                  <ng-template #useDeliveryStatusForAction>
+                    <div class="action-btns" *ngIf="order.deliveryStatus === 'notStarted'">
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="6">
+                            <ion-button (click)="onClickViewDetails(order.orderId)" fill="outline" shape="round" size="small">
+                              View Order
+                            </ion-button>
+                          </ion-col>
+                          <ion-col size="6">
+                            <ion-button (click)="onClickStartNavigation(order.orderId, order.address)" fill="outline"
+                              shape="round" size="small">
+                              Start Delivery
+                            </ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <div *ngIf="order.deliveryStatus === 'inProgress'">
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="6">
+                            <ion-button (click)="onClickViewDetails(order.orderId)" fill="outline" shape="round" size="small">
+                              View Order
+                            </ion-button>
+                          </ion-col>
+                          <ion-col size="6">
+                            <ion-button (click)="onClickContinueNavigation(order.orderId, order.deliveryLatLng)" fill="outline"
+                              shape="round" size="small">
+                              Continue Delivery
+                            </ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <div class="do-view-details-btn" *ngIf="order.deliveryStatus === 'delivered'">
+                      <ion-button (click)="onClickViewDetails(order.orderId)" fill="outline" shape="round" size="small">
+                        View Order
+                      </ion-button>
+                    </div>
+                  </ng-template>
+                </ion-list>
+              </div>
+            </div>
+
+          </div>
+        </ng-template>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div *ngIf="showLoader" class="spinner">
+          <ion-spinner color="primary"></ion-spinner>
+        </div>
+        <div class="no-data" *ngIf="noDeliveryOrders && !showLoader && !allDeliveryOrders.length; else showDeliveredOrders"
+          text-center>
+          <img src="assets/img/no-orders.png" alt="">
+          <h6>No orders</h6>
+        </div>
+        <ng-template #showDeliveredOrders>
+          <div *ngFor="let order of allDeliveryOrders; let i=index">
+            <div *ngIf="order.status === 'Cancelled' || order.status === 'Delivered' || order.deliveryStatus === 'delivered'">
+              <div class="do-order-id">
+                Order Id: ORD{{order.orderId}}
+              </div>
+              <div class="do-products-container">
+                <div class="do-placed-on">
+                  Placed On {{order.createdAt.toDate() | date}}
+                </div>
+                <ion-list class="ion-no-padding" lines="none" *ngIf="order?.products[0]">
+                  <ion-item class="do-order-data ion-no-padding">
+                    <div slot="start"
+                      [ngStyle]="{'background': 'url(' + order.products[0].img.mob + ') no-repeat center', 'background-size': 'contain'}"
+                      class="do-product-image">
+                      <div class="do-more" *ngIf="order.products.length > 1">+ {{order.products.length - 1}} more</div>
+                    </div>
+                    <ion-label>
+                      <h2 class="do-product-price ion-text-wrap">{{order.totalAmountToPaid | currency: 'INR':true}}</h2>
+                      <h3 class="do-product-name ion-text-wrap">{{order.products[0].name}} <span
+                          *ngIf="order.products.length > 1">+ {{order.products.length - 1}} more</span>
+                      </h3>
+                      <h5 *ngIf="(order.status === 'Cancelled' || order.status === 'Delivered'); else useDeliveryStatus;">
+                        Status: {{order.status}}</h5>
+                      <ng-template #useDeliveryStatus>
+                        <h5 *ngIf="order.deliveryStatus === 'notStarted'">Status: Not Started</h5>
+                        <h5 *ngIf="order.deliveryStatus === 'inProgress'">Status: Delivery In Progress</h5>
+                        <h5 *ngIf="order.deliveryStatus === 'delivered'">Status: Delivered</h5>
+                      </ng-template>
+                    </ion-label>
+                  </ion-item>
+                  <div class="do-view-details-btn"
+                    *ngIf="(order.status === 'Cancelled' || order.status === 'Delivered'); else useDeliveryStatusForAction;">
+                    <div class="do-view-details-btn">
+                      <ion-button (click)="onClickViewDetails(order.orderId)" fill="outline" shape="round" size="small">
+                        View Order
+                      </ion-button>
+                    </div>
+                  </div>
+                  <ng-template #useDeliveryStatusForAction>
+                    <div class="action-btns" *ngIf="order.deliveryStatus === 'notStarted'">
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="6">
+                            <ion-button (click)="onClickViewDetails(order.orderId)" fill="outline" shape="round" size="small">
+                              View Order
+                            </ion-button>
+                          </ion-col>
+                          <ion-col size="6">
+                            <ion-button (click)="onClickStartNavigation(order.orderId, order.address)" fill="outline"
+                              shape="round" size="small">
+                              Start Delivery
+                            </ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <div *ngIf="order.deliveryStatus === 'inProgress'">
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="6">
+                            <ion-button (click)="onClickViewDetails(order.orderId)" fill="outline" shape="round" size="small">
+                              View Order
+                            </ion-button>
+                          </ion-col>
+                          <ion-col size="6">
+                            <ion-button (click)="onClickContinueNavigation(order.orderId, order.deliveryLatLng)" fill="outline"
+                              shape="round" size="small">
+                              Continue Delivery
+                            </ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <div class="do-view-details-btn" *ngIf="order.deliveryStatus === 'delivered'">
+                      <ion-button (click)="onClickViewDetails(order.orderId)" fill="outline" shape="round" size="small">
+                        View Order
+                      </ion-button>
+                    </div>
+                  </ng-template>
+                </ion-list>
+              </div>
+            </div>
+
+          </div>
+        </ng-template>
+      </ion-content>
+    </super-tab>
+  </super-tabs-container>
+</super-tabs>
+

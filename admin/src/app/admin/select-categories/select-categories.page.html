@@ -1,0 +1,47 @@
+<ion-header class="modal-header">
+    <ion-toolbar>
+      <ion-title class="modal-header-title">Select {{type}}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="closeModal()">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+  
+    <div *ngIf="isLoading; else dataLoaded;" class="spinner">
+      <ion-spinner name="dots"></ion-spinner>
+    </div>
+  
+    <ng-template #dataLoaded>
+      <div *ngIf="!dataList.length">
+        <p class="no-data-txt">No data</p>
+      </div>
+  
+      <div *ngIf="dataList.length > 0">
+        <ion-list class="s-c-list" *ngFor="let data of dataList; let i=index">
+          <ion-item lines="none" (click)="selectParent(i)">
+            <ion-label>{{data.name}}</ion-label>
+            <ion-checkbox slot="end" [checked]="data.active"></ion-checkbox>
+          </ion-item>
+  
+          <div *ngIf="data.active && data.sublist.length" class="sub-list">
+            <ion-item *ngFor="let item of data.sublist; let j=index;" lines="none" (click)="selectChild(i, j)">
+              <ion-label>{{item.name}}</ion-label>
+              <ion-checkbox slot="end" [checked]="item.active"></ion-checkbox>
+            </ion-item>
+          </div>
+          <hr class="line">
+        </ion-list>
+      </div>
+    </ng-template>
+  
+  </ion-content>
+  
+  <ion-footer>
+    <ion-button (click)="onClickSave()" expand="block" class="footer-button">
+      Save
+    </ion-button>
+  </ion-footer>

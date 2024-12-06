@@ -1,0 +1,29 @@
+.ion-thumbnail{
+  width: 100%;
+    height: auto;
+}
+
+ion-col.img{
+  width: 100px;
+  max-width: 100px;
+}
+ion-col.name{
+  width: calc(100% - 310px);
+  max-width: calc(100% - 300px);
+}
+ion-col.action{
+  width: 128px;
+  max-width: 100px;
+}
+ion-col.reorder{
+  width: 75px;
+  max-width: 75px;
+}
+
+.page-footer{
+  margin-top:50px;
+  text-align: center;
+}
+
+
+

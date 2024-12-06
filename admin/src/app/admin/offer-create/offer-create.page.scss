@@ -1,0 +1,78 @@
+.oc-wrapper {
+    font-size: 14px;
+}
+
+.oc-headings {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.oc-data-container ion-input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.oc-upload-imgs {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.oc-upload-imgs div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    div {
+        opacity: .7;
+    }
+}
+
+.oc-upload-imgs div:nth-child(2) {
+    opacity: .7;
+    margin-top: 5px;
+}
+
+.oc-offer-imgs div {
+    max-width: 100%;
+    position: relative;
+    text-align: center;
+    img {
+        width: 90%;
+        height: 20vh;
+        margin: 10px;
+        object-fit: contain;
+        border: 1px solid #ccc;
+    }
+    div {
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        font-size: 20px;
+    }
+}
+
+.cancel-btn {
+    background-color: var(--ion-color-dark);
+    color: white
+  }
+  
+  .save-btn {
+    background-color: var(--ion-color-primary);
+    color: white
+  }
+  
+  .margin-icon {
+    margin-left: 5px;
+  }
+
+  ion-footer ion-title {
+    height: 45px;
+  }
+
+  .bottom-buttons {
+    font-size: 15px;
+    margin-left: 5px;
+  }
+
+  .page-footer{
+    text-align: center;
+  }

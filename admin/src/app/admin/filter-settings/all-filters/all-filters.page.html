@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Filters</ion-title>
+  </ion-toolbar>
+</ion-header>  
+
+<ion-content>
+    <div class="main">
+  <div *ngIf="!filters.length" class="no-data ion-text-center">
+    <img src="assets/img/no-category.png" alt="">
+    <h6>No filters</h6>
+  </div>
+  <div *ngIf="filters.length">
+    <br><br>
+    <div class="toggle">
+      <p>Active</p>
+      <div class="toggle-btn">
+        <label class="switch">
+          <input type="checkbox" (click)="toggleActive()" [checked]="isFilterActive">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div class="list-header">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col class="name">
+            <p>Filters</p>
+          </ion-col>
+          <ion-col class="name">
+            <p>Active</p>
+          </ion-col>
+          <ion-col class="name">
+            <p>Action</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <div class="list-container">
+      <ion-grid>
+        <ion-row *ngFor="let filter of filters; let i = index; let i = index" class="order-row">
+          <ion-col class="name">
+            <p class="ion-text-capitalize" (click)="editFilter(i)">{{filter.name}}</p>
+          </ion-col>
+          <ion-col class="name">
+            <div class="toggle-btn">
+              <label class="switch">
+                <input type="checkbox" (click)="toggleFilterActive(i)" [checked]="filter.active">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </ion-col>
+          <ion-col class="action">
+            <ion-button (click)="editFilter(i)" class="btn-sml i-start" fill="outline"
+              shape="round">
+              Edit
+            </ion-button>&nbsp;&nbsp;
+            <ion-button (click)="deleteFilter(filter.id)" class="btn-sml i-start m-s-btn" fill="outline"
+              shape="round">
+              Delete
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+  <br><br>
+  <div style="display: flex;justify-content: center">
+    <ion-button (click)="addNewFilter()" shape="round" class="btn-1 i-start">
+      Add New
+    </ion-button>
+  </div>
+    </div>
+</ion-content>

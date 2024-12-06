@@ -1,0 +1,264 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="user-cart" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center style="margin-left: 48px;">{{userData?.name}} (Delivery Agent)</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button (click)="getPendingOrdersPdf()" fill="outline" shape="round" class="add-btn">
+      download pending orders
+    </ion-button>
+  </div>
+</ion-header>
+
+<super-tabs no-shadow no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Assign Orders</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)="getAssignedOrders()">
+      <ion-label>Orders</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container>
+
+    <!-- Assign Orders -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <div class="SaveBtn">
+                  <ion-button (click)="saveAssignOrders()" shape="round" color="success">
+                    <i class="flaticon-null-20 margin-icon"></i>
+                    &nbsp; Assign Orders
+                  </ion-button>
+                </div>
+                <div class="dFlexBetween">
+
+                  <div class="">
+                    <div class="searchBox">
+                      <ion-input class="searchInput" type='number' placeholder="Enter Order Id"
+                        [(ngModel)]='searchOrder'>
+                      </ion-input>&nbsp;
+                      <ion-button (click)='searchOrderById()' expand="block" size="small">Search</ion-button>&nbsp;
+                      <ion-button (click)='resetSearch()' size="small" fill="outline" color="danger">Clear </ion-button>
+                    </div>
+                  </div>
+
+
+                  <div class="dFlex">
+                    <ion-label>Select All</ion-label>
+                    <div class="toggle-btn">
+                      <label class="switch">
+                        <input type="checkbox" (click)="selectAllOrder()" [checked]="isAllOrderSelect">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="12">
+                <div class="no-data" *ngIf="!unAssignOrders.length; else assignOrdersHasLength;" text-center>
+                  <img src="assets/img/no-orders.png" alt="">
+                  <h6>No orders For Assign</h6>
+                </div>
+
+                <ng-template #assignOrdersHasLength>
+                  <div class="resultArea">
+                    <table>
+                      <thead>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Order ID</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Delivery Agent</th>
+                        <th>Placed On</th>
+                        <!-- <th>View</th> -->
+                        <th>Select</th>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let order of unAssignOrders; index as i">
+                          <td>
+                            <div slot="start"
+                              [ngStyle]="{'background': 'url(' + order.products[0].img.mob + ') no-repeat center', 'background-size': 'contain'}"
+                              class="productImage">
+                              <!-- <div class="more" *ngIf="order.products.length > 1">
+                                + {{order.products.length - 1}} more
+                              </div> -->
+                            </div>
+                          </td>
+                          <td>
+                            <p class="aud-product-name ion-text-wrap">
+                              {{order.products[0].name}}
+                              <span *ngIf="order.products.length > 1"><br>( +{{order.products.length - 1}} more )</span>
+                            </p>
+                          </td>
+                          <td>
+                            <div>ORD: {{order.orderId}}</div>
+                          </td>
+                          <td>
+                            <p class="aud-product-price ion-text-wrap">
+                              {{order.totalAmountToPaid | currency: currencyCode:true:'0.0'}}
+                            </p>
+                          </td>
+                          <td>
+                            <p>{{order.status}}<span>&nbsp;<i class="flaticon-null-20"></i></span></p>
+                          </td>
+                          <td>
+                            <p>{{order.deliveryAgentId ? "Reassign" : "None"}}</p>
+                          </td>
+                          <td>
+                            <div class="placedOn" *ngIf="order?.createdAt">
+                              {{order.createdAt.toDate() | date}} by <span>{{order.userName}}</span>
+                            </div>
+                            <ion-text *ngIf="!order.createdAt">--</ion-text>
+                          </td>
+                          <!-- <td>
+                            <ion-button (click)="onClickViewDetails(order.orderId, i)" size="small" fill="outline">
+                              View Detail
+                            </ion-button>
+                          </td> -->
+                          <td>
+                            <div class="checkboxInput" (click)="onClickCheckBox(order.id)">
+                              <ion-label></ion-label>
+                              <ion-checkbox [checked]="editCheckBoxValue(order.id)" color="primary" slot="start">
+                              </ion-checkbox>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreOrders($event)">
+                    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more users...">
+                    </ion-infinite-scroll-content>
+                  </ion-infinite-scroll> -->
+                </ng-template>
+
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+
+    </super-tab>
+
+    <!-- Orders -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="2" id="scroll1">
+                <div class="statusList">
+                  <p class="ion-activatable" *ngFor="let item of sideMenu;  index as i" (click)="changeComponent(i)"
+                    [ngClass]="activeTile == i ? 'tile-bg-active' : 'tile-bg-inactive'">
+                    {{item}}
+                    <ion-ripple-effect></ion-ripple-effect>
+                  </p>
+                </div>
+              </ion-col>
+              <ion-col size="10" id="scroll2">
+                <ion-grid>
+                  <ion-row>
+                    <!-- Orders -->
+                    <ion-col size="12">
+                      <h3 class="text-center">{{activeTile == 0 ? 'Pending' : 'Delivered'}} Orders</h3>
+                      <div class="no-data" *ngIf="!orders.length; else ordersHasLength;" text-center>
+                        <img src="assets/img/no-orders.png" alt="">
+                        <h6>No {{activeTile == 0 ? 'pending' : 'delivered'}} orders</h6>
+                      </div>
+
+                      <!-- Orders Card -->
+                      <ng-template #ordersHasLength>
+                        <div *ngFor="let order of orders; let i=index">
+                          <ng-container *ngIf="showOrder(order)">
+                            <div class="aud-order-id">
+                              Order Id: ORD{{order.orderId}}
+                            </div>
+                            <div class="aud-products-container">
+                              <div class="aud-placed-on" *ngIf="order.createdAt">
+                                Placed On {{order.createdAt.toDate() | date}} by <span>{{order.userName}}</span>
+                              </div>
+                              <ion-list class="ion-no-padding" lines="none" *ngIf="order?.products[0]">
+                                <ion-item class="ion-no-padding">
+                                  <div slot="start"
+                                    [ngStyle]="{'background': 'url(' + order.products[0].img.mob + ') no-repeat center', 'background-size': 'contain'}"
+                                    class="aud-product-image">
+                                    <div class="aud-more" *ngIf="order.products.length > 1">
+                                      + {{order.products.length - 1}} more
+                                    </div>
+                                  </div>
+                                  <ion-label>
+                                    <h2 class="aud-product-price ion-text-wrap">
+                                      {{order.totalAmountToPaid | currency: currencyCode:true:'0.0'}}
+                                    </h2>
+                                    <h3 class="aud-product-name ion-text-wrap">{{order.products[0].name}} <span
+                                        *ngIf="order.products.length > 1">+ {{order.products.length - 1}} more</span>
+                                    </h3>
+                                    <h5>{{order.status}}<span><i class="flaticon-null-20"></i></span></h5>
+                                  </ion-label>
+                                </ion-item>
+                                <div class="aud-action-btn"
+                                  *ngIf="order.deliveryStatus === 'inProgress' && (order.status === 'Confirmed' || order.status === 'Dispatched'); else showOnlyViewOrder">
+                                  <ion-grid>
+                                    <ion-row class="ion-justify-content-center" style="opacity: .6;font-size: small;">
+                                      <ion-col size="12">
+                                        Delivery agent has started delivery
+                                      </ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                      <ion-col size="6">
+                                        <ion-button (click)="onClickViewDetails(order.orderId, i)" size="small"
+                                          shape="round">
+                                          View Order
+                                        </ion-button>
+                                      </ion-col>
+                                      <ion-col size="6">
+                                        <ion-button
+                                          (click)="onClickTrackOrder(order.deliveryAgentId, order.deliveryLatLng)"
+                                          size="small" shape="round" color="dark">
+                                          Track Order
+                                        </ion-button>
+                                      </ion-col>
+                                    </ion-row>
+                                  </ion-grid>
+                                </div>
+                                <ng-template #showOnlyViewOrder>
+                                  <div class="aud-view-details-btn">
+                                    <ion-button (click)="onClickViewDetails(order.orderId, i)" size="small"
+                                      shape="round">
+                                      View Order
+                                    </ion-button>
+                                  </div>
+                                </ng-template>
+                              </ion-list>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </ng-template>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+  </super-tabs-container>
+</super-tabs>
+
+<!-- <ion-footer ngIf="isAssignOrdersDisplay" class="page-footer" no-border>
+  <div class="main-container">
+    
+  </div>
+</ion-footer> -->

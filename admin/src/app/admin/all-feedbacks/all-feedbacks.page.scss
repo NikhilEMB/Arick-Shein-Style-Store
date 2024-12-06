@@ -1,0 +1,19 @@
+.feedbacks-wrap {
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    p{margin-bottom: 8px;}
+    .btn-wrap{
+        text-align: right;
+    }
+    span {
+        margin-left: 5px;
+        .flaticon-call::before {
+            font-size: 10px;
+        }
+        .flaticon-null-7::before {
+            font-size: 10px;
+        }
+    }
+}

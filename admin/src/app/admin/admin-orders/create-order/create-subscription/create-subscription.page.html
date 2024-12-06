@@ -1,0 +1,128 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-title text-center>Create Subscription</ion-title>
+    <ion-buttons slot="end"  >
+      <ion-button (click)="closeModal({})">
+        <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-padding cs-content">
+
+  <ion-item lines="none" class="cs-pdt-info">
+    <ion-avatar *ngIf="product.data.hasOwnProperty('coverPic') && product.data.coverPic.url" slot="start">
+      <img *ngIf="product.data.coverPic.thumb" src="{{product.data.coverPic.thumb}}">
+      <img *ngIf="!product.data.coverPic.thumb" src="{{product.data.coverPic.url}}">
+    </ion-avatar>
+    <ion-label>
+      <h1 class="product-name">{{product.data.prodName}}</h1>
+      <div class="price-wrap m-b-16">
+        <span class="product-price" *ngIf="product.data.prodPrice === product.data.discountedPrice; else discountedPrice;">{{product.data.prodPrice | currency: currencyCode:true:'0.0'}}</span>
+        <ng-template #discountedPrice>
+          <span class="product-price">
+            {{product.data.discountedPrice | currency: currencyCode:true:'0.0'}}
+            <del class="cs-original-price">{{product.data.prodPrice | currency: currencyCode:true:'0.0'}}</del>
+          </span>
+          <span class="product-discount">({{subData.discount}}% off)</span>
+        </ng-template>      
+      </div>
+    </ion-label>
+  </ion-item>
+  <hr class="line">
+
+  <div class="content-alignment">
+    <ion-grid class="ion-no-padding">
+      <ion-row class="row-align-center">
+        <ion-col size="6" class="ion-no-padding"><p><strong>Quantity per day</strong></p></ion-col>
+        <ion-col size="6" class="ion-no-padding ion-text-right"><ion-button class="qty-btn buy-btn-2 btn-1" color="medium"> 
+          <i class="flaticon-null-17 left" (click)="decrementQuantity()"></i> 
+          <span class="qty">{{subData.qtyPerDay}} </span>
+          <i class="flaticon-null-5 right c" (click)="incrementQuantity()"></i> 
+        </ion-button></ion-col>
+      </ion-row>
+    </ion-grid>
+    
+    
+  </div>
+  <hr class="line">
+
+  <div class="cs-fields">
+    <p><strong>Repeat</strong></p>
+    <div class="btn-group-outline m-t-16 m-b-26 hover-effect">
+      <ion-button fill="outline" [class.active]="subData.type === 'daily'" (click)="setSubType('daily')">
+        Daily
+      </ion-button>
+      <ion-button fill="outline" [class.active]="subData.type === 'weekly'" (click)="setSubType('weekly')">
+        Weekly
+      </ion-button>
+      <ion-button fill="outline" [class.active]="subData.type === 'monthly'" (click)="setSubType('monthly')">
+        Monthly
+      </ion-button>
+    </div>
+
+
+    <div *ngIf="subData.type === 'weekly'" class="m-b-16">
+      <p><strong>Select day(s) of week</strong></p>
+      <div class="week-days m-t-16">
+        <ion-button class="btn-2" *ngFor="let d of days;let i = index;" fill="outline" shape="round" [class.active]="d.active" (click)="daySelectToggle(i)">
+          {{d.day}}
+        </ion-button>
+      </div>
+    </div>
+
+    <div *ngIf="subData.type === 'monthly'">
+      <p><strong>Select day(s) of month</strong></p>
+      <div class="month-dates m-t-16">
+        <ion-button class="btn-2" *ngFor="let d of dates;let i = index;" fill="outline" shape="round" [class.active]="d.active" (click)="dateSelectToggle(i)">
+          {{d.date}}
+        </ion-button>
+      </div>
+    </div>
+
+  </div>
+  <hr class="line">
+
+  <div class="content-alignment cs-fields"
+    *ngIf="subData.type === 'daily' || subData.type === 'weekly' || subData.type === 'monthly'">
+
+    <div class="m-t-16">
+      <ion-grid class=" ion-no-padding">
+        <ion-row class="row-align-center">
+          <ion-col size="6" class="ion-no-padding">
+            <p *ngIf="subData.type === 'daily'"><strong>Total Deliveries</strong></p>
+            <p *ngIf="subData.type === 'weekly'"><strong>Total Weeks</strong></p>
+            <p *ngIf="subData.type === 'monthly'"><strong>Total Months</strong></p>
+          </ion-col>
+          <ion-col size="6" class="ion-no-padding ion-text-right"><ion-button class="qty-btn buy-btn-2 btn-1" color="medium"> 
+            <i class="flaticon-null-17 left" (click)="decrementDeliveries()"></i> 
+            <span class="qty">{{totalDeliveries}} </span>
+            <i class="flaticon-null-5 right c" (click)="incrementDeliveries()"></i> 
+          </ion-button></ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+  </div>
+  <hr class="line" *ngIf="timeSchedules.length > 0">
+
+  <div class="m-t-16" *ngIf="timeSchedules.length > 0">
+    <ion-item lines="none" class="select-item">
+      <ion-label>Delivery Time:</ion-label>
+      <ion-select (ionChange)="selectTime($event)">
+        <ion-select-option [value]="time" *ngFor="let time of timeSchedules">
+          {{time.start}} - {{time.end}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+
+
+</ion-content>
+
+<ion-footer>
+  <ion-button class="btn-1" expand="full" color="primary" (click)="subscribe()">
+    Subscribe
+  </ion-button>
+</ion-footer>

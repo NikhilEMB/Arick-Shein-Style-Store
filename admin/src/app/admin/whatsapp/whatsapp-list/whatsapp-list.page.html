@@ -1,0 +1,149 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Whatsapp List</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: white">
+  <!-- <div class="main-container"> -->
+    <ion-grid>
+      <ion-row>
+        <!-- category -->
+        <ion-col size="4" style="border-right: 1px solid black;">
+          <ion-row>
+            <ion-label>Add New Category (Max 24 characters)</ion-label>
+            <ion-col size="8">
+              <div class="input-wrap">
+                <ion-input class="form-input" type="text" maxlength="24" [(ngModel)]="newCategory"></ion-input>
+              </div>
+            </ion-col>
+            <ion-col size="4" class="vertical-align-end">
+              <div class="input-wrap">
+                <ion-button (click)="addNewCategory()">Add</ion-button>
+              </div>
+            </ion-col>
+            <ion-text color="danger">
+              <p>Note: Maximum of 10 List can be added.</p>
+            </ion-text>
+          </ion-row>
+    
+            <h4>List</h4>
+            <div class="sr-all-requests">
+              <div *ngFor="let list of menuButton3.list; let i = index">
+                <div class="sr-request">
+                  <p>{{list.title}}</p>
+                  <div class="btn-wrap">
+                    <span><i class="flaticon-null-21 cursor-p" (click)="showDeleteAlert(i, 'cat')"></i></span>
+                    <span><i class="flaticon-pencil-edit-button cursor-p" (click)="editList(i, 'cat')"></i></span>
+                    <ion-button (click)="viewListDetails(i)" shape="round">
+                      View <i class="flaticon-null-7"></i>
+                    </ion-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </ion-col>
+
+        <!-- subcategory -->
+        <ion-col size="4" style="border-right: 1px solid black;" *ngIf="menuButton3.model == 'product'">
+          <ion-text color="danger" *ngIf="paidPlanNote.length">
+            <p>{{paidPlanNote}}</p>
+          </ion-text>
+          <div class="toggle-btn" *ngIf="!paidPlanNote.length">
+            Show Subcategories
+            <label class="switch">
+              <input color="primary" type="checkbox" [checked]="menuButton3.list[selectedCatIndex]?.isSubcategories"
+                (click)="updateSubcategoryStatus($event.target.checked)">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <ng-container *ngIf="menuButton3.list[selectedCatIndex]?.isSubcategories">
+          <h3 class="t-a-c">{{menuButton3.list[selectedCatIndex]?.title}}</h3>
+          <ion-row>
+            <ion-label>Add New Subcategory (Max 24 characters)</ion-label>
+            <ion-col size="8">
+              <div class="input-wrap">
+                <ion-input class="form-input" type="text" maxlength="24" [(ngModel)]="newSubcategory"></ion-input>
+              </div>
+            </ion-col>
+            <ion-col size="4" class="vertical-align-end">
+              <div class="input-wrap">
+                <ion-button (click)="addSubcategory()">Add</ion-button>
+              </div>
+            </ion-col>
+            <ion-text color="danger">
+              <p>Note: Maximum of 10 List can be added.</p>
+            </ion-text>
+          </ion-row>
+    
+          <ng-container *ngIf="selectedCatSubcategories.list?.length">
+            <h4>List</h4>
+            <div class="sr-all-requests">
+              <div *ngFor="let list of selectedCatSubcategories.list; let i = index">
+                <div class="sr-request">
+                  <p>{{list.title}}</p>
+                  <div class="btn-wrap">
+                    <span><i class="flaticon-null-21 cursor-p" (click)="showDeleteAlert(i, 'subcat')"></i></span>
+                    <span><i class="flaticon-pencil-edit-button cursor-p" (click)="editList(i, 'subcat')"></i></span>
+                    <ion-button (click)="viewSubcatProducts(i)" shape="round">
+                      View Products <i class="flaticon-null-7"></i>
+                    </ion-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+        </ion-col>
+
+        <!-- Products -->
+        <ion-col size="4">
+          <h3 class="t-a-c" *ngIf="selectedSubcatIndex == -1">{{menuButton3.list[selectedCatIndex]?.title}}</h3>
+          <h3 class="t-a-c" *ngIf="selectedSubcatIndex != -1">{{selectedCatSubcategories.list[selectedSubcatIndex]?.title}}</h3>
+          <ion-row>
+            <ion-col size="8">
+              <div class="input-wrap">
+                <ion-button (click)="presentProductsModal()">Add Products</ion-button>
+              </div>
+            </ion-col>
+            <ion-col size="4">
+              <div class="input-wrap">
+                <ion-button color="success" (click)="saveProducts('new', menuButton3.list[selectedCatIndex].isSubcategories ? 'subcat' : 'cat')">Save Products</ion-button>
+              </div>
+            </ion-col>
+            <ion-text color="danger">
+              <p>Note: Maximum of 30 products can be added to the list.</p>
+            </ion-text>
+          </ion-row>
+          
+          <div class="m-t-10" *ngIf="selectedCatProducts?.list?.length">
+            <ion-grid class="ion-no-padding data-table ion-text-center">
+              <ion-row class="ion-text-capitalize">
+                <ion-col size="2">SNO</ion-col>
+                <ion-col>Product</ion-col>
+                <ion-col size="2">Action</ion-col>
+              </ion-row>
+              <ion-row *ngFor="let product of selectedCatProducts.list; let i=index;">
+                <ion-col size="2">
+                  {{i+1}}
+                </ion-col>
+                <ion-col>
+                  {{product.name}} <span *ngIf="product.variant">(Variant: {{product.variant}})</span>
+                </ion-col>
+                <ion-col size="2" (click)="removeProduct(i)" class="cursor-p">
+                  <i class="flaticon-null-17"></i>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  <!-- </div> -->
+
+</ion-content>
+

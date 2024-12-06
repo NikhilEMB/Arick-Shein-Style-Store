@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="templates-header-title">Select Filters</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="3">
+          <div class="statusList">
+            <p (click)="changeActiveTile('region')"
+              [ngClass]="activeTile === 'region' ? 'tile-bg-active' : 'tile-bg-inactive'">
+              Region
+            </p>
+          </div>
+          <div class="statusList" *ngIf="!(userDetails.role == 'manager')">
+            <p (click)="changeActiveTile('pincode')"
+              [ngClass]="activeTile === 'pincode' ? 'tile-bg-active' : 'tile-bg-inactive'">
+              Pincode
+            </p>
+          </div>
+          <div class="statusList" *ngIf="!(userDetails.role == 'manager')">
+            <p (click)="changeActiveTile('group')"
+              [ngClass]="activeTile === 'group' ? 'tile-bg-active' : 'tile-bg-inactive'">
+              Group
+            </p>
+          </div>
+        </ion-col>
+        <ion-col size=9 style="margin-top: 8px; border-left: 1px solid lightgray;" id="scroll2">
+          <ion-col>
+            <ion-button (click)="applyFilters()" color="success" style="margin-right: 10px;">
+              <i class="flaticon-null-20 margin-icon"></i>&nbsp;
+              Apply Filter
+            </ion-button>
+            <ion-button (click)="resetFilters()" style="margin-right: 10px;" *ngIf="!(userDetails.role == 'manager')">
+              <i class="flaticon-null-20 margin-icon"></i>&nbsp;
+              Reset All Filter
+            </ion-button>
+            <ion-text color="danger">
+              <p>Note: You can only use one filter at a time.</p>
+            </ion-text>
+          </ion-col>
+          <ion-col [ngSwitch]="activeTile">
+            <!-- For Region -->
+              <ion-row>
+                <ion-col size="12" *ngSwitchCase="'region'">
+                  <p class="rowHeading">Select Region</p>
+                  <select class="select" [(ngModel)]="filters.region" autocomplete="nope">
+                        <ng-container *ngFor="let region of regions">
+                          <option value="{{region.name}}">{{region.name}}</option>
+                        </ng-container>
+                  </select>
+                </ion-col>
+              </ion-row>
+            <!-- For Pincode -->
+              <ion-row>
+                <ion-col size="12" *ngSwitchCase="'pincode'">
+                  <div class="input-wrap">
+                      <ion-label>Enter Pincode</ion-label>
+                      <ion-input type="text" class="form-input" [(ngModel)]="filters.pincode"></ion-input>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <!-- Groups -->
+              <ion-row >
+                <ion-col size="12" *ngSwitchCase="'group'">
+                  <p class="rowHeading">Select Group</p>
+                  <select class="select" [(ngModel)]="filters.group">
+                      <option value="{{group.id}}" *ngFor="let group of groups">{{group.name}}</option>
+                  </select>
+                </ion-col>
+              </ion-row>
+          </ion-col>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+</ion-content>

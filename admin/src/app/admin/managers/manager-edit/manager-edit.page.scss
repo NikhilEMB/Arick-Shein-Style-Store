@@ -1,0 +1,136 @@
+.main{
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 30px;
+    background: white;
+    text-align: center;
+    width: 60vw;
+    margin: 0% auto;
+    height: fit-content
+}
+
+.toggle{
+    display: inline-flex;
+    justify-content: space-between;
+    width: 40vw;
+    margin-bottom: 10px;
+    margin-top: 10px
+}
+
+.toggleSub{
+    font-size: large;
+    display: inline-flex;
+    justify-content: space-between;
+    width: 30vw;
+}
+
+ion-toggle{
+    margin-top: -10px
+}
+
+.item-inner{
+    min-height: 1px !important;
+    }
+
+.label-md{
+    margin-bottom: 1px!important;
+    margin-top: 1px!important;
+}
+
+ion-item-divider{
+    margin-top: 0px;
+    min-height: 1px!important;
+    background: lightgray;
+    opacity: 50%
+}
+
+input{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.item{
+    display: flex;
+    justify-content: space-evenly
+}
+
+.card{
+    border: 1px solid lightgray;
+    width: 30vw;
+    margin: 0% auto
+}
+
+.buttons{
+    display: flex;
+    justify-content: space-evenly
+}
+
+#cardBtn1{
+    border-radius: 10px;
+    color: white;
+    background: black;
+    padding: 5px;
+    width: 80px
+}
+
+#cardBtn2{
+    border-radius: 10px;
+    color: white;
+    background: var(--ion-color-primary);
+    padding: 5px;
+    width: 80px
+}
+
+.tab{
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px lightgray;
+    font-size: large !important;
+    font-weight: 500;
+    border-bottom: 1px solid lightgray;
+}
+
+input,textarea{
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 8px;
+    width: 20vw;
+    max-width: 40vw;
+}
+
+.form{
+    text-align: left;
+    width: 20vw;
+    margin: 0% auto
+}
+
+.data-field{
+    text-align: center;
+    display: flex;
+    justify-content: space-between
+}
+
+.regionSelect{
+    border: 1px solid lightgray;
+    padding: 5px
+}
+
+.removeBtn{
+    color: #f40d30;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #f40d30;
+    background: white
+}
+
+ion-list{
+    display: flex;
+    justify-content: center;
+}
+
+.permission{
+    display: flex;
+    justify-content: space-between;
+    width: 40vw
+
+}

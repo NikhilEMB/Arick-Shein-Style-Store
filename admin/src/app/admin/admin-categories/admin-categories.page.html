@@ -1,0 +1,404 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Categories</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container" style="width: 100%;">
+    <div class="no-data ion-text-center" *ngIf="showNoCategories">
+      <img src="assets/img/no-category.png" alt="">
+      <h6>No categories</h6>
+    </div>
+    <ion-grid>
+      <ion-row class="main-row">
+        
+        <!-- Categories -->
+        <ion-col size="4">
+          <div class="titleArea">
+            <p class="titleFont">Categories</p>
+            <ion-button (click)="goToAddNew('categories')">Add New Category</ion-button>
+          </div>
+          <div class="inputArea">
+            <ion-input placeholder="Enter Category Name" class="inputSearch" [(ngModel)]='searchCategory'></ion-input>
+            &nbsp;
+            <ion-button size="small" (click)='clearSearchCategory()'>Clear</ion-button>
+          </div>
+          <div id="scroll1" *ngIf='categories && categories.length !== 0 && !showNoCategories'>
+            <ion-reorder-group (ionItemReorder)="onRenderCategories($event)" disabled="false" class="ion-no-padding">
+              <ion-item *ngFor="let category of categories | filter: searchCategory; let i = index">
+                <ion-grid class="ion-no-padding categoryGrid" (click)='getSubcategoryData(category,i)'
+                  style="cursor: pointer;">
+                  <ion-row [id]="'category'+i">
+                    <ion-col class="flexCenter">
+                      <div class="toggle-btn">
+                        <label class="switch">
+                          <input color="primary" type="checkbox" [checked]="category.status"
+                            (click)="updateEditCategoryStatus(category.id, category.status, i)">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </ion-col>
+                    <ion-col>
+                      <ion-thumbnail class="thumbnail">
+                        <img class="loading" *ngIf="category.image && !category.image.thumb && category.image.url"
+                          src="{{category.image.url}}">
+                        <img class="loading" *ngIf="category.image && category.image.thumb"
+                          src="{{category.image.thumb}}">
+                        <img *ngIf="category.image && !category.image.thumb && !category.image.url"
+                          src="assets/img/placeholder-img.jpg">
+                      </ion-thumbnail>
+                    </ion-col>
+                    <ion-col class="flexStart">
+                      <p class="ion-text-capitalize">{{category.name}}</p>
+                    </ion-col>
+                    <ion-col class="flexCenter">
+                      <ion-button class="action-btn" fill="clear" (click)="editCatgeory(category)">
+                        <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                      </ion-button>
+                      <ion-button class="action-btn" fill="clear" (click)="deleteCategoryConfirm(category.id, i)">
+                        <i class="flaticon-null-21" slot="icon-only"></i>
+                      </ion-button>
+                      <ion-reorder>
+                        <div class="flat-sort">
+                          <i class="flaticon-menu"></i>
+                        </div>
+                      </ion-reorder>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-reorder-group>
+          </div>
+        </ion-col>
+
+        <!-- Sub Categories -->
+        <ion-col size="4" id="middleColumn">
+          <div class="titleArea">
+            <p class="titleFont">Subcategories</p>
+            <ng-container *ngIf="!noSubcategories">
+              <ion-col class="flexEnd" *ngIf='categoryData'>
+                <!-- <ion-label>Show</ion-label>&nbsp; -->
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input color="primary" type="checkbox" [checked]="categoryData.isSubcategories"
+                      (click)="changeSubcategoriesStatus('category')">
+                    <span class="slider round"></span>
+                  </label>
+                </div>&nbsp;&nbsp;
+              </ion-col>
+            </ng-container>
+            <ion-button (click)="openAddSubCategoryModal('subcategory')">Add New Subcategory</ion-button>
+          </div>
+          <div class="inputArea">
+            <ion-input placeholder="Enter Subcategory Name" class="inputSearch" [(ngModel)]='searchSubcategory'>
+            </ion-input>&nbsp;
+            <ion-button size="small" (click)='clearSearchSubcategory()'>Clear</ion-button>
+          </div>
+          <div class="ion-text-center" *ngIf="noSubcategories">
+            <img src="assets/img/no-category.png" alt="" height="150px">
+            <h6>No subcategories</h6>
+          </div>
+          <div class="ion-no-padding row-border" *ngIf="subcategories && subcategories.length && !noSubcategories"
+            id="scroll2">
+            <ion-reorder-group (ionItemReorder)="onReorderSubcategoires($event)" disabled="false"
+              class="ion-no-padding">
+              <ion-item class="ion-no-padding" no-lines no-border
+                *ngFor="let item of subcategories | filter: searchSubcategory; let i = index">
+                <ion-grid class="row-background ion-no-padding ion-align-items-center hoverGrid"
+                  (click)='getSubOfSubCategory(item,i)' style="cursor: pointer;">
+                  <ion-row class="ion-align-items-center" [id]="'subCategory'+i" [ngStyle]="{'background': item.id===activeSubCatId ? 'var(--ion-color-categories-background)':'white'}">
+                    <ion-col class="flexCenter">
+                      <div class="toggle-btn">
+                        <label class="switch">
+                          <input color="primary" type="checkbox" [checked]="item.status"
+                            (click)="updateEditSubcategoryStatus(item.id, item.status, 'subcategories')">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </ion-col>
+                    <ion-col class="ion-text-center">
+                      <ion-thumbnail>
+                        <img class="loading" *ngIf="item.image && !item.image.thumb && item.image.url"
+                          src="{{item.image.url}}">
+                        <img class="loading" *ngIf="item.image && item.image.thumb" src="{{item.image.thumb}}">
+                        <img *ngIf="!item.image" src="assets/img/placeholder-img.jpg">
+                      </ion-thumbnail>
+                    </ion-col>
+                    <ion-col class="flexStart">
+                      <p class="ion-text-capitalize">{{item.name}}</p>
+                    </ion-col>
+                    <ion-col class="flexCenter">
+                      <ion-button class="action-btn" fill="clear" (click)="openEditSubCategoryModal(item, 'subcategory')">
+                        <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                      </ion-button>
+                      <ion-reorder>
+                        <div class="flat-sort">
+                          <i class="flaticon-menu"></i>
+                        </div>
+                      </ion-reorder>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-reorder-group>
+          </div>
+        </ion-col>
+
+        <!-- Sub-Sub Categories -->
+        <ion-col size="4" id="middleRightColumn">
+          <div class="titleArea">
+            <p class="titleFont">Sub-Subcategories</p>
+            <ng-container *ngIf="subOfSubcategories.length">
+              <ion-col class="flexEnd" *ngIf='categoryData'>
+                <!-- <ion-label>Show</ion-label>&nbsp; -->
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input color="primary" type="checkbox" [checked]="subCategoryData.isSubcategories"
+                      (click)="changeSubcategoriesStatus('subcategory')">
+                    <span class="slider round"></span>
+                  </label>
+                </div>&nbsp;&nbsp;
+              </ion-col>
+            </ng-container>
+            <ion-button (click)="openAddSubCategoryModal('sub-subcategory')">Add New Sub-Subcategory</ion-button>
+          </div>
+          <div class="inputArea">
+            <ion-input placeholder="Enter Sub-Subcategory Name" class="inputSearch" [(ngModel)]='searchSubcategory'>
+            </ion-input>&nbsp;
+            <ion-button size="small" (click)='clearSearchSubcategory()'>Clear</ion-button>
+          </div>
+          <div class="ion-text-center" *ngIf="!subOfSubcategories.length">
+            <img src="assets/img/no-category.png" alt="" height="150px">
+            <h6>No sub-subcategories</h6>
+          </div>
+          <div class="ion-no-padding row-border" *ngIf="subcategories && subcategories.length && subOfSubcategories.length" id="scroll2">
+            <ion-reorder-group (ionItemReorder)="onReorderSubOfSubcategoires($event)" disabled="false"
+              class="ion-no-padding">
+              <ion-item class="ion-no-padding" no-lines no-border
+                *ngFor="let item of subOfSubcategories | filter: searchSubOfSubcategory; let i = index">
+                <ion-grid class="row-background ion-no-padding ion-align-items-center hoverGrid"
+                  style="cursor: pointer;" (click)='getProdsOfSubSubCategory(item)'>
+                  <ion-row class="ion-align-items-center" [id]="'subCategory'+i" [ngStyle]="{'background': item.id===activeSubSubCatId ? 'var(--ion-color-categories-background)':'white'}">
+                    <ion-col class="flexCenter">
+                      <div class="toggle-btn">
+                        <label class="switch">
+                          <input color="primary" type="checkbox" [checked]="item.status"
+                            (click)="updateEditSubcategoryStatus(item.id, item.status, 'subsubcategories')">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </ion-col>
+                    <ion-col class="ion-text-center">
+                      <ion-thumbnail>
+                        <img class="loading" *ngIf="item.image && !item.image.thumb && item.image.url"
+                          src="{{item.image.url}}">
+                        <img class="loading" *ngIf="item.image && item.image.thumb" src="{{item.image.thumb}}">
+                        <img *ngIf="!item.image" src="assets/img/placeholder-img.jpg">
+                      </ion-thumbnail>
+                    </ion-col>
+                    <ion-col class="flexStart">
+                      <p class="ion-text-capitalize">{{item.name}}</p>
+                    </ion-col>
+                    <ion-col class="flexCenter">
+                      <ion-button class="action-btn" fill="clear" (click)="openEditSubCategoryModal(item, 'subsubcategory')">
+                        <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                      </ion-button>
+                      <ion-reorder>
+                        <div class="flat-sort">
+                          <i class="flaticon-menu"></i>
+                        </div>
+                      </ion-reorder>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-reorder-group>
+          </div>
+        </ion-col>
+
+        <!-- Products -->
+        <!-- *ngIf="noSubcategories" -->
+        <ion-col size="4">
+          <div class="titleArea">
+            <p class="titleFont">Products</p>
+            <ion-button (click)="exportProducts()">Export products</ion-button>
+          </div>
+          <div class="inputArea">
+            <ion-input placeholder="Enter Product Name" class="inputSearch" [(ngModel)]='searchProduct'></ion-input>
+            &nbsp;
+            <ion-button size="small" (click)='clearSearchProduct()'>Clear</ion-button>
+          </div>
+          <div class="ion-text-center" *ngIf="showNoProducts">
+            <img src="assets/img/no-product.png" alt="" height="150px">
+            <h6>No products</h6>
+          </div>
+          <div *ngIf="showLoader; else showListOfProducts" class="spinner">
+            <ion-spinner color="primary"></ion-spinner>
+          </div>
+          <ng-template #showListOfProducts>
+            <ion-list class="ion-no-padding row-border" *ngIf="prod && prod.length !== 0 && !showNoProducts"
+              id='scroll3'>
+              <div *ngIf="multiVendor && vendors.length">
+                <ion-row>
+                  <div class="headings">
+                    Add Vendor to All Products
+                  </div>
+                </ion-row>
+                <ion-row *ngIf="showSelectVendor == true">
+                  <ion-col size="12">
+                    <ion-select class="border i-s-p-10" (ionChange)="addVendor($event)" placeholder="Select Vendor"
+                      style="border: 1px solid;">
+                      <ion-select-option value="">No Vendor
+                      </ion-select-option>
+                      <ion-select-option [value]="vendor.id" *ngFor="let vendor of vendors">{{vendor.name}}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-col>
+                </ion-row>
+                <br>
+              </div>
+              <div *ngIf="showSelectGst == true">
+                <ion-row>
+                  <div class="headings">
+                    Set Gst Exclusive / Inclusive for all Products
+                  </div>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-select class="border i-s-p-10" [value]="categoryData?.gstExclusive" (ionChange)="addGst($event)" placeholder="Select Gst Type"
+                      style="border: 1px solid;">
+                      <ion-select-option [value]="true">Exclusive
+                      </ion-select-option>
+                      <ion-select-option [value]="false">Inclusive
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-col>
+                </ion-row>
+                <br>
+              </div>
+              <ion-reorder-group (ionItemReorder)="onRenderItems($event)" disabled="false" class="ion-no-padding">
+
+                <ion-item class="ion-no-padding" *ngFor="let item of prod | filter: searchProduct; let i = index">
+                  <ion-grid class="ion-no-padding ion-align-items-center">
+                    <ion-row class="row-background ion-align-items-center">
+                      <ion-col class="flexCenter">
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input color="primary" type="checkbox" [checked]="item.status"
+                              (click)="updateEditProductStatus(item.id, item.status)">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                      <ion-col>
+                        <ion-thumbnail>
+                          <img class="loading" *ngIf="item.coverPic && !item.coverPic.thumb && item.coverPic.url"
+                            src="{{item.coverPic.url}}">
+                          <img class="loading" *ngIf="item.coverPic && item.coverPic.thumb"
+                            src="{{item.coverPic.thumb}}">
+                          <img *ngIf="!item.coverPic" src="assets/img/placeholder-img.jpg">
+                        </ion-thumbnail>
+                      </ion-col>
+                      <ion-col class="flexStart">
+                        <p class="ion-text-capitalize">{{item.prodName}}</p>
+                      </ion-col>
+                      <ion-col class="flexCenter">
+                        <ion-button class="action-btn" fill="clear" (click)="editProduct(item)">
+                          <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                        </ion-button>
+                        <ion-reorder>
+                          <div class="flat-sort">
+                            <i class="flaticon-menu"></i>
+                          </div>
+                        </ion-reorder>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+
+              </ion-reorder-group>
+            </ion-list>
+          </ng-template>
+        </ion-col>
+
+        <!-- Sub Sub-categories -->
+        <!-- <ion-col *ngIf="!noSubcategories">
+          <p class="titleFont">Sub sub-categories</p>
+          <div class="titleArea">
+            <ion-col class="flexEnd" *ngIf='categoryData'>
+              <ion-label>Show</ion-label>&nbsp;
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input color="primary" type="checkbox" [checked]="subCategoryData?.isSubcategories"
+                    (click)="changeSubOfSubCategoriesStatus()">
+                  <span class="slider round"></span>
+                </label>
+              </div>&nbsp;&nbsp;
+            </ion-col>
+            <ion-button (click)="AddSubOfSubCategory()">Add Sub sub-Category</ion-button>
+          </div>
+          <div class="inputArea">
+            <ion-input placeholder="Enter Sub sub-category Name" class="inputSearch" [(ngModel)]='searchSubOfSubCategory'>
+            </ion-input>&nbsp;
+            <ion-button size="small" (click)='clearSearchSubOfSubCategory()'>Clear</ion-button>
+          </div>
+        
+          <div class="ion-text-center" *ngIf="subOfSubcategories.length == 0">
+            <img src="assets/img/no-category.png" alt="" height="150px">
+            <h6>No sub-subcategories</h6>
+          </div>
+          <ng-container *ngIf="subOfSubcategories && subOfSubcategories.length">
+            <div class="ion-no-padding row-border" id="scroll2">
+              <ion-reorder-group (ionItemReorder)="onReorderSubOfSubCategories($event)" disabled="false" class="ion-no-padding">
+                <ion-item class="ion-no-padding" no-lines no-border
+                  *ngFor="let item of subOfSubcategories | filter: searchSubOfSubCategory; index as i">
+
+                  <ion-grid class="row-background ion-no-padding ion-align-items-center hoverGrid" style="cursor: pointer;">
+                    <ion-row class="ion-align-items-center" [id]="'subCategory'+i">
+                      <ion-col class="flexCenter">
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input color="primary" type="checkbox" [checked]="item.status"
+                              (click)="editSubOfSubCategoryStatus(item.id, item.status)">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                      <ion-col class="ion-text-center">
+                        <ion-thumbnail>
+                          <img class="loading" *ngIf="item.image && !item.image.thumb && item.image.url"
+                            src="{{item.image.url}}">
+                          <img class="loading" *ngIf="item.image && item.image.thumb" src="{{item.image.thumb}}">
+                          <img *ngIf="!item.image" src="assets/img/placeholder-img.jpg">
+                        </ion-thumbnail>
+                      </ion-col>
+                      <ion-col class="flexStart">
+                        <p class="ion-text-capitalize">{{item.name}}</p>
+                      </ion-col>
+                      <ion-col class="flexCenter">
+                        <ion-button class="action-btn" fill="clear" (click)="editSubOfSubCategory(item)">
+                          <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                        </ion-button>
+                        <ion-reorder>
+                          <div class="flat-sort">
+                            <i class="flaticon-menu"></i>
+                          </div>
+                        </ion-reorder>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </ion-reorder-group>
+            </div>
+          </ng-container>
+        </ion-col> -->
+
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

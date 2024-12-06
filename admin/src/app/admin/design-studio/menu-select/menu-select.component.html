@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title text-center color="light">Select Menu Items</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+  <div class="main-container" style="width: 100%">
+    <ion-grid>
+      <ion-row>
+        <ion-col size=4 id="scroll1">
+          <div class="statusList">
+            <p id="status2" (click)="getPages()">Pages</p>
+            <p id="status3" (click)="getCategories()">Categories</p>
+            <p id="status4" (click)="getBrands()">Brands</p>
+            <p id="status5" (click)="getServices()">Services</p>
+            <p id="status6" (click)="getCustomLink()">Custom Link</p>
+          </div>
+        </ion-col>
+        <ion-col size=8 id="scroll2">
+          <div *ngIf="dataType ==  'pages' ">
+            <div class="checkList" *ngFor="let item of dataList,let i = index">
+              <!-- <p>{{item.name || item.id}}</p>&nbsp;&nbsp; -->
+              <label class="checkListLabel" for="pageList{{i}}">{{item.name || item.id}}</label>&nbsp;&nbsp;
+              <input type="checkbox" id="pageList{{i}}" (click)='showSubList(i)' />
+            </div>
+          </div>
+          <div *ngIf="dataType == 'categories'">
+            <div *ngFor="let item of dataList,let i = index">
+              <div class="checkList">
+                <!-- <p>{{item.name}}</p>&nbsp;&nbsp; -->
+                <label class="checkListLabel" for="catlist{{i}}">{{item.name}}</label>&nbsp;&nbsp;
+                <input type="checkbox" id="catlist{{i}}" (click)='showSubList(i)' />
+              </div>
+              <div class="subCheckList" *ngFor='let subItem of item.sublist,let j = index'>
+                <!-- <p>{{item.name}} : {{subItem.name}}</p>&nbsp;&nbsp;                 -->
+                <label class="checkListLabel" for="subList{{j}}">{{item.name}} : {{subItem.name}}</label>&nbsp;&nbsp;
+                <input type="checkbox" id="subList{{j}}" (click)='selectSubcategory(i,j)' />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="dataType ==  'brands' || dataType == 'services' ">
+            <div class="checkList" *ngFor="let item of dataList,let i = index">
+              <label class="checkListLabel" for="brandlist{{i}}">{{item.name}}</label>
+              <input type="checkbox" id="brandlist{{i}}" (click)='showSubList(i)' />
+            </div>
+          </div>
+          <div *ngIf="dataType == 'customLink'">
+            <div class="inputGroup">
+              <label class="formLabel" for="linkTitle">Custom Title</label>
+              <input class="formInput" [(ngModel)]="customTitle" id="linkTitle" type="text">
+            </div>
+            <div class="inputGroup">
+              <label class="formLabel" for="linkUrl">Custom Url / Link</label>
+              <input class="formInput" [(ngModel)]="customLink" id="linkUrl" type="text">
+            </div>
+            <div class="inputGroup" style="display: flex;">
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input type="checkbox" (click)="toggleNewTab()" [checked]="activeNewTab">
+                  <span class="slider round"></span>
+                </label>
+              </div>&nbsp;&nbsp;
+              <p>Open in new tab</p>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer style="padding: 10px;text-align: center;">
+  <ion-button (click)='closeModal()'>Save Menu Items</ion-button>
+</ion-footer>

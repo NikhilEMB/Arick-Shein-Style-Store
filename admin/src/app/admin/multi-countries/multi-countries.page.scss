@@ -1,0 +1,20 @@
+ion-footer {
+  padding: 1rem;
+}
+// input [type="checkbox"][disabled] {
+//   background-color: black !important;
+//   cursor: not-allowed !important;
+// }
+// .myDisabled {
+//   background-color: #ccc !important;
+//   cursor: not-allowed !important;
+// }
+.toggle {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+}
+.form-input {
+  margin-top: 0;
+}

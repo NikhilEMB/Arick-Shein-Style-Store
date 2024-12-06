@@ -1,0 +1,20 @@
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /vendors/requests/{img} {
+      allow read;
+      allow write;
+    }
+    match /upiManualPayment/{orderId}/image/{img} {
+      allow read;
+      allow write;
+    }
+    match /customPayment/{orderId}/image/{img} {
+      allow read;
+      allow write;
+    }
+    match /{allPaths=**} {
+      allow read;
+      allow write: if request.auth!=null;
+    }
+  }
+}

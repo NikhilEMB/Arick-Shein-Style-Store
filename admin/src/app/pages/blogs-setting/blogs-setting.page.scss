@@ -1,0 +1,33 @@
+.name {
+  width: calc(100% - 410px);
+  max-width: calc(100% - 410px);
+}
+
+.list-header {
+  position: relative;
+  text-align: center;
+}
+
+.list-container {
+  margin-top: 90px;
+  text-align: center;
+}
+
+.flexInput {
+  text-align: center;
+  margin: 0% auto;
+  display: flex;
+  width: 200px;
+
+  input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 8px;
+    padding: 4px;
+  }
+}
+
+.alignCenter {
+  border-bottom: var(--ion-color-medium) 1px solid;
+  align-items: center;
+}

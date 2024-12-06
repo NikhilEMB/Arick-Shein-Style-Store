@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Edit Quotation Products</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-text color="danger" style="text-align: center;font-weight: 600;">
+    <p style="font-size: medium;">Please Generate / Regenerate invoice whenever you Change Price / Quantity for this Quotation List</p>
+    <br>
+  </ion-text>
+  
+  <div *ngFor="let product of products; let i=index" style="background: #fff;">
+
+    <ion-item class="ion-no-padding" lines="none">
+
+      <div slot="start"
+        [ngStyle]="{'background': 'url(' + getProductImg(product) + ') no-repeat center', 'background-size': 'contain'}"
+        class="product-image"></div>
+
+      <ion-label>
+
+        <h3 class="product-name ion-text-wrap">{{product.name}}</h3>
+
+        <h6 class="product-description ion-text-capitalize">{{getProductDesc(product)}}</h6>
+
+        <!-- <h2>Current Price</h2> -->
+
+        <br>
+
+        <h2>Ordered Quantity: <input [(ngModel)]='product.quantity' type="number" min='0'/></h2>
+
+        <br>
+          
+        <h2 *ngIf="getProductType(product) !== 'pieces'">
+          Single Product Price:
+          <input [(ngModel)]='product.price' type="number" min='0' [disabled]="userRole == 'manager'" />
+          {{currencyCode}}
+        </h2>
+        
+        <h2 *ngIf="getProductType(product) == 'pieces'">
+          Single Product Price:
+          <input [(ngModel)]='product.pack.price' type="number" min='0' [disabled]="userRole == 'manager'" />
+          {{currencyCode}}
+        </h2>
+        
+        <ion-text color="danger" *ngIf="userRole == 'manager'">
+          <span>*Product price is disabled for manager.</span>
+        </ion-text>
+
+        <br>
+
+
+      </ion-label>
+    </ion-item>
+
+    <hr class="line" *ngIf="i !== (products.length - 1)">
+
+  </div>
+</ion-content>
+
+
+<ion-footer>
+  <ion-button (click)="saveEditOrder()" expand="block" class="footer-button">
+    Save
+  </ion-button>
+</ion-footer>

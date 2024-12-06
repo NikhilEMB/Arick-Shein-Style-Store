@@ -1,0 +1,255 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Bot Menu</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <div class="flex-label">
+            <div class="flex-space-between">
+              <div>
+                <ion-label>Header Image</ion-label>
+                <br>
+              </div>
+              <div class="upload-btn-wrapper" style="margin-top: 8px;">
+              <button
+                class="upload-btn btn-1 i-start" style="margin-right: 0px;"> <i
+                  class="flaticon-null-16"></i>Upload</button>
+              <input type="file" name="myfile" (change)="uploadImage($event.target.files)"
+                accept="image/*" />
+              </div>
+            </div>
+            <div class="img-container">
+                <div class="img-wrap" style="margin-top: 8px;"
+                  *ngIf="menuEntryPoint.header?.mediaUrl">
+                  <img class="category-img"
+                    [src]="menuEntryPoint.header?.mediaUrl"/>
+                  <div class="overlay">
+                    <ion-button class="btn-2 remove" shape="round" fill="clear" color="danger"
+                      (click)="removeImg('welcomeMsgImg')">
+                      <ion-icon name="trash" slot="icon-only"></ion-icon>
+                    </ion-button>
+                  </div>
+                </div>
+            </div>
+
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Welcome Message (Max 1024 characters)<span class="red">*</span></ion-label>
+            <ion-textarea rows="6" maxlength="1024" class="form-input" [(ngModel)]="menuEntryPoint.bodyText"></ion-textarea>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Footer Message (Max 60 characters)</ion-label>
+            <ion-input class="form-input" maxlength="60" [(ngModel)]="menuEntryPoint.footer"></ion-input>
+          </div>
+        </ion-col>
+        <h3>Welcome Menu Buttons</h3>
+        <!-- menu button 1 start -->
+        <ion-col size="12">
+          <div class="input-wrap">
+            <div class="flex-label">
+              <ion-label>Button 1</ion-label>
+              <ion-toggle [(ngModel)]="menuEntryPoint.list[0].active"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+
+        <ng-container *ngIf="menuEntryPoint.list[0].active">
+        <ion-col size="4">
+          <div class="input-wrap">
+            <ion-label>Button 1 Name (Max 20 characters)<span class="red">*</span></ion-label>
+            <ion-input class="form-input" maxlength="20" [(ngModel)]="menuEntryPoint.list[0].title"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="input-wrap">
+            <ion-label>Button 1 Body Text (Max 72 characters)<span class="red">*</span></ion-label>
+            <ion-input class="form-input" maxlength="72" [(ngModel)]="menuButton1.bodyText"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="input-wrap">
+            <ion-label>Type of List<span class="red">*</span></ion-label>
+            <select class="form-input" [(ngModel)]="menuButton1.model" interface="popover"
+              style="width: 100%; padding: 9px;" (change)="changeListType($event.target.value, 'menu-button-1')">
+              <option value="product" selected>Product</option>
+              <option value="service">Service</option>
+            </select>
+          </div>
+        </ion-col>
+        <ion-col size="12" class="vertical-align-end">
+          <div class="input-wrap">
+            <ion-button (click)="presentProductsModal(menuButton1.list, 'menu-button-1')">Add {{menuButton1.model | titlecase}}</ion-button>
+          </div>
+        </ion-col>
+        <ng-container *ngIf="menuButton1.list?.length">
+        <ion-col size="12">
+          <h4>{{menuButton1.model | titlecase}} List</h4>
+          <!-- <h4 class="cursor-p" (click)="showProductList1 = !showProductList1">Products List 
+            <i class="flaticon-download" [ngClass]="showProductList1 ? 'arrowDown' : 'arrowActive'"></i>
+          </h4> -->
+          <ion-text color="danger">
+            <p>Note: Maximum of {{menuButton1.model == 'product' ? 30 : 10}} items can be added to the list.</p>
+          </ion-text>
+        </ion-col>
+        <ion-col size="12">
+          <div class="m-t-10">
+            <ion-grid class="ion-no-padding data-table ion-text-center">
+              <ion-row class="ion-text-capitalize">
+                <ion-col>SNO</ion-col>
+                <ion-col>List</ion-col>
+                <ion-col>Action</ion-col>
+              </ion-row>
+              <ion-row *ngFor="let product of menuButton1.list; let i=index;">
+                <ion-col>
+                  {{i+1}}
+                </ion-col>
+                <ion-col>
+                  {{product?.name || product?.title}} <span *ngIf="product.variant">(Variant: {{product.variant}})</span>
+                </ion-col>
+                <ion-col (click)="removeProduct('btn1Products', i)" class="cursor-p">
+                  <i class="flaticon-null-17"></i>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-col>
+        </ng-container>
+      </ng-container>
+      <!-- menu button 1 end -->
+      
+        <!-- menu button 2 start -->
+        <ion-col size="12">
+          <div class="input-wrap">
+            <div class="flex-label">
+              <ion-label>Button 2</ion-label>
+              <ion-toggle [(ngModel)]="menuEntryPoint.list[1].active"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+
+        <ng-container *ngIf="menuEntryPoint.list[1].active">
+        <ion-col size="4">
+          <div class="input-wrap">
+            <ion-label>Button 2 Name (Max 20 characters)<span class="red">*</span></ion-label>
+            <ion-input class="form-input" maxlength="20" [(ngModel)]="menuEntryPoint.list[1].title"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="input-wrap">
+            <ion-label>Button 2 Body Text (Max 72 characters)<span class="red">*</span></ion-label>
+            <ion-input class="form-input" maxlength="72" [(ngModel)]="menuButton2.bodyText"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="input-wrap">
+            <ion-label>Type of List<span class="red">*</span></ion-label>
+            <select class="form-input" [(ngModel)]="menuButton2.model" interface="popover"
+              style="width: 100%; padding: 9px;" (change)="changeListType($event.target.value, 'menu-button-2')">
+              <option value="product" selected>Product</option>
+              <option value="service">Service</option>
+            </select>
+          </div>
+        </ion-col>
+        <ion-col size="12" class="vertical-align-end">
+          <ion-button (click)="presentProductsModal(menuButton2.list, 'menu-button-2')">Add {{menuButton2.model | titlecase}}</ion-button>
+        </ion-col>
+        <ng-container *ngIf="menuButton2.list?.length">
+        <ion-col size="12">
+          <h4>{{menuButton2.model | titlecase}} List</h4>
+          <!-- <h4 class="cursor-p" (click)="showProductList2 = !showProductList2">Products List 
+            <i class="flaticon-download" [ngClass]="showProductList2 == true ? 'arrowDown' : 'arrowActive'"></i>
+          </h4> -->
+          <ion-text color="danger">
+            <p>Note: Maximum of {{menuButton2.model == 'product' ? 30 : 10}} items can be added to the list.</p>
+          </ion-text>
+        </ion-col>
+        <ion-col size="12">
+          <div class="m-t-10">
+            <ion-grid class="ion-no-padding data-table ion-text-center">
+              <ion-row class="ion-text-capitalize">
+                <ion-col>SNO</ion-col>
+                <ion-col>List</ion-col>
+                <ion-col>Action</ion-col>
+              </ion-row>
+              <ion-row *ngFor="let product of menuButton2.list; let i=index;">
+                <ion-col>
+                  {{i+1}}
+                </ion-col>
+                <ion-col>
+                  {{product?.name || product?.title}} <span *ngIf="product.variant">(Variant: {{product.variant}})</span>
+                </ion-col>
+                <ion-col (click)="removeProduct('btn2Products', i)" class="cursor-p">
+                  <i class="flaticon-null-17"></i>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-col>
+        </ng-container>
+      </ng-container>
+      <!-- menu button 2 end -->
+
+      
+        <!-- menu button 3 start -->
+        <ion-col size="12">
+          <div class="input-wrap">
+            <div class="flex-label">
+              <ion-label>Button 3</ion-label>
+              <ion-toggle [(ngModel)]="menuEntryPoint.list[2].active"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+
+        <ng-container *ngIf="menuEntryPoint.list[2].active">
+        <ion-col size="4">
+          <div class="input-wrap">
+            <ion-label>Button 3 Name (Max 20 characters)<span class="red">*</span></ion-label>
+            <ion-input class="form-input" maxlength="20" [(ngModel)]="menuEntryPoint.list[2].title"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="input-wrap">
+            <ion-label>Button 3 Body Text (Max 72 characters)<span class="red">*</span></ion-label>
+            <ion-input class="form-input" maxlength="72" [(ngModel)]="menuButton3.bodyText"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="input-wrap">
+            <ion-label>Type of List<span class="red">*</span></ion-label>
+            <select class="form-input" [(ngModel)]="menuButton3.model" interface="popover"
+              style="width: 100%; padding: 9px;" (change)="changeListType($event.target.value, 'menu-button-3')">
+              <option value="product" selected>Product</option>
+              <option value="service">Service</option>
+            </select>
+          </div>
+        </ion-col>
+      </ng-container>
+      <!-- menu button 3 end -->
+
+      </ion-row>
+    </ion-grid>
+  </div>
+
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="save()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

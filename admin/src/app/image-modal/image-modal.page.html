@@ -1,0 +1,27 @@
+<ion-content *ngIf="imgs">
+  <ion-item class="close" lines="none" text-center style="margin-top: 25px;">
+    <ion-button (click)="close()" fill="clear" color="light">
+      <ion-icon slot="start" name="close" style="color: black;"></ion-icon>
+    </ion-button>
+  </ion-item>
+  <!-- <ion-slides [options]="sliderOpts">
+    <ion-slide *ngFor="let img of imgs; let i = index">
+        <img src="{{img.url}}" *ngIf="i === 0" style="width: 50px;"> -->
+        <!-- <div *ngIf="i === index">{{spliceFristImg()}}</div> -->
+        <!-- <div class="img-wrap swiper-zoom-container" *ngIf="i > 0"><img src="{{img.url}}"></div>
+    </ion-slide>
+  </ion-slides> -->
+  <div class="img-wrap" *ngIf="showLoader">
+      <img src="{{imgs[index].url}}" alt="">
+  </div>
+  <ion-slides [options]="sliderOpts">
+    <ion-slide *ngFor="let img of imgs; let i = index">
+        <div class="img-wrap swiper-zoom-container">
+          <img data-src="{{img.url}}" class="swiper-lazy" [hidden]="showLoader">
+        </div>
+</ion-slide>
+</ion-slides>
+</ion-content>
+<!-- 
+<img src="{{img.url}}" *ngIf="i === 0 && img.url===loadingUrl" style="width: 50px;">
+      <img src="{{img.url}}" *ngIf="i === 0 && img.url!==loadingUrl"> -->

@@ -1,0 +1,526 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{gatewayChoice.charAt(0).toUpperCase() +
+      gatewayChoice.slice(1)}} Settings</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <!-- Stripe Details -->
+    <ion-row *ngIf="gatewayChoice === 'stripe'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Stripe Active</ion-label>
+            <ion-toggle [(ngModel)]="stripeDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="stripeDetails.active">
+          <ion-label>Publishable Key</ion-label>
+          <ion-input class="form-input"
+            [(ngModel)]="stripeDetails.publishableKey"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="stripeDetails.active">
+          <ion-label>Secret Key</ion-label>
+          <ion-input type="text"
+            class="form-input"
+            [(ngModel)]="stripeDetails.secretKey"></ion-input>
+        </div>
+      </ion-col>
+
+      <!-- TODO - STRIPE -->
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="stripeDetails.active">
+          <div class="flex-space-between">
+            <div>
+              <ion-label>Extra Charges</ion-label>
+            </div>
+          </div>
+          <br />
+          <div class="flex-label">
+            <p>Flat</p>&nbsp;&nbsp;
+            <div class="toggle-btn">
+              <label class="switch">
+                <input color="primary"
+                  type="checkbox"
+                  (click)="extraChargesTypeStripe($event)"
+                  [checked]="stripeDetails.extraChargeStripe.type != 'flat'">
+                <span class="slider round"></span>
+              </label>
+            </div>&nbsp;&nbsp;
+            <p>Percentage ( % )</p>&nbsp;&nbsp;
+          </div>
+          <div class="extra-charges">
+
+            <div class="flex-space-between">
+              <div>
+                <ion-label style="margin-right: 20px;">Charge Name
+                </ion-label>
+              </div>
+              <ion-input class="form-input"
+                [(ngModel)]="stripeDetails.extraChargeStripe.chargeName"
+                type="text"
+                style="max-width: 10rem; margin-right: 20px;">
+              </ion-input>
+            </div>
+
+            <div class="flex-space-between">
+              <div>
+                <ion-label style="margin-right: 20px;">Charges
+                  {{charStripe}}</ion-label>
+              </div>
+              <ion-input class="form-input"
+                [(ngModel)]="stripeDetails.extraChargeStripe.charge"
+                type="number"
+                style="max-width: 10rem; margin-right: 20px;">
+              </ion-input>
+            </div>
+
+            <div *ngIf="toggleStateStripe == 'perc'">
+              <div class="flex-space-between">
+                <div>
+                  <ion-label style="margin-right: 20px;">Max
+                    Amount
+                  </ion-label>
+                </div>
+                <ion-input class="form-input"
+                  [(ngModel)]="stripeDetails.extraChargeStripe.maxCharge"
+                  type="number"
+                  style="max-width: 10rem; margin-right: 20px;">
+                </ion-input>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </ion-col>
+
+    </ion-row>
+
+    <!-- Paypal Details -->
+    <ion-row *ngIf="gatewayChoice === 'paypal'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Paypal Active</ion-label>
+            <ion-toggle [(ngModel)]="paypalDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="paypalDetails.active">
+          <ion-label>Client ID</ion-label>
+          <ion-input class="form-input"
+            [(ngModel)]="paypalDetails.client_id"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="paypalDetails.active">
+          <ion-label>Client Secret</ion-label>
+          <ion-input type="text"
+            class="form-input"
+            [(ngModel)]="paypalDetails.client_secret"></ion-input>
+        </div>
+      </ion-col>
+
+      <!-- TODO - PAYPAL -->
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="paypalDetails.active">
+          <div class="flex-space-between">
+            <div>
+              <ion-label>Extra Charges</ion-label>
+            </div>
+          </div>
+          <br />
+          <div class="flex-label">
+            <p>Flat</p>&nbsp;&nbsp;
+            <div class="toggle-btn">
+              <label class="switch">
+                <input color="primary"
+                  type="checkbox"
+                  (click)="extraChargesTypePaypal($event)"
+                  [checked]="paypalDetails.extraChargePaypal.type != 'flat'">
+                <span class="slider round"></span>
+              </label>
+            </div>&nbsp;&nbsp;
+            <p>Percentage ( % )</p>&nbsp;&nbsp;
+          </div>
+          <div class="extra-charges">
+
+            <div class="flex-space-between">
+              <div>
+                <ion-label style="margin-right: 20px;">Charge Name
+                </ion-label>
+              </div>
+              <ion-input class="form-input"
+                [(ngModel)]="paypalDetails.extraChargePaypal.chargeName"
+                type="text"
+                style="max-width: 10rem; margin-right: 20px;">
+              </ion-input>
+            </div>
+
+            <div class="flex-space-between">
+              <div>
+                <ion-label style="margin-right: 20px;">Charges
+                  {{charPaypal}}</ion-label>
+              </div>
+              <ion-input class="form-input"
+                [(ngModel)]="paypalDetails.extraChargePaypal.charge"
+                type="number"
+                style="max-width: 10rem; margin-right: 20px;">
+              </ion-input>
+            </div>
+
+            <div *ngIf="toggleStatePaypal == 'perc'">
+              <div class="flex-space-between">
+                <div>
+                  <ion-label style="margin-right: 20px;">Max
+                    Amount
+                  </ion-label>
+                </div>
+                <ion-input class="form-input"
+                  [(ngModel)]="paypalDetails.extraChargePaypal.maxCharge"
+                  type="number"
+                  style="max-width: 10rem; margin-right: 20px;">
+                </ion-input>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </ion-col>
+
+    </ion-row>
+
+    <!-- Cashfree Details -->
+    <ion-row *ngIf="gatewayChoice === 'cashfree'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Cashfree Active</ion-label>
+            <ion-toggle [(ngModel)]="cashfreeDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="cashfreeDetails.active">
+          <ion-label>App ID</ion-label>
+          <ion-input class="form-input"
+            [(ngModel)]="cashfreeDetails.app_id"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="cashfreeDetails.active">
+          <ion-label>Secret Key</ion-label>
+          <ion-input type="text"
+            class="form-input"
+            [(ngModel)]="cashfreeDetails.secret_key"></ion-input>
+        </div>
+      </ion-col>
+
+      <!-- TODO - CASHFREE -->
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="cashfreeDetails.active">
+          <div class="flex-space-between">
+            <div>
+              <ion-label>Extra Charges</ion-label>
+            </div>
+          </div>
+          <br />
+          <div class="flex-label">
+            <p>Flat</p>&nbsp;&nbsp;
+            <div class="toggle-btn">
+              <label class="switch">
+                <input color="primary"
+                  type="checkbox"
+                  (click)="extraChargesTypeCashfree($event)"
+                  [checked]="cashfreeDetails.extraChargeCashfree.type != 'flat'">
+                <span class="slider round"></span>
+              </label>
+            </div>&nbsp;&nbsp;
+            <p>Percentage ( % )</p>&nbsp;&nbsp;
+          </div>
+          <div class="extra-charges">
+
+            <div class="flex-space-between">
+              <div>
+                <ion-label style="margin-right: 20px;">Charge Name
+                </ion-label>
+              </div>
+              <ion-input class="form-input"
+                [(ngModel)]="cashfreeDetails.extraChargeCashfree.chargeName"
+                type="text"
+                style="max-width: 10rem; margin-right: 20px;">
+              </ion-input>
+            </div>
+
+            <div class="flex-space-between">
+              <div>
+                <ion-label style="margin-right: 20px;">Charges
+                  {{charCashfree}}</ion-label>
+              </div>
+              <ion-input class="form-input"
+                [(ngModel)]="cashfreeDetails.extraChargeCashfree.charge"
+                type="number"
+                style="max-width: 10rem; margin-right: 20px;">
+              </ion-input>
+            </div>
+
+            <div *ngIf="toggleStateCashfree == 'perc'">
+              <div class="flex-space-between">
+                <div>
+                  <ion-label style="margin-right: 20px;">Max
+                    Amount
+                  </ion-label>
+                </div>
+                <ion-input class="form-input"
+                  [(ngModel)]="cashfreeDetails.extraChargeCashfree.maxCharge"
+                  type="number"
+                  style="max-width: 10rem; margin-right: 20px;">
+                </ion-input>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </ion-col>
+
+    </ion-row>
+
+    <!-- PayU Details -->
+    <ion-row *ngIf="gatewayChoice === 'payU'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>PayU Active</ion-label>
+            <ion-toggle [(ngModel)]="payUDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="payUDetails.active">
+          <ion-label>Merchant ID</ion-label>
+          <ion-input class="form-input"
+            [(ngModel)]="payUDetails.merchantID"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="payUDetails.active">
+          <ion-label>Key</ion-label>
+          <ion-input type="text"
+            class="form-input"
+            [(ngModel)]="payUDetails.key"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="payUDetails.active">
+          <ion-label>Salt</ion-label>
+          <ion-input type="text"
+            class="form-input"
+            [(ngModel)]="payUDetails.salt"></ion-input>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <!-- Atom Details -->
+    <ion-row *ngIf="gatewayChoice === 'atom'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Atom Active</ion-label>
+            <ion-toggle [(ngModel)]="atomDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="atomDetails.active">
+          <ion-label>Key</ion-label>
+          <ion-input type="text"
+            class="form-input"
+            [(ngModel)]="atomDetails.key"></ion-input>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <!-- Paykun Details -->
+    <ion-row *ngIf="gatewayChoice === 'paykun'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Paykun Active</ion-label>
+            <ion-toggle [(ngModel)]="paykunDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="paykunDetails.active">
+          <ion-label>Merchant ID</ion-label>
+          <ion-input type="text"
+            class="form-input"
+            [(ngModel)]="paykunDetails.merchantId"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="paykunDetails.active">
+          <ion-label>Access Token</ion-label>
+          <ion-input type="text"
+            class="form-input"
+            [(ngModel)]="paykunDetails.accessToken"></ion-input>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <!-- CCAvenue Details -->
+    <ion-row *ngIf="gatewayChoice === 'ccAvenue'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>CCAvenue Active</ion-label>
+            <ion-toggle [(ngModel)]="ccAvenueDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="ccAvenueDetails.active">
+          <ion-label>Merchant ID</ion-label>
+          <ion-input type="text"
+            class="form-input"
+            [(ngModel)]="ccAvenueDetails.merchantId"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="ccAvenueDetails.active">
+          <ion-label>Registered Domain</ion-label>
+          <ion-input type="text"
+            class="form-input"
+            [(ngModel)]="ccAvenueDetails.domain"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="ccAvenueDetails.active">
+          <ion-label>Working Key</ion-label>
+          <ion-input type="text"
+            class="form-input"
+            [(ngModel)]="ccAvenueDetails.workingKey"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="ccAvenueDetails.active">
+          <ion-label>Access Code</ion-label>
+          <ion-input type="text"
+            class="form-input"
+            [(ngModel)]="ccAvenueDetails.accessCode"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap"
+          *ngIf="ccAvenueDetails.active">
+          <div class="flex-space-between">
+            <div>
+              <ion-label>Extra Charges</ion-label>
+            </div>
+          </div>
+          <br />
+          <div class="flex-label">
+            <p>Flat</p>&nbsp;&nbsp;
+            <div class="toggle-btn">
+              <label class="switch">
+                <input color="primary"
+                  type="checkbox"
+                  (click)="extraChargesTypeCCAvenue($event)"
+                  [checked]="ccAvenueDetails.extraChargeCCAvenue.type != 'flat'">
+                <span class="slider round"></span>
+              </label>
+            </div>&nbsp;&nbsp;
+            <p>Percentage ( % )</p>&nbsp;&nbsp;
+          </div>
+          <div class="extra-charges">
+
+            <div class="flex-space-between">
+              <div>
+                <ion-label style="margin-right: 20px;">Charge Name
+                </ion-label>
+              </div>
+              <ion-input class="form-input"
+                [(ngModel)]="ccAvenueDetails.extraChargeCCAvenue.chargeName"
+                type="text"
+                style="max-width: 10rem; margin-right: 20px;">
+              </ion-input>
+            </div>
+
+            <div class="flex-space-between">
+              <div>
+                <ion-label style="margin-right: 20px;">Charges
+                  {{charCCAvenue}}</ion-label>
+              </div>
+              <ion-input class="form-input"
+                [(ngModel)]="ccAvenueDetails.extraChargeCCAvenue.charge"
+                type="number"
+                style="max-width: 10rem; margin-right: 20px;">
+              </ion-input>
+            </div>
+
+            <div *ngIf="toggleStateCCAvenue == 'perc'">
+              <div class="flex-space-between">
+                <div>
+                  <ion-label style="margin-right: 20px;">Max
+                    Amount
+                  </ion-label>
+                </div>
+                <ion-input class="form-input"
+                  [(ngModel)]="ccAvenueDetails.extraChargeCCAvenue.maxCharge"
+                  type="number"
+                  style="max-width: 10rem; margin-right: 20px;">
+                </ion-input>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer no-border
+  class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveSettings()"
+      [disabled]="disableSave()"
+      shape="round"
+      class="btn-1 i-start"
+      color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

@@ -1,0 +1,35 @@
+ion-content{
+    --background: #f2f2f2;
+}
+.add-address-toolbar p{
+    font-size: 15px;
+    padding-left: 3%;
+    color: var(--ion-color-primary);
+}
+.selectable-address-item {
+    background: white;
+    padding: 10px;
+    margin: 6px 12px 12px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+ion-list{
+    background: none;
+}
+.s-user-name{
+    font-size: 15px;
+    color: black;
+}
+.s-address{
+    font-size: 13px;
+    color: black;
+}
+.s-phone-no{
+    font-size: 13px;
+    margin-bottom: -5px;
+    color: black;
+}
+.spinner{
+    text-align: center;
+    margin-top: 50%;
+}

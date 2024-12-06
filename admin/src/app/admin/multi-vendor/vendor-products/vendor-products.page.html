@@ -1,0 +1,62 @@
+<ion-header no-border>
+  <div class="bs-modal-header">
+    <div class="bs-search">
+      <ion-input type="text" placeholder="Search for products..." [(ngModel)]="searchProduct" autocapitalize></ion-input>
+    </div>
+  </div>
+  <br>
+  <p>&nbsp;&nbsp;Total products : {{productLength}}</p>
+  <p>&nbsp;&nbsp;Total selected products : {{selectedLength}}</p>
+  <p>&nbsp;&nbsp;Total unselected products : {{unselectedLength}}</p>
+</ion-header>
+<ion-content>
+  <div class="no-data" *ngIf="showNoProducts; else showProducts" text-center>
+    <img src="assets/img/no-orders.png" alt="">
+    <h6>No products</h6>
+  </div>
+  <div *ngIf="showSearchLoader" class="spinner">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <ng-template #showProducts>
+    <ion-button size="small" shape="round" (click)="selectAll()">Select All</ion-button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <ion-button size="small" shape="round" (click)="unselectAll()">Unselect All</ion-button>
+    <ion-list class="ion-no-padding list" *ngIf="productsData.length && !showSearchLoader" lines="none">
+      <ion-item class="ion-no-padding" *ngFor="let item of productsData | filter: searchProduct; let i = index">
+        <ion-grid class="ion-no-padding">
+          <ion-row class="ion-align-items-center" (click)="chooseProducts(i,item)" style="cursor: pointer">
+            <ion-col size="2">
+              <ion-thumbnail  class="thumbnail">
+                <img class="loading" *ngIf="item.coverPic && !item.coverPic.thumb && item.coverPic.url"
+                  src="{{item.coverPic.url}}">
+                <img class="loading" *ngIf="item.coverPic && item.coverPic.thumb"
+                  src="{{item.coverPic.thumb}}">
+                <img *ngIf="!item.coverPic" src="assets/img/placeholder-img.jpg">
+              </ion-thumbnail>
+            </ion-col>
+            <ion-col>
+              <p class="ion-text-capitalize">{{item.prodName}}</p>
+            </ion-col>
+            <ion-col>
+              <input type="checkbox" [checked]="productList.indexOf(item) > -1">
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+  </ng-template>
+</ion-content>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col style="text-align: start;">
+        Copy to vendor 
+        <ion-select (ionChange)="addVendor($event)" placeholder="Select Vendor" >
+          <ion-select-option [value]="vendor.id" *ngFor="let vendor of vendors">{{vendor.name}}
+          </ion-select-option>
+        </ion-select>
+        <ion-button size="small" shape="round" (click)="copyProducts()">Proceed
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

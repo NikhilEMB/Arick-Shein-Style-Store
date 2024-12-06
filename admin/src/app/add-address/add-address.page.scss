@@ -1,0 +1,29 @@
+ion-footer{padding: 16px;border-top: var(--ion-color-medium) 1px solid;}
+
+.address-type-list{
+    position: relative;
+    top: 20px;
+    ion-radio-group {
+        display: flex;
+        ion-item{
+            --border-radius:12px;
+        }
+    }
+}
+
+.locate-btn{
+    width: 100%;
+    position: relative;
+    top: 35px;
+    margin: 0;
+    height: 42px;
+    border-radius: 12px;
+    --background:var(--ion-color-light);
+    --color:var(--ion-color-primary);
+}
+
+@media(max-width:576px){
+    .locate-btn{
+        top: 0;
+    }
+}

@@ -1,0 +1,43 @@
+<div>
+  <h5 class="ion-text-center sd-service-name">
+    {{request.serviceName}}
+  </h5>
+  <div class="content-alignment sd-sections">
+    <div *ngIf="role === 'user'; else notUser;">
+      <ion-text color="danger" class="sr-status" *ngIf="request.status === 'Pending'">{{request.status}}</ion-text>
+      <ion-text color="success" class="sr-status" *ngIf="request.status === 'Completed'">{{request.status}}</ion-text>
+    </div>
+    <ng-template #notUser>
+      <p><strong>Customer Name: </strong> {{request.userName}}</p>
+    </ng-template>
+    <p><strong>Request Date: </strong> {{getDateTimeFormat(request.responseAt.toDate())}}</p>
+  </div>
+  <div class="sd-sections sd-details">
+    <p class="sd-headings">Details:</p>
+    <p>{{request.response}}</p>
+  </div>
+  <div *ngIf="request.attachments.length" class="sd-sections">
+    <p class="sd-headings">Attachments:</p>
+    <div class="img-container">
+      <div class="img-wrap" *ngFor="let img of request.attachments" (click)="imgZoom(img.url)">
+        <ion-img [src]="img.mob" *ngIf="img.mob" class="sd-images">
+        </ion-img>
+        <ion-img [src]="img.url" *ngIf="!img.mob && img.url"
+          class="sd-images"></ion-img>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="btn-wrap" *ngIf="(role === 'admin') && (request.status === 'Pending')" no-border class="page-footer">
+ 
+    <ion-button (click)="completeRequest()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Complete
+    </ion-button>
+  
+</div>
+<!-- New Product Footer-->
+

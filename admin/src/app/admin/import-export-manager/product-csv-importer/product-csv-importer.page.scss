@@ -1,0 +1,61 @@
+.main-container {
+  width: 100%;
+  padding: 0;
+}
+
+#scroll1 {
+  overflow: hidden;
+  height: 75vh;
+  border-right: 1px solid lightgray;
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+#scroll2 {
+  overflow: hidden;
+  height: 86vh;
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+#scroll {
+  overflow: hidden;
+  height: calc(100vh - 107px);
+  border-right: 1px solid lightgray;
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+.sectionArea{
+  h2 {
+    text-align: center;
+  }
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 24px;
+}
+
+#mainField {
+  margin: 0 4px 8px 8px;
+  padding: 4px 0 4px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  z-index: 99;
+}
+.page-footer{
+  border-top: 1px solid #ccc;
+}

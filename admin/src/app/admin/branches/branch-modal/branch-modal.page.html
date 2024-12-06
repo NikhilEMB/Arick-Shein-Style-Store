@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Branch Details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+
+      <ion-col size="12">
+        <div class="input-wrap">
+          <ion-label>Name*</ion-label>
+          <ion-input class="form-input" type="text" [(ngModel)]="branchData.name" placeholder="Write name"
+            autocapitalize="on"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap">
+          <ion-label>Email*</ion-label>
+          <ion-input class="form-input" type="text" [(ngModel)]="branchData.email" placeholder="Write email"
+            autocapitalize="on"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div class="input-wrap">
+          <ion-label>PhoneNo*</ion-label>
+          <ion-input class="form-input" type="text" [(ngModel)]="branchData.phoneNo" placeholder="Write phoneNo"
+            autocapitalize="on"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div class="input-wrap">
+          <ion-label>WhatsApp PhoneNo</ion-label>
+          <ion-input class="form-input" type="text" [(ngModel)]="branchData.whatsapp"
+            placeholder="Write WhatsApp phoneNo" autocapitalize="on"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap">
+          <ion-label>Shop Opening/Closing hours</ion-label>
+          <ion-input class="form-input" type="text" [(ngModel)]="branchData.hours" placeholder="Opening/Closing hours"
+            autocapitalize="on"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap">
+          <ion-label>Address</ion-label>
+          <ion-textarea class="form-input" rows="3" [(ngModel)]="branchData.location.address"
+            placeholder="Write Address"></ion-textarea>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div class="input-wrap">
+          <ion-label>Address lat</ion-label>
+          <ion-input class="form-input" type="number" [(ngModel)]="branchData.location.lat" placeholder="Write lat"
+            autocapitalize="on"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div class="input-wrap">
+          <ion-label>Address lng</ion-label>
+          <ion-input class="form-input" type="number" [(ngModel)]="branchData.location.lng" placeholder="Write lng"
+            autocapitalize="on"></ion-input>
+        </div>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveBranch()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

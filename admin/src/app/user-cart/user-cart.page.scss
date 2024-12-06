@@ -1,0 +1,133 @@
+ion-content{
+    --background: #f9f9fe;;
+}
+ion-list{
+    border-radius: 5px;
+}
+.products-container{
+    margin: 15px 10px 10px 10px;
+    background: white;
+    border-radius: 5px;
+    padding: 15px 5px 10px 2px;
+    position: relative;
+    box-shadow: 0px 2px 2px #ccc;
+}
+.product-image{
+    background: transparent url('https://s5.gifyu.com/images/loaderbb19efcc2749e115.gif') center no-repeat;
+    width: 110px;
+    height: 110px;
+    margin-left: 3%;
+}
+.product-name{
+    font-size: 14px;
+    margin-top: 7px;
+}
+.product-price{
+    color: var(--ion-color-primary);
+    font-size: 18px;
+}
+.product-description{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 7px;
+    opacity: .5;
+    margin-bottom: -3px;
+    font-size: 12px;
+}
+.item-divider{
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: #ccc;
+    height: 1px;
+    opacity: .4;
+}
+.product-minus-icon{
+    font-size: 15px;
+    margin-top: 5px;
+    border-radius: 3px;
+    padding: 1px;
+    color: var(--ion-color-primary);
+    background: #f9f9fe;
+}
+.product-add-icon{
+    font-size: 15px;
+    margin-top: 5px;
+    border-radius: 3px;
+    padding: 1px;
+    color: var(--ion-color-primary);
+    margin-left: -20px;
+    background: #f9f9fe;
+}
+.product-counter{
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 10px;
+}
+.product-counter-value{
+    font-size:16px;
+    padding-right: 10px;
+}
+
+.no-data{
+    margin: 0;
+      position: absolute;
+      top: 40%;
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+      left: 50%;
+      margin-left: -65px;
+  }
+  .no-data img{
+    width: 150px;
+  }
+  .spinner{
+    margin-top: 50%;
+    text-align: center;
+}
+.delete-icon{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    z-index: 1;
+    padding: 13px;
+    border-bottom-left-radius: 50px;
+    background: #ED1B24;
+}
+
+.flaticon-null-21::before{
+    color: white;
+    position: relative;
+    top: -3px;
+    left: 3px;
+}
+
+//media queries
+
+@media screen and(min-width:768px){
+    .product-counter-value{
+        padding: 8px;
+        font-size: 30px;
+    }
+    .product-minus-icon{
+        font-size: 25px;
+    }
+    .product-add-icon{
+        font-size: 25px;
+    }
+}
+@media screen and(min-width:1024px){
+    .product-counter-value{
+        padding: 12px;
+        font-size: 35px;
+    }
+    .product-minus-icon{
+        font-size: 30px;
+    }
+    .product-add-icon{
+        font-size: 30px;
+    }
+}

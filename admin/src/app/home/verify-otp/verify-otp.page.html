@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center>verify otp</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row class="upper-space ion-justify-content-center">
+      <p class="enter-text">Please enter verification code sent to <br>{{phoneNo}}</p>
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+      <div style="position: relative;">
+        <input #txtInput class="otp-input" type="tel" maxlength='6' [(ngModel)]="otpValue" (keyup)="removeFocus(txtInput)"/>
+      </div>
+    <div class="col-arrow" (click)="sendOTP()" *ngIf="!showLoader">
+      <i class="flaticon-null-7"></i>
+    </div>
+    <div class="loader" *ngIf="showLoader">
+      <ion-spinner color="primary"></ion-spinner>
+    </div>
+    </ion-row>
+    <ion-row>
+      <ion-col class="resend-otp-col">
+        <span class="resend-otp-timer" *ngIf="showTimer">00:<span *ngIf="timer >= 10; else appendZeroToTimer">{{timer}}</span>
+          <ng-template #appendZeroToTimer>
+            <span *ngIf="timer < 10">0{{timer}}</span>
+          </ng-template>
+        </span><br>
+        <ion-button (click)="resendOTP()" fill="clear" [disabled]="!showResendBtn" mode="ios">
+          Resend OTP
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

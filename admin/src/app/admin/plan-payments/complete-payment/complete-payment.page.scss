@@ -1,0 +1,62 @@
+#back {
+    margin-left: 10px
+}
+
+.vl {
+    border-left: 1px solid lightgray;
+    height: 30px;
+  }
+
+#rowDisplay {
+    display: flex;
+    justify-content: space-between;
+    width: 80vw;
+    margin: 1rem auto;
+    margin-bottom: -40px
+}
+
+button {
+    border: 1px solid black;
+    background: white;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto
+}
+
+#rowDisplayCard {
+    display: flex;
+    justify-content: space-evenly;
+    width: 90vw;
+    margin: 1rem auto;
+    margin-bottom: -40px
+}
+
+ion-card {
+    width: 500px;
+    text-align: center;
+    margin: 0% auto;
+    margin-top: 30px
+}
+
+#optionsCard2 {
+    width: auto
+}
+
+ion-card ion-card-title {
+    font-size: 16px !important
+}
+
+#link {
+    text-align: center
+}
+
+#title {
+    display: flex !important;
+    margin-right: 20px
+}
+
+#settings {
+    margin-right: 5px;
+    font-size: 18px;
+    vertical-align: text-top
+}

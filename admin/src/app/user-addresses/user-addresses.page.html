@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button class="custom-back-button">
+        <img src="assets/img/menu-icon-white.png" class="menu-img">
+      </ion-menu-button>
+    </ion-buttons>
+    <ion-title text-center>my addresses</ion-title>
+  </ion-toolbar>
+  <div class="add-address-toolbar" (click)="goToPage('new-address')" *ngIf="showAddAddressBtn">
+    <p>
+      + Add a new address
+    </p>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="spinner" *ngIf="showLoader">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <div *ngIf="!showLoader && addressesData">
+    <div class="address-count" *ngIf="!addressesData.length">No saved addresses</div>
+    <div class="address-count" *ngIf="addressesData.length == 1">1 saved address</div>
+    <div class="address-count" *ngIf="addressesData.length > 1">{{addressesData.length}} saved addresses</div>
+      <div class="address-card" *ngFor="let address of addressesData">
+        <p class="user-name">{{address.name}}</p>
+        <p class="address">{{address.address}}</p>
+        <p class="phone-no">{{address.phoneNo}}</p>
+        <ion-grid class="ion-no-padding">
+          <ion-row>
+              <ion-button (click)="editAddress(address)" fill="clear">
+                edit
+              </ion-button>
+              <ion-button (click)="deleteAlertConfirm(address)" fill="clear">
+                delete
+              </ion-button>
+          </ion-row>
+        </ion-grid>
+      </div>
+  </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="goToChat(true)">
+    <ion-fab-button size="small" color="dark">
+      <i class="flaticon-chat fab-btn-chat"></i>
+    </ion-fab-button>
+    <span class="unread-msg-badge" *ngIf="unreadAdminMsgs !== 0">{{unreadAdminMsgs}}</span>
+  </ion-fab>
+</ion-content>

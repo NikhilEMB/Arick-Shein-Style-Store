@@ -1,0 +1,205 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons style="margin-left: -8px;" slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-menu-button style="margin-left: 8px;" slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Product Bulk Image Importer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <ion-grid>
+      <ion-row>
+        <ion-col id="scroll" size="6">
+          <div class="sectionArea">
+            <h2>Details</h2>
+            <div class="flex-label" style="margin: 0 12px 0 12px;">
+              <p>Single Mode</p>&nbsp;&nbsp;
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input color="primary"
+                    type="checkbox"
+                    (click)="manageImportMode($event)"
+                    [checked]="importMode == 'multi'">
+                  <span class="slider round"></span>
+                </label>
+              </div>&nbsp;&nbsp;
+              <p>Multi Mode</p>&nbsp;&nbsp;
+            </div>
+          </div>
+          <div>
+
+            <ion-card *ngIf="(currentState && (currentState.status === ''))">
+              <ion-card-header>
+                <ion-card-title>Please start importing CSV...</ion-card-title>
+              </ion-card-header>
+            </ion-card>
+
+            <ion-card *ngIf="currentState && currentState.status">
+              <ion-card-header>
+                <ion-card-title>Current Status - {{currentState.status}}</ion-card-title>
+                <ion-card-title *ngIf="currentState.status === 'In Progress'">Created At - {{createdAt || 'NA'}}</ion-card-title>
+                <ion-card-title *ngIf="currentState.status === 'Completed'">Completed At - {{createdAt || 'NA'}}</ion-card-title>
+                <ion-card-title *ngIf="currentState.status === 'Failed'">Failed At - {{createdAt || 'NA'}}</ion-card-title>
+                <ion-card-subtitle *ngIf="currentState.status === 'In Progress'">Please wait while the images are being processed...</ion-card-subtitle>
+                <ion-button *ngIf="currentState.status === 'In Progress'" shape="round" (click)="terminateOperation()" style="margin-top: 10px;">Terminate Process</ion-button>
+                <ion-card-subtitle *ngIf="currentState.status === 'Completed'">Image have been imported successfully.</ion-card-subtitle>
+                <ion-card-subtitle *ngIf="currentState.status === 'Failed'">Image(s) import failed / terminated! Please try again.</ion-card-subtitle>
+              </ion-card-header>
+            </ion-card>
+
+            <ion-card *ngIf="currentState && ((currentState.status === 'In Progress') || (currentState.status === 'Completed'))">
+              <ion-card-header>
+                <ion-card-title>Successfully Imported SKUs</ion-card-title>
+                <div style="margin-top: 12px; display: flex; align-items: center; justify-content: space-between;">
+                  <ion-button shape="round" mode="ios" (click)="checkLogStatus()"><i class="flaticon-refresh" style="margin-right: 12px;"></i>Refresh</ion-button>
+                  <p style="margin-left: 12px;">{{completedSKUs}} / {{totalSKUs}}</p>
+                </div>
+                <ion-progress-bar type="indeterminate" style="margin-top: 12px;" *ngIf="(completedSKUs !== totalSKUs) && (currentState.status !== 'Completed')"></ion-progress-bar>
+              </ion-card-header>
+            </ion-card>
+
+            <!-- * If all is good -->
+            <ion-card *ngIf="(finalDirectory && finalDirectory.length) && ((!failMatch.length) || (!failSKU.length) || (!failVariant.length))">
+              <ion-card-header>
+                <ion-card-title>Zip Status</ion-card-title>
+                <ion-card-subtitle style="color: green;">✅ SKU checked successfully</ion-card-subtitle>
+                <ion-card-subtitle style="color: green;">✅ SKU variant(s) checked successfully</ion-card-subtitle>
+                <ion-card-subtitle style="color: green;">✅ Product limit checked successfully</ion-card-subtitle>
+                <ion-card-subtitle style="color: green;">Total - {{finalDirectory.length}}</ion-card-subtitle>
+              </ion-card-header>
+            
+              <ion-card-content>
+                Zip is now ready to be imported!
+              </ion-card-content>
+            </ion-card>
+
+            <!-- * If SKU Mismatch -->
+            <div *ngIf="failMatch && failMatch.length">
+              <ion-label style="margin-left: 10px; display: block;">SKU(s) with unidentified SKUs</ion-label>
+              <ion-label style="margin-left: 10px;">Total - {{failMatch.length}}</ion-label>
+              <ion-card>
+                <ion-card-header *ngFor="let item of failMatch">
+                  <ion-card-subtitle style="color: red;">❌ SKU - {{item.productCode}}</ion-card-subtitle>
+                </ion-card-header>
+              </ion-card>
+            </div>
+
+            <!-- * If Product Count Mismatch -->
+            <div *ngIf="failSKU && failSKU.length">
+              <ion-label style="margin-left: 10px; display: block;">SKU(s) with product limit mismatch</ion-label>
+              <ion-label style="margin-left: 10px;">Total - {{failSKU.length}}</ion-label>
+              <ion-card>
+                <ion-card-header *ngFor="let item of failSKU">
+                  <ion-card-subtitle style="color: red;">❌ SKU - {{item.productCode}}</ion-card-subtitle>
+                </ion-card-header>
+              </ion-card>
+            </div>
+
+            <!-- * If Variants Mismatch -->
+            <div *ngIf="failVariant && failVariant.length">
+              <ion-label style="margin-left: 10px; display: block;">SKU(s) with variant mismatch</ion-label>
+              <ion-label style="margin-left: 10px; display: block;">Error Code - {{failVariantReason}}</ion-label>
+              <ion-label style="margin-left: 10px;">Total - {{failVariant.length}}</ion-label>
+              <ion-card>
+                <ion-card-header *ngFor="let item of failVariant">
+                  <ion-card-subtitle style="color: red;">❌ SKU - {{item.productCode}}</ion-card-subtitle>
+                </ion-card-header>
+              </ion-card>
+            </div>
+          </div>
+
+        </ion-col>
+        <ion-col id="scroll" size="6">
+          <div class="sectionArea">
+            <h2 style="text-transform: capitalize;">Instructions - {{importMode}} Mode</h2>
+          </div>
+          <div *ngIf="importMode === 'single'">
+            <ol>
+              <li style="font-weight: bold">Before Uploading</li>
+                <ol>
+                  <li style="color: green">NOTE : A zip of max 2GB will take approx. 18-20 Hrs to process, (* Depends upon your internet connection and size of images)</li>
+                  <!-- <li style="color: blue">NOTE : Bulk Upload for variants feature is coming soon!</li> -->
+                  <li style="color: red;">WARNING : Using this will clear all previous images in the provided SKUs.</li>
+                  <li>Name the images similar to the SKU of the existing product.</li>
+                  <li>Select all images and compress into a zip named - 'single-mode-zip', with extension .zip</li>
+                  <li>For you the image limit per product is {{prodUploadLimit}}.</li>
+                </ol>
+              <li style="font-weight: bold">While Uploading</li>
+                <ol>
+                  <li>Make sure to only upload a file with .zip extension.</li>
+                  <li>Make sure to not do any changes in the provided SKUs while importing.</li>
+                  <li>The zip file shall not exceed 2GB in size.</li>
+                </ol>
+              <li style="font-weight: bold">While Importing</li>
+                <ol>
+                  <li>Sit back & relax while we import the zip file for processing.</li>
+                  <li>Do not close this tab while importing is in process.</li>
+                  <li>Feel free to continue working on the admin as will.</li>
+                </ol>
+            </ol>
+          </div>
+          <div *ngIf="importMode === 'multi'">
+            <ol>
+              <li style="font-weight: bold">Before Uploading</li>
+              <ol>
+                <li style="color: green">NOTE : A zip of max 2GB will take approx. 18-20 Hrs to process, (* Depends upon your internet connection and size of images)</li>
+                <!-- <li style="color: blue">NOTE : Bulk Upload for variants feature is coming soon!</li> -->
+                <li style="color: red;">WARNING : Using this will clear all previous images in the provided SKUs.</li>
+                <li>Name the folders similar to the SKU of the existing product.</li>
+                <li>Each folder must contain only the allowed no. of images per product.</li>
+                <li>For you the image limit per product is {{prodUploadLimit}}.</li>
+                <li style="font-weight: bold">Name the images as follows :- </li>
+                <ol>
+                  <li>For Cover Image - cover.jpg</li>
+                  <li>For Regular Image(s) - 1.jpg, 2.jpg, 3.jpg, 4.jpg ( total 5 inc. cover )</li>
+                  <li>For Variant Image(s) - 1-var-[variantName1].jpg, 2-var-[variantName2]-[variantName3].jpg</li>
+                  <li style="font-weight: bold;">Naming scheme for variant image(s) :-</li>
+                  <ol>
+                    <li>For [weight] variant - assign the weight field to the image name.</li>
+                    <li>For [size] variant - assign the size field to the image name.</li>
+                    <li>For [pieces] variant - assign the no. of pieces field to the image name.</li>
+                    <li>For [other] variant - assign the variant field to the image name.</li>
+                  </ol>
+                  <li style="color: red;">Total no. of images inc. cover, regular & variants should not exceed the permitted image limit of {{prodUploadLimit}}.</li>
+                </ol>
+              </ol>
+              <li style="font-weight: bold">While Uploading</li>
+              <ol>
+                <li>Make sure to only upload a file with .zip extension.</li>
+                <li>Make sure to not do any changes in the provided SKUs while importing.</li>
+                <li>The zip file shall not exceed 2GB in size.</li>
+                <li>The zip file should be compressed out of the folders named similar to the existing products SKUs.</li>
+              </ol>
+              <li style="font-weight: bold">While Importing</li>
+              <ol>
+                <li>Sit back & relax while we import the zip file for processing.</li>
+                <li>Do not close this tab while importing is in process.</li>
+                <li>Feel free to continue working on the admin as will.</li>
+              </ol>
+            </ol>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <!-- <ion-progress-bar *ngIf="buttonState === 'Import'" value="{{loadVal}}" buffer="{{loadBuffer}}"></ion-progress-bar> -->
+  <div class="main-container" style="margin-bottom: -6px; width: 100%;">
+    <div class="upload-btn-wrapper">
+      <ion-button [disabled]="((currentState.status === 'In Progress') || (currentState.status === 'Started'))" shape="round" class="btn-1 i-start" color="success" (click)="importImagesHandler($event, buttonState)" >
+        <i *ngIf="buttonState === 'Import'" class="flaticon-null-20 margin-icon"></i>
+        <i *ngIf="buttonState === 'Upload'" class="flaticon-null-16"></i>
+        {{buttonState}} zip
+      </ion-button>
+      <input [disabled]="((currentState.status === 'In Progress') || (currentState.status === 'Started'))" *ngIf="buttonState !== 'Import'" accept=".zip" type="file" name="myfile" (change)="importImagesHandler($event, buttonState)"/>
+    </div>
+  </div>
+</ion-footer>

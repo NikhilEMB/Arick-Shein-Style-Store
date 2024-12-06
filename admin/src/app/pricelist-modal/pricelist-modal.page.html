@@ -1,0 +1,48 @@
+<ion-header no-border>
+  <div class="modal-header">
+    <div *ngIf="product">
+      {{product.data.prodName}}
+    </div>
+    <div (click)="closePriceListModal()">
+      <i class="flaticon-null-19"></i>
+    </div>
+  </div>
+</ion-header>
+<div class="inner-content" *ngIf="mainListOfWeightsAndPrices && mainListOfWeightsAndPrices.length > 0">
+  <div *ngFor="let element of mainListOfWeightsAndPrices; let i=index">
+    <div class="pricelist-element">
+      <div style="width: 90%;">
+        <p class="weight">{{element.weight}}</p>
+        <p class="price" *ngIf="product.data.discount && product.data.discount !== '' && product.data.discount !== '0'; else showOriginalPrice;">
+          {{getDiscountedProduct(element.price, product.data.discount) | currency: 'INR':true:'0.0'}}<del class="del-price">{{element.price  | currency: 'INR':true:'0.0'}}</del>
+        </p>
+        <ng-template #showOriginalPrice>
+          <p class="price">{{element.price | currency: 'INR':true:'0.0'}}</p>
+        </ng-template>
+      </div>
+      <div class="cart-counter" *ngIf="!element.inCart; else productInCart">
+        <ion-button (click)="addProductToCart(i)" expand="block" size="small">
+          Add Item +
+        </ion-button>
+      </div>
+      <ng-template #productInCart>
+        <div *ngIf="true" class="cart-counter">
+          <div class="cart-counter-minus">
+            <ion-icon name="remove" (click)="decrementQuantity(i)"></ion-icon>
+          </div>
+          <div class="cart-counter-value">
+            {{element.quantity}}
+          </div>
+          <div class="cart-counter-plus">
+            <ion-icon name="add" (click)="incrementQuantity(i)"></ion-icon>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<ion-footer>
+  <ion-button (click)="goToCart()" fill="outline" shape="round" size="small">
+    Go to Cart
+  </ion-button>
+</ion-footer>

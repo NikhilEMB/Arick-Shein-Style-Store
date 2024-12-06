@@ -1,0 +1,24 @@
+.toolbar{
+    display: flex;
+    align-items: center;
+    height: 50px;
+    ion-title{
+        padding: 0;
+    }
+    ion-buttons{
+        margin: 0;
+        background: white;
+        border-radius: 20px;
+    }
+}
+.main-point-box{
+    margin-inline: 10px;
+    margin-top: 5px;
+}
+.input-box {
+    ion-input, ion-select, ion-textarea{
+        border: 1px solid gray;
+        border-radius: 5px;
+        margin: 5px 0px;
+    }
+}

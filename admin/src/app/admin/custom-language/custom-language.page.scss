@@ -1,0 +1,65 @@
+h2 {
+  text-align: center;
+}
+label {
+  text-transform: capitalize;
+}
+input,
+select,
+textarea {
+  height: 38px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+textarea {
+  height: initial;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+td,
+th {
+  text-align: left;
+  padding: 8px;
+}
+tr:hover {
+  background-color: #efefef;
+}
+
+.parentFlex {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+
+  .Fields,
+  .fetchArea {
+    width: 80%;
+    padding: 8px;
+  }
+}
+.inputField {
+  margin-bottom: 0.5rem;
+  width: 100%;
+}
+.dFlex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.impText {
+  color: rgb(204, 14, 14);
+  margin-top: 0.5rem;
+}
+.resultArea {
+  margin-top: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.5rem;
+}

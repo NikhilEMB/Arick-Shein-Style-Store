@@ -1,0 +1,83 @@
+<ion-header class="templates-header">
+  <ion-toolbar>
+    <ion-title class="templates-header-title">{{'BANNER_LINKING_MODAL.header_text' | translate}} {{linkType}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div *ngIf="linkType === BANNER_LINKING_MODAL_LABELS['product']; else noProductLinking;">
+    <div class="ion-text-center">
+      <ion-searchbar mode="ios" [placeholder]="searchPh" inputmode="text" [(ngModel)]="searchProduct" (ngModelChange)="fireSearchQuery()" clearInput></ion-searchbar>
+    </div>
+    <div class="no-product" *ngIf="showNoProducts; else showProducts" text-center>
+      <p *ngIf="!searchProduct">{{'BANNER_LINKING_MODAL.search_any_product' | translate}}</p>
+      <p *ngIf="searchProduct && !showSearchLoader">{{'BANNER_LINKING_MODAL.no_available' | translate}} {{linkType}}</p>
+    </div>
+    <ng-template #showProducts>
+      <div *ngIf="showSearchLoader" class="spinner">
+        <ion-spinner color="primary" name="dots"></ion-spinner>
+      </div>
+  
+      <ion-list *ngIf="!showSearchLoader" lines="none">
+        <ion-list>
+            <ion-item class="blm-names" *ngFor="let pdt of list; let i=index;" (click)="selectIds(i,pdt.id,pdt.name)" lines="none">
+              <ion-label class="ion-text-wrap">{{pdt.name}}</ion-label>
+              <ion-checkbox [checked]="dataList.includes(pdt.id)" slot="end"></ion-checkbox>
+            </ion-item>
+        </ion-list>
+      </ion-list>
+    </ng-template>
+  
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreProducts($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </div>
+
+  <ng-template #noProductLinking>
+    <div class="ion-text-center">
+      <ion-searchbar mode="ios" [placeholder]="searchPh" inputmode="text" [(ngModel)]="searchValue"></ion-searchbar>
+    </div>
+  
+    <div *ngIf="!loading">
+      <p class="blm-no-list" *ngIf="!list.length;else showList;">{{'BANNER_LINKING_MODAL.no_available' | translate}} {{linkType}}</p>
+    </div>
+  
+    <ng-template #showList>
+      <ion-list *ngIf="linkType == BANNER_LINKING_MODAL_LABELS['category'] || linkType == BANNER_LINKING_MODAL_LABELS['brand']">
+          <ion-item class="blm-names" *ngFor="let l of list | filter: searchValue; let i=index;" (click)="selectIds(i,l.id,l.name)" lines="none">
+            <ion-label class="ion-text-wrap">{{l.name}}</ion-label>
+            <ion-checkbox [checked]="dataList.indexOf(l.id) > -1" slot="end"></ion-checkbox>
+          </ion-item>
+      </ion-list>
+
+      <ion-list *ngIf="linkType != BANNER_LINKING_MODAL_LABELS['category'] && linkType != BANNER_LINKING_MODAL_LABELS['brand']">
+        <ion-radio-group [value]="linkId">
+          <ion-item class="blm-names" *ngFor="let l of list | filter: searchValue; let i=index;" (click)="selectValue(i,l.id,l.name)" lines="none">
+            <ion-label class="ion-text-wrap" *ngIf="l.name">{{l.name}}</ion-label>
+            <ion-label class="ion-text-wrap" *ngIf="l.id == 'about'">About us</ion-label>
+            <ion-label class="ion-text-wrap" *ngIf="l.id == 'homepage'">Homepage</ion-label>
+            <ion-radio [value]="l.id" [checked]="linkId === l.id" slot="end"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+
+    </ng-template>
+  </ng-template>
+  
+</ion-content>
+
+<ion-footer no-border *ngIf="linkType == BANNER_LINKING_MODAL_LABELS['product'] || linkType == BANNER_LINKING_MODAL_LABELS['category'] || linkType == BANNER_LINKING_MODAL_LABELS['brand']" class="footer">
+  <div class="main-container">
+    <ion-button shape="round" class="btn-1 i-start" color="success" (click)="confirmSelection()">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Select
+    </ion-button>
+  </div>
+</ion-footer>

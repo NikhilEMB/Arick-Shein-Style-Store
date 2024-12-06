@@ -1,0 +1,234 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center"
+      *ngIf="brandData === undefined">New Brand</ion-title>
+    <ion-title class="ion-text-center"
+      *ngIf="brandData !== undefined">Edit Brand</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs>
+
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Basic</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Advanced (optional)</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container>
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <div style="text-align: center;">
+            <ion-button (click)="saveBrand()"
+              shape="round"
+              class="btn-1 i-start"
+              color="success"
+              fill="outline">
+              <i class="flaticon-null-20 margin-icon"></i>
+              Save
+            </ion-button>&nbsp;&nbsp;
+            <ion-button *ngIf="brandData"
+              (click)="deleteConfirm()"
+              shape="round"
+              class="btn-1 i-start"
+              color="danger"
+              fill="outline">
+              <i class="flaticon-null-21"></i>
+              Delete
+            </ion-button>
+          </div>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <div class="flex-space-between">
+                    <div>
+                      <ion-label>Brand Name</ion-label>
+                    </div>
+                    <div class="flex-label">
+                      <ion-label>Active</ion-label>
+                      <ion-toggle [checked]="status"
+                        [(ngModel)]="status"></ion-toggle>
+                    </div>
+                  </div>
+                  <ion-input class="form-input"
+                    [(ngModel)]="name"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12">
+                <div class="ab-data-sections">
+                  <div class="ab-headings">Description</div>
+                  <ckeditor [(ngModel)]="description"
+                    [config]="ckeConfig"></ckeditor>
+                </div>
+              </ion-col>
+              <ion-col size="12">
+                <div class="flex-space-between">
+                  <div>
+                    <ion-label>Brand Image</ion-label>
+                  </div>
+                  <div class="upload-btn-wrapper">
+                    <button class="upload-btn btn-1 i-start"
+                      (click)="uploadImage($event.target.files, 'brandImg')"> <i
+                        class="flaticon-null-16"></i>Upload Brand Image</button>
+                    <!-- <input type="file" name="myfile"
+                      (change)="uploadImage($event.target.files, 'brandImg')" /> -->
+                  </div>
+                </div>
+                <div class="img-container">
+                  <div
+                    *ngIf="image[0] && image[0].hasOwnProperty('url') && image[0].url != ''">
+                    <div class="img-wrap"
+                      *ngFor="let img of image; let i=index;">
+                      <img class="category-img"
+                        [src]="img.url"
+                        (click)="imgZoom(img.url)" />
+                      <div class="overlay">
+                        <ion-button class="btn-2 remove"
+                          shape="round"
+                          fill="clear"
+                          color="danger"
+                          (click)="removeImage('brandImg')">
+                          <ion-icon name="trash"
+                            slot="icon-only"></ion-icon>
+                        </ion-button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ion-col>
+
+              <ion-col size="12">
+                <div class="flex-space-between">
+                  <div>
+                    <ion-label>Brand Banner</ion-label>
+                  </div>
+                  <div class="upload-btn-wrapper">
+                    <button class="upload-btn btn-1 i-start"
+                      (click)="uploadImage($event.target.files, 'brandBanner')">
+                      <i class="flaticon-null-16"></i>Upload Brand
+                      Banner</button>
+                    <!-- <input type="file"
+                      name="myfile"
+                      (change)="uploadImage($event.target.files, 'brandBanner')" /> -->
+                  </div>
+                </div>
+                <div class="img-container">
+                  <div
+                    *ngIf="banner[0] && banner[0].hasOwnProperty('url') && banner[0].url != ''">
+                    <div class="img-wrap"
+                      *ngFor="let img of banner; let i=index;">
+                      <img class="category-img"
+                        [src]="img.url"
+                        (click)="imgZoom(img.url)" />
+                      <div class="overlay">
+                        <ion-button class="btn-2 remove"
+                          shape="round"
+                          fill="clear"
+                          color="danger"
+                          (click)="removeImage('brandBanner')">
+                          <ion-icon name="trash"
+                            slot="icon-only"></ion-icon>
+                        </ion-button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <div style="text-align: center;">
+            <ion-button (click)="saveBrand()"
+              shape="round"
+              class="btn-1 i-start"
+              color="success"
+              fill="outline">
+              <i class="flaticon-null-20 margin-icon"></i>
+              Save
+            </ion-button>
+          </div>
+          <ion-col>
+            <!-- region select -->
+            <div *ngIf="multiRegion && regions.length"
+              class="ab-data-sections">
+              <div class="ab-headings">
+                Add Region
+              </div>
+              <ion-select multiple="true"
+                [value]="regionId"
+                class="border f-s-14 i-s-p-10"
+                (ionChange)="addRegion($event)"
+                placeholder="Select Region"
+                style="border: 1px solid gray; width: 300px;">
+                <ion-select-option [value]="region.id"
+                  *ngFor="let region of regions">{{region.name}}
+                </ion-select-option>
+              </ion-select>
+              <br>
+            </div>
+            <!-- region select -->
+          </ion-col>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <h3>Website SEO</h3>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <ion-label>Meta Title</ion-label>
+                  <ion-input class="form-input"
+                    [(ngModel)]="metaData.pageTitle"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <ion-label>Meta Description</ion-label>
+                  <ion-input class="form-input"
+                    [(ngModel)]="metaData.metaDescription"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <ion-label>Meta Keywords</ion-label>
+                  <ion-input class="form-input"
+                    [(ngModel)]="metaData.metaKeywords"></ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="isUniversal && brandData !== undefined">
+              <ion-col size="12">
+                <h3>Brand Slug</h3>
+              </ion-col>
+              <ion-col>
+                <div class="input-wrap">
+                <ion-label>Slug Name <ion-text color="danger">(<b class="cursor-p" 
+                  (click)="sharedService.presentSlugAlert()">CLICK HERE</b> for Slug Instructions)</ion-text>
+                </ion-label>
+                 <ion-input type="text" class="form-input" [(ngModel)]='slug.name'></ion-input>
+              </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+  </super-tabs-container>
+
+</super-tabs>

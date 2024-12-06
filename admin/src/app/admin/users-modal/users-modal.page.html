@@ -1,0 +1,37 @@
+<ion-header no-border>
+  <div class="cc-modal-header">
+    <div class="cc-search">
+      <!-- <ion-input type="text" placeholder="Search for users..." [(ngModel)]="userName"
+      (ionChange)="fireSearchQuery()"></ion-input> -->
+      <ion-input type="text" placeholder="Search for users..." [(ngModel)]="searchValue"
+      (ionChange)="typeSenseSearchQuery()"></ion-input>
+    </div>
+    <div>
+      <i class="flaticon-null-19" (click)="closeModal()"></i>
+    </div>
+  </div>
+</ion-header>
+<ion-content>
+    <ion-list class="ion-no-padding list" *ngIf="userList.length" lines="none">
+      <ion-item class="ion-no-padding" *ngFor="let user of userList; let i = index">
+        <ion-grid class="ion-no-padding">
+          <ion-row class="ion-align-items-center">
+            <ion-col size="3">
+              <ion-thumbnail style="margin-left: 5%;" class="thumbnail">
+                <img src="{{user.dP}}">
+                <!-- <img *ngIf="!user.coverPic" src="assets/img/placeholder-img.jpg"> -->
+              </ion-thumbnail>
+            </ion-col>
+            <ion-col size="6">
+              <p class="ion-text-capitalize ion-text-center">{{user.name}}</p>
+              <p class="ion-text-capitalize ion-text-center">{{user.phoneNo}}</p>
+            </ion-col>
+            <ion-col size="3">
+              <p class="ion-text-center ion-text-uppercase" style="color: var(--ion-color-primary); cursor: pointer;" (click)="addUser(user, i)" *ngIf="!user.added">add</p>
+              <p class="ion-text-center ion-text-uppercase" *ngIf="user.added">added</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+</ion-content>

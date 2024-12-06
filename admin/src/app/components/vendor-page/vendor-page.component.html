@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-title class="ion-text-center" *ngIf="role !== 'vendor'">Vendor Page Edit</ion-title>
+    <ion-title class="ion-text-center" *ngIf="role == 'vendor'">Edit Profile Sections</ion-title>
+    <ion-buttons slot="secondary" (click)="dismiss()">
+      <ion-button>
+        <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <!-- <div style="text-align: center; display: flex; width: 400px;" *ngIf="pageId != 'about' && pageId != 'homepage'">
+      <input [(ngModel)]='vendorName' placeholder="Enter name of page"/>&nbsp;&nbsp;
+      <ion-button (click)="changeName()" class="btn-sml i-start m-s-btn" fill="outline" shape="round">
+        Change page name</ion-button>
+    </div> -->
+    <div *ngIf="pageData.length == 0" style="text-align: center;">
+      <img src="assets/img/no-category.png" alt="">
+      <br>
+      <p><strong>No sections for this page</strong></p>
+    </div>
+    <ion-reorder-group (ionItemReorder)="webSectionReorder($event)" disabled="false">
+      <ion-item *ngFor="let item of pageData; let i = index">
+        <div class="section">
+          <div style="display: inline-flex">
+            <ion-reorder slot="end" *ngIf="role !== 'vendor'"> <i class="flaticon-menu"></i></ion-reorder>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <p style="margin-top: -12px;font-size: large">Section {{i+1}}</p>
+          </div>
+          <br><br>
+          <div class="sectionBlock">
+            <div style="display: block">
+              <p *ngIf="item.sectionName" class="crop">Name: {{item.sectionName}}</p>
+              <br *ngIf="item.sectionName">
+              <p *ngIf="item.widgetType">Type: {{item.widgetType}}</p>
+            </div>
+            <div style="display: flex">
+              <div>
+                <ion-button (click)="openWidgetEdit(item.widgetType,item.widgetID,i)">
+                  <i class="flaticon-pencil-edit-button" slot="icon-only" slot="icon-only"></i>
+                  &nbsp;Edit
+                </ion-button>
+                &nbsp;&nbsp;
+                <ion-button (click)="deleteSectionConfirm(item.widgetID,i)" *ngIf="role !== 'vendor'">
+                  <i class="flaticon-null-21" slot="icon-only" slot="icon-only"></i>
+                  &nbsp;Delete
+                </ion-button>
+              </div>
+              <ion-list lines="none">
+                <ion-item>
+                  <ion-label>App</ion-label>
+                  <ion-toggle [checked]="item.location=='app' || item.location=='all'"
+                    (ionChange)="changeLocationStatus(i,'app')"></ion-toggle>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Website</ion-label>
+                  <ion-toggle [checked]="item.location=='web' || item.location=='all'"
+                    (ionChange)="changeLocationStatus(i,'web')"></ion-toggle>
+                </ion-item>
+              </ion-list>
+            </div>
+          </div>
+        </div>
+      </ion-item>
+    </ion-reorder-group>
+    <br>
+  </div>
+</ion-content>
+
+
+<ion-footer no-border class="page-footer" *ngIf="role !== 'vendor'">
+  <div class="main-container">
+    <ion-button shape="round" class="btn-1 i-start" color="primary" (click)="addNewSection()">
+      <ion-icon name="add-circle" slot="start"></ion-icon>
+      Add New Section
+    </ion-button>
+  </div>
+</ion-footer>

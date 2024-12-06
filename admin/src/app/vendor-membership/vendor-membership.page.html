@@ -1,0 +1,222 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Vendor Membership</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs no-shadow no-border>
+
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Current Vendors</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Membership Settings / Plans</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container>
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <ng-container *ngIf="membershipVendors.length; else noMembershipVendors">
+            <!-- <div class="resultArea">
+              <table>
+                <thead>
+                  <th>Name</th>
+                  <th>Plan Price ({{currencyCode}})</th>
+                  <th>Plan Discounted Price ({{currencyCode}})</th>
+                  <th>Discount</th>
+                  <th>Max Discount ({{currencyCode}})</th>
+                  <th>Free Delivery</th>
+                  <th>Free Delivery</th>
+                  <th>Delivery Fee as Cashback</th>
+                  <th>Delivery Free Above Amount ({{currencyCode}})</th>
+                  <th>Initial Cashback ({{currencyCode}})</th>
+                  <th>Months</th>
+                  <th>Valid Till</th>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let vendor of membershipVendors; index as i">
+                    <td>
+                      <div slot="start"
+                        [ngStyle]="{'background': 'url(' + vendor.products[0].img.mob + ') no-repeat center', 'background-size': 'contain'}"
+                        class="productImage">
+                      </div>
+                    </td>
+                    <td>
+                      <p class="aud-product-name ion-text-wrap">
+                        {{vendor.products[0].name}}
+                        <span *ngIf="vendor.products.length > 1"><br>( +{{vendor.products.length - 1}} more )</span>
+                      </p>
+                    </td>
+                    <td>
+                      <div>ORD: {{vendor.vendorId}}</div>
+                    </td>
+                    <td>
+                      <p class="aud-product-price ion-text-wrap">
+                        {{vendor.totalAmountToPaid}}
+                      </p>
+                    </td>
+                    <td>
+                      <p>{{vendor.status}}<span>&nbsp;<i class="flaticon-null-20"></i></span></p>
+                    </td>
+                    <td>
+                      <p>{{vendor.deliveryAgentId ? "Reassign" : "None"}}</p>
+                    </td>
+                    <td>
+                      <div class="placedOn" *ngIf="vendor?.createdAt">
+                        {{vendor.createdAt.toDate() | date}} by <span>{{vendor.userName}}</span>
+                      </div>
+                      <ion-text *ngIf="!vendor.createdAt">--</ion-text>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div> -->
+          </ng-container>
+
+          <ng-template #noMembershipVendors>
+            <div class="noData" text-center>
+              <img src="assets/img/no-user.png" alt="">
+              <h6>No Vendor with membership active</h6>
+            </div>
+          </ng-template>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <ion-grid>
+            <!-- Save Button -->
+            <ion-row>
+              <ion-col size="12">
+                <div style="text-align: center;">
+                  <ion-button (click)="saveSettings()" shape="round" class="btn-1 i-start" color="success">
+                    <i class="flaticon-null-20 margin-icon"></i>
+                    Save
+                  </ion-button>
+                  <br><br>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <!-- Membership Settings -->
+            <ion-row>
+              <ion-col size="12">
+                <div class="toggle">
+                  <div class="flex">
+                    <div class="toggle-btn">
+                      <label class="switch">
+                        <input type="checkbox" [checked]="membershipSettings.active" (click)="toggleCheckbox()">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                    <ion-label>Active</ion-label>
+                  </div>
+                </div>
+              </ion-col>
+
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <div class="flex-space-between">
+                    <ion-label for="">Name</ion-label>
+                  </div>
+                  <ion-input class="form-input" type="text" [(ngModel)]="membershipSettings.name"
+                    placeholder="Section name">
+                  </ion-input>
+                </div>
+              </ion-col>
+
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <div class="flex-space-between">
+                    <ion-label for="">Description</ion-label>
+                    <br>
+                    <br>
+                  </div>
+                  <ckeditor class="form-input" [(ngModel)]="membershipSettings.description" [config]="ckeConfig">
+                  </ckeditor>
+                </div>
+              </ion-col>
+
+            </ion-row>
+
+            <!-- Membership Plans -->
+            <ion-row>
+              <ion-col size="12">
+                <div style="text-align: center;">
+                  <h4>Membership Plans</h4>
+                  <ion-button (click)="addPlan()" fill="outline">Add Plan</ion-button>
+                </div>
+              </ion-col>
+
+              <ng-container *ngIf="membershipSettings.plans.length; else noPlans">
+                <ion-col size="12">
+                  <div class="resultArea">
+                    <table>
+                      <thead>
+                        <th>Name</th>
+                        <th>Months</th>
+                        <th>Price ({{currencyCode}})</th>
+                        <th>Discounted Price ({{currencyCode}})</th>
+                        <th>Remove</th>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let plan of membershipSettings.plans; index as i">
+                          <td>
+                            <p>{{plan.name}}</p>
+                          </td>
+                          <td>
+                            <p>{{plan.months}}</p>
+                          </td>
+                          <td>
+                            <p>{{plan.price}}</p>
+                          </td>
+                          <td>
+                            <p>{{plan.discountedPrice}}</p>
+                          </td>
+                          <td>
+                            <ion-button (click)="removePlan(i)" size="small" fill="outline" shape="round">
+                              <i class="flaticon-null-17"></i>
+                            </ion-button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </ion-col>
+              </ng-container>
+
+              <ng-template #noPlans>
+                <ion-col size="12">
+                  <div text-center style="margin-top: 1rem;">
+                    <img src="assets/img/no-product.png" style="max-width:130px;" alt="">
+                    <h6>No Plans</h6>
+                  </div>
+                </ion-col>
+              </ng-template>
+            </ion-row>
+          </ion-grid>
+
+        </div>
+      </ion-content>
+
+      <!-- <ion-footer no-border class="page-footer">
+        <div class="main-container">
+          <ion-button (click)="saveSettings()" shape="round" class="btn-1 i-start" color="success">
+            <i class="flaticon-null-20 margin-icon"></i>
+            Save
+          </ion-button>
+        </div>
+      </ion-footer> -->
+    </super-tab>
+  </super-tabs-container>
+
+</super-tabs>

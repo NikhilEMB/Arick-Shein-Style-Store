@@ -1,0 +1,553 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+
+    <div class="header-logo" slot="start">
+      <img src="../../../assets/img/shop-logo.png">
+    </div>
+
+    <ion-title>
+      {{subcategoryData ? 'Edit' : 'New'}} {{title}}
+    </ion-title>
+
+    <div class="header-cart-btn" slot="end">
+      <ion-button fill="outline" shape="round" class="add-btn" (click)="exportProducts()">
+        Export products
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ng-container *ngIf="subcategoryData === undefined; else editSubcategoryData">
+  <super-tabs>
+    <super-tabs-toolbar>
+      <super-tab-button>
+        <ion-label>Information</ion-label>
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>Advance</ion-label>
+      </super-tab-button>
+    </super-tabs-toolbar>
+
+    <super-tabs-container>
+      <super-tab>
+        <ion-content >
+          <div class="main-container">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <div class="flex-space-between">
+                      <div><ion-label>{{title}} Name</ion-label></div>
+                      <div class="flex-label"><ion-label>Show</ion-label>
+                        <ion-toggle (click)="updateNewSubcategoryStatus()" checked></ion-toggle>
+                      </div>
+                    </div>
+                    <ion-input class="form-input" [(ngModel)]="categoryValue"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div class="headings">{{title}} Description</div>
+                </ion-col>
+                <ion-col size="12">
+                  <ckeditor [(ngModel)]="description" [config]="ckeConfig"></ckeditor>
+                </ion-col>
+                <!-- <ion-col size="12">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <ion-label>Exclusive</ion-label>
+                      <ion-toggle [(ngModel)]="subcategoryIsExclusive"></ion-toggle>
+                    </div>
+                    <ion-text color="danger">
+                      <p>Note: This feature will allow order from only one Subcategory</p>
+                    </ion-text>
+                  </div>
+                </ion-col> -->
+                <ion-col size="12">
+                  <div class="flex-space-between">
+                    <div>
+                      <ion-label>{{title}} Image</ion-label>
+                      <ion-text color="danger">
+                        <p style="margin-top: 5px">Image size for best view : 600x450 Px</p>
+                      </ion-text>
+                    </div>
+                    <div class="upload-btn-wrapper">
+                      <button [disabled]="imageResponse.length !== 0" class="upload-btn btn-1 i-start"> <i class="flaticon-null-16"></i>upload</button>
+                      <input [disabled]="imageResponse.length !== 0" type="file" name="myfile" (change)="uploadImage($event.target.files,'catImg')" />
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <div class="img-container">
+              <div class="no-img" *ngIf="!imageResponse.length">
+                <p>No attached image</p>
+              </div>
+              <div *ngIf="imageResponse.length !== 0">
+                <div class="img-wrap">
+                  <img class="category-img" src="{{imageResponse[0].imgData}}" (click)="imgZoom(imageResponse[0].imgData)" />
+                  <div class="overlay">
+                  <ion-button class="btn-2" shape="round" color="danger" fill="clear" (click)="removeImage('catImg')">
+                    <ion-icon name="trash" slot="icon-only"></ion-icon>
+                  </ion-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          </div>
+         
+        </ion-content>
+      </super-tab>
+
+      <super-tab>
+        <ion-content>
+          <div class="main-container">
+            <ion-grid>
+              <ion-row>
+                <ion-col size=2 id="scroll1">
+                  <div class="statusList">
+                    <div [id]="i" *ngFor="let item of sideMenu; index as i" (click)='changeComponent(i)'>
+                      <p [ngClass]="selectedId === i ? 'tile-bg-active' : 'tile-bg-inactive'">{{item}}</p>
+                    </div>
+                  </div>
+                </ion-col>
+                <ion-col size=10 id="scroll2" style="border-left: 1px solid lightgray;">
+                  <ng-container [ngSwitch]="selectedId">
+
+                    <ng-container *ngSwitchCase="0">
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="12">
+                            <h3>Website SEO (optional)</h3>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col size="12">
+                            <div class="input-wrap">
+                              <ion-label>Meta Title</ion-label>
+                              <ion-input class="form-input"
+                                [(ngModel)]="metaData.pageTitle"></ion-input>
+                            </div>
+                          </ion-col>
+                          <ion-col size="12">
+                            <div class="input-wrap">
+                              <ion-label>Meta Description</ion-label>
+                              <ion-input class="form-input"
+                                [(ngModel)]="metaData.metaDescription"></ion-input>
+                            </div>
+                          </ion-col>
+                          <ion-col size="12">
+                            <div class="input-wrap">
+                              <ion-label>Meta Keywords</ion-label>
+                              <ion-input class="form-input"
+                                [(ngModel)]="metaData.metaKeywords"></ion-input>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="1">
+                      <ion-grid>
+                        <ion-row *ngFor="let x of faq; let i = index;">
+                          <ion-col size="6" class="vertical-center">
+                            <div>
+                              <p>{{i+1}})</p>
+                            </div>
+                            <ion-textarea rows="3" type="text" placeholder="Question" class="form-input" [(ngModel)]="x.quest">
+                            </ion-textarea>
+                          </ion-col>
+                          <ion-col size="6" class="vertical-center">
+                            <ion-textarea rows="3" type="text" placeholder="Answer" class="form-input" [(ngModel)]="x.ans">
+                            </ion-textarea>
+                            <i class="flaticon-null-19 remove-icon" (click)="removeFaq(i)"></i>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row class="ion-justify-content-center">
+                          <ion-button (click)="addMoreFaq()" fill="outline" shape="round" size="small">
+                            Add FAQ
+                          </ion-button>
+                        </ion-row>
+                      </ion-grid>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="2">
+                      <ion-text *ngIf="isUniversal">
+                        Slug Name available when you edit this sub category.
+                      </ion-text>
+                      <ion-text *ngIf="!isUniversal" color="danger">
+                        Slug Name is disabled
+                      </ion-text>
+                    </ng-container>
+                  </ng-container>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-content>
+      </super-tab>
+
+    </super-tabs-container>
+  
+  </super-tabs>
+  
+  <ion-footer no-border class="page-footer">
+    <div class="main-container">
+      <ion-button shape="round" class="btn-1 i-start" (click)="addSubcategory()" color="success">
+        <i class="flaticon-null-20 margin-icon"></i>
+        Save
+      </ion-button>
+    </div>
+  </ion-footer>
+</ng-container>
+
+
+<ng-template #editSubcategoryData>
+  <super-tabs>
+    <super-tabs-toolbar slot="top">
+      <super-tab-button>
+        <ion-label>information</ion-label>
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>Advance</ion-label>
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>products</ion-label>
+      </super-tab-button>
+    </super-tabs-toolbar>
+
+    <super-tabs-container>
+      <super-tab>
+        <ion-content>
+          <div class="main-container">
+            <div class="">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="12">
+                    <div class="input-wrap">
+                      <div class="flex-space-between">
+                        <div><ion-label>{{title}} Name</ion-label></div>
+                        <div class="flex-label"><ion-label>Show&nbsp;&nbsp;</ion-label>
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input type="checkbox" (click)="updateEditSubcategoryStatus(subcategoryData.status)" [checked]="subcategoryData.status == true">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <br>
+                      <ion-input class="ion-text-capitalize" [(ngModel)]="subcategoryData.name" style="border: 1px solid gray"></ion-input>
+                    </div>
+                  </ion-col>
+                  <ion-col size="12">
+                    <div class="headings">{{title}} Description</div>
+                  </ion-col>
+                  <ion-col size="12">
+                    <ckeditor [(ngModel)]="subcategoryData.description" [config]="ckeConfig"></ckeditor>
+                  </ion-col>
+                  <!-- <ion-col size="12">
+                    <div class="input-wrap">
+                      <div class="flex-label">
+                        <ion-label>Exclusive</ion-label>
+                        <ion-toggle [(ngModel)]="subcategoryData.isExclusive"></ion-toggle>
+                      </div>
+                      <ion-text color="danger">
+                        <p>Note: This feature will allow order from only one Subcategory</p>
+                      </ion-text>
+                    </div>
+                  </ion-col> -->
+                
+                  <ion-col size="12">
+                    <div class="flex-space-between">
+                      <div>
+                        <ion-label>Image</ion-label>
+                        <ion-text color="danger">
+                          <p style="margin-top: 5px">Image size for best view : 600x450 Px</p>
+                        </ion-text>
+                      </div>
+                      <div class="upload-btn-wrapper">
+                        <button [disabled]="imageResponse.length !== 0 || (subcategoryData.image && subcategoryData.image.url)" class="upload-btn btn-1 i-start"> <i class="flaticon-null-16"></i>upload</button>
+                        <input [disabled]="imageResponse.length !== 0 ||  (subcategoryData.image && subcategoryData.image.url)" type="file" name="myfile" (change)="uploadImage($event.target.files,'catImg')" />
+                      </div>
+                    </div>
+                    <div class="img-container">
+                      <div class="no-img" *ngIf="(!imageResponse.length && !(subcategoryData.image && subcategoryData.image.url))">
+                        <p>No attached image</p>
+                      </div>
+                      <div *ngIf="subcategoryData.image">
+                        <div class="img-wrap" *ngIf="subcategoryData.image.url">
+                          <img class="category-img" [src]="subcategoryData.image.url"
+                            (click)="imgZoom(subcategoryData.image.url)" />
+                            <div class="overlay">
+                          <ion-button class="btn-2" shape="round" fill="clear" color="danger" (click)="removeEditImage('catImg')">
+                            <ion-icon name="trash" slot="icon-only"></ion-icon>
+                          </ion-button>
+                        </div>
+                        </div>
+                      </div>
+                      <div *ngIf="imageResponse.length !== 0">
+                        <div class="img-wrap">
+                          <img class="category-img" [src]="imageResponse[0].imgData"
+                            (click)="imgZoom(imageResponse[0].imgData)" />
+                            <div class="overlay">
+                          <ion-button class="btn-2" shape="round" color="danger" fill="clear" (click)="removeImage('catImg')">
+                            <ion-icon name="trash" slot="icon-only"></ion-icon>
+                          </ion-button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ion-col>
+                  <ion-col size="12">
+                    <div class="flex-space-between">
+                      <div>
+                        <ion-label>Banner Image</ion-label>
+                        <ion-text color="danger">
+                          <p style="margin-top: 5px">Image size for best view : 1366x400 Px</p>
+                        </ion-text>
+                      </div>
+                      <div class="upload-btn-wrapper">
+                        <button [disabled]="banner.length !== 0 || (subcategoryData.banner && subcategoryData.banner.url)" class="upload-btn btn-1 i-start"> <i class="flaticon-null-16"></i>Upload Banner Image</button>
+                        <input  [disabled]="banner.length !== 0 || (subcategoryData.banner && subcategoryData.banner.url)" type="file" name="myfile" (change)="uploadImage($event.target.files, 'bannerImg')" />
+                      </div>
+                    </div>
+                    <div class="img-container">
+                      <div class="no-img" *ngIf="(!banner.length && !(subcategoryData.banner && subcategoryData.banner.url))">
+                        <p>No Banner image</p>
+                      </div>
+                      <div *ngIf="subcategoryData.banner">
+                        <div class="img-wrap" *ngIf="subcategoryData.banner.url">
+                          <img class="category-img" [src]="subcategoryData.banner.url"
+                      (click)="imgZoom(subcategoryData.banner.url)" />
+                          <div class="overlay">
+                            <ion-button class="btn-2 remove" shape="round" fill="clear" color="danger" (click)="removeEditImage('bannerImg')">
+                              <ion-icon name="trash" slot="icon-only"></ion-icon>
+                            </ion-button>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="banner.length !== 0">
+                        <div class="img-wrap">
+                          <img class="category-img" [src]="banner[0].imgData" (click)="imgZoom(banner[0].imgData)" />
+                          <div class="overlay">
+                          <ion-button class="btn-2 remove" shape="round" color="danger" fill="clear" (click)="removeImage('bannerImg')">
+                            <ion-icon name="trash" slot="icon-only"></ion-icon>
+                          </ion-button>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+             
+            </div>
+  
+          </div>
+        </ion-content>
+
+
+      </super-tab>
+
+      <super-tab>
+        <ion-content>
+          <div class="main-container">
+            <ion-grid>
+              <ion-row>
+                <ion-col size=2 id="scroll1">
+                  <div class="statusList">
+                    <div [id]="i" *ngFor="let item of sideMenu; index as i" (click)='changeComponent(i)'>
+                      <p [ngClass]="selectedId === i ? 'tile-bg-active' : 'tile-bg-inactive'">{{item}}</p>
+                    </div>
+                  </div>
+                </ion-col>
+                <ion-col size=10 id="scroll2" style="border-left: 1px solid lightgray;">
+                  <ng-container [ngSwitch]="selectedId">
+
+                    <ng-container *ngSwitchCase="0">
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="12">
+                            <h3>Website SEO (optional)</h3>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col size="12">
+                            <div class="input-wrap">
+                              <ion-label>Meta Title</ion-label>
+                              <ion-input class="form-input"
+                                [(ngModel)]="metaData.pageTitle"></ion-input>
+                            </div>
+                          </ion-col>
+                          <ion-col size="12">
+                            <div class="input-wrap">
+                              <ion-label>Meta Description</ion-label>
+                              <ion-input class="form-input"
+                                [(ngModel)]="metaData.metaDescription"></ion-input>
+                            </div>
+                          </ion-col>
+                          <ion-col size="12">
+                            <div class="input-wrap">
+                              <ion-label>Meta Keywords</ion-label>
+                              <ion-input class="form-input"
+                                [(ngModel)]="metaData.metaKeywords"></ion-input>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="1">
+                      <ion-grid>
+                        <ion-row *ngFor="let x of faq; let i = index;">
+                          <ion-col size="6" class="vertical-center">
+                            <div>
+                              <p>{{i+1}})</p>
+                            </div>
+                            <ion-textarea rows="3" type="text" placeholder="Question" class="form-input" [(ngModel)]="x.quest">
+                            </ion-textarea>
+                          </ion-col>
+                          <ion-col size="6" class="vertical-center">
+                            <ion-textarea rows="3" type="text" placeholder="Answer" class="form-input" [(ngModel)]="x.ans">
+                            </ion-textarea>
+                            <i class="flaticon-null-19 remove-icon" (click)="removeFaq(i)"></i>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row class="ion-justify-content-center">
+                          <ion-button (click)="addMoreFaq()" fill="outline" shape="round" size="small">
+                            Add FAQ
+                          </ion-button>
+                        </ion-row>
+                      </ion-grid>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="2">
+                      <ion-row *ngIf="isUniversal">
+                        <ion-col>
+                          <div class="input-wrap">
+                            <ion-label>
+                              Slug Name
+                              <ion-text color="danger">
+                                (<b class="cursor-p" (click)="sharedService.presentSlugAlert()">CLICK HERE</b> for Slug Instructions)
+                              </ion-text>
+                            </ion-label>
+                            <ion-input type="text" class="form-input" [(ngModel)]='subcategoryData.slug.name'></ion-input>
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                      <ion-text *ngIf="!isUniversal" color="danger">
+                        Slug Name is disabled
+                      </ion-text>
+                    </ng-container>
+                  </ng-container>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-content>
+      </super-tab>
+
+      <super-tab>
+
+        <ion-content>
+          <div class="main-container">
+            <div class="">
+              <div *ngIf="showLoader; else showListOfProducts" class="spinner">
+                <ion-spinner color="primary"></ion-spinner>
+              </div>
+  
+              <div class="no-data ion-text-center" *ngIf="showNoProducts">
+                <img src="assets/img/no-product.png" alt="">
+                <h6>No products</h6>
+              </div>
+  
+  
+  
+              <ng-template #showListOfProducts>
+                <div class="section-search-wrap" *ngIf="!showNoProducts">
+                  <ion-searchbar [(ngModel)]="searchProduct" mode="ios"></ion-searchbar>
+                </div>
+                <div class="product-headings" *ngIf="!showNoProducts">
+                  <ion-grid class="ion-no-padding">
+                    <ion-row>
+                      <ion-col>
+                        <p>Image</p>
+                      </ion-col>
+                      <ion-col>
+                        <p>Product</p>
+                      </ion-col>
+                      <ion-col>
+                        Action
+                      </ion-col>
+                      <ion-col class="ion-text-right">
+                        <p>Reorder</p>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </div>
+  
+                <ion-list class="ion-no-padding row-border" *ngIf="prod && prod.length !== 0 && !showNoProducts">
+                  <ion-reorder-group (ionItemReorder)="onRenderItems($event)" [disabled]="prod.length==1" class="ion-no-padding">
+  
+                    <ion-item class="ion-no-padding" *ngFor="let item of prod | filter: searchProduct; let i = index">
+                      <ion-grid class="ion-no-padding ion-align-items-center">
+                        <ion-row class="row-background ion-align-items-center">
+                          <ion-col>
+                            <ion-thumbnail>
+                              <img class="loading" *ngIf="item.coverPic && !item.coverPic.thumb && item.coverPic.url"
+                                src="{{item.coverPic.url}}">
+                              <img class="loading" *ngIf="item.coverPic && item.coverPic.thumb"
+                                src="{{item.coverPic.thumb}}">
+                              <img *ngIf="!item.coverPic" src="assets/img/placeholder-img.jpg">
+                            </ion-thumbnail>
+                          </ion-col>
+                          <ion-col>
+                            <p class="ion-text-capitalize">{{item.prodName}}</p>
+                          </ion-col>
+                          <ion-col>
+                            <ion-button class="action-btn" fill="clear" (click)="editProduct(item)">
+                              <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                            </ion-button>
+                          </ion-col>
+                          <ion-col class="ion-text-right">
+                            <ion-reorder>
+                              <div class="flat-sort">
+                                <i class="flaticon-menu"></i>
+                              </div>
+                            </ion-reorder>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-item>
+  
+                  </ion-reorder-group>
+                </ion-list>
+              </ng-template>
+            </div>
+          </div>
+        </ion-content>
+      </super-tab>
+    </super-tabs-container>
+
+  </super-tabs>
+
+  <ion-footer no-border class="page-footer">
+    <div class="main-container">
+      <ion-button (click)="deleteSubcategoryConfirm()" shape="round" class="btn-1 i-start" color="danger">
+        <i class="flaticon-null-21"></i>
+        Delete
+      </ion-button>
+
+      <ion-button (click)="editSubcategory()" shape="round" class="btn-1 i-start" color="success">
+        <i class="flaticon-null-20 margin-icon"></i>
+        Save
+      </ion-button>
+    </div>
+
+  </ion-footer>
+
+</ng-template>

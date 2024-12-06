@@ -1,0 +1,29 @@
+
+.or-text{
+  display: flex;
+  align-items: center;
+  margin: 0px 10px;
+  margin-bottom: 0px!important;
+}
+.remove-icon{
+  cursor: pointer;
+  margin-top: 12px;
+  margin-left: 5px;
+  color: var(--ion-color-danger);
+  font-size: 16px;
+}
+h4{margin: 0px;}
+
+// Requests Tab
+.data-table{  
+    ion-col{
+    border: 1px solid gray;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    user-select: text;
+  }
+  
+  ion-row:first-child{
+    background: lightgray
+  }
+}

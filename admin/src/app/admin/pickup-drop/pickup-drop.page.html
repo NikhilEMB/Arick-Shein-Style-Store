@@ -1,0 +1,336 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Pick Up & Drop</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+  <super-tabs no-shadow no-border>
+    <super-tabs-toolbar slot="top">
+      <super-tab-button>
+        <ion-label>Orders</ion-label>
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>Settings</ion-label>
+      </super-tab-button>
+    </super-tabs-toolbar>
+  <super-tabs-container>
+    <super-tab>
+      <ion-content class="ion-no-padding">
+        <div class="main-container" style="width: 100%">
+          <ion-grid>
+            <ion-row>
+              <ion-col size=2>
+                <p class="rowHeading">Order Status</p>
+                <div class="statusList">
+                  <p id="status1" (click)="getPendingOrders()">Pending</p>
+                  <p id="status2" (click)="getPickedOrders()">Picked Up</p>
+                  <p id="status3" (click)="getDeliveredOrders()">Delivered</p>
+                  <p id="status4" (click)="getCancelledOrders()">Cancelled</p>
+                </div>  
+              </ion-col>
+              <ion-col size=4>
+                <div
+                  style="height: 3vh;text-align: center;width: 100%;font-weight: bold;font-size: medium;display: flex;align-items: center;">
+                  <ion-input type='number' placeholder="Enter Order Id"
+                    style="height: 3vh;padding-top: 0px;padding-bottom: 0px;border: 1px solid lightgray;margin-left: 8px;"
+                    [(ngModel)]='searchOrder'></ion-input>&nbsp;
+                  <ion-button size="small" (click)='searchOrderById()'>Search</ion-button>&nbsp;
+                  <ion-button size="small" (click)='resetSearch()'>Show All</ion-button>
+                </div>
+                <div *ngIf='ordersList && ordersList.length == 0'
+                  style="text-align: center;width: 100%;font-size: large;font-weight: bold;">
+                  <br>No Orders</div>
+                <div id="scroll2" *ngIf='ordersList && ordersList.length > 0'>
+                  <div style="text-align: center;" *ngFor='let order of ordersList; let i=index'>
+                    <br>
+                    <ion-grid (click)='onClickViewDetails(order.orderId)' class='orderGrid' 
+                    *ngIf="currentOrders != 'paymentPending' || (currentOrders == 'paymentPending' && (order.status == 'Pending' || order.status == 'Confirmed'))">
+                      <ion-row>
+                        <ion-col>
+                          <p style="color: gray;margin-bottom: 5px;">{{getDateTimeFormat(order.createdAt.toDate())}}</p>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col style="text-align: left;margin-left: 15px;">
+                          <strong>User</strong> : {{order.user.name}}
+                        </ion-col>
+                        <ion-col>
+                          <strong>Id</strong> : <strong>{{order.orderId}}</strong>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col style="text-align: left;margin-left: 15px">
+                          <strong>Amount</strong> : {{order.delivery.cost}}
+                        </ion-col>
+                        <ion-col>
+                          <strong>Status</strong> : {{order.status}}
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </div>
+                </div>
+              </ion-col>
+              <ion-col size=6>
+                <div *ngIf="orderId == '' " style="text-align: center;width: 100%;font-size: large;font-weight: bold;">No
+                  Order Selected</div>
+                <div style="height: 4vh;display: flex; align-items: center; justify-content: space-evenly;"
+                  *ngIf="orderId != '' ">
+                  <h3>Order Id : {{orderData[0].orderId}} ({{orderData[0].status}})</h3>
+                  <div *ngIf="!showLoader && orderData[0].status === 'pending'">
+                    <ion-button (click)="onClickCancelOrder()" color="danger">
+                      <i class="flaticon-null-19"></i>&nbsp;
+                      Cancelled
+                    </ion-button>&nbsp;
+                    <ion-button (click)="onClickPickupOrder()" color="success">
+                      <i class="flaticon-null-20"></i>&nbsp;
+                      Picked Up
+                    </ion-button>
+                  </div>
+                  <div *ngIf="!showLoader && orderData[0].status === 'picked'">
+                    <ion-button (click)="onClickDeliverOrder()" color="success">
+                      <i class="flaticon-null-20"></i>&nbsp;
+                      Delivered
+                    </ion-button>
+                  </div>
+                  <div>
+                    <ion-button (click)="showHistory = !showHistory" color="secondary" *ngIf='!showHistory'>
+                      View Order History
+                    </ion-button>&nbsp;
+                    <ion-button (click)="showHistory = !showHistory" color="secondary" *ngIf='showHistory'>
+                      View Order Details
+                    </ion-button>
+                  </div>
+                </div>
+                <div class="order-wrapper" *ngIf="orderData[0] && orderData[0].hasOwnProperty('timeline') == false && showHistory" id="scroll3">
+                  <p style="text-align: center;font-size: large;margin-top: 20vh;font-weight: bold;">Sorry, No history for this order!</p>
+                </div>
+                <div class="order-wrapper" *ngIf="orderData[0] && orderData[0].hasOwnProperty('timeline') && showHistory" id="scroll3">
+                  <br>
+                  <ion-card>
+                    <ion-card-header>
+                      <ion-card-title style="text-align: center;font-weight: bold;">Order Tracking</ion-card-title>
+                    </ion-card-header>
+                  
+                    <ion-card-content style="padding-left: 35px;">
+                      <div class="status-progress-container">
+                        <ul class="status-progress">
+                          <li class="status-progress-item" *ngFor="let status of allOrderStatuses"
+                            [ngClass]="{'status-missing': !isStatusTimelinePresent(status), 'status-cancelled': isStatusCancelled(status), 'hide-status': hideStatuses(status), 'last-status': isLastStatus(status)}">
+                            <p class="status-progress-title">{{status === 'pending' ? 'Placed' : status}}</p>
+                            <p class="status-progress-info" *ngIf="isStatusTimelinePresent(status)">{{orderData[0].timeline[status].time.toDate() | date: 'medium'}}</p>
+                          </li>
+                        </ul>
+                      </div>
+                    </ion-card-content>
+                  </ion-card>
+      
+                  <ion-card *ngIf='logData && logData.length > 0'>
+                    <ion-card-header>
+                      <ion-card-title style="text-align: center;font-weight: bold;">Order Logs</ion-card-title>
+                    </ion-card-header>
+                  
+                    <ion-card-content style="padding-left: 35px;">
+                      <div *ngFor="let logs of logData"> 
+                        <div style="display: flex;margin-top: 10px;">
+                          <p style="font-weight: bold;font-size: medium;">{{logs.text}} :</p>&nbsp;&nbsp;<p style="font-size: medium;">{{getDateTimeFormat(logs.time.toDate())}}</p>
+                        </div>
+                      </div>
+                    </ion-card-content>
+                  </ion-card>
+                </div>
+                <div class="order-wrapper" *ngIf="orderId != '' && !showHistory" id="scroll3">
+                  <div class="order-details">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col size="12" size-md="4" style="border-right: 1px solid lightgray;">
+                          <div class="address-wrap">
+                            <p><strong>Pickup Address</strong></p>
+                            <hr class="line">
+                            <p> {{orderData[0].pickup.address}}</p>
+                            <br>
+                          </div>
+                          <div class="address-wrap">
+                            <p><strong>Delivery Address</strong></p>
+                            <hr class="line">
+                            <p> {{orderData[0].drop.address}}</p>
+                            <br>
+                          </div>
+                          <p><strong>Phone Number : </strong>{{phoneNo}}</p>
+                          <div>
+                            <div class="assign-delivery"
+                              *ngIf="(orderData[0].status === 'pending' || orderData[0].status === 'picked') && !orderData[0].agentId">
+                              <br>
+                              <p><strong>Delivery Agent</strong></p>
+                              <br>
+                              <select [(ngModel)]="orderData[0].delivery.agentId" interface="popover"
+                                (change)="onChangeDeliveryAgent($event)" *ngIf="!noDeliveryAgents && allDeliveryAgents.length > 0"
+                                style="margin-right: 12px;width: 100%;padding: 4px;">
+                                <option value="" disabled selected>Select delivery agent</option>
+                                <option [value]="agents.id" *ngFor="let agents of allDeliveryAgents">{{agents.name}}
+                                </option>
+                              </select>
+                              <select interface="popover" placeholder="Select delivery agent"
+                                (change)="onSetupDeliveryAgent()" *ngIf="noDeliveryAgents" style="margin-right: 12px;">
+                                <option>Setup Delivery Agent</option>
+                              </select>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="12" size-md="8">
+                          <div
+                            *ngIf="orderData[0] && orderData[0].hasOwnProperty('delivery.agentId') && (orderData[0].agentId != '')">
+                            <br>
+                            <p><strong>Delivery by : </strong> {{deliveryAgentName}}</p>
+                            <br />
+                          </div>
+                          <div class="address-wrap">
+                            <p><strong>Pickup Information</strong></p>
+                            <hr class="line">
+                            <p style="margin-bottom: 8px;"> Pickup Date : {{orderData[0].pickup.date}}</p>
+                            <p> Pickup Time : {{orderData[0].pickup.time}}</p>
+                            <br>
+                          </div>
+                          <div *ngIf="orderData[0] && orderData[0].hasOwnProperty('payment')">
+                            <p><strong>Payment Details</strong></p>
+                            <hr class="line">
+                            <p style="margin-bottom: 8px;" *ngIf='orderData[0].payment.completed == true'><strong>Completed : </strong>Yes</p>
+                            <p style="margin-bottom: 8px;" *ngIf='orderData[0].payment.completed != true'><strong>Completed : </strong>No</p>
+                            <p *ngIf='orderData[0].payment.details && orderData[0].payment.details.length > 0' style="margin-bottom: 8px;"><strong>Details : </strong>{{orderData[0].payment.details}}</p>
+                            <p><strong>Mode : </strong>{{orderData[0].payment.mode}}</p>
+                            <div *ngIf="orderData[0].slab">
+                              <p><strong>Slabs :</strong></p>
+                              <p><strong>{{orderData[0].slab.Name}}: </strong>{{orderData[0].slab.cost}}</p>
+                            </div>
+
+                          </div>
+                          <br>
+                          <ng-container *ngIf="isCancelReasonAvailable()">
+                            <div class="content-card my-10">
+                              <p class="content-heading">Cancelled Reason</p>
+                              <hr class="line">
+                              <p>
+                                <strong>Cancelled By</strong>: {{orderData[0].cancelData.by}}
+                              </p>
+                              <p>
+                                <strong>Reason</strong>: {{orderData[0].cancelData.reason}}
+                              </p>
+                            </div>
+                          </ng-container>
+
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+    <super-tab>
+      <ion-content class="ion-padding">
+          <div class="main-container">
+        <div class="content-alignment sub-settings-fields">
+          <div>Active</div>&nbsp;&nbsp;
+          <div class="toggle-btn">
+            <label class="switch">
+              <input type="checkbox" (click)="activeToggle()" [checked]="isActive">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="content-alignment sub-settings-fields">
+          <div>Gst %</div>&nbsp;&nbsp;
+          <ion-input class="sub-settings-input" type="number" [(ngModel)]="gst"></ion-input>
+        </div>
+        <div class="sub-settings-fields" *ngIf='deliveryByWeight'>
+          <div class="content-alignment sub-settings-fields">
+            <div>Charges per Kg</div>&nbsp;
+            <ion-input class="sub-settings-input" type="number" [(ngModel)]="deliveryByWeight.cost"></ion-input>
+          </div>
+        </div>
+        <div style="display: flex;align-items: center;">
+          <div>Allow Delivery based on Weight</div>&nbsp;&nbsp;
+          <div class="toggle-btn">
+            <label class="switch">
+              <input type="checkbox"
+                (click)="deliveryBasedToggle()"
+                [checked]="weightSlabs.active">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div><br>
+        <div *ngIf="!weightSlabs.active">
+        <div class="sub-settings-fields" *ngIf='deliveryByWeight'>
+
+          <div class="content-alignment sub-settings-fields">
+            Charge&nbsp;<ion-input class="sub-settings-input" type="number" [(ngModel)]="deliveryByWeight.baseCost"></ion-input>&nbsp;for&nbsp;
+            <ion-input class="sub-settings-input" type="number" [(ngModel)]="deliveryByWeight.baseWeight"></ion-input>&nbsp;Kgs
+          </div>
+
+          <div class="content-alignment sub-settings-fields">
+            <div>Extra Charges per Kg</div>&nbsp;
+            <ion-input class="sub-settings-input" type="number" [(ngModel)]="deliveryByWeight.cost"></ion-input>
+          </div>
+        </div>
+        
+        </div>
+        <div *ngIf="weightSlabs.active" >
+          <div style="display: flex;align-items: center;">
+            <ion-button (click)='enterSlabData()'>
+              <p
+                *ngIf="weightSlabs.slabs && weightSlabs.slabs.length == 0">
+                Create Slab</p>
+              <p
+                *ngIf="weightSlabs.slabs && weightSlabs.slabs.length > 0">
+                Add Slab</p>
+            </ion-button>&nbsp;&nbsp;
+            <ion-button (click)="removeSlabs()">
+              Remove All Slabs
+            </ion-button>
+          </div>
+          <br>
+          <ion-grid
+            *ngIf="weightSlabs.slabs && weightSlabs.slabs.length > 0"
+            class="ion-no-padding data-table ion-text-center"
+            style="margin-top: 12px;width: 400px;">
+            <ion-row>
+              <ion-col>Name</ion-col>
+              <ion-col>Range</ion-col>
+              <ion-col>Cost</ion-col>
+            </ion-row>
+            <ion-row
+              *ngFor="let slab of weightSlabs.slabs; let i=index;"
+              style="border-top: 1px solid lightgray;">
+              <ion-col>
+                <p>{{slab.Name}}</p>
+              </ion-col>
+              <ion-col>
+                <p>{{slab.range[0]}} - {{slab.range[1]}}</p>
+              </ion-col>
+              <ion-col>
+                <p>{{slab.cost}}</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <div class="page-footer">
+            <ion-button (click)="saveSettings()" shape="round" class="btn-1 i-start" color="success">
+              <i class="flaticon-null-20 margin-icon"></i>
+              Save 
+            </ion-button>
+        </div>
+        </div>
+      </ion-content>
+    </super-tab>
+    </super-tabs-container>
+  </super-tabs>
+</ion-content>

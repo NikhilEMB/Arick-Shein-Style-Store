@@ -1,0 +1,155 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons style="margin-left: -8px;" slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-menu-button style="margin-left: 8px;" slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Export Orders</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+
+        <ion-col id="scroll" size="6">
+          <div class="sectionArea">
+            <h2>Configure Export Scheme</h2>
+            <div>
+              <!-- <ion-card>
+                <ion-card-header style="display: flex; justify-content: center; padding-bottom: 8px;">
+                  <ion-card-title style="font-size: 20px; display: block;">Filters</ion-card-title>
+                </ion-card-header>
+                <ion-card-header style="display: flex; justify-content: center; padding-top: 0;">
+                  <ion-card-subtitle style="display: block;">Select Only 1 filter at once</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-card-title style="padding-bottom: 8px;">Region</ion-card-title>
+                  <select class="customSelect"></select>
+                </ion-card-content>
+                <ion-card-content style="padding-top: 0;">
+                  <ion-card-title style="padding-bottom: 8px;">Group</ion-card-title>
+                  <select class="customSelect"></select>
+                </ion-card-content>
+                <ion-card-content style="padding-bottom: 16p; padding-top: 0;">
+                  <ion-card-title style="padding-bottom: 8px;">Pincode</ion-card-title>
+                  <select class="customSelect"></select>
+                </ion-card-content>
+              </ion-card> -->
+
+              <!-- *** NEW FILTERS -->
+              <ion-card style="border-radius: 12px; background-color: #ddd;">
+                <ion-card-header style="display: flex; justify-content: center; padding-bottom: 8px;">
+                  <ion-card-title style="font-size: 20px; display: block;">Filters</ion-card-title>
+                </ion-card-header>
+                <ion-card-header style="display: flex; justify-content: center; padding-top: 0;">
+                  <ion-card-subtitle style="display: block;">Select preferred order status</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-card-title style="padding-bottom: 8px;">Include Archived Orders</ion-card-title>
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input type="checkbox"
+                      (click)="disableArchiveState()"
+                      checked>
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                  <ion-card-title style="padding-bottom: 8px;">Status</ion-card-title>
+                  <div style="display: flex; justify-content: space-between;"> 
+                    <select class="customSelect" style="width: 100%;" (change)="setOrderStatus($event.target.value)">
+                      <option value="Confirmed" selected>Confirmed</option>
+                      <option value="Pending">Pending</option>
+                      <option value="Dispatched">Dispatched</option>
+                      <option value="Delivered">Delivered</option>
+                      <option value="Cancelled">Cancelled</option>
+                      <option value="Rejected">Rejected</option>
+                      <option value="Returned">Returned</option>
+                      <option value="Payment Pending">Payment pending</option>
+                    </select>
+                    <!-- <ion-button mode="ios" shape="round" style="margin-left: 18px; height: 25px; margin-bottom: 12px;">Apply</ion-button> -->
+                  </div>
+                </ion-card-content>
+              </ion-card>
+
+              <ion-card style="border-radius: 12px; background-color: #ddd;">
+                <ion-card-header style="display: grid; justify-content: center; padding-bottom: 8px; width: 100%; grid-template-columns: 1fr max-content;">
+                  <ion-card-title style="font-size: 20px; display: block; text-align: center; margin-left: 51px;">Date Range</ion-card-title>
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input type="checkbox"
+                      (click)="disableDatePicker()">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </ion-card-header>
+                <ion-card-header style="display: flex; justify-content: center; padding-top: 0;">
+                  <ion-card-subtitle style="display: block;">Select preferred preset / date range</ion-card-subtitle>
+                </ion-card-header>
+                <div class="date-picker" (mouseover)="alertDatePicker()">
+                  <div class="disable-date" *ngIf="isDisableDatePicker"></div>
+                  <ion-card-content>
+                  <ion-card-title style="padding-bottom: 8px;">Select date preset</ion-card-title>
+                  <select class="customSelect" style="width: 100%;" (change)="setDateRange('preset', $event.target.value)">
+                    <option value=0 selected>No Preset</option>
+                    <option value=7>Last 7 days</option>
+                    <option value=30>Last 30 days</option>
+                  </select>
+                  </ion-card-content>
+                  <p style="margin-left: 50%;">Or</p>
+                  <ion-card-content>
+                  <ion-card-title style="padding-bottom: 8px;">Select date range</ion-card-title>
+                  <ion-item style="border-radius: 12px;">
+                    <ion-label>Start date</ion-label>
+                    <!-- <ion-datetime mode="ios"
+                      displayFormat="DD-MM-YYYY"
+                    ></ion-datetime> -->
+                    <input type="date" style="width: 80%;" [(ngModel)]="dateObj.startDate" [disabled]="disableDatePickerRange" (change)="filterDate('start')">
+                  </ion-item>
+                  <ion-item style="margin-top: 12px; border-radius: 12px;">
+                    <ion-label>End date</ion-label>
+                    <!-- <ion-datetime mode="ios"
+                      displayFormat="DD-MM-YYYY"
+                    ></ion-datetime> -->
+                    <input type="date" style="width: 80%;" [(ngModel)]="dateObj.endDate" [disabled]="disableDatePickerRange" (change)="filterDate('end')">
+                  </ion-item>
+                  </ion-card-content>
+                </div>
+              </ion-card>
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col size="6">
+          <div class="sectionArea">
+            <h2>Instructions</h2>
+          </div>
+          <div style="margin-top: 10px;">
+            <ol>
+              <li>Select the desired order status for export.</li>
+              <li>You can also select the the date range by turning on the toggle for specific range of orders w.r.t date and/or date presets.</li>
+              <li>Click on Export Orders for exporting the filtered orders.</li>
+            </ol>
+          </div>
+        </ion-col>
+        
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer no-border class="page-footer" style="border-top: 1px solid #ccc;">
+  <div class="main-container" style="display: flex; align-content: center; justify-content: space-between; align-items: center;">
+    <p style="font-size: 16px; font-weight: bold;">Total Orders : {{totalOrders}}</p>
+    <p style="font-size: 16px; font-weight: bold;">Filtered Orders : {{allOrders.length}} - {{currentOrderStatus || 'Confirmed'}}</p>
+    <ion-button (click)="exportAllOrders()" [disabled]="saveDisable()" shape="round" class="btn-1 i-start" color="warning"><i class="flaticon-null-17 margin-icon"></i>Export All Orders</ion-button>
+    <ion-button (click)="exportOrdersHandler()" [disabled]="saveDisable()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Export Orders
+    </ion-button>
+  </div>
+</ion-footer>

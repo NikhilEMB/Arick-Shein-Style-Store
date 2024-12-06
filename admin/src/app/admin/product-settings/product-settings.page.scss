@@ -1,0 +1,14 @@
+.dFlex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  margin-top: 15px;
+  ion-input{
+    margin-top: 0px;
+  }
+}
+
+.widgetImage{
+  width: 100px;
+}

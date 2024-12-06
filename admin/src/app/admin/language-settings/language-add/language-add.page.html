@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Select Languages to Add</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main">
+    <br/>
+    <div class="languages" *ngFor="let item of languages; let i = index">
+      <div class="lang" (click)="toggleLangAdd(i)" >
+        <div>
+          <p style="font-weight: 600">{{item.englishName}}</p>
+          <p style="font-weight: 400">( {{item.langName}} )</p>
+        </div>
+        <div>
+          <input type="checkbox" id="{{'checkbutton' +i}}" color="primary" [checked]="item.isAdded" class="checkLang">
+          <!-- <ion-checkbox id="{{'checkbutton' +i}}" color="primary" style="margin-top: 8px" (click)="toggleLangAdd(i)" [checked]="item.isAdded"></ion-checkbox> -->
+        </div>
+      </div>
+    </div>
+    <br/>
+    <br/>
+  </div>
+</ion-content>

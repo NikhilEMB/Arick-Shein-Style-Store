@@ -1,0 +1,187 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Vendor Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <br>
+    <ion-grid class="t-a-l">
+      <ion-row>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <div class="flex-label">
+              <ion-label>Active</ion-label>
+              <ion-toggle [(ngModel)]="settings.activeByVendor"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+      <!-- Shop Timings -->
+      <ion-row>
+        <ion-col class="ion-no-padding" style="display: flex;">
+          <ion-label>Set Shop Timings</ion-label>&nbsp;&nbsp;
+          <div class="toggle-btn">
+            <label class="switch">
+              <input type="checkbox" (click)="shopTimingsToggle()"
+                [checked]="settings.shopTime.active">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </ion-col>
+      </ion-row>
+      <br>
+      <ion-row>
+        <ion-col size="6">
+          <div class="headings">
+            Start Time
+          </div>
+          <ion-row class="ion-align-items-center">
+            <ion-col size="3">
+              <ion-datetime class="input-border time-picker" [disabled]="!settings.shopTime.active" display-format="h:mm A" picker-format="h:mm A" minuteValues="0,30" placeholder="Select Start Time" [(ngModel)]="settings.shopTime.start"></ion-datetime>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <ion-col size="6">
+          <div class="headings">
+            End Time
+          </div>
+          <ion-row class="ion-align-items-center">
+            <ion-col size="3">
+              <ion-datetime class="input-border time-picker" [disabled]="!settings.shopTime.active" display-format="h:mm A" picker-format="h:mm A" placeholder="Select End Time" minuteValues="0,30" [(ngModel)]="settings.shopTime.end"></ion-datetime>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="multipleVendorInvoices">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Billing Name</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="settings.invoiceSettings.billingName"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Billing Address</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="settings.invoiceSettings.address"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Telephone Number</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="settings.invoiceSettings.phoneNo"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="input-wrap">
+            <ion-label>GST Number</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="settings.invoiceSettings.gstNo"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="input-wrap">
+            <ion-label>PAN Number</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="settings.invoiceSettings.panNo"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Custom Message In Invoice</ion-label>
+            <ion-textarea rows="4"
+              type="text"
+              class="form-input"
+              [(ngModel)]="settings.invoiceSettings.customMessage"></ion-textarea>
+          </div>
+        </ion-col>
+
+
+        <ion-col size="12" [hidden]="settings.invoiceSettings.logo.adminLogo == false">
+          <div class="justify-content">
+            <p>Logo (for Invoice) (Max Size: 200px by 200px)
+              <ion-text color="danger">
+                <p>Only image files are allowed</p>
+              </ion-text>
+            </p>
+            <div class="upload-btn-wrapper">
+              <button *ngIf="!settings.invoiceSettings.logo.url"
+                class="upload-btn btn-1 i-start"> <i
+                  class="flaticon-null-16"></i>Upload</button>
+              <input *ngIf="!settings.invoiceSettings.logo.url"
+                type="file"
+                name="myfile"
+                (change)="uploadInvoiceImg($event.target.files, 'logo')"
+                accept="image/*" />
+            </div>
+            <ion-button (click)="removeImg('logo')"
+              fill="outline"
+              color="dark"
+              shape="round"
+              size="small"
+              *ngIf="settings.invoiceSettings.logo.url">
+              Remove
+            </ion-button>
+          </div>
+          <div *ngIf="settings.invoiceSettings.logo.url"
+            class="ion-text-center">
+            <img src="{{settings.invoiceSettings.logo.url}}"
+              class="sign-img">
+          </div>
+        </ion-col>
+
+        <ion-col>
+          <div class="justify-content">
+            <p>Authorized Signatory (for Invoice) (Max Size: 200px by
+              200px)<ion-text color="danger">
+                <p>Only image files are allowed</p>
+              </ion-text>
+            </p>
+            <div class="upload-btn-wrapper">
+              <button *ngIf="!settings.invoiceSettings.signature"
+                class="upload-btn btn-1 i-start"> <i
+                  class="flaticon-null-16"></i>Upload</button>
+              <input *ngIf="!settings.invoiceSettings.signature"
+                type="file"
+                name="myfile"
+                (change)="uploadInvoiceImg($event.target.files,'sign')"
+                accept="image/*" />
+            </div>
+            <ion-button (click)="removeImg('sign')"
+              fill="outline"
+              color="dark"
+              shape="round"
+              size="small"
+              *ngIf="settings.invoiceSettings.signature">
+              Remove
+            </ion-button>
+          </div>
+          <div *ngIf="settings.invoiceSettings.signature"
+            class="ion-text-center">
+            <img src="{{settings.invoiceSettings.signature}}"
+              class="sign-img">
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveSettings()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

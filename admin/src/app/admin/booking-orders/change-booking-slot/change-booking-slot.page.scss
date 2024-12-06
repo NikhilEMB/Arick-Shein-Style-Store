@@ -1,0 +1,74 @@
+.scrolling-wrapper {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 13px solid #fff;
+  position: absolute;
+  bottom: -1px;
+}
+
+.slot-date {
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 100px;
+  height: 75px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  color: black;
+  position: relative;
+  margin: 0 -1px;
+  min-width: 100px;
+  cursor: pointer;
+}
+
+.slot-active {
+  background: #2574ed;
+  color: #fff;
+}
+
+.time-schedules {
+  ion-item {
+    ion-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+    ion-radio {
+      margin-right: 15px;
+    }
+  }
+}
+
+.choose-txt {
+  margin: 20px 10px;
+  opacity: 0.8;
+}
+
+/* width */
+::-webkit-scrollbar {
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(160, 160, 160);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(117, 117, 117);
+}

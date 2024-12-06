@@ -1,0 +1,50 @@
+<ion-header>
+	<ion-toolbar>
+	  <ion-title>Subscription Calendar</ion-title>
+	  <i (click)="closeModal()" slot="end" class="flaticon-letter-x"></i>
+	</ion-toolbar>
+</ion-header>
+  
+  <ion-content>
+	<div class="calenderDiv">
+	  <i class="flaticon-back"></i>
+	  <i class="flaticon-next"></i>
+  
+	  <ion-calendar
+	  [options]="options"
+	  [format]="'YYYY-MM-DD'">
+	  </ion-calendar>
+  
+	  <div class="date-specifiers">
+		  <h6>Date Labels</h6>
+		  <div class="specifiers">
+			  <span id="delivery-date" class="specifier-date">
+				  <span class="specifier-date-text">12</span>
+			  </span>
+			  <span class="specifier-text delivery-txt">&nbsp; Delivery Dates</span>
+		  </div>
+  
+		  <div class="specifiers">
+			  <span id="leave-date" class="specifier-date">
+				  <span class="specifier-date-text">12</span>
+			  </span>
+			  <span class="specifier-text leave-txt">&nbsp; Leave</span>
+		  </div>
+  
+		  <div class="specifiers">
+			  <span id="not-delivered-date" class="specifier-date">
+				  <span class="specifier-date-text"><ion-icon name="close"></ion-icon></span>
+			  </span>
+			  <span class="specifier-text not-delivered-txt">&nbsp; Not - Delivered</span>
+		  </div>
+  
+		  <div class="specifiers">
+			  <span id="delivered-date" class="specifier-date">
+				  <span class="specifier-date-text"><ion-icon name="checkmark"></ion-icon></span>
+			  </span>
+			  <span class="specifier-text delivered-txt">&nbsp; Delivered</span>
+		  </div>
+		</div>
+	</div>
+  </ion-content>
+  

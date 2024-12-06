@@ -1,0 +1,83 @@
+
+<ion-header class="colors-header">
+  <ion-toolbar>
+    <ion-title class="colors-header-title">Colors</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="new-color">
+    <div>
+      <p>Name</p>
+      <ion-input type="text" class="input-border" [(ngModel)]="colorName"></ion-input>
+    </div>
+    <div *ngIf="!colorCode">
+      <p>color image</p>
+      <div class="upload-btn-wrapper" *ngIf="colorImg === ''">
+        <button class="upload-btn btn-1 i-start"> <i class="flaticon-null-16"></i>upload</button>
+        <input type="file" name="myfile" (change)="uploadColor($event.target.files)" />
+      </div>
+
+      <div class="imgs-container" *ngIf="colorImg !== ''">
+        <div class="img-wrap">
+          <img [src]="colorImg" />
+          <div class="overlay">
+            <ion-button class="remove" shape="round" color="danger" fill="clear"
+              (click)="removeColorImg()">
+              <ion-icon name="trash" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+    <div *ngIf="colorCode">
+      <p>color</p>
+      <div slot="start" [ngStyle]="{'background-color': colorCode}" class="color-code">
+      </div>
+    </div>
+  </div>
+  <br>
+  <div style="text-align: center;">
+    <ion-button (click)="addColor()" shape="round" fill="outline" [disabled]="colorName === ''">
+      Add Color
+    </ion-button>
+    <br/><br/>
+    <ion-searchbar mode="ios" placeholder="Search colors" inputmode="text" [(ngModel)]="searchColors"></ion-searchbar>
+  </div>
+
+  <div *ngIf="showColorsLoader && !allColors.length; else colorsLoaded" class="color-spinner">
+    <ion-spinner name="dots" color="primary"></ion-spinner>
+  </div>
+  <ng-template #colorsLoaded>
+    <ion-list>
+      <ion-item-sliding *ngFor="let color of allColors | filter: searchColors; let i = index;">
+        <ion-item-options side="start">
+          <ion-item-option color="dark" (click)="deleteColor(color.id, i)">
+            <ion-icon slot="top" name="trash" style="font-size: 15px;"></ion-icon>
+            <div style="font-size: 12px;">Delete</div>
+          </ion-item-option>
+        </ion-item-options>
+      <ion-item  class="colors-wrapper">
+        <div slot="start" [ngStyle]="{'background-color': color.code}" class="color-code" *ngIf="color.code && color.code !== ''">
+        </div>
+        <div slot="start" *ngIf="color.image && color.image !== '' && color.code === ''">
+          <img src="{{color.image}}" class="color-code">
+        </div>
+        <ion-label>{{color.name}}</ion-label>
+        <ion-button (click)="selectColor(color)" fill="clear" size="small" slot="end">
+          select
+        </ion-button>
+      </ion-item>
+    </ion-item-sliding>
+    </ion-list>
+  </ng-template>
+
+</ion-content>

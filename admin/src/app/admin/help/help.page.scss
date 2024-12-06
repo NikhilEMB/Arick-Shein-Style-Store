@@ -1,0 +1,59 @@
+
+.search-help{
+    border: 1px solid #ccc;
+    border-radius: 25px;
+}
+.margining{
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.message-box{
+    position: relative;
+  }
+  .flaticon-null-22::before {
+    margin: 15px;
+    color: #ccc;
+  }
+  ion-input{
+    --padding-bottom: 3px;
+    --padding-top: 3px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+  }
+
+  .spinner{
+    text-align: center;
+    margin-top: 50%;
+}
+
+.help-container {
+    margin-bottom: 10%;
+}
+
+.video-btns {
+    display: flex;
+}
+
+.hindi-video-btn {
+    --background: #08ABEE;
+    margin-right: 3%;
+    font-size: 13px;
+}
+.eng-video-btn {
+    --background: #672E8F;
+    font-size: 13px;
+}
+
+  @media screen and (min-width: 700px){
+    ion-input{
+      font-size: 20px;
+    }
+    .margining{
+        margin-right: 50px;
+        margin-left: 50px;
+        margin-bottom: 20px;
+    }
+  }
+  

@@ -1,0 +1,196 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Whatsapp Promotions</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size=6 id="scroll1">
+          <p style="text-align:center; font-size: medium; font-weight: bold;">
+            Select Users / Groups
+          </p>
+          <div class="sideMenu-local">
+            <!-- !!! Users -->
+            <!-- <div class="flex-label-local">
+              <p>All Users</p>
+              <div class="toggle-btn-local">
+                <label class="switch">
+                  <input color="primary" type="checkbox" (click)="grpCheck()">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <p>Groups</p>
+            </div> -->
+
+            <ion-list>
+              <ion-radio-group>
+                <ion-item>
+                  <ion-label>All Users</ion-label>
+                  <ion-radio mode="ios" slot="end" value="all" (click)="grpCheck('all')" checked></ion-radio>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Custom Selection(s)</ion-label>
+                  <ion-radio mode="ios" slot="end" value="singleUser" (click)="grpCheck('singleUser')"></ion-radio>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-label>Groups</ion-label>
+                  <ion-radio mode="ios" slot="end" value="groups" (click)="grpCheck('groups')"></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+
+            <div *ngIf="selection === 'groups'">
+
+              <p style="text-align:center; font-size: medium; font-weight: bold;">Select Groups</p>
+              <ion-item>
+                <ion-label>Available Groups</ion-label>
+                <ion-select multiple="true" interface="popover" cancelText="Cancel" okText="Okay!" mode="ios"
+                  (ionChange)="getGroupOptions($event.target.value)">
+                  <ion-select-option *ngFor="let group of userGroups" [value]="group.id">
+                    {{group.name}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </div>
+          </div>
+          <p style="text-align:center; font-size: medium; font-weight: bold;">Select Service</p>
+          <div class="sideMenu-st">
+            <!-- !!! Services -->
+            <ion-item>
+              <ion-label>Available Services</ion-label>
+              <ion-select multiple="false" interface="popover" cancelText="Cancel" okText="Okay!" mode="ios"
+                [(ngModel)]="selectedService" (ionChange)="getServicesOptions($event.target.value)">
+                <ion-select-option value="twilio">Twilio</ion-select-option>
+                <ion-select-option value="aisensy">AiSensy</ion-select-option>
+                <ion-select-option value="interakt">Interakt</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+          
+          <!-- Select Template -->
+          <!-- <ng-container *ngIf="selectedService[0] !== 'aisensy'">
+            <p style="text-align:center; font-size: medium; font-weight: bold;">
+              Select Template
+            </p>
+            <div class="sideMenu-st">
+              !!! Templates
+              <ion-item>
+                <ion-label>Available Templates</ion-label>
+                <ion-select multiple="true" interface="popover" cancelText="Cancel" okText="Okay!" mode="ios">
+                  <ion-select-option value="aisensy">Template 1</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </div>
+          </ng-container> -->
+
+          <!-- Select Campaign -->
+          <div *ngIf="selectedService && availableCampaigns.length > 0">
+            <p style="text-align:center; font-size: medium; font-weight: bold;">
+              Select Campaign
+            </p>
+            <div class="sideMenu-st">
+              <!-- !!! Templates -->
+              <ion-item>
+                <ion-label>Available Campaigns</ion-label>
+                <ion-select interface="popover" cancelText="Cancel" okText="Okay!" mode="ios"
+                  (ionChange)="getCampaignOptions($event.target.value)">
+                  <ion-select-option *ngFor="let campaign of availableCampaigns">{{campaign.campaignName}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </div>
+          </div>
+
+          <div *ngIf="selectedService === 'twilio'">
+            <p style="text-align:center; font-size: medium; font-weight: bold;">
+              Make / Edit the template
+            </p>
+            <div class="sideMenu-st">
+              <div class="save-button" style="margin: 20px 0 20px 0">
+                <ion-button (click)="templateMaker()" shape="round" class="btn-1 i-start"
+                  color="success">
+                  <i *ngIf="twilioTemplateButton === 'Make'" class="flaticon-null-5 margin-icon"></i>
+                  <i *ngIf="twilioTemplateButton === 'Edit'" class="flaticon-pencil-edit-button margin-icon"></i>
+                  {{twilioTemplateButton}} your template
+                </ion-button>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="selectedService && availableCampaigns.length > 0 && (selectedCampaign != '')">
+            <p style="text-align:center; font-size: medium; font-weight: bold;">
+              Enter Campaign Params
+            </p>
+            <div class="sideMenu-st">
+              <ion-item>
+                <ion-input mode="ios" placeholder="Enter Params here" (ionChange)="getCampaignParams($event.target.value)"></ion-input>
+              </ion-item>
+            </div>
+          </div>
+
+          <div *ngIf="selectedService === 'twilio' && twilioParams.length">
+            <p style="text-align:center; font-size: medium; font-weight: bold;">
+              {{twilioParamDesc}}
+            </p>
+            <div class="sideMenu-st">
+              <ion-item>
+                <ion-input mode="ios" placeholder="Enter Params here" [(ngModel)]="tempParam" value="tempParam" (ionChange)="getTwilioParams($event.target.value)"></ion-input>
+              </ion-item>
+            </div>
+          </div>
+
+          <!-- Select Template Params -->
+          <!-- <ng-container *ngIf="selectedService[0] == 'aisensy'">
+            <p style="text-align:center; font-size: medium; font-weight: bold;">
+              Select Template Param
+            </p>
+            <div class="sideMenu-st">
+              !!! Templates
+              <ion-item>
+                <ion-label>Available Template Params</ion-label>
+                <ion-select multiple="true" interface="popover" cancelText="Cancel" okText="Okay!" mode="ios">
+                  <ion-select-option value="aisensy">Template 1</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </div>
+          </ng-container> -->
+
+          <div class="save-button">
+            <ion-button (click)="saveSettings()" [disabled]="disableSave" shape="round" class="btn-1 i-start"
+              color="success">
+              <i class="flaticon-null-20 margin-icon"></i>
+              Send Message
+            </ion-button>
+          </div>
+        </ion-col>
+        <ion-col size=6 id="scroll2">
+          <div class="messageArea">
+            <p style="text-align:center; font-size: medium; font-weight: bold;">
+              Recent Logs
+            </p>
+            <ng-container *ngIf="logs">
+              <div>
+                <ion-card mode *ngFor="let log of logsArr; let i = index" class="customCard">
+                  <ion-card-header>
+                    <ion-card-subtitle style="text-transform: capitalize;">{{log.title}}</ion-card-subtitle>
+                    <ion-card-title>Broadcast Time - {{log.time}}</ion-card-title>
+                    <ion-card-title>Broadcast Selection - {{log.sendTo}}</ion-card-title>
+                  </ion-card-header>
+                </ion-card>
+              </div>
+            </ng-container> 
+            <ng-container *ngIf="!logs || !logsArr.length">
+              <p style="text-align:center; font-size: medium; margin-top: 20px;">No Logs available yet!</p>
+            </ng-container>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

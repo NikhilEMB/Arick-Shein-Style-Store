@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Manage Roles</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <div class="user-container" *ngFor="let user of users; let i=index">
+      <div class="user-wrapper">
+        <div class="title">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="4">
+                <div class="flex-label">{{user.name}}</div>
+              </ion-col>
+              <ion-col size="4">
+                <div class="flex-label">{{user.number}}</div>
+              </ion-col>
+              <ion-col size="4">
+                <div class="flex-label">
+                <label>Active</label>
+                <ion-toggle [(ngModel)]="user.status"></ion-toggle>
+              </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+        <div class="roles">
+          <ion-list class="roles-list" lines="none">
+            <ion-item *ngFor="let role of user.roles">
+              <ion-label>{{role.role}}</ion-label>
+              <ion-checkbox slot="start" [(ngModel)]="role.status"></ion-checkbox>
+            </ion-item>
+          </ion-list>
+        </div>
+        <div class="btn-wrap">
+
+          <ion-button  shape="round" class="btn-1 i-start" color="danger">
+            <i class="flaticon-null-21"></i>
+            Delete
+          </ion-button>
+          <ion-button  shape="round" class="btn-1 i-start" color="success">
+            <i class="flaticon-null-20 margin-icon"></i>
+            Save
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="templates-header-title">Select Product Variant</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-list class="ion-no-padding list" lines="none">
+          <ion-item class="ion-no-padding" *ngFor="let item of product.priceList; let i = index">
+            <ion-grid class="ion-no-padding">
+              <ion-row class="ion-align-items-center">
+                <ion-col size="2">
+                  <ion-thumbnail style="margin-left: 5%;" class="thumbnail">
+                    <img class="loading" *ngIf="product.coverPic && !product.coverPic.thumb && product.coverPic.url"
+                      src="{{product.coverPic.url}}">
+                    <img class="loading" *ngIf="product.coverPic && product.coverPic.thumb"
+                      src="{{product.coverPic.thumb}}">
+                    <img *ngIf="!product.coverPic" src="assets/img/placeholder-img.jpg">
+                  </ion-thumbnail>
+                </ion-col>
+                <ion-col size="6">
+                  <p class="ion-text-capitalize ion-text-center">{{product.prodName}}</p>
+                  <p class="ion-text-capitalize ion-text-center" *ngIf="product.variantType !== '' && product.variantType !== 'other'">{{product.variantType}}:
+                    <span>{{item.weight}}</span>
+                    <!-- <span *ngIf="product.variantType == 'size'">{{item.size}}</span>
+                    <span *ngIf="product.variantType == 'pieces'">{{item.pieces}}</span> -->
+                  </p>
+                  <p class="ion-text-capitalize ion-text-center" *ngIf="product.variantType === '' || product.variantType === 'other'">Variant
+                  </p>
+                  <ng-container *ngIf="product.variantType !== '' && product.variantType !== 'other'">
+                    <p class="ion-text-center" *ngIf="product.variantType.length==0 && item.hasOwnProperty('weight')">{{item.weight}}</p>
+                    <!-- <p class="ion-text-center" *ngIf="product.variantType.length==0 && item.hasOwnProperty('size')">{{item.size}}</p>
+                    <p class="ion-text-center" *ngIf="product.variantType.length==0 && item.hasOwnProperty('pieces')">{{item.pieces}}</p> -->
+                  </ng-container>
+                  <p class="ion-text-capitalize ion-text-center" *ngIf="item.discountedPrice">Price: {{item.discountedPrice | currency: currencyCode:true}}</p>
+                </ion-col>
+                <ion-col size="4" *ngIf="item.totalQuantity >= 1;else noStatus">
+                  <ion-button class="btn-sml" shape="round" fill="outline" (click)="addProduct(item, i)"
+                    *ngIf="!item.added">Add</ion-button>
+                    <p class="green ion-text-uppercase" style="display: inline;" *ngIf="item.added">Added</p>
+                    <ion-button class="btn-sml" style="margin-left:10px" shape="round" fill="outline" (click)="subscribe(i)" *ngIf="product.subscription && product.subscription.isAllowed && subscriptionFeature && showSubscription">Subscribe</ion-button>
+                </ion-col>
+                <ng-template #noStatus>
+                  <ion-col size="3">
+                    <!-- <ion-button class="btn-sml" shape="round" fill="outline" (click)="addProduct(item, i)" *ngIf="item.isPriceList">Select</ion-button>
+                    <ion-text *ngIf="!item.status && !item.isPriceList" color="danger">InActive</ion-text> -->
+                    <ion-text color="danger">Out Of Stock</ion-text>
+                  </ion-col>
+                </ng-template>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

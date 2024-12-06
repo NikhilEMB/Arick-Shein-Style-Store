@@ -1,0 +1,126 @@
+.main-container {
+  width: 100%;
+}
+
+#scroll1 {
+  overflow: hidden;
+  height: 75vh;
+  border-right: 1px solid lightgray;
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+#scroll2 {
+  overflow: hidden;
+  height: 86vh;
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+.orderList {
+  padding-right: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+  margin-right: 4px;
+  cursor: pointer;
+  &:hover {
+    box-shadow: 0 2px 5px #ccc;
+  }
+  strong {
+    font-size: 16px;
+  }
+}
+
+.rejectText {
+  color: red;
+}
+
+.justifyFlex {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.searchBox {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.searchInput {
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.noAppointment {
+  text-align: center;
+  width: 100%;
+  font-size: large;
+  font-weight: bold;
+}
+.bookingCard {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  // &:hover {
+  //   // box-shadow: 0 2px 5px #ccc;
+  // }
+}
+
+.textLeft {
+  text-align: left;
+  // margin-left: 15px;
+}
+.hr {
+  // padding: 2px;
+  border-top: 1px solid #ccc;
+  margin-top: 8px;
+}
+
+.textCap {
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.priceSummary {
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+  span,
+  p {
+    font-size: 16px;
+  }
+}
+
+.d-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.bookingInfo {
+  padding: 4px;
+  margin-top: 8px;
+  border-radius: 5px;
+}
+
+.payment-ss {
+  img {
+    width: 200px;
+    cursor: zoom-in;
+  }
+}
+
+@media screen and(min-height: 1200px) {
+  #scroll1 {
+    height: 92vh;
+  }
+  #scroll2 {
+    height: 86vh;
+  }
+}

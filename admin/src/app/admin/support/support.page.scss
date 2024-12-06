@@ -1,0 +1,43 @@
+.container {
+    text-align: justify;
+}
+.org-info {
+    text-align: center;
+}
+
+p {
+    font-size: 15px;
+    margin-top: 0px;
+}
+
+h6 {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.bwi-logo {
+    width: 200px;
+}
+
+.call-btn {
+    --background: var(--ion-color-success);
+    margin: 0px 0px 10% 0px;
+}
+
+.sections {
+    margin: 0px 0px 10% 0px;
+}
+
+.spinner{
+    text-align: center;
+    margin-top: 50%;
+}
+
+.copyright-info {
+    text-align: center;
+}
+
+.copyright-line {
+    font-size: 12px;
+    opacity: .6;
+}

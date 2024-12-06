@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="delivery-orders" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center>Navigation</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="google-maps-btn">
+    <ion-button (click)="openGoogleMaps()" shape="round">
+      Open in Google Maps
+    </ion-button>
+  </div>
+<div #map id="map"></div>
+</ion-content>
+<ion-footer (click)="finishNavigationConfirm()">
+  <ion-grid>
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <div class="app-footer-text">
+        Finish Navigation<span><i class="flaticon-address app-footer-icon"></i></span>
+    </div>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

@@ -1,0 +1,477 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="exportUsers()">
+      Export Users
+    </ion-button>
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="addUser()">
+      Add User
+    </ion-button>
+  </div>
+</ion-header>
+<super-tabs no-shadow no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button (click)="getSelectedList('users')">
+      <ion-label>Users</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)="getSelectedList('delivery')">
+      <ion-label>Delivery</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)="getManagerUsers()">
+      <ion-label>Managers</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)="getSelectedList('admin')">
+      <ion-label>Admins</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+  <super-tabs-container swipeEnabled="false">
+
+    <!-- Users -->
+    <super-tab>
+      <ion-content class="ion-no-padding">
+        <div class="main-container">
+          <div class="no-users" *ngIf="showNoUsers" text-center> <img src="assets/img/no-user.png" alt="">
+            <h6>No users</h6>
+          </div>
+          <!-- header -->
+          <div class="list-header" *ngIf="!showNoUsers">
+            <ion-grid class="ion-no-padding">
+        
+                <ion-row style="display: flex;align-items: center;justify-content: space-between;">
+
+                  <!-- <ion-col size="6" style="display: flex;align-items: center;">
+                    <input placeholder="Enter name" [(ngModel)]="searchUser" style="background: white;border: 1px solid;padding: 5px;" (click)='clearPhone()' (keyup.enter)='fireSearchQuery()'>&nbsp;
+                    <input placeholder="Enter number" [(ngModel)]="searchUserPhone" style="background: white;border: 1px solid;padding: 5px;" (click)='clearName()' (keyup.enter)='fireSearchQuery()'>
+                    <input placeholder="Enter number" [maxlength]='phoneLimit' [(ngModel)]="searchUserPhone" style="background: white;border: 1px solid;padding: 5px;" (click)='clearName()'>
+                    &nbsp;
+                    <ion-button (click)='fireSearchQuery()' size="small">Search</ion-button>&nbsp;
+                    <ion-button (click)='showAllUsers()' size="small" >Show All</ion-button>
+                  </ion-col> -->
+
+                  <ion-col class="searchArea" size="6">
+                    <input class="searchInput" [(ngModel)]="searchValue" placeholder="Search by name, phone number">
+                    &nbsp;
+                    <ion-button (click)='typeSenseSearchQuery()' size="small">Search</ion-button>&nbsp;
+                    <ion-button (click)='clearSearch()' size="small">Show All</ion-button>
+                  </ion-col>
+
+                    <ion-col size="4">
+                        <ion-select class="border f-s-14 i-s-p-10" (ionChange)="sortUsers($event)"
+                          placeholder="Sort By" style="
+                          text-align: center;
+                          border: none;
+                          border-bottom: 1px solid;
+                          padding: 6px;
+                        ">
+                          <ion-select-option value="lastAccessAt">Last Access Time
+                          </ion-select-option>
+                          <ion-select-option value="lowercaseName">User Name
+                          </ion-select-option>
+                          <ion-select-option value="birthday">Birthday
+                          </ion-select-option>
+                        </ion-select>
+                    </ion-col>
+                  
+                </ion-row>
+              <ion-row>
+                <ion-col class="image">
+                  <p>Image</p>
+                </ion-col>
+                <ion-col class="user">
+                  <p>Name | Number</p>
+                </ion-col>
+                <ion-col class="last-active">
+                  <p>Date</p>
+                </ion-col>
+                <ion-col class="last-active">
+                  <p>Birth Date</p>
+                </ion-col>
+                <ion-col class="action">
+                  <p>Action</p>
+                </ion-col>
+                <ion-col class="action">
+                  <p>View</p>
+                </ion-col>
+                <ion-col class="action">
+                  <p>Options</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <!-- header -->
+
+          <!-- container -->
+          <div class="list-container">
+            <ion-list class="ion-no-padding row-border" *ngIf="!showLoader && !showNoUsers">
+              <ng-container *ngFor="let user of users; let i=index">
+                <ion-item *ngIf="user.data.role==='user'" >
+                  <ion-grid>
+                    <ion-row class="row-background">
+                      <ion-col class="image">
+                        <ion-avatar class="profile-pic"
+                          *ngIf="user.data.role==='user'"> <img
+                            src="{{user.data.dP}}" (click)="imageZoom(user.data.dP)"> </ion-avatar>
+                        <ion-avatar class="profile-pic" *ngIf="user.data.role==='admin'"> <img
+                            src="assets/img/admin-pic.png"> </ion-avatar>
+                      </ion-col>
+                      <ion-col class="user" (click)="onClickUser(user.id, user.data)" style="cursor: pointer;">
+                        <p>{{user.data.name}} ({{user.data.phoneNo}})</p>
+                      </ion-col>
+                      <ion-col class="last-active" (click)="onClickUser(user.id, user.data)" style="cursor: pointer;">
+                        <p >{{getDateTimeFormat(user.data.lastAccessAt.toDate())}}</p>
+                      </ion-col>
+                      <ion-col class="last-active" (click)="onClickUser(user.id, user.data)" style="cursor: pointer;">
+                        <p *ngIf="user.data.birthday">{{getDateTimeFormat(user.data.birthday) | date}}</p>
+                        <p *ngIf="!user.data.birthday">Not Available</p>
+                        
+                        
+                
+                      </ion-col>
+                      <ion-col class="action">
+                        <ion-button class="btn-sml" shape="round" fill="outline" (click)="editUserRoleAlert(user, i)">
+                          Edit Role </ion-button>
+                          <br>
+                      </ion-col>
+                      <ion-col class="action">
+                        <ion-button class="btn-sml" shape="round" fill="outline" (click)="onClickUser(user.id, user.data)">
+                          View </ion-button>
+                      </ion-col>
+                      <ion-col class="action">
+                          <ion-button class="btn-sml" shape="round" fill="outline" (click)="messageUser(user.id)">
+                            Message User </ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </ng-container>
+            </ion-list>
+            <ion-grid class="row-border ion-no-padding" *ngIf="showLoader && !showNoUsers">
+              <ion-row class="row-background" *ngFor="let x of [1,2,3,4,5,6,7,8,9,10]">
+                <ion-col size="3">
+                  <ion-avatar>
+                    <ion-skeleton-text></ion-skeleton-text>
+                  </ion-avatar>
+                </ion-col>
+                <ion-col size="3">
+                  <h3>
+                    <ion-skeleton-text animated style="width: 70%;margin-left: -10px;"></ion-skeleton-text>
+                  </h3>
+                </ion-col>
+                <ion-col size="3">
+                  <h3>
+                    <ion-skeleton-text animated style="width: 90%;margin-left: -5px;"></ion-skeleton-text>
+                  </h3>
+                </ion-col>
+                <ion-col size="3">
+                  <h3>
+                    <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+                  </h3>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <!-- container -->
+          <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreUsers($event)">
+            <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more users...">
+            </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <!-- Delivery -->
+    <super-tab>
+      <ion-content class="ion-no-padding">
+        <div class="main-container">
+          <div class="no-users" *ngIf="showNoUsers" text-center> <img src="assets/img/no-user.png" alt="">
+            <h6>No users</h6>
+          </div>
+          <!-- header -->
+          <div class="list-header" *ngIf="!showNoUsers">
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col class="image">
+                  <p>Image</p>
+                </ion-col>
+                <ion-col class="user">
+                  <p>Name | Number</p>
+                </ion-col>
+                <ion-col class="last-active">
+                  <p>Date</p>
+                </ion-col>
+                <ion-col class="action">
+                  <p>Action</p>
+                </ion-col>
+                <ion-col class="view">
+                  <p>View</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <!-- header -->
+
+          <!-- container -->
+          <div class="list-container">
+            <ion-list class="ion-no-padding row-border" *ngIf="!showLoader && !showNoUsers">
+              <ng-container *ngFor="let user of deliveryAgentUsers; let i=index">
+                <ion-item *ngIf="user.data.role==='deliveryAgent'">
+                  <ion-grid>
+                    <ion-row class="row-background">
+                      <ion-col class="image">
+                        <ion-avatar class="profile-pic"
+                          *ngIf="user.data.role==='deliveryAgent'"> <img
+                            src="{{user.data.dP}}" (click)="imageZoom(user.data.dP)"> </ion-avatar>
+                        <ion-avatar class="profile-pic" *ngIf="user.data.role==='admin'"> <img
+                            src="assets/img/admin-pic.png"> </ion-avatar>
+                      </ion-col>
+                      <ion-col class="user">
+                        <p >{{user.data.name}} ({{user.data.phoneNo}})</p>
+                      </ion-col>
+                      <ion-col class="last-active">
+                        <p>{{getDateTimeFormat(user.data.lastAccessAt.toDate())}}</p>
+                      </ion-col>
+                      <ion-col class="action">
+                        <ion-button class="btn-sml" shape="round" fill="outline" (click)="editUserRoleAlert(user, i)">
+                          Edit Role </ion-button>
+                      </ion-col>
+                      <ion-col class="view">
+                        <ion-button (click)="onClickUser(user.id,user.data)">Manage Orders</ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </ng-container>
+            </ion-list>
+            <ion-grid class="row-border ion-no-padding" *ngIf="showLoader && !showNoUsers">
+              <ion-row class="row-background" *ngFor="let x of [1,2,3,4,5,6,7,8,9,10]">
+                <ion-col size="3">
+                  <ion-avatar>
+                    <ion-skeleton-text></ion-skeleton-text>
+                  </ion-avatar>
+                </ion-col>
+                <ion-col size="3">
+                  <h3>
+                    <ion-skeleton-text animated style="width: 70%;margin-left: -10px;"></ion-skeleton-text>
+                  </h3>
+                </ion-col>
+                <ion-col size="3">
+                  <h3>
+                    <ion-skeleton-text animated style="width: 90%;margin-left: -5px;"></ion-skeleton-text>
+                  </h3>
+                </ion-col>
+                <ion-col size="3">
+                  <h3>
+                    <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+                  </h3>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <!-- container -->
+          <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreUsers($event)">
+            <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more users...">
+            </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        </div>
+      </ion-content>
+        
+    </super-tab>
+
+    <!-- Manager -->
+    <super-tab>
+      <ion-content class="ion-no-padding">
+        <div class="main-container">
+          <div class="no-users" *ngIf="showNoUsers" text-center> <img src="assets/img/no-user.png" alt="">
+            <h6>No users</h6>
+          </div>
+          <!-- header -->
+          <div class="list-header" *ngIf="!showNoUsers">
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col class="image">
+                  <p>Image</p>
+                </ion-col>
+                <ion-col class="user">
+                  <p>Name | Number</p>
+                </ion-col>
+                <ion-col class="last-active">
+                  <p>Date</p>
+                </ion-col>
+                <ion-col class="action">
+                  <p>Action</p>
+                </ion-col>
+                <ion-col class="action">
+                  <p>View</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <!-- header -->
+
+          <!-- container -->
+          <div class="list-container">
+            <ion-list class="ion-no-padding row-border" *ngIf="!showLoader && !showNoUsers">
+              <ng-container *ngFor="let user of managerUsers; let i=index">
+                <ion-item *ngIf="user.data.role==='manager'">
+                  <ion-grid>
+                    <ion-row class="row-background">
+                      <ion-col class="image">
+                        <ion-avatar class="profile-pic" *ngIf="user.data.dP"> 
+                          <img src="{{user.data.dP}}" (click)="imageZoom(user.data.dP)">
+                         </ion-avatar>
+                        <ion-avatar class="profile-pic" *ngIf="!user.data.dP"> 
+                          <img src="assets/img/admin-pic.png">
+                         </ion-avatar>
+                      </ion-col>
+                      <ion-col class="user">
+                        <p>{{user.data.name}} ({{user.data.phoneNo}})</p>
+                      </ion-col>
+                      <ion-col class="last-active">
+                        <p>{{getDateTimeFormat(user.data.lastAccessAt.toDate())}}</p>
+                      </ion-col>
+                      <ion-col class="action">
+                        <ion-button class="btn-sml" shape="round" fill="outline" (click)="editUserRoleAlert(user, i)">
+                          Edit Role </ion-button>
+                      </ion-col>
+                      <ion-col class="action">
+                        <ion-button (click)="editManager(user.id)" lass="btn-sml" shape="round" fill="outline">
+                          Edit Manager</ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </ng-container>
+            </ion-list>
+            <ion-grid class="row-border ion-no-padding" *ngIf="showLoader && !showNoUsers">
+              <ion-row class="row-background" *ngFor="let x of [1,2,3,4,5,6,7,8,9,10]">
+                <ion-col size="3">
+                  <ion-avatar>
+                    <ion-skeleton-text></ion-skeleton-text>
+                  </ion-avatar>
+                </ion-col>
+                <ion-col size="3">
+                  <h3>
+                    <ion-skeleton-text animated style="width: 70%;margin-left: -10px;"></ion-skeleton-text>
+                  </h3>
+                </ion-col>
+                <ion-col size="3">
+                  <h3>
+                    <ion-skeleton-text animated style="width: 90%;margin-left: -5px;"></ion-skeleton-text>
+                  </h3>
+                </ion-col>
+                <ion-col size="3">
+                  <h3>
+                    <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+                  </h3>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <!-- container -->
+          <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreUsers($event)">
+            <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more users...">
+            </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <!-- Admin -->
+    <super-tab>
+      <ion-content class="ion-no-padding">
+        <div class="main-container">
+          <div class="no-users" *ngIf="showNoUsers" text-center> <img src="assets/img/no-user.png" alt="">
+            <h6>No users</h6>
+          </div>
+          <!-- header -->
+          <div class="list-header" *ngIf="!showNoUsers">
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col class="image">
+                  <p>Image</p>
+                </ion-col>
+                <ion-col class="user">
+                  <p>Name | Number</p>
+                </ion-col>
+                <ion-col class="last-active">
+                  <p>Date</p>
+                </ion-col>
+                <ion-col class="action">
+                  <p>Action</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <!-- header -->
+
+          <!-- container -->
+          <div class="list-container">
+            <ion-list class="ion-no-padding row-border" *ngIf="!showLoader && !showNoUsers">
+              <ng-container *ngFor="let user of users; let i=index">
+                <ion-item *ngIf="user.data.role==='admin'">
+                  <ion-grid>
+                    <ion-row class="row-background">
+                      <ion-col class="image">
+                        <ion-avatar class="profile-pic" *ngIf="user.data.dP"> 
+                          <img src="{{user.data.dP}}" (click)="imageZoom(user.data.dP)">
+                         </ion-avatar>
+                        <ion-avatar class="profile-pic" *ngIf="!user.data.dP"> 
+                          <img src="assets/img/admin-pic.png">
+                         </ion-avatar>
+                      </ion-col>
+                      <ion-col class="user">
+                        <p>{{user.data.name}} ({{user.data.phoneNo}})</p>
+                      </ion-col>
+                      <ion-col class="last-active">
+                        <p>{{getDateTimeFormat(user.data.lastAccessAt.toDate())}}</p>
+                      </ion-col>
+                      <ion-col class="action">
+                        <ion-button class="btn-sml" shape="round" fill="outline" (click)="editUserRoleAlert(user, i)">
+                          Edit Role </ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </ng-container>
+            </ion-list>
+            <ion-grid class="row-border ion-no-padding" *ngIf="showLoader && !showNoUsers">
+              <ion-row class="row-background" *ngFor="let x of [1,2,3,4,5,6,7,8,9,10]">
+                <ion-col size="3">
+                  <ion-avatar>
+                    <ion-skeleton-text></ion-skeleton-text>
+                  </ion-avatar>
+                </ion-col>
+                <ion-col size="3">
+                  <h3>
+                    <ion-skeleton-text animated style="width: 70%;margin-left: -10px;"></ion-skeleton-text>
+                  </h3>
+                </ion-col>
+                <ion-col size="3">
+                  <h3>
+                    <ion-skeleton-text animated style="width: 90%;margin-left: -5px;"></ion-skeleton-text>
+                  </h3>
+                </ion-col>
+                <ion-col size="3">
+                  <h3>
+                    <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+                  </h3>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <!-- container -->
+          <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreUsers($event)">
+            <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more users...">
+            </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        </div>
+      </ion-content>
+    </super-tab>
+
+  </super-tabs-container>
+</super-tabs>

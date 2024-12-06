@@ -1,0 +1,12 @@
+ion-content {
+  --background: #fff;
+}
+.dFlex{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  div{
+    width: 50%;
+  }
+}

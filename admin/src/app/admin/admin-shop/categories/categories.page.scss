@@ -1,0 +1,107 @@
+
+ ion-list ion-item ion-col {
+  display: -webkit-inline-box;
+  display: inline-flex;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+.loading {
+  background: transparent url('https://s5.gifyu.com/images/377-2.gif') center no-repeat;
+  }
+
+  .product-headings{
+    background: var(--ion-color-medium);
+    padding: 8px;
+    margin: 0 -16px;
+  }
+
+  .product-search-wrap
+  {
+    text-align: center;
+    ion-searchbar{
+      width: 300px;
+      max-width: 100%;
+      margin: auto;
+    }
+  }
+
+  .flex
+  {
+    display: flex;
+    align-items: center;
+  }
+
+  .action-btn {
+    width: 50px;
+    height: 50px;
+    --border-radius: 100px;
+}
+.fixed-btn{
+    position: fixed;
+    bottom: 16px;
+    width: 1168px;
+    text-align: right;
+    ion-button{
+      margin-left: 16px;
+    }
+}
+.product-active {
+  background-color: green;
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 30px;
+  border: 1px solid green;
+  margin-right: 10%;
+}
+.product-inactive {
+  background-color: red;
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 30px;
+  border: 1px solid red;
+  margin-right: 10%;
+}
+
+ion-col.reorder{
+  justify-content: flex-end!important;
+}
+
+#scroll1 {
+  overflow: hidden;
+  height: 80vh;
+}
+
+#scroll1:hover {
+  overflow-y: auto;
+}
+
+#scroll2 {
+  overflow: hidden;
+  height: 75vh;
+}
+
+#scroll2:hover {
+  overflow-y: auto;
+}
+.statusList {
+  text-align: center;
+  p {
+    font-size: medium;
+    border: 1px solid lightgray;
+    padding: 10px;
+    margin: 8px;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+}
+@media screen and(min-height: 1200px) {
+  #scroll1 {
+    height: 92vh;
+  }
+  #scroll2 {
+    height: 87vh;
+  }
+}

@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Edit Manager</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main">
+    <br><br>
+    <div class="data-field">
+      <p>Active</p>
+      <div class="toggle-btn">
+        <label class="switch">
+          <input type="checkbox" *ngIf="receivedManagerData" (click)="toggleActive()" [checked]="receivedManagerData.active">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <br><br>
+    <div>
+      <h2><strong>Permissions</strong></h2>&nbsp;&nbsp;&nbsp;<ion-button class="btn-sml i-start" fill="outline"
+      shape="round" (click)="updatePermissions()">Update</ion-button>
+        <!-- For Groups -->
+        <ion-list>
+          <div class="toggle" *ngIf="groups">
+            <p>
+              Select Groups
+            </p>
+            <ion-select class="regionSelect" placeholder="Select Groups" multiple [(ngModel)]="selectedGroups">
+              <ng-container *ngFor="let group of groups">
+                <ion-select-option value="{{group.id}}">{{group.name}}</ion-select-option>
+              </ng-container>
+            </ion-select>
+          </div>
+        </ion-list>
+      <ng-container *ngFor="let page of pagesList; let i = index">
+      <ion-list lines="none">
+        <ion-item>
+          <div class="permission">
+            <p style="text-transform: capitalize;">{{page.name}}</p>
+            <div class="toggle-btn">
+              <label class="switch">
+                <input type="checkbox" (click)="givePermission(i)" [checked]='currentPages.includes(pagesList[i].path)'>
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+          <br>
+        </ion-item>
+      </ion-list>
+      <ion-list>
+        <div class="toggle" *ngIf="page.name == 'Orders' && currentPages.includes(pagesList[i].path)">
+          <p>
+            Select Region For Orders
+          </p>
+          <ion-select class="regionSelect" placeholder="Select Order Region" multiple [(ngModel)]="selectedRegion">
+            <ng-container *ngFor="let region of regions">
+              <ion-select-option value="{{region.id}}">{{region.name}}</ion-select-option>
+            </ng-container>
+          </ion-select>
+        </div>
+      </ion-list>
+    </ng-container>
+    </div>
+  </div>
+</ion-content>

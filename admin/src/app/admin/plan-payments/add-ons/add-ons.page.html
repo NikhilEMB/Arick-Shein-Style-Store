@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+      <ion-title>Add Ons</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid id="addOns">
+      <ion-row>
+        <ion-col>
+          <button >Add</button>
+        </ion-col>
+        <ion-col>
+          <!-- {{addON.id}} -->
+        </ion-col>
+        <ion-col>
+          <!-- {{addON.quantity}}{{addON.validity}} -->
+        </ion-col>
+        <ion-col>
+          <!-- Rs<p >{{addON.price}}</p> -->
+        </ion-col>
+      </ion-row>
+      <br>
+    </ion-grid>
+    <br>
+    <div id="amount">
+      <div id="rowDisplay">
+        <!-- <p id="details">Amount : </p><p>Rs {{selectedAmount}}</p> -->
+      </div>
+      <div id="rowDisplay">
+        <!-- <p id="details">Tax (18% GST) : </p><p>Rs {{taxAmount}}</p> -->
+      </div>
+      <div id="rowDisplay">
+        <!-- <p id="details">Total : </p><p>Rs {{totalAmount}}</p> -->
+      </div>
+    </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar mode="ios">
+    <ion-title (click)="gotoCompletePayment()">Continue to Payment</ion-title>
+  </ion-toolbar>
+</ion-footer>

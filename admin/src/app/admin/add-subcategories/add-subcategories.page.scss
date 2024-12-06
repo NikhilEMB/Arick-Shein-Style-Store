@@ -1,0 +1,76 @@
+.img-container {
+  text-align: center;
+  padding-top: 20px;
+  .img-wrap {
+    width: 300px;
+    display: inline-block;
+    position: relative;
+    border: var(--ion-color-medium) 1px solid;
+    border-radius: 16px;
+    overflow: hidden;
+    ion-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+    }
+  }
+}
+
+.product-headings {
+  background: var(--ion-color-medium);
+  padding: 8px;
+  margin: 0 -16px;
+}
+
+.loading {
+  background: transparent url("https://s5.gifyu.com/images/377-2.gif") center
+    no-repeat;
+}
+
+super-tabs,
+super-tabs-container,
+super-tab {
+  width: 100%;
+  max-width: 100%;
+}
+
+#scroll1 {
+  overflow: hidden;
+  height: 80vh;
+}
+
+#scroll1:hover {
+  overflow-y: auto;
+}
+
+#scroll2 {
+  overflow: hidden;
+  height: 75vh;
+}
+
+#scroll2:hover {
+  overflow-y: auto;
+}
+.statusList {
+  text-align: center;
+  p {
+    font-size: medium;
+    border: 1px solid lightgray;
+    padding: 10px;
+    margin: 8px;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+}
+@media screen and(min-height: 1200px) {
+  #scroll1 {
+    height: 92vh;
+  }
+  #scroll2 {
+    height: 87vh;
+  }
+}
+
+ion-label, .headings {
+  text-transform: capitalize;
+}

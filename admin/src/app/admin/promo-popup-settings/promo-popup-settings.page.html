@@ -1,0 +1,151 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Promo Popup</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <div class="main-container info-container fixed-height">
+    <ng-container>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <div class="flex-space-between">
+
+                <div class="flex-label">
+                  <ion-label> {{'PROMO_POPUP_SETTINGS.active' | translate}}
+                  </ion-label>
+                  <ion-toggle [(ngModel)]="popup.active" [checked]="popup.active"></ion-toggle>
+                </div>
+              </div>
+
+            </div>
+          </ion-col>
+
+          <ion-col size="12">
+            <div class="flex-space-between">
+              <div>
+                <ion-label>{{'PROMO_POPUP_SETTINGS.banner' | translate}}
+                </ion-label>
+              </div>
+              <div class="upload-btn-wrapper">
+                <button [disabled]="popup.banner.url" class="upload-btn btn-1 i-start"
+                  (click)="uploadImage($event.target.files)"> <i class="flaticon-null-16"></i>Upload Banner
+                  Image</button>
+                <!-- <input [disabled]="popup.banner.url" type="file" name="myfile" (change)="uploadImage($event.target.files)" /> -->
+              </div>
+            </div>
+            <div class="img-container">
+              <div class="no-img" *ngIf="!popup.banner.url">
+                <p>No attached image</p>
+              </div>
+              <div *ngIf="popup.banner.url">
+                <div class="img-wrap">
+                  <img class="category-img" [src]="popup.banner.url" (click)="imgZoom(popup.banner.url)" />
+                  <div class="overlay">
+                    <ion-button class="btn-2 remove" shape="round" fill="clear" color="danger" (click)="removeImage()">
+                      <ion-icon name="trash" slot="icon-only"></ion-icon>
+                    </ion-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            {{'PROMO_POPUP_SETTINGS.link_with' | translate}}
+          </ion-col>
+
+          <ion-col size="12">
+            <ion-list>
+              <ion-radio-group [value]="popup.link.type">
+                <ion-item class="pps-links" *ngFor="let link of linkTypes; let i=index;" lines="none"
+                  (click)="selectLinkType(i)">
+                  <ion-radio slot="start" [value]="link"></ion-radio>
+                  <ion-label>
+                    {{link}} : <ng-container
+                      *ngIf="(link === popup.link.type) && (!linkLength || linkLength == 1) && checkCurrentType(popup.link.type)">
+                      {{popup.link.name}}
+                    </ng-container>
+                    <ng-container *ngIf="(link === popup.link.type) && (linkLength > 1) && checkCurrentType(popup.link.type)">
+                      {{linkLength}} {{link}} selected
+                    </ng-container>
+                  </ion-label>
+                </ion-item>
+                <ion-item class="bs-links" lines="none" (click)="selectStaticLink('external')">
+                  <ion-radio slot="start" value="external"></ion-radio>
+                  <ion-label style="text-transform: capitalize">
+                    External Link :
+                  </ion-label>&nbsp;
+                  <ion-input [(ngModel)]='linkUrl' style="border: 1px solid;max-width: 250px;"></ion-input>
+                </ion-item>
+                <ion-item class="bs-links" lines="none" (click)="selectStaticLink('contactUs')">
+                  <ion-radio slot="start" value="contactUs"></ion-radio>
+                  <ion-label style="text-transform: capitalize">
+                    Contact Us
+                  </ion-label>
+                </ion-item>
+                <!-- <ion-item class="bs-links" lines="none" (click)="selectStaticLink('referEarn')">
+                  <ion-radio slot="start" value="referEarn"></ion-radio>
+                  <ion-label style="text-transform: capitalize">
+                    Refer and Earn
+                  </ion-label>
+                </ion-item> -->
+                <ion-item class="bs-links" lines="none" (click)="selectStaticLink('feedback')">
+                  <ion-radio slot="start" value="feedback"></ion-radio>
+                  <ion-label style="text-transform: capitalize">
+                    Feedback
+                  </ion-label>
+                </ion-item>
+                <ion-item class="bs-links" lines="none" (click)="selectStaticLink('offers')">
+                  <ion-radio slot="start" value="offers"></ion-radio>
+                  <ion-label style="text-transform: capitalize">
+                    Offers
+                  </ion-label>
+                </ion-item>
+                <ion-item class="bs-links" lines="none" (click)="selectStaticLink('membership')">
+                  <ion-radio slot="start" value="membership"></ion-radio>
+                  <ion-label style="text-transform: capitalize">
+                    Membership
+                  </ion-label>
+                </ion-item>
+                <div style="display: flex; align-items: center">
+                  <ion-item class="bs-links" lines="none" (click)="selectStaticLink('pdf')">
+                    <ion-radio slot="start" value="pdf"></ion-radio>
+                    <p>PDF File</p>
+                    <div class="upload-btn-wrapper">
+                      <button class="upload-btn btn-1 i-start"> <i class="flaticon-null-16"></i>Upload Pdf File</button>
+                      <input type="file" name="myFile" (change)="uploadPdf($event.target.files)" />
+                    </div>
+                    <br>
+                  </ion-item>
+                  <a href="{{pdfUrl}}" target="_blank" *ngIf="pdfUrl != '' ">Uploaded File</a>&nbsp;&nbsp;
+                  <p *ngIf="popup.link && popup.link.type == 'pdf' && popup.link.url && newFile == true">
+                    Selected File : {{popup.link.url.name}}
+                  </p>
+                </div>
+              </ion-radio-group>
+
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+  </div>
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+
+    <ion-button (click)="savePopup()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      {{'SHARED.save' | translate}}
+    </ion-button>
+
+  </div>
+</ion-footer>

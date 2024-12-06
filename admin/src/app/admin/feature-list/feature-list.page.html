@@ -1,0 +1,196 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Extra Features</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+      <h2 style="text-align: center">Please contact administrator to turn the below listed features on/off</h2>
+      <br>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Request for Quote :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.RFQFeature">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.RFQFeature">Disabled</ion-text>
+          </div>
+          <p>Convert your ecommerce system to quote based system. You can list all your products and customers can request for quote according to quantity required. 
+            Get instant notification and message for quote.</p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Real time Delivery Navigation :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.deliveryFeature">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.deliveryFeature">Disabled</ion-text>
+          </div>
+          <p>Show real time navigation of your delivery agent to customers ad well as track as admin. Uses high quality GPS based navigation on Google Maps. 
+            Customers can see live location of delivery agent when order is dispatched. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Delivery Charges Based On KM :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.isDeliveryBasedKm">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.isDeliveryBasedKm">Disabled</ion-text>
+          </div>
+          <p>Calculate delivery charges based on distance (in Kms) from your store to customer’s address. Example, if customer is 5km from your store and 
+            delivery charge is set as 10 / Km, then total delivery charges for that order will be 50. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Delivery by weight :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.isDeliveryBasedOnWeight">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.isDeliveryBasedOnWeight">Disabled</ion-text>
+          </div>
+          <p>To calculate the delivery charges according to total weight of products in an order. Example: if delivery charges are 10/Kg, then total delivery
+            charges of 5kg weight will be 50. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Limited Time Deal :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.limitedTimeDeal">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.limitedTimeDeal">Disabled</ion-text>
+          </div>
+          <p>Show special discounts on products for a limited time and once that time is expired, offer is automatically removed from those products. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Membership :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.membership">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.membership">Disabled</ion-text>
+          </div>
+          <p>Create different membership plans for your customers and offer extra discounts or free delivery for customers enrolling for these plans. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Multi Region :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.multiRegion">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.multiRegion">Disabled</ion-text>
+          </div>
+          <p>Show different products in different areas / regions / cities / pincodes. This feature is useful, when you plan to start / take your business
+            in multiple cities or regions and would like to offer different products to different customers. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Multi Vendor :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.multiVendor">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.multiVendor">Disabled</ion-text>
+          </div>
+          <p>Limited Multi Vendor where vendor can be selected for every product and vendor will get a notification for order. Multi region and multi vendor
+              can be combined together to create a vendor based system to offer products based on different vendors in different regions.</p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Open Search :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.openAlgoliaSearch">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.openAlgoliaSearch">Disabled</ion-text>
+          </div>
+          <p>Allow users to do search on website and app without even login into the app or website. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Price For Retail :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.priceForRetail">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.priceForRetail">Disabled</ion-text>
+          </div>
+          <p>For Wholesale & Retail business. To show different prices to customers and retailers . Add retailers into your system and set extra discounts for them. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Price Request Feature :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.priceReqFeature">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.priceReqFeature">Disabled</ion-text>
+          </div>
+          <p>To show prices to only specific customers. Customer can send a one time request for checking prices and once approved by admin, customers can check prices. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Product Rating :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.productRatings">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.productRatings">Disabled</ion-text>
+          </div>
+          <p>Allow customers to rate product after order, add feedback or upload images of product. Customers can only rate a product once they place an order. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Product Sharing :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.productSharing">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.productSharing">Disabled</ion-text>
+          </div>
+          <p>Allow customers to share product on different social media platforms. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Referral Feature :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.referralFeature">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.referralFeature">Disabled</ion-text>
+          </div>
+          <p>Customers can refer their friends for downloading your app and earn cashbacks which can be used for placing orders. Example : Customer 1 refers Customer 2,
+            customer 2 downloads app, gets ‘X’ cash back into their wallet. When Customer 2 completes first order, Customer 1 gets ‘Y’ amount into their wallet. You can
+            set “X” and “Y” according to your business. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Homepage Sections Allowed :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled">{{environmentValues.sectionsLimit}}</ion-text>
+          </div>
+          <p>Number of sections you can create on home page. You can choose different section types available and can upto number of sections allowed to you.
+            List of section types available: Banner Slider, Static Images, Product Carousel, Product List, Image with Text, Video with Text, Text Block, Categories, Brands & Services
+            You can completely customise your homepage using these sections, more sections means more you can present on home screen of website and app. Show separate content on app and website according to your business. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Social Sign In :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.socialSigin">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.socialSigin">Disabled</ion-text>
+          </div>
+          <p>Allow customers to login using Facebook, Google or Apple on your app and website. </p>
+        </div>
+      </div>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment">
+          <div class="listItems">
+            <ion-text class="usage-item-name">Subscription Feature :&nbsp;</ion-text>
+            <ion-text class="statusTextEnabled" *ngIf="environmentValues.subscriptionFeature">Enabled</ion-text>
+            <ion-text class="statusTextDisabled" *ngIf="!environmentValues.subscriptionFeature">Disabled</ion-text>
+          </div>
+          <p>Allow you customers to subscribe for products on daily, weekly or monthly basis. System generates orders automatically based on subscription. Help customers set up automatic orders for common products 
+            like groceries, milk, diapers, etc.</p>
+        </div>
+      </div>
+  </div>
+</ion-content>

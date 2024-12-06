@@ -1,0 +1,166 @@
+.header {
+    background: var(--ion-color-medium);
+    margin: -24px -24px 0 -24px;
+    overflow: hidden;
+    display: flex;
+    padding: 8px 24px;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+
+    p {
+        font-size: 16px;
+    }
+}
+
+.grid-container {
+    margin-left: -16px;
+    margin-right: -16px;
+
+    ion-grid {
+        --ion-grid-padding: 0;
+
+        ion-col {
+            --ion-grid-column-padding: 16px;
+        }
+    }
+}
+
+.address-grid {
+
+    /* margin-right: -16px;
+    margin-left: -16px;*/
+    ion-grid {
+        --ion-grid-padding: 0;
+
+        ion-col {
+            --ion-grid-column-padding: 32px;
+
+            .address-wrapper {
+                /* border-right: var(--ion-color-medium) 1px solid;*/
+                .btn-sml {
+                    --color: #111;
+                }
+                .address-wrap {
+                    margin-top: 12px;
+
+                    .num-wrap {
+                        margin-top: 21px;
+                    }
+                }
+                ion-button.btn-2 {
+                    margin-top: 12px;
+
+                    &.active {
+                        --background: var(--ion-color-success);
+                    }
+                }
+
+            }
+        }
+    }
+
+}
+
+.coupon-wrapper {
+    margin-bottom: 21px;
+    .coupon-wrap{
+        position: relative;
+        .btn-wrap{
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 999;
+        }
+    }
+    .coupon-status{
+        margin:6px 0 0 8px;
+        &.success{color: var(--ion-color-success);}
+        &.error{color: var(--ion-color-danger);}
+    }
+    .coupon-input {
+        margin: 0;
+        position: relative;
+        --padding-start: 54px;
+        font-size: 16px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        &.success{
+            border: var(--ion-color-success) 1px solid;
+            color: var(--ion-color-success);
+        }
+        &.error{
+            border: var(--ion-color-danger) 1px solid;
+            color: var(--ion-color-danger);
+        }
+        &:before {
+            content: "\f11c";
+            font-family: Flaticon;
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            -webkit-transform: translateX(-50%);
+            transform: translateY(-50%);
+            font-size: 24px;
+            font-weight: normal;
+        }
+    }
+
+
+}
+
+.order-summery-wrapper {
+    padding: 16px;
+
+    h3 {
+        font-size: 16px;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    table {
+        width: 100%;
+
+        td {
+            padding: 4px 0;
+        }
+
+        td:last-child {
+            text-align: right;
+        }
+    }
+
+    .sub-total-wrap {
+        border-top: #ccc 1px solid;
+        margin-top: 16px;
+        padding-top: 16px;
+
+        h3 {
+            font-size: 18px;
+            display: inline;
+        }
+
+        span {
+            margin-left: 6px;
+            font-size: 10px;
+        }
+    }
+}
+
+
+@media(max-width:500px) {
+    .header {
+        flex-direction: column;
+        height: auto;
+
+        .btn-2-outline {
+            margin-top: 16px;
+        }
+    }
+}
+
+.payment-container {
+    margin-top: 26px;
+}

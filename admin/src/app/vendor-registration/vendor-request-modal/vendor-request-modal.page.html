@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="templates-header-title">Vendor Detail</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+        <ion-list class="ion-no-padding list" lines="none">
+          <ion-item class="ion-no-padding">
+            <ion-grid class="ion-no-padding">
+              <ion-row class="ion-align-items-center">
+
+                <ng-container *ngIf="vendorDetails?.formType === 'vendor';">
+                  <ng-container *ngFor="let formData of vendorDetails.formData | keyvalue">
+                    <ion-col size="12">
+                      <p class="ion-text-capitalize"><b>{{formData.key}}:</b>&nbsp;
+                        <span>
+                          <ng-container *ngIf="!isValidHttpUrl(formData.value)">
+                            {{formData.value}}
+                          </ng-container>
+                        
+                          <ng-container *ngIf="isValidHttpUrl(formData.value)">
+                            <a href="{{formData.value}}" target="_blank">View Uploaded File</a>
+                          </ng-container>
+                        </span>
+                      </p>
+                    </ion-col>
+                  </ng-container>
+                </ng-container>
+
+                <ion-col size="12" *ngIf="vendorDetails?.formType !== 'vendor';">
+                  <p class="ion-text-capitalize"><b>Name:</b> {{vendorDetails.name}}</p>
+                  <p class="ion-text-capitalize"><b>Phone Number:</b> {{vendorDetails.phoneNo}}</p>
+                  <p class="ion-text-capitalize"><b>Email:</b> {{vendorDetails.email}}</p>
+                  <p class="ion-text-capitalize"><b>Address:</b> {{vendorDetails.address.address}},{{vendorDetails.address.city}}, {{vendorDetails.address.state}}, Pincode:{{vendorDetails.address.pincode}}</p>
+                  <p class="ion-text-capitalize" *ngIf="vendorDetails.gstNo"><b>GST:</b> {{vendorDetails.gstNo}}</p>
+                  <p class="ion-text-capitalize" *ngIf="vendorDetails.details"><b>Other Info:</b> {{vendorDetails.details}}</p>
+
+                  <!-- For customised projects -->
+                  <p class="ion-text-capitalize t-a-c" *ngIf="vendorDetails.accountNumber"><b><u>Bank Details</u> -</b></p>
+                  <p class="ion-text-capitalize" *ngIf="vendorDetails.accountNumber"><b>Account Number:</b> {{vendorDetails.accountNumber}}</p>
+                  <p class="ion-text-capitalize" *ngIf="vendorDetails.ifscCode"><b>IFSC Code:</b> {{vendorDetails.ifscCode}}</p>
+                  <p class="ion-text-capitalize" *ngIf="vendorDetails.bankName"><b>Bank Name:</b> {{vendorDetails.bankName}}</p>
+                  <p class="ion-text-capitalize" *ngIf="vendorDetails.dchNumber"><b>DCH Number:</b> {{vendorDetails.dchNumber}}</p>
+                  <p class="ion-text-capitalize" *ngIf="vendorDetails.pan"><b>PAN:</b> {{vendorDetails.pan}}</p>
+                  <p class="ion-text-capitalize" *ngIf="vendorDetails.organizationType"><b>Organization Type:</b> {{vendorDetails.organizationType}}</p>
+
+                  <p class="ion-text-capitalize t-a-c" *ngIf="vendorDetails.filePassbookURL || vendorDetails.filePANCardURL || vendorDetails.fileGSTCertificateURL"><b><u>Attachments</u> -</b></p>
+                    
+                  <div class="url-container">
+                    <p class="ion-text-capitalize" *ngIf="vendorDetails.filePANCardURL">
+                      <a [href]="vendorDetails.filePANCardURL" target="_blank">Pan Card</a>
+                    </p>
+                    <p class="ion-text-capitalize" *ngIf="vendorDetails.filePassbookURL">
+                      <a [href]="vendorDetails.filePassbookURL" target="_blank">Cancelled cheque/ passbook</a>
+                    </p>
+                    <p class="ion-text-capitalize" *ngIf="vendorDetails.fileGSTCertificateURL">
+                      <a [href]="vendorDetails.fileGSTCertificateURL" target="_blank">GST Certificate </a>
+                    </p>
+                    <p class="ion-text-capitalize" *ngIf="vendorDetails.fileURL">
+                      <a [href]="vendorDetails.fileURL" target="_blank">View Uploaded File</a>
+                    </p>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+
+</ion-content>
+<ion-footer class="page-footer" no-border *ngIf="!vendorDetails.approved">
+  <div class="main-container">
+    <!-- <ion-button (click)="close()" shape="round" class="btn-1 i-start" color="danger">
+      <i class="flaticon-null-19"></i>
+      Reject
+    </ion-button> -->
+    <ion-button (click)="approve()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20"></i>
+      Approve
+    </ion-button>
+  </div>
+</ion-footer>

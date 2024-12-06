@@ -1,0 +1,112 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"
+        defaultHref="homepage-setting"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Image Block</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="main-container info-container fixed-height">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Section Name</ion-label>
+            <ion-input class="form-input" [(ngModel)]="sectionName"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item lines="none">
+            <ion-label>Display Type</ion-label>
+            <ion-select placeholder="Select One"
+              [(ngModel)]="widgetData.displayType"
+              interface="popover">
+              <ion-select-option value="image-left-text-right"
+                [selected]="widgetData.displayType == 'image-left-text-right'">
+                image Left, Text Right</ion-select-option>
+              <ion-select-option value="image-right-text-left"
+                [selected]="widgetData.displayType == 'image-right-text-left'">
+                image Right, Text Left</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Description</ion-label>
+            <ckeditor [(ngModel)]="widgetData.description"
+              [config]="ckeConfig"></ckeditor>
+          </div>
+        </ion-col>
+
+
+        <ion-col size="12">
+          <div class="flex-space-between">
+            <div>
+              <ion-label>Cover Image</ion-label>
+            </div>
+            <div class="upload-btn-wrapper"
+              *ngIf="!widgetData.coverImage.mob">
+              <button class="upload-btn btn-1 i-start"
+                (click)="uploadImage($event.target.files)"> <i
+                  class="flaticon-null-16"></i>Upload Cover Image</button>
+              <!-- <input type="file" name="myfile" (change)="uploadImage($event.target.files)" accept="image/*"/> -->
+            </div>
+          </div>
+          <div class="img-container">
+            <div class="no-img"
+              *ngIf="!widgetData.coverImage.mob">
+              <p>No attached image</p>
+            </div>
+            <div *ngIf="widgetData.coverImage && widgetData.coverImage.mob">
+              <div class="img-wrap">
+                <img class="category-img"
+                  [src]="widgetData.coverImage.mob"
+                  (click)="imgZoom(widgetData.coverImage.mob)" />
+                <div class="overlay">
+                  <ion-button class="btn-2 remove"
+                    shape="round"
+                    fill="clear"
+                    color="danger"
+                    (click)="removeImage()">
+                    <ion-icon name="trash"
+                      slot="icon-only"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+
+<ion-footer no-border
+  class="page-footer">
+  <div class="main-container">
+
+    <ion-button (click)="addwidgetData()"
+      shape="round"
+      class="btn-1 i-start"
+      color="success"
+      *ngIf="!widgetID">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+
+    <ion-button (click)="updatewidgetData()"
+      shape="round"
+      class="btn-1 i-start"
+      color="success"
+      *ngIf="widgetID">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Update
+    </ion-button>
+
+  </div>
+</ion-footer>

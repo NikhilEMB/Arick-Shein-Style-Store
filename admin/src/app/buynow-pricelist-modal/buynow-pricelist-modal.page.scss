@@ -1,0 +1,74 @@
+.bn-modal-header{
+    display: flex; 
+    justify-content: space-between;
+    margin: 12px;
+    text-transform: capitalize;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+}
+.flaticon-null-19 {
+    font-size: 18px;
+    opacity: .6;
+}
+.bn-line{
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: rgb(238, 238, 238);
+    height: 1px;
+}
+
+ion-header{
+    border-bottom: 1px solid rgb(238, 238, 238);
+}
+
+.bn-pricelist-element{
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgb(238, 238, 238);
+    align-items: center;
+}
+
+.bn-price{
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bn-counter-value{
+    font-size: 15px;
+}
+.bn-counter{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width: 50%;
+}
+.bn-counter-minus{
+    background: white;
+    color: var(--ion-color-primary);
+    padding: 3px 3px 0px 3px;
+    border-radius: 3px;
+    font-size: 13px;
+    border: 1px solid var(--ion-color-primary);
+}
+.bn-counter-plus{
+    background: white;
+    color: var(--ion-color-primary);
+    padding: 3px 3px 0px 3px;
+    border-radius: 3px;
+    font-size: 13px;
+    border: 1px solid var(--ion-color-primary);
+}
+
+.bn-del-price {
+    opacity: .6;
+    margin-left: 3%;
+    font-size: smaller;
+    color: black;
+}

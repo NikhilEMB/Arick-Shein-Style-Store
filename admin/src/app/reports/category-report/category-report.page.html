@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Category Report</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="main-container">
+    <div class="verticle-tab-container">
+      <div class="tabs-buttons">
+        <ion-button expand="full" fill="outline" class="btn-1 tab-btn" (click)="goToPage('sales-report')">Sales</ion-button>
+        <ion-button expand="full" class="btn-1 tab-btn" (click)="goToPage('category-report')">Category</ion-button>
+        <ion-button expand="full" fill="outline" class="btn-1 tab-btn" (click)="goToPage('products-report')">Products</ion-button>
+        <ion-button expand="full" fill="outline" class="btn-1 tab-btn" (click)="goToPage('brands-report')">Brands</ion-button>
+        <!-- <ion-button expand="full" fill="outline" class="btn-1 tab-btn" (click)="goToPage('services-report')">Services</ion-button> -->
+        <ion-button expand="full" fill="outline" class="btn-1 tab-btn" (click)="goToPage('users-report')">Users</ion-button>
+        <ion-button expand="full" fill="outline" class="btn-1 tab-btn" (click)="goToPage('tax-report')">Tax</ion-button>
+        <!-- <ion-button expand="full" fill="outline" class="btn-1 tab-btn" (click)="goToPage('area-report')">Area</ion-button> -->
+        <!-- <ion-button expand="full" fill="outline" class="btn-1 tab-btn" (click)="goToPage('vendor-report')" *ngIf="vendorReport">Vendors</ion-button> -->
+        <ion-button expand="full" fill="outline" class="btn-1 tab-btn" (click)="goToPage('coupon-report')">Coupons</ion-button>
+        <!-- <ion-button expand="full" fill="outline" class="btn-1 tab-btn" (click)="goToPage('referral-report')">Referral</ion-button> -->
+        </div>
+      <div class="tabs-content" >
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label>Start Date</ion-label>
+                <ion-datetime displayFormat=" DD MM YYYY" [max]="endDate" placeholder="Select Date" [(ngModel)]="startDate" (ionChange)="setStartDate()"></ion-datetime>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label>End Date</ion-label>
+                <ion-datetime displayFormat="DD MM YYYY" [min]="startDate" placeholder="Select Date" [(ngModel)]="endDate" (ionChange)="setEndDate()"></ion-datetime>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col style="text-align: center">
+              <ion-button style="margin-right: 10px" (click)="getReport()">Generate Report</ion-button>
+              <ion-button color="tertiary" (click)="exportReport()">Export Generated Report</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ng-container>
+        
+        <div class="report-chart">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="6">
+                <div class="report-pie-chart">
+                  <h5>Sales</h5>
+                <canvas #salesChart></canvas>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="report-pie-chart">
+                  <h5>Orders</h5>
+                <canvas #ordersChart></canvas>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <div class="report-table">
+          <table>
+            <thead>
+              <tr>
+                <th class="name">Category</th>
+                <th class="sales">Sales</th>
+                <th class="items">No of items Ordered</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let categoryReport of categoryReports; let i=index">
+                <td>{{categoryReport.categoryName}}</td>
+                <td>{{categoryReport.sales | currency: currencyCode:true}}</td>
+                <td>{{categoryReport.items}}</td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+      <ng-template #noData>
+        <p>No Data Avilable</p>
+      </ng-template>
+      </div>
+    </div>
+  </div>
+</ion-content>

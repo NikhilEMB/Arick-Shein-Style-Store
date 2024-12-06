@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="delivery-orders" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center>Order: ORD{{orderId}}</ion-title>
+    <ion-buttons slot ="end">
+      <ion-button (click)="callUser()">
+        <i class="flaticon-call"></i>
+      </ion-button>
+  </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="showLoader; else showOrderDetails" class="spinner">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <ng-template #showOrderDetails>
+    <div class="address-card">
+      <p class="user-name">{{orderData[0].address.name}}</p>
+      <p class="address">{{orderData[0].address.address}}</p>
+      <p class="phone-no">{{orderData[0].address.phoneNo}}</p>
+    </div>
+    <div class="products-container">
+      <ion-list class="ion-no-padding" lines="none">
+        <ion-grid class="ion-no-padding">
+          <ion-row class="ion-no-padding">
+            <ion-col class="ion-no-padding">
+              <div class="products-heading">
+                Products
+              </div>
+            </ion-col>
+            <ion-col class="ion-no-padding">
+              <div *ngIf="(orderData[0].status === 'Cancelled' || orderData[0].status === 'Delivered');else useDeliveryStatus" class="order-status">
+                {{orderData[0].status}}
+              </div>
+            </ion-col>
+            <ng-template #useDeliveryStatus>
+              <ion-col class="ion-no-padding">
+                <div *ngIf="orderData[0].deliveryStatus === 'notStarted'" class="order-status">
+                  Not Started
+                </div>
+                <div *ngIf="orderData[0].deliveryStatus === 'inProgress'" class="order-status">
+                  Delivery In Progress
+                </div>
+                <div *ngIf="orderData[0].deliveryStatus === 'delivered'" class="order-status">
+                  Delivered
+                </div>
+              </ion-col>
+            </ng-template>
+          </ion-row>
+        </ion-grid>
+
+        <hr class="line">
+        <div *ngFor="let product of orderData[0].products; let i=index">
+          <ion-item class="ion-no-padding" (click)="goToPrdouctDetails(product.productId)">
+            <div slot="start"
+              [ngStyle]="{'background': 'url(' + product.img.mob + ') no-repeat center', 'background-size': 'contain'}"
+              class="product-image"></div>
+            <ion-label>
+              <h2 class="product-price ion-text-wrap">{{product.price * product.quantity | currency: 'INR':true}}</h2>
+              <h3 class="product-name ion-text-wrap">{{product.name}}</h3>
+              <h6 class="product-description">{{product.description}}</h6>
+              <ion-grid>
+                <ion-row>
+                  <h3 class="product-quantity">QTY: {{product.quantity}}</h3>
+                </ion-row>
+              </ion-grid>
+            </ion-label>
+          </ion-item>
+          <hr class="line" *ngIf="i !== orderData[0].products.length - 1">
+        </div>
+      </ion-list>
+    </div>
+    
+  </ng-template>
+</ion-content>
+
+<ion-footer *ngIf="!showLoader && orderData[0].deliveryStatus === 'notStarted' && (orderData[0].status !== 'Cancelled' && orderData[0].status !== 'Delivered')" (click)="onClickStartNavigation()">
+  <ion-grid>
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <div class="app-footer-text">
+        Start Navigation<span><i class="flaticon-address app-footer-icon"></i></span>
+    </div>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
+
+<ion-footer *ngIf="!showLoader && orderData[0].deliveryStatus === 'inProgress' && (orderData[0].status !== 'Cancelled' && orderData[0].status !== 'Delivered')" (click)="onClickContinueNavigation()">
+  <ion-grid>
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <div class="app-footer-text">
+        Continue Navigation<span><i class="flaticon-address app-footer-icon"></i></span>
+    </div>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

@@ -1,0 +1,42 @@
+.vertical-align-end{
+    display: flex;
+    align-items: end;
+    justify-content: center;
+}
+
+.data-table{  
+    ion-col{
+    border: 1px solid gray;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    user-select: text;
+  }
+  
+  ion-row:first-child{
+    background: lightgray
+  }
+}
+
+.sr-all-requests {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.sr-request {
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    .btn-wrap{
+        text-align: right;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    span {
+        i{
+            font-size: 18px;
+            margin-right: 20px;
+        }
+    }
+}

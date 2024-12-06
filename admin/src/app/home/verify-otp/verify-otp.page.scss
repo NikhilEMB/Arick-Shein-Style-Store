@@ -1,0 +1,193 @@
+.otp-input {
+  border: none;
+  width: 15ch;
+  background: repeating-linear-gradient(90deg, dimgrey 0, dimgrey 2ch, transparent 0, transparent 2.6ch) 0 100%/100% 2px no-repeat;
+  color: #3c3c3c;
+  font: 25px consolas, monospace;
+  letter-spacing: 1.6ch;
+  outline: none;
+  padding: 6px;
+  position: relative;
+}
+
+.enter-text {
+  line-height: 24px;
+  text-align: center;
+}
+
+.upper-space {
+  margin-top: 30%;
+}
+
+.flaticon-null-7::before {
+  border-radius: 50%;
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  padding: 5px;
+  font-size: 15px;
+}
+
+.resend-otp-timer {
+  font-size: 12px;
+  opacity: .6;
+}
+
+.resend-otp-col {
+  margin-top: 28px;
+  text-align: center;
+}
+
+.resend-otp-col ion-button {
+  font-size: 13px;
+  margin-top: -1%;
+}
+
+.col-arrow {
+  margin-top: 15px;
+  position: absolute;
+  right: 10%;
+}
+
+.loader {
+  margin-top: 5px;
+  position: absolute;
+  right: 10%;
+}
+
+//MEDIA QUERIES
+@media screen and (max-width:375px) {}
+
+@media screen and (max-width:360px) {
+  .otp-input {
+    font: 23px consolas, monospace;
+  }
+
+  .resend-otp-col ion-button {
+    font-size: 13px;
+  }
+
+  .resend-otp-timer {
+    font-size: 12px;
+  }
+
+  ion-spinner {
+    height: 25px !important;
+  }
+
+  .col-arrow {
+    margin-top: 15px;
+    right: 9%;
+  }
+
+  .loader {
+    margin-top: 10px;
+    right: 9%;
+  }
+}
+
+@media screen and (max-width:320px) {
+  .otp-input {
+    font: 20px consolas, monospace;
+  }
+
+  .resend-otp-col ion-button {
+    font-size: 11px;
+  }
+
+  .resend-otp-timer {
+    font-size: 10px;
+  }
+}
+
+@media screen and(min-width: 600px) {
+  .otp-input {
+    font: 35px consolas, monospace;
+  }
+
+  .loader {
+    margin-top: 2%;
+    right: 13%;
+  }
+
+  .col-arrow {
+    margin-top: 3%;
+    right: 13%;
+  }
+
+  .flaticon-null-7::before {
+    font-size: 25px;
+  }
+}
+
+@media screen and (min-width:768px) {
+
+  .flaticon-null-7::before {
+    padding: 8px;
+    font-size: 30px;
+  }
+
+  ion-spinner {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .otp-input {
+    font: 45px consolas, monospace;
+  }
+
+  .resend-otp-col {
+    margin-top: 30px;
+  }
+
+  .resend-otp-timer {
+    font-size: 20px;
+  }
+
+  .resend-otp-col ion-button {
+    font-size: 22px;
+  }
+
+}
+
+@media screen and (min-width:1000px) {
+  .enter-text {
+    line-height: 35px;
+  }
+
+  .flaticon-null-7::before {
+    padding: 10px;
+    font-size: 40px;
+  }
+
+  .col-arrow {
+    margin-top: 15px;
+    right: 18%;
+  }
+
+  .loader {
+    margin-top: 10px;
+    right: 18%;
+  }
+
+  .resend-otp-col {
+    margin-top: 35px;
+  }
+
+  .resend-otp-timer {
+    font-size: 25px;
+  }
+
+  .resend-otp-col ion-button {
+    font-size: 26px;
+  }
+
+  .otp-input {
+    font: 50px consolas, monospace;
+  }
+
+  ion-spinner {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+}

@@ -1,0 +1,386 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="admin-orders" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Order id: ORD{{orderId}}</ion-title>
+  </ion-toolbar>
+  </ion-header>
+
+<super-tabs no-shadow no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label class="step-count" *ngIf="statusIndex <= 1; else step1Completed;">1</ion-label>
+      <ng-template #step1Completed>
+        <ion-label>
+          <ion-icon class="check-icon" name="checkmark-circle"></ion-icon>
+        </ion-label>
+      </ng-template>
+      <ion-label>create order</ion-label>
+    </super-tab-button>
+
+    <super-tab-button>
+      <ion-label class="step-count" *ngIf="statusIndex <= 2; else step2Completed;">2</ion-label>
+      <ng-template #step2Completed>
+        <ion-label>
+          <ion-icon class="check-icon" name="checkmark-circle"></ion-icon>
+        </ion-label>
+      </ng-template>
+      <ion-label>select courier</ion-label>
+    </super-tab-button>
+
+    <super-tab-button>
+      <ion-label class="step-count" *ngIf="statusIndex <= 3; else step3Completed;">3</ion-label>
+      <ng-template #step3Completed>
+        <ion-label>
+          <ion-icon class="check-icon" name="checkmark-circle"></ion-icon>
+        </ion-label>
+      </ng-template>
+      <ion-label>download manifest, label and invoice {{manageShipmentService.integrationCode}}</ion-label>
+    </super-tab-button>
+
+  </super-tabs-toolbar>
+
+  <super-tabs-container swipeEnabled="false" *ngIf="orderDetails">
+
+    <!-- create order -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-grid>
+            <ion-row>
+
+              <ion-col class="ion-text-center m-b-20" size="12">
+                <ng-container *ngIf="isIntegrationCodeSaved(); else integrationNotSelected;">
+                  <p class="integration-txt">
+                    Delivery Integration through <span class="value">{{manageShipmentService.integrationCode}}</span>
+                  </p>
+                </ng-container>
+  
+                <ng-template #integrationNotSelected>
+                  <div class="flex-label">
+                    <span class="heading">Delivery Integration through</span>
+                    <span class="m-l-16">
+                      <ion-select class="form-input" placeholder="Select Delivery Integration Option" (ionChange)="onChangeIntegration($event)">
+                        <ion-select-option [value]="integration.id" *ngFor="let integration of integrations">{{integration.id}}</ion-select-option>
+                      </ion-select>
+                    </span>
+                  </div>
+                </ng-template>
+              </ion-col>
+              
+              <ng-container *ngIf="orderDetails.vendors?.length && !isVendorLogin">
+                <ion-col class="ion-text-center m-b-20" size="12">
+                  <div class="flex-label">
+                    <span class="heading">Select Vendor</span>
+                    <span class="m-l-16">
+                      <ion-select class="form-input" placeholder="Select Vendor" (ionChange)="onChangeVendor($event)" [disabled]="!manageShipmentService.integrationCode">
+                        <ion-select-option [value]="vendor.id" *ngFor="let vendor of orderDetails.vendors">{{vendor.vendor.name}}</ion-select-option>
+                      </ion-select>
+                    </span>
+                  </div>
+                </ion-col>
+              </ng-container>
+              
+
+              <!-- Length -->
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>Length(in cm) (Must be more than 1)</ion-label>
+                  <ion-input class="form-input" type="number" [(ngModel)]="customOrder.length" [readonly]="statusIndex > 1"></ion-input>
+                </div>
+              </ion-col>
+              <!-- Length -->
+
+              <!-- Breadth -->
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>Breadth(in cm) (Must be more than 1)</ion-label>
+                  <ion-input class="form-input" type="number" [(ngModel)]="customOrder.breadth" [readonly]="statusIndex > 1"></ion-input>
+                </div>
+              </ion-col>
+              <!-- Breadth -->
+
+              <!-- Height -->
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>Height(in cm) (Must be more than 1)</ion-label>
+                  <ion-input class="form-input" type="number" [(ngModel)]="customOrder.height" [readonly]="statusIndex > 1"></ion-input>
+                </div>
+              </ion-col>
+              <!-- Height -->
+
+              <!-- Weight -->
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>Weight(in kgs)</ion-label>
+                  <ion-input class="form-input" type="number" [(ngModel)]="customOrder.weight" [readonly]="statusIndex > 1"></ion-input>
+                </div>
+              </ion-col>
+              <!-- Weight -->
+
+              <!-- Pickup Location -->
+              <ion-col size="6" *ngIf="pickupLocations?.length">
+                <div class="input-wrap">
+                  <ion-label>Select pickup location / profile</ion-label>
+                
+                  <p class="m-t-16" *ngIf="!manageShipmentService.integrationCode; else integrationSelected;">
+                    Please select any available delivery integration option first. 
+                  </p>
+
+                  <ng-template #integrationSelected>
+                    <p class="m-t-16" *ngIf="!pickupLocations?.length; else locationsAvailable;">
+                      No Pickup Locations are available in your delivery integration account.
+                    </p>
+                    <ng-template #locationsAvailable>
+                      <ion-select class="form-input" [value]="getSelectedLocation()" placeholder="Select Pickup Location"
+                        (ionChange)="onChangePickupLocation($event);" [disabled]="statusIndex > 1">
+                        <div *ngIf="manageShipmentService.integrationCode === 'shiprocket'">
+                          <ion-select-option [value]="location.id" *ngFor="let location of pickupLocations">
+                            {{location.pickup_location}}</ion-select-option>
+                        </div>
+                        <div *ngIf="manageShipmentService.integrationCode === 'fastbeetle'">
+                          <ion-select-option [value]="location.profileName" *ngFor="let location of pickupLocations">
+                            {{location.profileName}} - {{location.merchantAddress}}</ion-select-option>
+                        </div>
+                      </ion-select>
+                    </ng-template>
+                  </ng-template>
+
+                </div>
+              </ion-col>
+              <!-- Pickup Location -->
+
+              <!-- shipping details -->
+              <ion-col size="6" *ngIf="(orderDetails?.address?.address || customOrder?.billing_address) as address">
+                <div class="input-wrap">
+                  <ion-label>Shipping Details</ion-label>
+                  <ion-input class="form-input" type="text" [value]="address" readonly></ion-input>
+                </div>
+              </ion-col>
+              <!-- shipping details -->
+            </ion-row>
+          </ion-grid>
+
+          <ion-footer no-border class="page-footer">
+            <div class="main-container">
+              <ion-button (click)="createOrder()" [disabled]="disableCreateOrderBtn()" shape="round" class="btn-1 i-start"
+                color="success" *ngIf="statusIndex <= 1">
+                <i class="flaticon-null-20 margin-icon"></i>
+                Create Order
+              </ion-button>
+              <ion-button (click)="presentAlertConfirm()" shape="round" class="btn-1 i-start"
+                  color="danger" *ngIf="statusIndex > 1">
+                  <i class="flaticon-null-19 margin-icon"></i>
+                  cancel and start new shipment 
+                </ion-button>
+            </div>
+          </ion-footer>
+        </div>
+      </ion-content>
+    </super-tab>
+    <!-- create order -->
+
+
+
+    <!-- select courier -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+
+          <ng-container *ngIf="statusIndex < 2; else step2Allowed;">
+            <p>Please create order at step 1 before selecting couriers.</p>
+          </ng-container>
+
+          <ng-template #step2Allowed>
+
+            <!-- Courier & Pickup Details will show after courier selected -->
+          <ng-container *ngIf="statusIndex >= 3; else noCourierSelected;">
+            <table *ngIf="awbData.courier_name; else defaultCourierData;">
+              <caption>Courier & Pickup Details</caption>
+              <tr>
+                <th>courier name</th>
+                <td>{{awbData.courier_name}}</td>
+              </tr>
+              <tr>
+                <th>applied weight</th>
+                <td>{{awbData.applied_weight}}</td>
+              </tr>
+              <tr>
+                <th>COD</th>
+                <td>{{awbData.cod === 1 ? 'Available' : 'Not Available'}}</td>
+              </tr>
+
+              <ng-container *ngIf="pickupDetails">
+                <tr>
+                  <th>pickup confirmation</th>
+                  <td>{{pickupDetails.data}}</td>
+                </tr>
+                <tr>
+                  <th>pickup generated at</th>
+                  <td>{{pickupDetails.pickup_generated_date.date | date:'medium'}}</td>
+                </tr>
+                <tr>
+                  <th>pickup scheduled at</th>
+                  <td>{{pickupDetails.pickup_scheduled_date | date:'medium'}}</td>
+                </tr>
+              </ng-container>
+            </table>
+
+            <ng-template #defaultCourierData>
+              <ng-container *ngIf="shipmentDetails.courier_name; else callAgainCourierApi">
+                <p class="default-courier">{{shipmentDetails.courier_name}} will be the default courier partner for this order.</p>
+              </ng-container>
+
+              <ng-template #callAgainCourierApi>
+                <ion-button (click)="checkCourierServiceability()" shape="round" class="btn-1 i-start" color="danger">
+                  Check Courier Serviceability
+                </ion-button>
+              </ng-template>
+              
+            </ng-template>
+            
+          </ng-container>
+          <!-- Courier & Pickup Details will show after courier selected-->
+          
+          <ng-template #noCourierSelected>
+            <ng-container *ngIf="!couriers.length; else showCouriers;">
+              <p>No couriers available currently. Please wait for some time.</p>
+            </ng-container>
+  
+            <!-- Available Couriers -->
+            <ng-template #showCouriers>
+              <p class="recommended-courier-txt" *ngIf="orderDetails?.deliveryGstObj?.courierId && getCourierName()">
+                <span>{{getCourierName()}}</span> courier service used when placing the order. It is recommended to proceed with the same one.
+              </p>
+              <p class="table-heading">Available Couriers</p>
+              <table>
+                <tr>
+                  <th>courier name</th>
+                  <th>charges</th>
+                  <th>rating</th>
+                  <th>COD</th>
+                  <th>estimated delivery time</th>
+                  <th>recommended by {{manageShipmentService.integrationCode}}</th>
+                  <th>select</th>
+                </tr>
+                <tr *ngFor="let courier of couriers">
+                  <td>{{courier.courier_name}}</td>
+                  <td>{{courier.rate | currency:'INR'}}</td>
+                  <td>{{courier.rating}}</td>
+                  <td>{{courier.cod === 1 ? 'Available' : 'Not Available'}}</td>
+                  <td>{{courier.etd}}</td>
+                  <td>{{courier.courier_company_id === recommendedCourierId ? 'Yes' : 'No'}}</td>
+                  <td>
+                    <ion-button (click)="selectCourier(courier.courier_company_id)" size="small" shape="round"
+                      color="success">
+                      select
+                    </ion-button>
+                  </td>
+                </tr>
+              </table>
+            </ng-template>
+            <!-- Available Couriers -->
+          </ng-template>
+
+        </ng-template>
+          
+          
+        </div>
+      </ion-content>
+
+    </super-tab>
+    <!-- select courier -->
+
+
+
+    <!-- download manifest, label and invoice -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+
+          <ng-container *ngIf="statusIndex < 3; else step3Allowed;">
+            <p>Please select any courier at step 2 before accessing this step.</p>
+          </ng-container>
+          <ng-template #step3Allowed>
+            
+          <ion-grid>
+
+            <!-- manifets, label and invoice urls dwnld or generate-->
+            <ion-row>
+              <ion-col size="12">
+                <h5>Download Links</h5>
+              </ion-col>
+              <ion-col size="3" class="url-links" *ngFor="let type of receiptTypes">
+                <p>{{type}} url</p>
+                <ion-button (click)="downloadUrl(type)" size="small" shape="round" color="success" *ngIf="receiptsUrls[type]">
+                  download {{type}}
+                </ion-button>
+                <ion-button (click)="generateUrl(type)" size="small" shape="round" color="success" *ngIf="!receiptsUrls[type]">
+                  generate
+                </ion-button>
+              </ion-col>
+            </ion-row>
+            <!-- manifets, label and invoice urls dwnld or generate-->
+
+            <!-- Tracking Link get and send to user-->
+            <ion-row>
+              <ion-col size="12">
+                <h5>Tracking Details</h5>
+              </ion-col>
+              <ion-col size="12">
+                <ng-container *ngIf="!trackingDetails.trackUrl; else trackingUrlAvailable;">
+                  <ion-button class="m-r-16 m-t-16" (click)="getTrackingDetails('url')" size="small" color="success">
+                    get tracking url
+                  </ion-button>
+                </ng-container>
+    
+                <ng-template #trackingUrlAvailable>
+                  <div class="tracking-link" ngxClipboard [cbContent]="trackingDetails.trackUrl">
+                    <p>{{trackingDetails.trackUrl}}</p>
+                    <div class="copy-link" (click)="showToast()">
+                      <ion-icon name="copy"></ion-icon>
+                      <ion-text>Click to copy</ion-text>
+                    </div>
+                    <div class="m-l-16">
+                      <ion-button (click)="sendTrackingLink()" size="small">
+                        send tracking link to user
+                      </ion-button>
+                    </div>
+                  </div>
+
+                </ng-template>
+
+                <ion-button class="m-t-16" (click)="getTrackingDetails('events')" size="small" color="success">
+                  get tracking real time events
+                </ion-button>
+                <ng-container *ngIf="trackingDetails.trackEvents?.length">
+                  <div class="tracking-events">
+                    <div class="event" *ngFor="let event of trackingDetails.trackEvents">
+                      <p class="time">{{event.time | date:'medium'}}</p>
+                      <p class="remarks">{{event.remarks}}</p>
+                      <p class="location">{{event.location}}</p>
+                    </div>
+                  </div>
+                </ng-container>
+                
+              </ion-col>
+            </ion-row>
+            <!-- Tracking Link get and send to user-->
+
+          </ion-grid>
+
+        </ng-template>
+        </div>
+      </ion-content>
+
+    </super-tab>
+    <!-- download manifest, label and invoice -->
+
+
+
+
+
+  </super-tabs-container>
+</super-tabs>

@@ -1,0 +1,169 @@
+.input-border {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.ds-content {
+    font-size: 14px;
+    text-transform: capitalize;
+
+}
+
+.ds-all-pincodes {
+    ion-input {
+        --padding-start: 0px;
+    }
+}
+
+ion-input {
+    font-size: 13px;
+}
+
+.ds-content p {
+    margin-bottom: 5px;
+}
+
+.ds-alignment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ds-headings {
+    width: 45%;
+    margin-right: 10%;
+}
+
+.ds-days-container {
+    display: flex;
+    flex-flow: wrap;
+}
+
+.ds-days-inactive {
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 10px 15px 10px 15px;
+    border-radius: 5px;
+    margin: 4px;
+}
+
+.ds-days-active {
+    border: 1px solid var(--ion-color-chat-border);
+    text-align: center;
+    padding: 10px 15px 10px 15px;
+    border-radius: 5px;
+    margin: 4px;
+    background: var(--ion-color-chat-background);
+}
+
+.line{
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: #ccc;
+    height: 1px;
+    opacity: .4;
+}
+
+.flaticon-null-17::before {
+    font-size: 18px;
+    opacity: .7;
+    margin-right: -10px;
+  }
+
+.spinner{
+    margin-top: 50%;
+    text-align: center;
+}
+
+.time-picker {
+    padding-right: 15px;
+}
+
+ion-datetime {
+    font-size: small;
+}
+
+.delivery-wt-txt{
+    display: flex;
+    ion-input{
+        margin-top: -10px
+    }
+}
+.remove-area-btn{
+    --padding-start: 10px;
+    --padding-end: 10px;
+}
+.or-text{
+    display: flex;
+    align-items: center;
+    margin: 0px 10px;
+    margin-bottom: 0px!important;
+}
+
+// Delivery Partner
+.img-container{
+    width: 80%;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    img{
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+
+  #scroll1{
+    overflow: hidden;
+    height: 82vh
+   }
+  
+   #scroll1:hover{
+    overflow-y: auto
+   }
+  
+   #scroll2{
+    overflow: hidden;
+    height: 82vh;
+   }
+  
+   #scroll2:hover{
+    overflow-y: auto
+   }
+  
+   @media screen and(min-height: 1200px) {
+    #scroll1{
+      height: 92vh;
+     }
+    #scroll2{
+      height: 92vh;
+     }
+   }
+  
+   .statusList{
+    text-align: center;
+    p{
+      font-size: medium;
+      border: 1px solid lightgray;
+      padding: 10px;
+      margin: 8px;
+      cursor: pointer;
+      text-transform: capitalize;
+    }
+  }
+
+.state-wrapper {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+.tile-bg-active{
+    background-color: var(--ion-color-categories-background);
+}
+.tile-bg-inactive{}

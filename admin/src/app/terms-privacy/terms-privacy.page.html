@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button class="custom-back-button">
+        <img src="assets/img/menu-icon-white.png" class="menu-img">
+      </ion-menu-button>
+    </ion-buttons>
+    <ion-title text-center>terms and privacy</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs no-shadow no-border>
+    <super-tabs-toolbar slot="top">
+      <super-tab-button>
+        <ion-label>Terms</ion-label>    
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>Privacy</ion-label>    
+      </super-tab-button>
+    </super-tabs-toolbar>
+
+    <super-tabs-container>
+      <super-tab>
+        <ion-content class="ion-padding">
+          <div [innerHtml]="termsContent"></div>
+        </ion-content>
+      </super-tab>
+      <super-tab>
+        <ion-content class="ion-padding">
+          <div [innerHtml]="privacyContent"></div>
+        </ion-content>
+      </super-tab>
+    </super-tabs-container>
+  </super-tabs>

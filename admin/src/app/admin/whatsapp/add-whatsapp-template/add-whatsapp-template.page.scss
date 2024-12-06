@@ -1,0 +1,19 @@
+.red{
+    color: red;
+  }
+
+  ion-list.option-list ion-radio-group {
+    display: flex;
+    ion-item{
+        --padding-start:0;
+        width: 33.3%;
+    }
+}
+
+.remove-icon{
+  cursor: pointer;
+  margin-top: 12px;
+  margin-left: 5px;
+  color: var(--ion-color-danger);
+  font-size: 16px;
+}

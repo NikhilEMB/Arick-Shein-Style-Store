@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Whatsapp Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs>
+
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Account</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Insights</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container" style="width: 100%;">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-subtitle>Whatsapp Credentials</ion-card-subtitle>
+              <ion-card-title>Auth Token<span class="red">*</span></ion-card-title>
+              <ion-input class="form-input" [(ngModel)]="credentials.authToken"></ion-input>
+
+              <ion-card-title>Catalogue ID<span class="red">*</span></ion-card-title>
+              <ion-input class="form-input" [(ngModel)]="credentials.catalogueId"></ion-input>
+
+              <ion-card-title>Catalogue Feed ID<span class="red">*</span></ion-card-title>
+              <ion-input class="form-input" [(ngModel)]="credentials.catalogueFeedId"></ion-input>
+
+              <ion-card-title>Phone Number ID<span class="red">*</span></ion-card-title>
+              <ion-input class="form-input" [(ngModel)]="credentials.phoneNumberId"></ion-input>
+
+              <ion-card-title>Webhook Verify Token<span class="red">*</span></ion-card-title>
+              <ion-input class="form-input" [(ngModel)]="credentials.webhookVerifyToken"></ion-input>
+
+              <ion-card-title>Business Account Id<span class="red">*</span></ion-card-title>
+              <ion-input class="form-input" [(ngModel)]="credentials.businessId"></ion-input>
+
+              <ion-card-title>Business Page Id<span class="red">*</span></ion-card-title>
+              <ion-input class="form-input" [(ngModel)]="credentials.businessPageId"></ion-input>
+
+              <ion-card-title>Dev App Id<span class="red">*</span></ion-card-title>
+              <ion-input class="form-input" [(ngModel)]="credentials.devAppId"></ion-input>
+
+              <ion-button style="margin-right: 16px;" mode="ios" shape="round" (click)="saveWhatsappCredentials()">Save
+                Credentials</ion-button>
+            </ion-card-header>
+          </ion-card>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container" style="width: 100%;">
+          <ion-button style="margin-right: 16px;" mode="ios" shape="round" (click)="syncProducts()">Sync Products on Whatsapp</ion-button>
+        </div>
+      </ion-content>
+    </super-tab>
+
+  </super-tabs-container>
+
+</super-tabs>

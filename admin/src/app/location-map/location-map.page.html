@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="user-order-history" class="custom-back-button" *ngIf="routeFromUserSide"></ion-back-button>
+      <ion-back-button defaultHref="admin-orders" class="custom-back-button" *ngIf="!routeFromUserSide"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center>Track Order</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<div #map id="map"></div>
+</ion-content>

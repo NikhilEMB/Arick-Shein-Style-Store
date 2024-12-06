@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons style="margin-left: -8px;" slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-menu-button style="margin-left: 8px;" slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Export Users</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+
+        <ion-col id="scroll" size="4">
+          <div class="sectionArea">
+            <h2>Uploaded Users</h2>
+            <p class="ion-text-center" *ngIf="!updateObj.length">
+              Please Upload CSV
+            </p>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Ready to import user(s)</ion-card-title>
+                <ion-card-subtitle style="color: green;">✅ Total Found - {{updateObj.length || 0}}</ion-card-subtitle>
+                <div class="stateDiv" *ngFor="let user of updateObj; let i = index">
+                  <ion-card-subtitle>{{i+1}} ) Name - <p class="customIdentifier">{{user.name}}</p> Number - <p class="customIdentifier">{{user.phoneNumber}}</p></ion-card-subtitle>
+                </div>
+              </ion-card-header>
+            </ion-card>
+          </div>
+        </ion-col>
+
+        <ion-col id="scroll" size="4">
+          <div class="sectionArea">
+            <h2>Imported Users</h2>
+            <p class="ion-text-center" *ngIf="!finalUsers.length">
+              Please Import CSV
+            </p>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Imported user(s)</ion-card-title>
+                <ion-card-subtitle style="color: green;">✅ Total Imported - {{finalUsers.length || 0}}</ion-card-subtitle>
+                <div class="stateDiv" *ngFor="let user of finalUsers; let i = index">
+                  <ion-card-subtitle>{{i+1}} ) Name - <p class="customIdentifier">{{user.data.name}}</p> Number - <p class="customIdentifier">{{user.data.phoneNumber}}</p></ion-card-subtitle>
+                </div>
+              </ion-card-header>
+            </ion-card>
+          </div>
+        </ion-col>
+
+        <ion-col size="4">
+          <div class="sectionArea">
+            <h2>Instructions</h2>
+          </div>
+          <div style="margin-top: 10px;">
+            <ol>
+              <li style="font-weight: bold">Before Uploading</li>
+                <ion-button expand="block" shape="round" mode="ios" style="margin: 10px 0 10px 0">
+                  <a href="../../../../../assets/files/sample-csv-add-users.csv" download>Download Sample CSV</a>
+                </ion-button>
+                <ol>
+                  <li>You can use the sample csv format provided for formatting the users accordingly.</li>
+                  <li>Make sure to input the phone numbers as [9999999999] format only.</li>
+                </ol>
+              <li style="font-weight: bold">While Uploading</li>
+              <ol>
+                <li>Make sure that the file is of .csv format.</li>
+              </ol>
+              <li style="font-weight: bold">While Importing</li>
+              <ol>
+                <li>Please wait while the importing of users is undergoing & make sure to not close this tab.</li>
+              </ol>
+            </ol>
+          </div>
+        </ion-col>
+        
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer no-border class="page-footer" style="border-top: 1px solid #ccc;">
+  <div class="main-container" style="display: flex; align-content: center; justify-content: space-between; align-items: center;">
+    <div class="upload-btn-wrapper">
+      <ion-button [disabled]="saveDisable()" shape="round" class="btn-1 i-start" color="success" (click)="importOrdersHandler($event, buttonState)" >
+        <i *ngIf="buttonState === 'Import'" class="flaticon-null-20 margin-icon"></i>
+        <i *ngIf="buttonState === 'Upload'" class="flaticon-null-16"></i>
+        {{buttonState}} CSV
+      </ion-button>
+      <ng-container *ngIf="buttonState !== 'Import'">
+        <input type="file" name="myfile" (change)="importOrdersHandler($event, buttonState)"/>
+      </ng-container>
+    </div>
+  </div>
+</ion-footer>

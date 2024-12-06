@@ -1,0 +1,80 @@
+ion-content{
+    --background: #F2F2F2;
+}
+.price-card{
+    background: white;
+    padding: 10px 10px 0px 10px;
+    margin: 6px 12px 12px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.price-details{
+    font-size: 14px;
+    text-transform: uppercase;
+    opacity: .7;
+}
+.line{
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: #ccc;
+    height: 1px;
+    opacity: .4;
+}
+.total-items{
+    font-size: 13px;
+}
+.price-total{
+    text-align: end;
+}
+.price-total p{
+    font-size: 15px;
+}
+.total-estimated{
+    font-size: 16px;
+}
+.estimated-price{
+    text-align: end;
+}
+.estimated-price p{
+    font-size: 17px;
+    color: var(--ion-color-primary);
+}
+.payment-methods{
+    background: white;
+    padding: 10px 10px 10px 10px;
+    margin: 6px 12px 12px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.payment-modes{
+    font-size: 14px;
+    text-transform: uppercase;
+    opacity: .7;
+}
+
+.spinner{
+    text-align: center;
+    margin-top: 5%;
+}
+ion-item{
+    --detail-icon-color: var(--ion-color-primary);
+    --detail-icon-opacity: 1;
+    --detail-icon-font-size: 13px;
+    --padding-start: 4%;
+}
+ion-item ion-thumbnail {
+    width: 35px;
+    height: 35px;
+}
+ion-item ion-label {
+    font-size: 14px;
+}
+ion-item ion-label p {
+    font-size: 12px;
+    margin-top: 5px;
+}
+.ion-item{
+    --padding-bottom: 5%;
+}

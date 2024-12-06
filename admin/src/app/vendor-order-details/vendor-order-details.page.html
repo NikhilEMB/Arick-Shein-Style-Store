@@ -1,0 +1,163 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="templates-header-title">Order Details ({{order.orderId}})</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="products.length" class="ion-padding edit-order">
+
+  <div class="ion-text-center" *ngIf="vendorStatus === 'notSet'">
+    <ion-button (click)="cancelOrder()" shape="round" size="small">
+      Cancel Order
+    </ion-button>
+  </div>
+
+  <div *ngFor="let product of products; let i=index">
+    <ion-item class="ion-no-padding" lines="none">
+
+      <div slot="start"
+        [ngStyle]="{'background': 'url(' + getProductImg(product) + ') no-repeat center', 'background-size': 'contain'}"
+        class="product-image"></div>
+
+      <ion-label>
+        <h2 class="product-price ion-text-wrap">
+          {{getProductPrice(product) | currency: currencyCode:true}}</h2>
+
+        <h3 class="product-name ion-text-wrap">{{product.name}}</h3>
+
+        <h6 class="product-description ion-text-capitalize">{{getProductDesc(product)}}</h6>
+
+        <h3 class="product-quantity" *ngIf="getProductType(product) !== 'pieces'">
+          Ordered Quantity: {{product.quantity}}</h3>
+
+          <h3 class="product-quantity" *ngIf="isVendorQtyUnavialble(product)">
+            Quantity Accepted: {{product.quantity - product.vendorStatus.unavailableQty}}</h3>
+
+      </ion-label>
+    </ion-item>
+    
+    <ng-container>
+      <div class="comment-box" *ngIf="product.commentMsg">
+        Message: {{product.commentMsg}}
+      </div>
+      <div *ngIf="product.commentImgs">
+        <div *ngIf="product.commentImgs.length !== 0">
+          <ion-grid class="ion-no-padding">
+            <ion-row class="ion-justify-content-start">
+              <ion-col size="2" class="comment-img-conatiner" *ngFor="let img of product.commentImgs; let imgIndex = index">
+                <div *ngIf="img?.thumb; else showUrlImg" (click)="imgZoom(img.url)"
+                  [ngStyle]="{'background': 'url(' + img.thumb + ') no-repeat center', 'background-size': 'contain'}"
+                  class="comment-img"></div>
+                  <ng-template #showUrlImg>
+                    <div *ngIf="img?.url" (click)="imgZoom(img.url)"
+                      [ngStyle]="{'background': 'url(' + img.url + ') no-repeat center', 'background-size': 'contain'}"
+                      class="comment-img"></div>
+                  </ng-template>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="product.vendorStatus.status === 'notSet'; else showStatus;">
+      <div class="d-flex-sb">
+        <h6 class="un-qty-txt">Unavailable Quantity:</h6>
+        <div class="counter">
+          <div class="counter-action">
+            <ion-icon name="remove" (click)="decrementQty(i)"></ion-icon>
+          </div>
+          <div class="counter-value">
+            {{product.vendorStatus.unavailableQty}}
+          </div>
+          <div class="counter-action">
+            <ion-icon name="add" (click)="incrementQty(i, product.quantity)"></ion-icon>
+          </div>
+        </div>
+        <div>
+          <ion-button (click)="remove(i, product.quantity)" fill="outline" size="small" shape="round">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #showStatus>
+      <div class="status">
+        <ion-text [color]="getStatusColor(product.vendorStatus.status)">
+          {{product.vendorStatus.status}}
+        </ion-text>
+      </div>
+    </ng-template>
+
+    <hr class="line" *ngIf="i !== (products.length - 1)">
+  </div>
+
+  <!-- order other info -->
+  <ng-container *ngIf="showOrderInfo">
+    <div class="order-info">
+
+      <div *ngIf="!order.hasOwnProperty('storePickupObj') || (order.hasOwnProperty('storePickupObj') && !order.storePickupObj.hasOwnProperty('charges')); else notDeliveryOrder;">
+        <div class="content-card m-t-10">
+          <p class="content-heading">Delivery Address</p>
+          <hr class="line">
+          <p class="f-s-15">Name: {{order.address.name}}</p>
+          <p class="f-s-13">Address: {{order.address.address}},
+            {{order.address.city}}, {{order.address.state}} {{order.address.pincode}}</p>
+          <p class="f-s-13">Contact Number: {{order.address.phoneNo}}</p>
+          <p class="f-s-13">Placed On:
+            {{order.createdAt.toDate() | date: 'medium'}}</p>
+          <p class="f-s-13" *ngIf="order.region">Region: {{order.region}}</p>
+        </div>
+      </div>
+      <ng-template #notDeliveryOrder>
+        <div class="content-card m-t-10">
+          <p class="content-heading">Store Pickup Address</p>
+          <hr class="line">
+          <p class="user-name">{{order.storePickupObj.storeAddress.address}}</p>
+        </div>
+      </ng-template>
+
+    </div>
+  </ng-container>
+
+  <!-- order other info -->
+
+
+
+</ion-content>
+
+
+<ng-container *ngIf="vendorStatus === 'notSet'">
+  <ion-footer>
+    <ion-grid class="ion-no-padding">
+      <ion-row class="ion-no-padding">
+
+        <ion-col size="6" class="ion-no-padding">
+          <ion-title class="dark cursor-p" (click)="saveChanges()">
+            <span>Save Changes</span>
+          </ion-title>
+        </ion-col>
+
+        <ion-col size="6" class="ion-no-padding">
+          <ion-title class="primary cursor-p" (click)="dispatchReady()">
+            <span>Ready for dispatch</span>
+          </ion-title>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-footer>
+</ng-container>
+
+<ng-container *ngIf="vendorStatus === 'prepared'">
+  <ion-footer>
+    <ion-button (click)="dispatched()" expand="block" class="footer-button">
+      Dispatched
+    </ion-button>
+  </ion-footer>
+</ng-container>

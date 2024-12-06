@@ -1,0 +1,253 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start"
+      class="menu-btn">
+      <ion-icon slot="icon-only"
+        name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Membership Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <super-tabs no-shadow
+    no-border>
+    <super-tabs-toolbar slot="top">
+      <super-tab-button>
+        <ion-label>Current Users</ion-label>
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>Settings</ion-label>
+      </super-tab-button>
+    </super-tabs-toolbar>
+    <super-tabs-container>
+      <super-tab>
+        <ion-content>
+          <div class="main-container">
+            <div *ngIf="membershipUsers.length == 0">
+              <p style="font-weight: bold;font-size: medium;">Sorry! No user
+                with membership active</p>
+            </div>
+            <div *ngIf="membershipUsers.length > 0"
+              class="m-t-10">
+              <ion-grid class="ion-no-padding data-table ion-text-center">
+                <ion-row class="ion-text-capitalize">
+                  <ion-col>Name</ion-col>
+                  <ion-col>Plan Price ({{currencyCode}})</ion-col>
+                  <ion-col>Plan Discounted Price ({{currencyCode}})</ion-col>
+                  <ion-col>Discount</ion-col>
+                  <ion-col>Max Discount ({{currencyCode}})</ion-col>
+                  <ion-col>Free Delivery</ion-col>
+                  <ion-col>Delivery Fee as Cashback</ion-col>
+                  <ion-col>Delivery Free Above Amount ({{currencyCode}})
+                  </ion-col>
+                  <ion-col>Initial Cashback ({{currencyCode}})</ion-col>
+                  <ion-col>Months</ion-col>
+                  <ion-col>Valid Till</ion-col>
+                </ion-row>
+                <ion-row *ngFor="let user of membershipUsers; let i=index;">
+                  <ion-col>
+                    {{user.name}}
+                  </ion-col>
+                  <ion-col>
+                    {{user.membership.planConfig.plan.price}}
+                  </ion-col>
+                  <ion-col>
+                    {{user.membership.planConfig.plan.discountedPrice}}
+                  </ion-col>
+                  <ion-col>
+                    {{user.membership.planConfig.discount}} %
+                  </ion-col>
+                  <ion-col>
+                    {{user.membership.planConfig.maxDiscount}}
+                  </ion-col>
+                  <ion-col
+                    *ngIf='user.membership.planConfig.isDeliveryFree == true'>
+                    Yes
+                  </ion-col>
+                  <ion-col
+                    *ngIf='user.membership.planConfig.isDeliveryFree != true'>
+                    No
+                  </ion-col>
+                  <ion-col
+                    *ngIf='user.membership.planConfig.isDeliveryFeeAsCashback == true'>
+                    Yes
+                  </ion-col>
+                  <ion-col
+                    *ngIf='user.membership.planConfig.isDeliveryFeeAsCashback != true'>
+                    No
+                  </ion-col>
+                  <ion-col>
+                    {{user.membership.planConfig.deliveryFreeAmount}}
+                  </ion-col>
+                  <ion-col>
+                    {{user.membership.planConfig.plan.initialCashback}}
+                  </ion-col>
+                  <ion-col>
+                    {{user.membership.planConfig.plan.months}}
+                  </ion-col>
+                  <ion-col>
+                    {{getDateTimeFormat(user.membership.planConfig.validTill)}}
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </div>
+        </ion-content>
+      </super-tab>
+      <super-tab>
+        <ion-content>
+          <div class="main-container">
+            <div class="toggle">
+              <p>Active</p>&nbsp;&nbsp;&nbsp;
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input type="checkbox"
+                    (click)="toggleActive()"
+                    [checked]="membership.active">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <br>
+            <div class="data-field">
+              <div class="data-field-txt">
+                Membership Name
+              </div>
+              <div>
+                <ion-input type="text"
+                  [(ngModel)]="membership.name"
+                  class="form-input"></ion-input>
+              </div>
+            </div>
+            <br>
+            <div class="data-field">
+              <div class="data-field-txt">
+                <p>Membership Description</p>
+                <br>
+                <ckeditor [(ngModel)]="membership.description"
+                  [config]="ckeConfig"></ckeditor>
+              </div>
+            </div>
+            <div class="data-field">
+              <div class="data-field-txt">
+                Discount on total bill (%)
+              </div>
+              <div>
+                <ion-input type="number"
+                  [(ngModel)]="membership.discount"
+                  class="form-input"></ion-input>
+              </div>
+            </div>
+            <br>
+            <div class="data-field">
+              <div class="data-field-txt">
+                Max discount({{currencyCode}})
+              </div>
+              <div>
+                <ion-input type="number"
+                  [(ngModel)]="membership.maxDiscount"
+                  class="form-input"></ion-input>
+              </div>
+            </div>
+            <br>
+            <div class="toggle">
+              <p>Delivery free</p>&nbsp;&nbsp;&nbsp;
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input type="checkbox"
+                    (click)="toggleDeliveryFreeActive()"
+                    [checked]="membership.isDeliveryFree">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <br>
+            <!-- TODO - delivery fee as cashback -->
+            <div class="toggle">
+              <p>Delivery fee as cashback</p>&nbsp;&nbsp;&nbsp;
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input type="checkbox"
+                    (click)="toggleDeliveryFreeAsCashback()"
+                    [disabled]="membership.isDeliveryFree"
+                    [checked]="membership.isDeliveryFeeAsCashback">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <br>
+            <div class="data-field">
+              <div class="data-field-txt">
+                Delivery free on order above({{currencyCode}})
+              </div>
+              <div>
+                <ion-input type="number"
+                  [(ngModel)]="membership.deliveryFreeAmount"
+                  class="form-input"></ion-input>
+              </div>
+            </div>
+            <br>
+            <div class="data-field">
+              <div class="content-alignment">
+                <div class="data-field-txt">
+                  Membership plans
+                </div>
+                <br>
+                <ion-button (click)="addPlan()"
+                  fill="outline"
+                  shape="round"
+                  size="small">
+                  + Add
+                </ion-button>
+              </div>
+            </div>
+            <br>
+            <div *ngIf="membership.plans.length"
+              class="m-t-10">
+              <ion-grid class="ion-no-padding data-table ion-text-center">
+                <ion-row class="ion-text-capitalize">
+                  <ion-col>Months</ion-col>
+                  <ion-col>Price</ion-col>
+                  <ion-col>Discounted Price</ion-col>
+                  <ion-col>Initial Cashback</ion-col>
+                  <ion-col>Remove</ion-col>
+                </ion-row>
+                <ion-row *ngFor="let plan of membership.plans; let i=index;">
+                  <ion-col>
+                    {{plan.months}}
+                  </ion-col>
+                  <ion-col>
+                    {{plan.price | currency: currencyCode: true: '0.0'}}
+                  </ion-col>
+                  <ion-col>
+                    {{plan.discountedPrice | currency: currencyCode: true:
+                    '0.0'}}
+                  </ion-col>
+                  <ion-col>
+                    {{(plan.initialCashback || 0) | currency: currencyCode:
+                    true:
+                    '0.0'}}
+                  </ion-col>
+                  <ion-col (click)="removePlan(i)">
+                    <i class="flaticon-null-17"></i>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+            <br>
+            <div style="display: flex;justify-content: center">
+              <ion-button (click)="saveMembership()"
+                shape="round"
+                class="btn-1 i-start">
+                Save
+              </ion-button>
+            </div>
+          </div>
+        </ion-content>
+      </super-tab>
+    </super-tabs-container>
+  </super-tabs>
+</ion-content>

@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button" defaultHref="homepage-setting"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Text Block</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="main-container info-container fixed-height">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Section Name</ion-label>
+            <ion-input class="form-input" [(ngModel)]="sectionName"></ion-input>
+          </div>
+        </ion-col>
+        
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Description</ion-label>
+            <ckeditor [(ngModel)]="widgetData.description" [config]="ckeConfig"></ckeditor>
+          </div>
+        </ion-col>
+
+        </ion-row>
+        </ion-grid>
+      </div>
+</ion-content>
+
+
+<ion-footer  no-border class="page-footer">
+  <div class="main-container">
+
+      <ion-button (click)="addwidgetData()" shape="round" class="btn-1 i-start" color="success" *ngIf="!widgetID">
+        <i class="flaticon-null-20 margin-icon"></i>
+        Save
+      </ion-button>
+
+      <ion-button (click)="updatewidgetData()" shape="round" class="btn-1 i-start" color="success" *ngIf="widgetID">
+        <i class="flaticon-null-20 margin-icon"></i>
+        Update
+      </ion-button>
+    
+    </div>
+    </ion-footer>

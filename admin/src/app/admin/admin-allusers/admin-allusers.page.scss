@@ -1,0 +1,26 @@
+.list-header{
+  top: 0;
+}
+
+.list-container{
+  margin-top: 95px;
+}
+
+.image{
+  width: 100px;
+  max-width: 100px;
+}
+.last-active{
+  width: 100px;
+  max-width: 100px;
+}
+
+.action,.view{
+  width: 124px;
+  max-width: 124px;
+}
+
+.user{
+  width: calc(100% - 324px);
+  max-width: calc(100% - 324px);
+}

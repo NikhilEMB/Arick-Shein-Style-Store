@@ -1,0 +1,10 @@
+<ion-app>
+  <app-sidemenu></app-sidemenu>
+  <ion-router-outlet id="content1"></ion-router-outlet>
+  <button class="help-button"
+    (click)="gotoGuide()"
+    *ngIf="bwiClient==true && showBtn!='homepage'">
+    <span>?</span>
+    Help
+  </button>
+</ion-app>

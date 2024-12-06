@@ -1,0 +1,24 @@
+.s-c-active-header {
+    color: var(--ion-color-primary);
+    font-size: 15px;
+}
+
+.s-c-list {
+    ion-label {
+        text-transform: capitalize;
+        font-size: 14px;
+    }
+    .sub-list {
+        margin-left: 20px;
+        ion-checkbox {
+            width: 14px;
+            height: 14px;
+        }
+    }
+}
+
+ion-icon{
+    color: white;
+    font-size: 16px;
+    font-weight: bold
+}

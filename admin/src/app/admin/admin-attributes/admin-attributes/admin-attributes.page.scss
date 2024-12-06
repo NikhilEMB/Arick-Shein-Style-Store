@@ -1,0 +1,104 @@
+.alignCenter{
+  text-align: center;
+}
+label {
+  text-transform: capitalize;
+}
+input,
+select {
+  height: 38px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td{
+  padding: 10px;
+}
+td:first-child{
+    display: flex;
+    justify-content: flex-start;
+}
+th {
+  text-align: left;
+  padding: 8px;
+}
+
+tr{
+  border-bottom: 1px solid #cccc;
+}
+// tr:hover {
+//   background-color: #efefef;
+// }
+.btnArea {
+  overflow: hidden;
+  height: 82vh;
+
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+.displayArea {
+  overflow: hidden;
+  height: 82vh;
+  border-left: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+  padding: 8px;
+
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+.statusList {
+  text-align: center;
+  margin-right: 1rem;
+  button {
+    width: 100%;
+    font-size: medium;
+    border: 1px solid lightgray;
+    background-color: #fff;
+    padding: 10px;
+    margin: 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+}
+.dFlex {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 1rem;
+}
+.inputField {
+  // margin-bottom: 0.5rem;
+  width: 40%;
+}
+.impText {
+  color: rgb(204, 14, 14);
+  margin-top: 0.5rem;
+}
+.resultArea {
+  margin-top: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.5rem;
+  width: 60%;
+}
+.activeBtn {
+  background-color: var(--ion-color-categories-background) !important;
+}
+@media screen and(min-height: 1200px) {
+  .scroll1 {
+    height: 92vh;
+  }
+  .scroll2 {
+    height: 92vh;
+  }
+}

@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+  <div *ngIf="showLoader; else optionsLoaded" class="spinner">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <ng-template #optionsLoaded>
+    <div class="main-container">
+    <div class="no-data" *ngIf="!options.length; else showOptions" text-center>
+      <img src="assets/img/no-product.png" alt="">
+      <h6>No options</h6>
+    </div>
+    <ng-template #showOptions>
+      <div class="list-header">
+        <ion-grid class="ion-no-padding" >
+          <ion-row class="ion-align-items-center ion-justify-content-center" class="total-products">
+            <ion-col size="6">
+              Total Options
+            </ion-col>
+            <ion-col size="6" style="text-align: end;font-size: larger;">
+              {{options.length}}
+            </ion-col>
+            <ion-col size="12">
+              <p> Options can be used to add different colours and variants of a product. These would be displayed as alternate options in that product
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row >
+            <ion-col class="img">
+              <p>Image</p>
+            </ion-col>
+            <ion-col class="name">
+              <p>Name</p>
+            </ion-col>
+            <ion-col class="action">
+              <p>Action</p>
+            </ion-col>
+            
+          </ion-row>
+        </ion-grid>
+      </div>
+      <div class="list-container" *ngIf="options">
+        <ion-list class="categories-list" >
+              <ion-item class="ion-no-padding" no-lines no-border *ngFor="let item of options; let i = index">
+                <ion-grid class="ion-no-padding ion-align-items-center">
+                  <ion-row class="row-background ion-align-items-center">
+                    <ion-col  class="img">
+                      <ion-thumbnail style="margin-left: 5%;" class="product-img-wrapper">
+                        <img class="loading" *ngIf="item.coverPic && !item.coverPic.thumb && item.coverPic.url"
+                          src="{{item.coverPic.url}}">
+                        <img class="loading" *ngIf="item.coverPic && item.coverPic.thumb" src="{{item.coverPic.thumb}}">
+                        <img *ngIf="!item.coverPic" src="assets/img/placeholder-img.jpg">
+                      </ion-thumbnail>
+                      <div class="out-of-stock" *ngIf="checkPdtOutOfDelivery(item)">
+                        Out of stock
+                      </div>
+                    </ion-col>
+                    <ion-col  class="name">
+                      <div [ngClass]="{'product-active': item.status, 'product-inactive': !item.status}">
+                      </div>
+                      <p text-capitalize text-center>{{item.prodName}}</p>
+                    </ion-col>
+                   
+                    <ion-col class="action">
+                      <ion-button class="action-btn" fill="clear" (click)="editProductOption(item)">
+                        <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                      </ion-button>
+                      <ion-button class="action-btn" fill="clear" (click)="deleteProductOption(item.id)">
+                        <i class="flaticon-null-21" slot="icon-only"></i>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+        </ion-list>
+        </div>
+    </ng-template>
+  </div>
+  </ng-template>
+</ion-content>

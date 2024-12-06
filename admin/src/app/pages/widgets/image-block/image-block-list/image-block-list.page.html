@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button" defaultHref="homepage-setting"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Image Blocks</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="addNewImageBlock()">
+      <ion-icon name="add-circle" slot="start"></ion-icon>
+      Add new
+    </ion-button>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+  <div *ngIf="showLoader; else showData" class="spinner">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+
+  <ng-template #showData>
+    <ng-container *ngIf="noWidgets; else showWidgets">
+         No Data Available
+    </ng-container>
+    <ng-template #showWidgets>
+      <ion-list class="widget-list">
+        <ion-item *ngFor="let item of widgetList; let i=index" >
+          <ion-label>{{item.title}}</ion-label>
+          <i class="flaticon-null-21" slot="end" (click)="deleteWidgetConfirm(item.id)"></i>
+          <i class="flaticon-pencil-edit-button" slot="end" (click)="editWidget(item.id)"></i>
+        </ion-item>
+      </ion-list>
+    </ng-template>
+  </ng-template>
+</div>
+</ion-content>

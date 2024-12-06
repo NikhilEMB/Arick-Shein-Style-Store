@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start">
+      <img src="../../../assets/img/shop-logo.png">
+    </div>
+    <ion-title>User Groups</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+          <ion-button expand='block' (click)="openCreateGroupModal()">Create Group</ion-button>
+          <div id="scroll1">
+            <div class="groupWrapper">
+              <div class="groupItem" 
+                  [ngClass]="activeTile === i ? 'tile-bg-active' : 'tile-bg-inactive'" 
+                  *ngFor="let group of groups; index as i" (click)="getGroupUsers(i)">
+                <div class="itemFlex">
+                  <p class="groupName">{{group.name}}</p>
+                  <!-- <p class="groupSize">---- users</p> -->
+                </div>
+                <span class="groupDate">Created On: {{group.createdAt.toDate() | date}}</span>
+              </div>
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col size="8" id="scroll2" *ngIf="selectedGroup?.id">
+          <div class="groupDetails-container">
+            <h4 class="displayTitle">{{selectedGroup.name}} <span *ngIf="users">(Users: {{users.length}})</span></h4>
+            <p class="groupDate t-a-c">Created On: {{selectedGroup.createdAt.toDate() | date}}</p>
+            <div class="groupDetail">
+              <div class="itemFlex" style="margin-bottom: 1rem;">
+                <ion-button size="small" color="danger" (click)="askConfirmDelete()">
+                  <i class="flaticon-null-21"></i> Delete Group
+                </ion-button>
+              </div>
+              <div class="itemFlex">
+                <input class="searchInput" placeholder="Search user..." [(ngModel)]="searchUser" type="text">
+                <ion-button (click)="openUsersModal()">
+                  <i class="flaticon-null-28"></i>&nbsp; Add User
+                </ion-button>
+              </div>
+              <ion-text color="danger">
+                <span>*Changing role of a [ user ] to something else will lead to deletion from all groups !</span>
+              </ion-text>
+  
+              <div *ngIf="showLoader; else showUsers" class="spinner">
+                <ion-spinner color="primary"></ion-spinner>
+              </div>
+              <ng-template #showUsers>
+                <div class="tableScroll" *ngIf="users.length">
+                  <table class="userTable">
+                    <thead>
+                      <th>SNO</th>
+                      <th>User Name</th>
+                      <th>Phone Number</th>
+                      <th>Remove</th>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let user of users | filter: searchUser; let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{user.name}}</td>
+                        <td>{{user.phoneNo}}</td>
+                        <td>
+                          <ion-button size="small" color="danger" (click)="removeUser(i, user.id)">
+                            <i class="flaticon-null-17"></i>
+                          </ion-button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

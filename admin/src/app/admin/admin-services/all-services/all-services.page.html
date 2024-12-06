@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button" defaultHref="admin-home"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+      <ion-button fill="outline" shape="round" class="add-btn" (click)="newService()">
+        <ion-icon name="add-circle" slot="start"></ion-icon>
+        Add new Service
+      </ion-button>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="main-container">
+  <div class="spinner" *ngIf="showLoader; else dataLoaded;">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <ng-template #dataLoaded>
+    <br>
+    <div class="content-alignment sub-settings-fields">
+      <div>Active</div>&nbsp;&nbsp;&nbsp;
+      <div class="toggle-btn">
+        <label class="switch">
+          <input type="checkbox" (click)="changeStatus()" [checked]="isActive">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+   
+
+    <ng-container *ngIf="services.length > 0; else noServices;">
+      <div class="list-header list-header-services">
+        <ion-grid class="ion-no-padding">
+          <ion-row >
+            <ion-col class="img">
+              <p>image</p>
+            </ion-col>
+            <ion-col class="name">
+              <p>name</p>
+            </ion-col>
+            <ion-col class="date">
+              <p>name</p>
+            </ion-col>
+            <ion-col class="action">
+              <p>Action</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        </div>
+        <div class="list-container">
+      <ion-list class="ion-no-padding row-border">
+          
+            <ion-item class="ion-no-padding"  *ngFor="let service of services; let i = index">
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-col class="img">
+                    <ion-thumbnail style="margin-left: 5%;" class="thumbnail">
+                      <img *ngIf="service.banner && !service.banner.thumb && service.banner.url" img-preloader="{{service.banner.url}}">
+                      <img *ngIf="service.banner && service.banner.thumb" img-preloader="{{service.banner.thumb}}">
+                      <img *ngIf="service.banner && !service.banner.thumb && !service.banner.url" src="assets/img/img-preloader.png">
+                    </ion-thumbnail>
+                  </ion-col>
+                  <ion-col class="name">
+                    <p class="ion-text-capitalize">{{service.name}}</p>
+                  </ion-col>
+                  <ion-col class="date">
+                    <p>{{getDateTimeFormat(service.createdAt.toDate())}}</p>
+                  </ion-col>
+                  <ion-col class="action">
+                    <ion-button class="action-btn" fill="clear"  (click)="editService(service)">
+                      <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                    </ion-button>
+                    <ion-button class="action-btn" fill="clear" (click)="deleteServiceConfirm(service.id)">
+                      <i class="flaticon-null-21" slot="icon-only"></i>
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          
+      </ion-list>
+
+     
+
+    </div>
+    </ng-container>
+
+    <ng-template #noServices>
+      <div class="no-data ion-text-center">
+        <img src="assets/img/no-category.png" alt="">
+        <h6>No Services</h6>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>
+</ion-content>

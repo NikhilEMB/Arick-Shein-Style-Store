@@ -1,0 +1,23 @@
+{
+  "hosting": {
+    "target":"bwi-shein-admin",
+    "public": "www",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      { "source": "/share/**", "dynamicLinks": true },
+      { "source": "/refer/**", "dynamicLinks": true },
+      {
+        "source": "/sitemap.xml",
+        "function": "sitemap-sitemap"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

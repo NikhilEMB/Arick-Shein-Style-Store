@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons style="margin-left: -8px;" slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Product CSV Importer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col id="scroll" size="6">
+          <div class="sectionArea">
+            <h2>Detected Fields</h2>
+            <p class="ion-text-center" *ngIf="!detectedFields.length">
+              Please Upload CSV
+            </p>
+            <!-- <ion-progress-bar  type="indeterminate"></ion-progress-bar> -->
+            <ion-list *ngIf="detectedFields.length">
+              <div id="mainField" *ngFor="let entry of detectedFields; let i = index">
+                <ion-label>{{entry.name}}</ion-label>
+                <ion-checkbox mode="ios" slot="end" [disabled]="true" [(ngModel)]="entry.active"></ion-checkbox>
+              </div>
+            </ion-list>
+          </div>
+        </ion-col>
+        <ion-col id="scroll" size="6">
+          <div class="sectionArea">
+            <h2>Instructions</h2>
+          </div>
+          <div>
+            <ol>
+              <li style="font-weight: bold">Before Uploading</li>
+                <ion-button expand="block" shape="round" mode="ios" style="margin: 10px 0 10px 0" (click)="openCSVImportRules()">View Rules</ion-button>
+              <li style="font-weight: bold">While Uploading</li>
+              <ol>
+                <li>Make sure that the file is of .csv format.</li>
+                <li>You can use the sample csv format provided for formatting the products accordingly.</li>
+              </ol>
+              <li style="font-weight: bold">While Importing</li>
+              <ol>
+                <li>Please wait while the importing of products is undergoing & make sure to not close this tab.</li>
+              </ol>
+            </ol>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <!-- <ion-progress-bar *ngIf="isProgressBarActive" value="progressValue" buffer="progressBuffer"></ion-progress-bar> -->
+  <ion-progress-bar *ngIf="isProgressBarActive" type="indeterminate"></ion-progress-bar>
+  <div class="main-container" style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="status-update">
+      <strong style="display: inline;">Total Products Imported : {{totalProcessed}} / {{calcProcessedEntities()}}</strong>
+    </div>
+    <div class="upload-btn-wrapper">
+      <ion-button [disabled]="saveDisable() || isProgressBarActive" shape="round" class="btn-1 i-start" color="success" (click)="importProductsHandler($event, buttonState)" >
+        <i *ngIf="buttonState === 'Import'" class="flaticon-null-20 margin-icon"></i>
+        <i *ngIf="buttonState === 'Upload'" class="flaticon-null-16"></i>
+        {{buttonState}} CSV
+      </ion-button>
+      <ng-container *ngIf="!isProgressBarActive && buttonState !== 'Import'">
+        <input type="file" name="myfile" (change)="importProductsHandler($event, buttonState)"/>
+      </ng-container>
+    </div>
+  </div>
+</ion-footer>

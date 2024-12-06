@@ -1,0 +1,23 @@
+.border-bottom{
+    border-bottom: 1px solid lightgray;
+}
+  
+.ao-product-image {
+    background: transparent url('https://s5.gifyu.com/images/loaderbb19efcc2749e115.gif') center no-repeat;
+    width:64px;
+    height: 64px;
+    position: relative;
+    border: 1px solid #f0f0f0;
+}
+
+.product-name-col {
+    line-height: 2;
+    .name {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    ul {
+        padding-inline-start: 0;
+        list-style: inside;
+    }
+}

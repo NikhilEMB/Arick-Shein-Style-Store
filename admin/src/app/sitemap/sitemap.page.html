@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start"
+      class="menu-btn">
+      <ion-icon slot="icon-only"
+        name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Site Map</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content style="--background: white;">
+  <div class="main-container">
+    <div class="add-points-btn">
+      <ion-button (click)="addSitemapModal()">Add Sitemap</ion-button>
+    </div>
+
+    <div class="tableArea">
+      <table>
+        <thead>
+          <tr class="header">
+            <th>Sr No.</th>
+            <!-- <th>Date</th> -->
+            <th>Category</th>
+            <th>Products</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="siteMapData && siteMapData.length">
+            <tr *ngFor="let sitemap of siteMapData; index as i">
+              <td>{{i + 1}}</td>
+              <!-- <td>{{ sitemap.createdAt.toDate() | date:'medium'}}</td> -->
+              <td>{{sitemap.category}}</td>
+              <td>
+                  <span *ngFor="let product of sitemap.products; let j = index">
+                    {{product.name}}<span *ngIf="j < sitemap.products.length - 1">, </span>
+                  </span>
+              </td>
+              <td><ion-icon style="font-size: 24px;" name="eye" (click)="editSitemap(sitemap)"></ion-icon></td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</ion-content>

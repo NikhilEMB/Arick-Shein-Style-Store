@@ -1,0 +1,153 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>All Vendors</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- <div class="main"> -->
+  <div class="main-container">
+    <br><br>
+    <ion-grid class="t-a-l">
+      <ion-col *ngIf="settings.active && multiVendorDoc" style="display: flex;justify-content: center;">
+        <ion-button (click)="addVendor()" class="btn-sml i-start m-s-btn" fill="outline" shape="round">
+          + Add Vendor
+        </ion-button>
+      </ion-col>
+    </ion-grid>
+    <!-- <ion-col size="6" style="display: flex;align-items: center;">
+      <input placeholder="Enter name" [(ngModel)]="searchUser" style="background: white;border: 1px solid;padding: 5px;" (click)='clearPhone()'>&nbsp;
+      <input placeholder="Enter number" [maxlength]='phoneLimit' [(ngModel)]="searchUserPhone" style="background: white;border: 1px solid;padding: 5px;" (click)='clearName()'>&nbsp;
+      <ion-button (click)='fireSearchQuery()' size="small">Search</ion-button>&nbsp;
+      <ion-button (click)='showAllUsers()' size="small" >Show All</ion-button>
+    </ion-col> -->
+
+    <!-- <div class="list-header" *ngIf="vendors.length && settings.active">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col class="name">
+            <p>Vendor</p>
+          </ion-col>
+          <ion-col class="name">
+            <p>Phone No</p>
+          </ion-col>
+          <ion-col class="name">
+            <p>Action</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div> -->
+
+    <!-- <div class="list-container" *ngIf="vendors.length && settings.active">
+      <ion-grid>
+        <ion-row *ngFor="let vendor of vendors; let i=index" class="order-row">
+          <ion-col class="name">
+            <p class="ion-text-capitalize" (click)="editVendor(vendor)" style="cursor: pointer;">{{vendor.name}}</p>
+          </ion-col>
+          <ion-col class="name">
+            <p class="ion-text-capitalize">{{vendor.phoneNo}}</p>
+          </ion-col>
+          <ion-col class="action">
+            <ion-button (click)="editVendor(vendor)" class="btn-sml i-start" fill="outline" shape="round">
+              Edit
+            </ion-button>&nbsp;&nbsp;
+            <ion-button (click)="deleteVendor(vendor.id)" class="btn-sml i-start m-s-btn" fill="outline" shape="round">
+              Delete
+            </ion-button>&nbsp;&nbsp;
+            <ion-button (click)="pageVendor(vendor.id,vendor.name)" class="btn-sml i-start m-s-btn" fill="outline"
+              shape="round">
+              Vendor Page
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div> -->
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <ng-container *ngIf="vendors.length && settings.active">
+            <ion-searchbar [(ngModel)]="vendorSearch" mode="ios" animated showCancelButton="focus"
+              placeholder="Search vendor"></ion-searchbar>
+            <div class="tableArea">
+              <table>
+                <thead>
+                  <tr>
+                    <!-- <th>Image</th> -->
+                    <th>SN.</th>
+                    <th>Vendor Name</th>
+                    <th>Phone No</th>
+                    <th>Actions</th>
+                    <!-- <th>Edit</th>
+                    <th>Vendor Page</th>
+                    <th>Delete</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let vendor of vendors | filter: vendorSearch; let i=index">
+                    <!-- <td (click)="editVendor(vendor)" style="cursor: pointer;">
+                        <ng-container *ngIf="vendor?.dP; else noImg">
+                          <div class="productImage">
+                            <img [src]="vendor.dP" alt="">
+                          </div>
+                        </ng-container>
+                        <ng-template #noImg>
+                          <div class="noImg"></div>
+                        </ng-template>
+                      </td> -->
+                    <td class="editVendor">{{i+1}}</td>
+                    <td class="editVendor" (click)="editVendor(vendor)">{{vendor.name}}</td>
+                    <td>{{vendor.phoneNo}}</td>
+                    <!-- <td>
+                        <ion-button (click)="editVendor(vendor)" class="btn-sml" fill="outline" shape="round">
+                          Edit
+                        </ion-button>
+                      </td>
+                      <td>
+                        <ion-button (click)="pageVendor(vendor.id,vendor.name)" class="btn-sml" fill="outline" shape="round">
+                          Vendor Page
+                        </ion-button>
+                      </td>
+                      <td>
+                        <ion-button (click)="deleteVendor(vendor.id)" class="btn-sml" fill="outline" shape="round" color="danger">
+                          Delete
+                        </ion-button>
+                      </td> -->
+
+                    <td>
+                      <div class="actionBtn">
+                        <ion-button (click)="editVendor(vendor)" class="btn-sml" fill="outline" shape="round">
+                          Edit
+                        </ion-button>
+                        <ion-button (click)="pageVendor(vendor.id,vendor.name)" class="btn-sml" fill="outline"
+                          shape="round">
+                          Vendor Page
+                        </ion-button>
+                        <ion-button (click)="deleteVendor(vendor.id)" class="btn-sml" fill="outline" shape="round"
+                          color="danger">
+                          Delete
+                        </ion-button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="!vendors.length">
+            <div class="no-data" text-center>
+              <img src="assets/img/no-user.png" alt="">
+              <h6>No Vendor</h6>
+            </div>
+          </ng-container>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <br><br>
+</ion-content>

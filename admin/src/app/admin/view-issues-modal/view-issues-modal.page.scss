@@ -1,0 +1,73 @@
+ion-input {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.imgBox {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  img {
+    height: 125px;
+  }
+}
+.feedbacks-wrap {
+  margin-bottom: 1rem;
+  .title {
+    text-transform: capitalize;
+    font-size: 18px;
+    margin-bottom: 1rem;
+  }
+  .description {
+    &::first-letter {
+      text-transform: capitalize;
+    }
+    // background-color: #eaecf0;
+    // padding: 1rem;
+    // border-radius: 5px;
+    // margin-bottom: 0.5rem;
+  }
+}
+.date {
+  font-size: 12px;
+  color: #606060;
+  font-style: italic;
+}
+.labels {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.input-wrap {
+  textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    resize: none;
+  }
+}
+.scroller {
+  height: 30vh;
+  margin-bottom: 1rem;
+  overflow-y: hidden;
+  &:hover {
+    overflow-y: scroll;
+  }
+  ion-item {
+    --padding-start: 0;
+  }
+}
+.commentBox {
+  margin-bottom: 1rem;
+  p {
+    color: #303030;
+    &::first-letter {
+      text-transform: capitalize;
+    }
+  }
+}

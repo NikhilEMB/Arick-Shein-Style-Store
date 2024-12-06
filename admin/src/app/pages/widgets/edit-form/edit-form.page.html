@@ -1,0 +1,156 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"
+        defaultHref="homepage-setting"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>{{mode=='new'? 'create new' : 'edit'}} Form</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <div style="text-align: center;">
+      <ion-button (click)="saveWidget()"
+        color="success"
+        fill="outline"
+        shape="round">
+        Save Form
+      </ion-button>&nbsp;&nbsp;
+      <ion-button (click)="previewForm()"
+        color="secondary"
+        fill="outline"
+        shape="round">
+        Preview Form
+      </ion-button>
+    </div>
+    <br><br>
+    <ion-col style="display: flex;align-items: center">
+      <ion-label>Allow multiple submissions for form </ion-label>&nbsp;&nbsp;
+      <div class="toggle-btn">
+        <label class="switch">
+          <input color="primary"
+            type="checkbox"
+            [checked]="multipleSubmissions"
+            (click)="changeMultipleStatus()">
+          <span class="slider round"></span>
+        </label>
+      </div>&nbsp;&nbsp;
+    </ion-col>
+    <br>
+    <ion-col size="12">
+      <div class="input-wrap">
+        <ion-label>Form Title</ion-label>
+        <ion-input class="form-input"
+          [(ngModel)]="formTitle"></ion-input>
+      </div>
+    </ion-col>
+
+    <!-- Form Type Selection -->
+    <ion-col size="12">
+      <label for="">Select Form Type</label>&nbsp;&nbsp;
+      <select class="selectFrom" [(ngModel)]="formType">
+        <option value="vendor">vendor</option>
+        <option value="others">Others</option>
+      </select>
+    </ion-col>
+    <!-- Form Type Selection -->
+
+    <br><br>
+    <ion-col size="12">
+      <div class="flex-space-between">
+        <div>
+          <ion-label>Banner Image</ion-label>
+          <ion-text color="danger">
+            <p style="margin-top: 5px">Image size for best view : 1366x400 Px
+            </p>
+          </ion-text>
+        </div>
+        <div class="upload-btn-wrapper">
+          <button
+            [disabled]="widgetData && widgetData.banner && widgetData.banner.url"
+            class="upload-btn btn-1 i-start"
+            (click)="uploadImage($event.target.files)"> <i
+              class="flaticon-null-16"></i>Upload Banner Image</button>
+          <!-- <input  [disabled]="widgetData && widgetData.banner && widgetData.banner.url" type="file" name="myfile" (change)="uploadImage($event.target.files)" /> -->
+        </div>
+      </div>
+      <div class="img-container">
+        <div class="no-img"
+          *ngIf="widgetData && !widgetData.banner">
+          <p>No Banner image</p>
+        </div>
+        <div *ngIf="widgetData && widgetData.banner">
+          <div class="img-wrap"
+            *ngIf="widgetData.banner.url">
+            <img class="category-img"
+              [src]="widgetData.banner.url" />
+            <div class="overlay">
+              <ion-button class="btn-2 remove"
+                shape="round"
+                fill="clear"
+                color="danger"
+                (click)="removeImage()">
+                <ion-icon name="trash"
+                  slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ion-col>
+    <br><br>
+    <ion-button (click)="addInput()">
+      Add form input
+    </ion-button>
+    <br><br>
+    <div *ngIf="inputs.length > 0"
+      class="m-t-10">
+      <ion-grid class="ion-no-padding data-table ion-text-center">
+        <ion-row class="ion-text-capitalize"
+          style="background: lightgray">
+          <ion-col>Reorder</ion-col>
+          <ion-col>Name</ion-col>
+          <ion-col>Type</ion-col>
+          <ion-col>Required</ion-col>
+          <ion-col>Remove</ion-col>
+        </ion-row>
+        <ion-reorder-group (ionItemReorder)="onReorderInputs($event)"
+          disabled="false"
+          class="ion-no-padding">
+          <ion-row *ngFor="let input of inputs; let i=index;">
+            <ion-col class="reorder">
+              <ion-reorder>
+                <div class="flat-sort">
+                  <i class="flaticon-menu"></i>
+                </div>
+              </ion-reorder>
+            </ion-col>
+            <ion-col>
+              {{input.name}}
+            </ion-col>
+            <ion-col>
+              {{input.type}}
+            </ion-col>
+            <ion-col>
+              {{input.required}}
+            </ion-col>
+            <ion-col (click)="removeInput(i)">
+              <i class="flaticon-null-17"></i>
+            </ion-col>
+          </ion-row>
+        </ion-reorder-group>
+      </ion-grid>
+    </div>
+    <br><br>
+    <ion-col size="12">
+      <div class="input-wrap">
+        <ion-label>Submit button name</ion-label>
+        <ion-input class="form-input"
+          [(ngModel)]="buttonName"></ion-input>
+      </div>
+    </ion-col>
+  </div>
+</ion-content>

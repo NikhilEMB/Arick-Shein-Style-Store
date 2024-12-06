@@ -1,0 +1,80 @@
+.list-header{
+    position: static;
+    margin:36px auto;
+}
+
+.list-container{margin: 0;}
+
+ion-col.img{
+    width: 100px;
+    max-width: 100px;
+  }
+  ion-col.name{
+    width: calc(100% - 310px);
+    max-width: calc(100% - 300px);
+  }
+  ion-col.action{
+    width: 128px;
+    max-width: 100px;
+  }
+  ion-col.reorder{
+    width: 75px;
+    max-width: 75px;
+  }
+
+  .data-table{  
+    ion-col{
+    border: 1px solid gray;
+    padding-top: 10px;
+    padding-bottom: 10px
+  }
+}
+.deleteIcon{
+  font-size: 20px;
+}
+.impText {
+  color: rgb(204, 14, 14);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+.tableArea{
+  margin-top: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  // padding: 0.5rem;
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    
+    td,
+    th {
+      border: 1px solid #dddddd;
+      text-align: center;
+      padding: 8px;
+    }
+    tr:hover {
+      background-color: #efefef;
+    }
+  }
+}
+.imageWrapper{
+  display: flex;
+  justify-content:flex-start;
+  align-items: center;
+  gap: 8px;
+}
+.showcaseImage{
+  width: 30%;
+}
+.dFlex{
+  display: flex;
+}
+
+.prodTd{
+  max-width: 200px;
+  // ion-select{
+  //   max-width: 200px;
+  // }
+}

@@ -1,0 +1,5 @@
+<ion-list>
+  <ion-item button (click)="onClickViewDetails()">View Order</ion-item>
+  <ion-item button *ngIf="showShiprocket" (click)="goToManageShipment()">Manage Shipment</ion-item>
+  <ion-item button (click)="archiveOrder()" lines="none">Archive Order</ion-item>
+</ion-list>

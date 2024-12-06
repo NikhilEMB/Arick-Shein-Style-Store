@@ -1,0 +1,1090 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="solid" color="secondary">
+      <span class="icon" slot="start">
+        <i class="flaticon-null" slot="start"></i>
+        <span class="count">5</span>
+      </span>
+    </ion-button>
+    <ion-button fill="solid" color="secondary">
+      <span class="icon" slot="start">
+        <i class="flaticon-shopping-bag" slot="start"></i>
+        <span class="count">2</span>
+      </span>
+    </ion-button>
+  </div>
+  <div class="header-cart-btn">
+    <!-- <ion-button fill="outline" shape="round" class="add-btn" (click)="exportOrders(currentOrders,ordersList)">
+      Export All {{ordersText}}
+    </ion-button> -->
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="exportProducts()"
+      *ngIf="exportType == 'products'">
+      Export Products for Delivery
+    </ion-button>
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="createOrder()">
+      Create Order
+    </ion-button>
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="goToArchivedOrders()">
+      Archived Orders
+    </ion-button>
+  </div>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+  <div class="main-container" style="width: 100%">
+    <ion-grid>
+      <ion-row>
+        <ion-col size=2 id="scroll1">
+          <div class="footerBtn" style="margin-top: -12px;">
+            <ion-button (click)='checkProductToDeliver()'>
+              Check products to deliver
+            </ion-button>
+          </div>
+          <!-- <div class="footerBtn" style="margin-top: -12px;">
+            <ion-button (click)='openFilterModal()'>
+              Select More Filters
+            </ion-button>
+           <ng-container *ngIf="filters">
+            <p *ngFor="let filter of filters | keyvalue">
+              <b *ngIf="filter?.value?.length>0">Applied Filter: {{filter.key | titlecase}}</b>
+            </p>
+           </ng-container>
+          </div> -->
+          <br>
+          <p class="rowHeading">Select Filter</p>
+          <!-- <ion-select placeholder="Select filter">
+            <ion-select-option value="last7Days">Last 7 days</ion-select-option>
+            <ion-select-option value="last30Days">Last 30 days</ion-select-option>
+            <ion-select-option value="lastXDays"></ion-select-option>
+          </ion-select> -->
+          <div>
+            <select id="days" style="width: 100%;padding: 5px;" (change)="selectDate($event.target.value)">
+              <option value=7 selected>Last 7 days</option>
+              <option value=30>Last 30 days</option>
+            </select>
+            <div style="width: 100%;text-align: center;font-weight: bold;margin: 5px;">
+              OR
+            </div>
+            <div style="display: flex;align-items: center;justify-content: space-between;">
+              <strong style="font-size: medium;">From:</strong>&nbsp;<input type="date" [(ngModel)]='startDate'
+                style="width: 80%;">
+            </div>
+            <div style="display: flex;align-items: center;justify-content: space-between;">
+              <strong style="font-size: medium;">To:</strong>&nbsp;<input type="date" [(ngModel)]='endDate'
+                style="margin-top: 8px;width: 80%;">
+            </div>
+          </div>
+          <br>
+          <div class="footerBtn">
+            <ion-button (click)='filterOrder()' style="margin: 0px;">
+              Filter Orders
+            </ion-button>&nbsp;&nbsp;
+            <ion-button (click)='clearFilter()' style="margin: 8px;">
+              Clear Dates
+            </ion-button>
+          </div>
+          <br>
+          <ion-segment (ionChange)="activeLabels()" value="status" style="margin-top: -12px;">
+            <ion-segment-button value="status">
+              <ion-label style="font-size: small;">Order Status</ion-label>
+            </ion-segment-button>
+            <ion-segment-button>
+              <ion-label style="font-size: small;">Labels</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+          <div class="statusList" *ngIf='!showLabels'>
+            <p id="status1" (click)="getPaymentFailedOrders()"
+              [ngClass]="currentOrders == 'Pending Orders' ? 'tile-bg-active' : 'tile-bg-inactive'">Incomplete / Pending</p>
+            <p id="status2" (click)="getPendingOrders()"
+              [ngClass]="currentOrders == 'pending' ? 'tile-bg-active' : 'tile-bg-inactive'">Confirmed</p>
+            <p id="status3" (click)="getDispatchedOrders()"
+              [ngClass]="currentOrders == 'dispatched' ? 'tile-bg-active' : 'tile-bg-inactive'">Dispatched</p>
+            <p id="status4" (click)="getCompletedOrders()"
+              [ngClass]="currentOrders == 'completed' ? 'tile-bg-active' : 'tile-bg-inactive'">Delivered</p>
+            <p id="status5" (click)="getCancelledOrders()"
+              [ngClass]="currentOrders == 'cancelled' ? 'tile-bg-active' : 'tile-bg-inactive'">Cancelled</p>
+            <p id="status8" (click)="getRejectedOrders()"
+              [ngClass]="currentOrders == 'rejected' ? 'tile-bg-active' : 'tile-bg-inactive'">Rejected</p>
+            <p id="status6" (click)="getReturnedOrders()"
+              [ngClass]="currentOrders == 'returned' ? 'tile-bg-active' : 'tile-bg-inactive'">Returned</p>
+            <p id="status7" (click)="getPaymentPendingOrders()"
+              [ngClass]="currentOrders == 'paymentPending' ? 'tile-bg-active' : 'tile-bg-inactive'">Payment Pending</p>
+          </div>
+          <div class="statusList" *ngIf='showLabels'>
+            <div *ngIf='labels && labels.length > 0' style="margin-top: 8px;margin-bottom: 8px;">
+              <div style="display: flex;align-items: center;" *ngFor='let label of labels; let i=index'>
+                <p [id]="'labelStatus' + i" (click)='getOrderWithLables(label,i)' style="width: 100%;">{{label}}</p>
+                <i class="flaticon-null-19 remove-icon" (click)="deleteLabel(i)"></i>
+              </div>
+            </div>
+            <div style="text-align: center; margin: 0% auto; display: flex;justify-content: center;">
+              <input [(ngModel)]='newLabelName' placeholder="Enter Label Name" style="width: 120px;" />&nbsp;&nbsp;
+              <ion-button (click)="addLabel()" class="btn-sml i-start m-s-btn" fill="outline" shape="round"
+                size='small'>
+                Add Label</ion-button>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size=4>
+          <div
+            style="height: 3vh;text-align: center;width: 100%;font-weight: bold;font-size: medium;display: flex;align-items: center;">
+            <ion-input type='number' placeholder="Enter Order Id"
+              style="--padding-top: 0px;--padding-bottom: 0px;border: 1px solid lightgray;margin-left: 8px;"
+              [(ngModel)]='searchOrder' (keyup.enter)='searchOrderById()'></ion-input>&nbsp;
+            <ion-button size="small" (click)='searchOrderById()'>Search</ion-button>&nbsp;
+            <ion-button size="small" (click)='resetSearch()'>Show All</ion-button>
+          </div>
+
+          <!-- <div class="searchBar">
+            <ion-searchbar [(ngModel)]='searchOrder' animated mode="ios" placeholder="Search orders, users, products..."></ion-searchbar>
+            <div class="btnArea">
+              <ion-button (click)='typeSenseSearchQuery()' size="small" shape="round">Search</ion-button>
+              <ion-button (click)='resetSearch()' size="small" shape="round" fill="outline">Reset</ion-button>
+            </div>
+          </div> -->
+
+          <div style="height: 3vh;width: 100%;text-align: center;margin-top: 5px;"><strong>Orders for
+              {{currentFilter}}</strong></div>
+          <div *ngIf='ordersList && ordersList.length == 0'
+            style="text-align: center;width: 100%;font-size: large;font-weight: bold;">
+            <br>No Orders
+          </div>
+          <div id="scroll2" *ngIf='ordersList && ordersList.length > 0'>
+            <div style="text-align: center;" *ngFor='let order of ordersList; let i=index'>
+              <ion-grid (click)='onClickViewDetails(order.orderId)' class='orderGrid'
+                *ngIf="( currentOrders != 'paymentPending' || (currentOrders == 'paymentPending' && (order.status != 'Cancelled' && order.status != 'Returned')) ) && ((order.subStatus && order.subStatus.isArchive == false) || !order.subStatus)">
+                <ion-row>
+                  <ion-col>
+                    <p style="margin-bottom: 5px; color: var(--ion-color-primary);">
+                      <strong style="font-size: 19px;" *ngIf="order.orderType == 'quotation'">Quotation Order</strong>
+                    </p>
+                    <p style="color: gray;margin-bottom: 5px;">{{getDateTimeFormat(order.createdAt.toDate())}}</p>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col style="text-align: left;margin-left: 15px;">
+                    <strong>User</strong> : {{order.userName}}
+                  </ion-col>
+                  <ion-col>
+                    <strong>Id</strong> : <strong>{{order.orderId}}</strong>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col style="text-align: left;margin-left: 15px" *ngIf="order.orderType !== 'quotation' && order.totalAmountToPaid != undefined">
+                    <strong>Amount</strong> : {{order.totalAmountToPaid.toFixed(2)}}
+                  </ion-col>
+                  <ion-col>
+                    <strong>Status</strong> : {{order.status}}
+                  </ion-col>
+                </ion-row>
+                <ion-row style="display: flex;justify-content: center;">
+                  <ion-button (click)="goToManageShipment(order.orderId, order)" class="btn-sml i-start m-s-btn"
+                    fill="outline" shape="round"
+                    *ngIf="!isSubOrMembershipOrder(order) && (order.status == 'Pending' || order.status == 'Confirmed' )">
+                    Manage Shipment
+                  </ion-button>&nbsp;&nbsp;&nbsp;
+                  <ion-button (click)="archiveOrder(order.id,i)" class="btn-sml i-start m-s-btn" fill="outline"
+                    *ngIf="((order.subStatus && order.subStatus.isArchive == false) || !order.subStatus)  && !showLabels"
+                    shape="round">
+                    Archive Order
+                  </ion-button>
+                </ion-row>
+              </ion-grid>
+            </div>
+            <br>
+            <div style="text-align: center;">
+              <ion-button (click)='loadMoreOrders()' *ngIf='!noMoreOrders && showLoadMoreBtn && !showLabels' shape="round">
+                Load More Orders
+              </ion-button>
+              <ion-button *ngIf='noMoreOrders' disabled shape="round">
+                No More Orders
+              </ion-button>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size=6>
+          <div *ngIf="orderId == '' " style="text-align: center;width: 100%;font-size: large;font-weight: bold;">No
+            Order Selected</div>
+          <div style="height: 4vh;display: flex; align-items: center; justify-content: space-evenly;"
+            *ngIf="orderId != '' ">
+            <h3 style="width: 32%;">Order Id : {{orderId}} ({{orderData[0].status}})</h3>
+            <div *ngIf="!showLoader && orderData[0].status === 'Pending'">
+              <ion-button (click)="onClickRejectOrder()" color="danger">
+                <i class="flaticon-null-19"></i>&nbsp;
+                Reject
+              </ion-button>&nbsp;
+              <ion-button (click)="onClickConfirmOrder()" color="success">
+                <i class="flaticon-null-20"></i>&nbsp;
+                Confirm
+              </ion-button>
+            </div>
+
+            <div *ngIf="!showLoader && orderData[0].status === 'Confirmed'">
+              <ion-button (click)="onClickCancelOrder()" color="danger">
+                <i class="flaticon-null-19"></i>&nbsp;
+                Cancel
+              </ion-button>&nbsp;
+              <ion-button (click)="onClickDispatchOrder()" color="success">
+                <i class="flaticon-null-20"></i>&nbsp;
+                Dispatch
+              </ion-button>
+            </div>
+
+            <div *ngIf="!showLoader && orderData[0].status === 'Dispatched'"
+              style="display: flex;align-items: center;margin-bottom: 14px;">
+              <ion-button (click)="onClickCancelOrder()" color="danger" size="small">
+                <i class="flaticon-null-19"></i>&nbsp;
+                Cancel
+              </ion-button>&nbsp;
+              <ion-button (click)="onClickDeliverOrder()" color="success" size="small">
+                <i class="flaticon-null-20"></i>&nbsp;
+                Delivered
+              </ion-button>&nbsp;
+              <ion-button (click)="refundAmountConfirm()" color="success" size="small">
+                <i class="flaticon-null-20"></i>&nbsp;
+                Returned
+              </ion-button>&nbsp;
+            </div>
+
+            <div *ngIf="!showLoader && orderData[0].status === 'Delivered'">
+              <ion-button (click)="refundAmountConfirm()" color="success">
+                <i class="flaticon-null-20"></i>&nbsp;
+                Returned
+              </ion-button>
+            </div>
+
+            <div>
+              <ion-button (click)="showHistory = !showHistory" color="secondary" *ngIf='!showHistory'>
+                View Order History
+              </ion-button>&nbsp;
+              <ion-button (click)="showHistory = !showHistory" color="secondary" *ngIf='showHistory'>
+                View Order Details
+              </ion-button>
+            </div>
+          </div>
+          <!-- order tracking -->
+          <div class="order-wrapper" *ngIf="orderData[0].hasOwnProperty('timeline') == false && showHistory"
+            id="scroll3">
+            <p style="text-align: center;font-size: large;margin-top: 20vh;font-weight: bold;">Sorry, No history for
+              this order!</p>
+          </div>
+          <div class="order-wrapper" *ngIf="orderData[0].hasOwnProperty('timeline') && showHistory" id="scroll3">
+            <br>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title style="text-align: center;font-weight: bold;">Order Tracking</ion-card-title>
+              </ion-card-header>
+
+              <ion-card-content style="padding-left: 35px;">
+                <div class="status-progress-container">
+                  <ul class="status-progress">
+                    <li class="status-progress-item" *ngFor="let status of allOrderStatuses"
+                      [ngClass]="{'status-missing': !isStatusTimelinePresent(status), 'status-cancelled': isStatusCancelled(status), 'hide-status': hideStatuses(status), 'last-status': isLastStatus(status)}">
+                      <p class="status-progress-title">{{status === 'Pending' ? 'Placed' : status}}</p>
+                      <p class="status-progress-info" *ngIf="isStatusTimelinePresent(status)">
+                        {{orderData[0].timeline[status].time.toDate() | date: 'medium'}}</p>
+                    </li>
+                  </ul>
+                </div>
+              </ion-card-content>
+            </ion-card>
+
+            <ion-card *ngIf='logData && logData.length > 0'>
+              <ion-card-header>
+                <ion-card-title style="text-align: center;font-weight: bold;">Order Logs</ion-card-title>
+              </ion-card-header>
+
+              <ion-card-content style="padding-left: 35px;">
+                <div *ngFor="let logs of logData">
+                  <div style="display: flex;margin-top: 10px;">
+                    <p style="font-weight: bold;font-size: medium;">{{logs.text}} :</p>&nbsp;&nbsp;<p
+                      style="font-size: medium;">{{getDateTimeFormat(logs.time.toDate())}}</p>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </div>
+          <br>
+          <!-- order tracking -->
+          <div class="order-wrapper" *ngIf="orderId != '' && !showHistory" id="scroll3">
+            <div class="order-details">
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    <p *ngIf="orderData[0].metaData?.orderBy && orderData[0].metaData?.orderBy?.role"><b>Created By: </b>{{orderData[0].metaData.orderBy.role | titlecase }} - {{orderData[0].metaData.orderBy.name}}</p>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12" size-md="4" style="border-right: 1px solid lightgray;">
+                    <div class="address-wrap">
+                      <p><strong>Delivery Address</strong></p>
+                      <hr class="line">
+                      <p> <strong>{{orderData[0].address.name}}</strong><br>
+                        {{orderData[0].address.address}}<br>
+                        {{orderData[0].address.city}}<br>
+                        {{orderData[0].address.state}}<br>
+                        {{orderData[0].address.pincode}}
+                      </p>
+                      <br>
+                      <p
+                        *ngIf="orderData[0].metaData && orderData[0].metaData.source && orderData[0].metaData.source == 'browser' ">
+                        <strong>Order From</strong> - Website
+                      </p>
+                      <p
+                        *ngIf="orderData[0].metaData &&  orderData[0].metaData.source && orderData[0].metaData.source == 'android' ">
+                        <strong>Order From</strong> - Android
+                      </p>
+                      <p
+                        *ngIf="orderData[0].metaData &&  orderData[0].metaData.source && orderData[0].metaData.source == 'ios' ">
+                        <strong>Order From</strong> - Apple
+                      </p>
+                      <ng-container *ngIf="orderData[0]?.metaData?.source === 'whatsapp'">
+                        <p><strong>Order From</strong> - WhatsApp</p>
+                      </ng-container>
+                      <p *ngIf='orderData[0].metaData &&  !orderData[0].metaData.source'><strong>Order From</strong> -
+                        Not Available</p>
+                      <br>
+                      <p><strong>Phone Number</strong> - {{orderData[0].address.phoneNo}}</p>
+                      <a href="https://wa.me/{{getPhoneNo(orderData[0].address.phoneNo)}}" target="_blank">Chat on Whatsapp</a>
+                      <!-- <p class="phone-no">Placed On: {{getDateTimeFormat(orderData[0].createdAt.toDate())}}</p> -->
+                      <br>
+                      <p *ngIf="orderData[0].customerGstNo && orderData[0].customerGstNo != ''"><strong>Customer
+                          {{taxType}} no
+                          :
+                        </strong>{{orderData[0].customerGstNo}}</p>
+                    </div>
+                    <!-- <ng-container *ngIf="orderData[0].orderType !== 'quotation'">
+                      <p *ngIf="orderData[0].deliveryStatus && orderData[0].deliveryStatus == 'rejected'"
+                        style="color: red; text-transform: capitalize; text-align: center; border-bottom: 1px solid lightgray;border-top: 1px solid lightgray; padding: 6px;">
+                        <span>Delivery agent has rejected this order</span>
+                      </p>
+                      <div  
+                        *ngIf="!orderData[0].hasOwnProperty('storePickupObj') || (orderData[0].hasOwnProperty('storePickupObj') && !orderData[0].storePickupObj.hasOwnProperty('charges'))">
+                        <br />
+                        <div class="assign-delivery"
+                          *ngIf="orderData[0].status === 'Confirmed' || orderData[0].status === 'Dispatched'">
+                          <p><strong>Delivery Agent</strong></p>
+                          <br>
+                          <select [(ngModel)]="orderData[0].deliveryAgentId" interface="popover"
+                            (change)="onChangeDeliveryAgent($event)"
+                            *ngIf="!noDeliveryAgents && allDeliveryAgents.length"
+                            style="margin-right: 12px;width: 100%;padding: 4px;">
+                            <option value="" disabled selected>Select delivery agent</option>
+                            <option value="">None</option>
+                            <option [value]="agents.id" *ngFor="let agents of allDeliveryAgents">{{agents.name}}
+                            </option>
+                          </select>
+                          <select interface="popover" placeholder="Select delivery agent"
+                            (change)="onSetupDeliveryAgent()" *ngIf="noDeliveryAgents" style="margin-right: 12px;">
+                            <option>Setup Delivery Agent</option>
+                          </select>
+                        </div>
+
+                        <br />
+
+                        <ng-container *ngIf="orderData[0].status === 'Confirmed'">
+                          <div class="assign-delivery">
+                            <p><strong>Assign Branch</strong></p>
+                      
+                            <select [value]="orderData[0]?.branchData?.id" (change)="onChangeBranch($event)" *ngIf="branches.length"
+                              style="margin-right: 12px;width: 100%;padding: 4px;">
+                              <option value="" disabled selected>Select branch</option>
+                              <option value="none">None</option>
+                              <option [value]="branch.id" *ngFor="let branch of branches">
+                                {{branch.name}}
+                              </option>
+                            </select>
+                          </div>
+                        </ng-container>
+                        <br>
+                        <ng-container *ngIf="orderData[0]?.branchData?.id !== ''">
+                          <p><strong>Branch Details</strong></p>
+                          <p><strong>Name: </strong> <span>{{orderData[0].branchData?.name}}</span></p>
+                          <p><strong>Email: </strong> <span>{{orderData[0].branchData?.email}}</span></p>
+                          <p><strong>PhoneNo: </strong> <span>{{orderData[0].branchData?.phoneNo}}</span></p>
+                        </ng-container>
+                      </div>
+                    </ng-container> -->
+                    <div>
+                      <br>
+                      <div class="assign-delivery">
+                        <div style="display: flex;align-items: center;justify-content: space-between;">
+                          <p><strong>Custom Label</strong></p>
+                          <ion-button (click)="removeLabel()" size="small">
+                            Remove<i class="flaticon-credit-cards-payment"></i>
+                          </ion-button>
+                        </div>
+                        <br>
+                        <select [(ngModel)]="orderData[0].label" interface="popover" (change)="onChangeLabel($event)"
+                          *ngIf="labels && labels.length > 0" style="margin-right: 12px;width: 100%;padding: 4px;">
+                          <option value="" disabled selected>Select Custom Label</option>
+                          <option [value]="label" *ngFor="let label of labels">{{label}}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <ion-col size="12" size-md="4" *ngIf="orderData[0].additionalInfo">
+                      <p><strong>Additional Information</strong></p>
+                      <br>
+                      <p class="userInfo">{{orderData[0].additionalInfo}}</p>
+                      <!-- <p class="userInfo" *ngIf="!orderData[0].additionalInfo">Not provided</p> -->
+                    </ion-col>
+                  </ion-col>
+                  <ion-col size="12" size-md="8">
+                    <ng-container *ngIf="orderData[0].orderType !== 'quotation'">
+                      <div
+                        *ngIf="!orderData[0].hasOwnProperty('orderType') || (orderData[0].hasOwnProperty('orderType') && orderData[0].orderType !== 'subscription')">
+                        <div>
+                          <p class="payment-failed-msg"
+                            *ngIf="orderData[0].payment.hasOwnProperty('status') && orderData[0].payment.status === 'failed'">
+                            <strong>Payment failed</strong>
+                          </p>
+                        </div>
+                        <div class="payment-req"
+                          *ngIf="!orderData[0].payment.completed && orderData[0].payment.mode !== 'cash' && (orderData[0].status === 'Confirmed' || orderData[0].status === 'Dispatched')">
+                          <br>
+                          <ion-button (click)="sendPaymentRequest()" shape="round" size="small">
+                            Send payment request &nbsp;<i class="flaticon-credit-cards-payment"></i>
+                          </ion-button>
+                        </div>
+                      </div>
+                      <div
+                        *ngIf="orderData[0].hasOwnProperty('deliveryAgentId') && (orderData[0].deliveryAgentId != '') && deliveryAgentName">
+                        <br>
+                        <p><strong>Delivery by : </strong> {{deliveryAgentName}}</p>
+                      </div>
+                      <div
+                        *ngIf="!orderData[0].hasOwnProperty('storePickupObj') || (orderData[0].hasOwnProperty('storePickupObj') && !orderData[0].storePickupObj.hasOwnProperty('charges')); else notDeliveryOrder;">
+                        <div class="content-card">
+                          <br>
+                          <p class="content-heading"><strong>Delivery Schedule</strong></p>
+                          <hr class="line">
+
+                          <!-- No delivery schedule set -->
+                          <p *ngIf="!isDeliveryScheduled() && !isEstimatedTimeAvailable() && !isInstantDelivery()">Not
+                            set
+                            by
+                            {{orderData[0].address.name}}</p>
+
+                          <!-- Estimated delivery time -->
+                          <p *ngIf="isEstimatedTimeAvailable()">
+                            Expected delivery date according to customer's address is
+                            <strong>{{orderData[0].estimatedDeliveryTime}}</strong>
+                          </p>
+
+                          <!-- Instant delivery order -->
+                          <p *ngIf="isInstantDelivery()">Customer has opted for instant delivery within
+                            <strong>{{orderData[0].instantDelivery.time}}</strong>
+                          </p>
+
+                          <!-- Delivery scheduled selected -->
+                          <ng-container *ngIf="isDeliveryScheduled()">
+                            <p *ngIf="!orderData[0].scheduledTime"><strong>{{getDateTimeFormat(dateSchedule)}}</strong>
+                              at
+                              any time</p>
+                            <p *ngIf="orderData[0].scheduledTime && orderData[0].scheduledTime.hasOwnProperty('start')">
+                              <strong>{{getDateTimeFormat(dateSchedule)}}</strong> at
+                              <strong>{{orderData[0].scheduledTime.start}} -
+                                {{orderData[0].scheduledTime.end}}</strong>
+                            </p>
+                            <p
+                              *ngIf="orderData[0].scheduledTime && !orderData[0].scheduledTime.hasOwnProperty('start')">
+                              <strong>{{getDateTimeFormat(dateSchedule)}}</strong> at
+                              <strong>{{orderData[0].scheduledTime}}</strong>
+                            </p>
+                          </ng-container>
+
+                        </div>
+                      </div>
+                      <ng-template #notDeliveryOrder>
+                        <br />
+                        <div class="content-card">
+                          <p class="content-heading"><strong>Store Pickup Address</strong></p>
+                          <hr class="line">
+                          <p class="user-name">{{orderData[0].storePickupObj.storeAddress.address}}</p>
+                        </div>
+                      </ng-template>
+                      <br />
+                      <div class="content-card" *ngIf="orderData[0].payment.completed">
+                        <p class="content-heading"><strong>Payment Mode</strong></p>
+                        <hr class="line">
+                        <!-- <p class="user-name" *ngIf="orderData[0].payment.mode !== 'upiManual'">{{orderData[0].address.name}}
+                          paid using <span
+                            style="font-size: 15px;text-transform: capitalize;font-weight: bold;color: darkgreen;">{{orderData[0].payment.mode}}</span>
+                        </p> -->
+                        <p class="user-name" *ngIf="orderData[0].payment.mode !== 'upiManual'">
+                          {{orderData[0].address.name}} paid using
+                          <span style="text-transform: capitalize;font-weight: 600;">
+                            {{orderData[0].payment.mode === 'custom' ? orderData[0].payment.optionName :
+                            orderData[0].payment.mode}}
+                          </span>
+                          <br>
+                          <span *ngIf="orderData[0].payment.mode == 'razorpay' && paymentId"><span
+                              style="font-weight: 700;">Transaction Id: </span>{{paymentId}}</span>
+                        </p>
+
+                        <p class="user-name" *ngIf="isPartialOrder()">Partial payment of
+                          {{orderData[0].partialPayment.online.amount | currency: currencyCode: true: '0.0'}} made using
+                          {{orderData[0].partialPayment.online.mode}}</p>
+
+                        <div class="payment-ss" *ngIf="orderData[0].payment.mode === 'upiManual'">
+                          <p>
+                            Uploaded payment screenshot
+                          </p>
+                          <img [src]="orderData[0].payment.screenshot">
+                        </div>
+                        <div class="payment-ss" *ngIf="orderData[0].payment.mode === 'custom'">
+                          <div *ngIf="orderData[0].payment.textDetails">
+                            <p>
+                              Details: {{orderData[0].payment.textDetails}}
+                            </p>
+                          </div>
+                          <div *ngIf="orderData[0].payment.screenshot">
+                            <p>
+                              Uploaded payment screenshot
+                            </p>
+                            <ion-img [src]="orderData[0].payment.screenshot" style="width: 100px; height: 100px;">
+                            </ion-img>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="content-card"
+                        *ngIf="!orderData[0].payment.completed && orderData[0].payment.mode === 'cash'">
+                        <p class="content-heading"><strong>Payment info</strong></p>
+                        <hr class="line">
+
+                        <p class="user-name" *ngIf="isPartialOrder()">Partial payment of
+                          {{orderData[0].partialPayment.online.amount | currency: currencyCode: true: '0.0'}} made using
+                          {{orderData[0].partialPayment.online.mode}}</p>
+
+                        <p class="user-name">{{orderData[0].address.name}} will pay
+                          <span *ngIf='orderData[0].payment.details'>{{getCodAmount() | currency:
+                            currencyCode: true: '0.0'}}</span>
+                          using <span style="font-size: 15px;text-transform: capitalize;font-weight: bold;
+                          color: darkgreen;">{{orderData[0].payment.mode}}</span>
+                        </p>
+                        <p class="update-status" style="display: flex;align-items: center;">Update status if already
+                          paid
+                          &nbsp;<ion-button (click)="onClickUpdatePaymentComplete()" class="i-start m-s-btn"
+                            shape="round">
+                            Update
+                          </ion-button>
+                        </p>
+                      </div>
+                    </ng-container>
+                    <br />
+                    <!-- <div class="content-card" *ngIf="orderData[0].hasOwnProperty('vendors')">
+                        <p class="content-heading">Vendors</p>
+                        <hr class="line">
+                        <ul>
+                          <li *ngFor="let vendor of orderData[0].vendors">{{vendor.vendor.name}} ({{vendor.vendor.phone}})</li>
+                        </ul>
+                      </div> -->
+                    <br>
+                    <div class="content-card" *ngIf="orderData[0].invoice?.status === 'generated'">
+                      <p class="content-heading"></p>
+                      <hr class="line">
+
+                      <div style="display: flex;justify-content: left;align-items: center;">
+                        <a class="invoiceBtn" *ngIf="orderData[0].vendors && orderData[0].vendors[0] && orderData[0].vendors[0]?.invoice; else orderInvoice" (click)="showInvoiceModal()"><strong>Download Invoice</strong></a>
+                        <ng-template #orderInvoice>
+                          <a href="{{orderData[0].invoice.url}}" download="Invoice-ORD{{orderId}}" target="_blank"
+                            class="invoiceBtn"><strong>Download Invoice</strong></a>
+                        </ng-template>&nbsp;
+                        <ng-container *ngIf="showRegenInvoiceBtn()">
+                          <ion-button (click)="generateInvoice()">
+                            Regenerate Invoice
+                          </ion-button>
+                        </ng-container>
+                        <!-- QR Code -->
+                        <!-- <div class="uploaded-doc-imgs" *ngIf="orderData[0].qrCode">
+                          <a (click)="openImg(orderData[0].qrCode)">
+                            <ion-img [src]="orderData[0].qrCode"></ion-img>
+                          </a>
+                        </div> -->
+                      </div>
+                      <br>
+
+                      <p class="invoiceBtn" (click)="openOrderInvoice(orderData[0].creditNote.url)"
+                        *ngIf="orderData[0].creditNote?.status === 'generated'">View Credit Note</p>
+
+                      <ng-container *ngIf="orderData[0].orderType !== 'quotation'">
+                        <div class="content-card"
+                          *ngIf="orderData[0].status === 'Confirmed' && !(orderData[0].hasOwnProperty('message') && orderData[0].message !== '')">
+                          <p>Enter Dispatch Message / Tracking Link</p>
+                          <ion-textarea [(ngModel)]="message" rows="2" placeholder="Enter your dispatch message here..."
+                            class="dispatch-msg-textarea"></ion-textarea>
+                        </div>
+                        <div style="padding: 5px;margin-top: 12px;border: 1px solid lightgray;"
+                          *ngIf="orderData[0].hasOwnProperty('message') && orderData[0].message !== ''">
+                          <p><strong>Dispatch Message / Tracking Link</strong>&nbsp;  :</p>
+                          <div style="margin-top: 5px;" [innerHtml]="covertTextToUrl(orderData[0].message)"></div>
+                        </div>
+                      </ng-container>
+
+                    </div>
+
+                    <!-- Reselling option -->
+                    <ng-container *ngIf="isResaleOrder()">
+                      <div class="content-card">
+                        <p class="content-heading">Reselling Option</p>
+                        <hr class="line">
+
+                        <h4 (click)="onClickResaleBtn()" class="view-btn">
+                          <strong>View Reselling Details</strong>
+                        </h4>
+                      </div>
+                    </ng-container>
+                    <!-- Reselling option -->
+
+                    <!-- Generate Invoice -->
+                    <ng-container *ngIf="showGenInvoiceBtn()">
+                      <ion-button (click)="generateInvoice()">
+                        Generate Invoice
+                      </ion-button>
+                    </ng-container>
+                    <!-- Generate Invoice -->
+                    
+                    <ng-container *ngIf="isPrintingInvoice">
+                      <ion-button (click)="generatePrintingInvoice()">download printing invoice</ion-button>
+                    </ng-container>
+
+                    <!-- Uploaded Doc -->
+                    <ng-container
+                      *ngIf="orderData[0].hasOwnProperty('uploadedDoc') && orderData[0].uploadedDoc.uploads.length">
+                      <div class="content-card" style="margin-top: 10px;">
+                        <p class="content-heading">Uploaded {{orderData[0].uploadedDoc.name}}</p>
+                        <hr class="line">
+                        <div class="uploaded-doc-imgs">
+                          <a (click)="openImg(img.url)"
+                            *ngFor="let img of orderData[0].uploadedDoc.uploads; let i=index;">
+                            <ion-img [src]="img.url"></ion-img>
+                          </a>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <!-- Uploaded Doc -->
+
+                    <!-- cancel reason -->
+                    <ng-container *ngIf="isCancelReasonAvailable()">
+                      <div class="content-card my-10">
+                        <p class="content-heading">Cancelled Reason</p>
+                        <hr class="line">
+                        <p>
+                          <strong>Cancelled By</strong>: {{orderData[0].cancelData.by}}
+                        </p>
+                        <p>
+                          <strong>Reason</strong>: {{orderData[0].cancelData.reason}}
+                        </p>
+                      </div>
+                    </ng-container>
+
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+            <br>
+            <div>
+              <div style="display: flex;align-items: center;margin-bottom: 5px;">
+                <p><strong>Add a comment for this order ...</strong></p>&nbsp;&nbsp;
+                <ion-button (click)="addComment()" size="small"><i class="flaticon-pencil-edit-button"
+                    style="margin-right: 8px;"></i>Save</ion-button>
+              </div>
+              <textarea placeholder="Enter Comment for Order here" [(ngModel)]='orderData[0].orderComment'
+                style="width: 95%;border: 1px solid lightgray;padding: 8px;"></textarea>
+            </div>
+            <div>
+              <div *ngIf="orderData[0].custom && orderData[0].custom.active && orderData[0].custom.value">
+                <p><b>{{orderData[0].custom.name}}</b> : {{orderData[0].custom.value}}</p>
+              </div>
+              <div *ngIf="orderData[0].custom && orderData[0].custom.deliveryAgentMsg">
+                <p><b>Delivery Agent Message</b> :>{{orderData[0].custom.deliveryAgentMsg}}</p>
+              </div>
+            </div>
+            <div *ngIf="orderData[0].deliveryVerification?.productsPic">
+              <p>
+                Products pic by delivery agent
+              </p>
+              <ion-img [src]="orderData[0].deliveryVerification.productsPic" style="width: 100px; height: 100px;">
+              </ion-img>
+            </div>
+
+            <div class="divider"></div>
+            <!-- Edit Order -->
+            <ng-container>
+              <div class="edit-order-btn">
+                <ion-button (click)="editOrder()" shape="round" size="small"
+                  *ngIf="showEditOrderBtn() && orderData[0].orderType != 'quotation'">
+                  <i class="flaticon-pencil-edit-button" style="margin-right: 8px;"></i>
+                  Edit Order
+                </ion-button>
+                <ion-button shape="round" size="small" (click)="editQuotation()"
+                  *ngIf="orderData[0].orderType == 'quotation'">
+                  <i class="flaticon-pencil-edit-button" style="margin-right: 8px;"></i>
+                  Edit Order
+                </ion-button>
+                <ion-button (click)="openChatModal()" style="margin-right: 12px;">
+                  Chat With This User&nbsp;&nbsp;<i class="flaticon-null-29"></i>
+                </ion-button>
+              </div>
+            </ng-container>
+            <!-- Edit Order End -->
+
+            <div class="order-items-detail-wrapper">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="12" size-xl="8">
+                    <div *ngFor="let product of orderData[0].products; let i=index">
+                      <ion-item class="ion-no-padding" lines="none">
+                        <div slot="start" *ngIf="product?.img?.mob"
+                          [ngStyle]="{'background': 'url(' + product.img.mob + ') no-repeat center', 'background-size': 'contain'}"
+                          class="product-image"></div>
+                        <div slot="start" *ngIf="!product?.img?.mob && product?.img?.url"
+                          [ngStyle]="{'background': 'url(' + product?.img?.url + ') no-repeat center', 'background-size': 'contain'}"
+                          class="product-image"></div>
+                        <div slot="start" *ngIf="!product?.img?.mob && !product?.img?.url"
+                          style="background: url(assets/img/placeholder-img.jpg) no-repeat center; background-size: contain;"
+                          class="product-image"></div>
+                        <ion-label>
+                          <h2 class="product-price ion-text-wrap"
+                            *ngIf="!product.hasOwnProperty('pack') || (product.hasOwnProperty('pack') && product.pack.variantType && product.pack.variantType !== 'pieces')">
+                            {{product.price * product.quantity | currency: currencyCode:true}}</h2>
+                          <h2 class="product-price ion-text-wrap"
+                            *ngIf="product.hasOwnProperty('pack') && product.pack.variantType && product.pack.variantType === 'pieces'">
+                            {{product.price | currency: currencyCode:true}}</h2>
+                          <h3 class="product-name ion-text-wrap"><strong>{{product.name}}</strong></h3>
+                          <div class="product-sub_heading" *ngIf="product.showSubheading">
+                            <ng-container *ngIf="productSetting?.subheading?.img">
+                              <img [src]="productSetting.subheading.img" class="product-sub_heading-img" alt="">
+                            </ng-container>
+                            <ng-container *ngIf="productSetting?.subheading?.text">
+                              <div class="product-sub_heading-text">{{productSetting.subheading.text}}</div>
+                            </ng-container>
+                          </div>
+                         
+                          <h6 class="product-description ion-text-capitalize"><span
+                              *ngIf="product.hasOwnProperty('pack') && product.pack.variantType">{{product.pack.variantType}}:
+                            </span>{{product.description}}<span
+                              *ngIf="product.hasOwnProperty('pack') && product.pack.variantType && product.pack.variantType === 'pieces'">
+                              X {{product.quantity}}</span></h6>
+                          <div
+                            *ngIf="!product.hasOwnProperty('pack') || (product.hasOwnProperty('pack') && product.pack.variantType && product.pack.variantType !== 'pieces')">
+                            <h3 class="product-quantity">QTY: {{product.quantity}}</h3>
+                            <h3 class="product-name"
+                              *ngIf="product.hasOwnProperty('orderType') && product.orderType === 'subscription'">
+                              <strong>Subscription</strong>
+                            </h3>
+                            <h3 class="product-quantity" *ngIf="product.shippingWt">Shipping Weight: {{product.shippingWt}}</h3>
+                          </div>
+                          <div class="cart-counter"
+                            *ngIf="product.hasOwnProperty('pack') && product.pack.variantType && product.pack.variantType === 'pieces' && product.totalPieces">
+                            <!-- <div class="cart-counter-action">
+                                <ion-icon name="remove" (click)="decrementPieces(i)"></ion-icon>
+                              </div> -->
+                            <div class="cart-counter-value">
+                              {{product.totalPieces}}
+                            </div>
+                            <!-- <div class="cart-counter-action">
+                                <ion-icon name="add" (click)="incrementPieces(i)"></ion-icon>
+                              </div> -->
+                          </div>
+                        </ion-label>
+                      </ion-item>
+
+                      <!-- product addons -->
+                      <ng-container *ngIf="isAddonAvailable(product)">
+                        <app-product-addons [product]="product"></app-product-addons>
+                      </ng-container>
+                      <!-- product addons -->
+                      
+                      <div class="comment-box" *ngIf="product.commentMsg">
+                        {{orderData[0].address.name}}'s Message: {{product.commentMsg}}
+                      </div>
+                      <div *ngIf="product.commentImgs">
+                        <div *ngIf="product.commentImgs.length !== 0">
+                          <ion-grid class="ion-no-padding">
+                            <ion-row class="ion-justify-content-start">
+                              <ion-col size="2" class="comment-img-conatiner"
+                                *ngFor="let img of product.commentImgs; let imgIndex = index">
+                                <div *ngIf="img?.thumb; else showUrlImg" (click)="imgZoom(img.url)"
+                                  [ngStyle]="{'background': 'url(' + img.thumb + ') no-repeat center', 'background-size': 'contain'}"
+                                  class="comment-img"></div>
+                                  <ng-template #showUrlImg>
+                                    <div (click)="imgZoom(img.url)"
+                                      [ngStyle]="{'background': 'url(' + img.url + ') no-repeat center', 'background-size': 'contain'}"
+                                      class="comment-img"></div>
+                                  </ng-template>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </div>
+                      </div>
+                      <div class="sku-code" *ngIf="product.hasOwnProperty('sku') && product.sku !== ''">
+                        <span class="sku-code-heading">Sku Code:</span>
+                        <span class="sku-code-value"> {{product.sku}}</span>
+                      </div>
+                      <div class="sku-code" *ngIf="product.hasOwnProperty('barcodeNo') && product.barcodeNo !== ''">
+                        <span class="sku-code-heading">Barcode No:</span>
+                        <span class="sku-code-value"> {{product.barcodeNo}}</span>
+                      </div>
+                      <!-- vendor status -->
+                      <ng-container *ngIf="product.hasOwnProperty('vendorStatus')">
+
+                        <div class="f-s-13 ion-text-capitalize"
+                          *ngIf="getVendorName(product.vendorStatus.id) as vendorName;">
+                          <span class="f-w-b">Vendor Name: </span>
+                          <span>{{vendorName}}</span>
+                        </div>
+
+                        <div class="f-s-13 ion-text-capitalize" *ngIf="product.vendorStatus.status !== 'notSet'">
+                          <span class="f-w-b">Vendor Status: </span>
+                          <span>
+                            <ion-text [color]="getVendorStatusColor(product.vendorStatus.status)">
+                              {{product.vendorStatus.status}}
+                            </ion-text>
+                          </span>
+                        </div>
+
+                        <div class="f-s-13" *ngIf="isVendorQtyUnavialble(product)">
+                          <span class="f-w-b">Available Quantity: </span>
+                          <span>Vendor has only {{product.quantity - product.vendorStatus.unavailableQty}} available
+                            quantity.</span>
+                        </div>
+                      </ng-container>
+                      <!-- vendor status -->
+                      <ng-container *ngIf="!product.hasOwnProperty('vendorStatus') && product.hasOwnProperty('vendorId')">
+                        <div class="f-s-13 ion-text-capitalize"
+                          *ngIf="getVendorName(product.vendorId) as vendorName;">
+                          <span class="f-w-b">Vendor Name: </span>
+                          <span>{{vendorName}}</span>
+                        </div>
+                      </ng-container>
+                      <hr class="line" *ngIf="i !== orderData[0].products.length - 1">
+                    </div>
+                  </ion-col>
+                  <ion-col size="12" size-xl="4">
+                    <!-- Unavailable products Start-->
+                    <div class="products-container" *ngIf="(orderData[0].unavailable | json) !== '{}'"
+                      style="border: 1px solid #ccc; margin-left: 26px; margin-bottom: 20px;">
+                      <ion-list class="ion-no-padding" lines="none">
+                        <div class="content-heading" style="padding: 8px 5px 0px;">
+                          <b>Unavailable Products</b>
+                        </div>
+
+                        <hr class="line">
+
+                        <div *ngFor="let product of orderData[0].unavailable | keyvalue">
+                          <ng-container *ngIf="orderData[0].unavailable[product.key]">
+                            <ion-item class="ion-no-padding">
+                              <div *ngIf="orderData[0].products[product.key].img.mob" slot="start"
+                                [ngStyle]="{'background': 'url(' + orderData[0].products[product.key].img.mob + ') no-repeat center', 'background-size': 'contain'}"
+                                class="product-image"></div>
+                              <div
+                                *ngIf="!orderData[0].products[product.key].img.mob && orderData[0].products[product.key].img.url"
+                                slot="start"
+                                [ngStyle]="{'background': 'url(' + orderData[0].products[product.key].img.url + ') no-repeat center', 'background-size': 'contain'}"
+                                class="product-image"></div>
+                              <div
+                                *ngIf="!orderData[0].products[product.key].img.mob && !orderData[0].products[product.key].img.url"
+                                slot="start" class="no-product-image"></div>
+
+                              <ion-label>
+                                <h3 class="product-name ion-text-wrap">{{orderData[0].products[product.key].name}}</h3>
+                                <h3 class="product-quantity opacity-07">Quantity:
+                                  {{orderData[0].unavailable[product.key]}}</h3>
+                                <h6 class="f-w-b m-t-8">
+                                  {{getUnavailableProductPrice(product.key) | currency: currencyCode:true:'0.0'}}</h6>
+                              </ion-label>
+                            </ion-item>
+                            <hr class="line">
+                          </ng-container>
+                        </div>
+
+                        <div class="d-flex-sb">
+                          <p><b>Total Amount:</b> {{orderData[0].unavailablePrice | currency: currencyCode:true:'0.0'}}
+                          </p>
+                        </div>
+
+                      </ion-list>
+                    </div>
+                    <!-- Unavailable products End -->
+
+                    <div class="order-summery-wrapper" *ngIf="orderData[0].orderType !== 'quotation' && (orderData[0].orderType !== 'subscription')">
+                      <p style="text-align: center;"><strong style="font-size: 16px;text-decoration: underline;">Order
+                          Summary</strong></p>
+                      <table>
+                        <tr>
+                          <td>Number of Items</td>
+                          <td>{{getTotalItems()}} items</td>
+                        </tr>
+                        <tr>
+                          <td>Subtotal</td>
+                          <td>{{getSubTotalPrice() | currency: currencyCode:true}}</td>
+                        </tr>
+                        <tr *ngIf="orderData[0].discountOnMrp">
+                          <td>Offer Discount</td>
+                          <td>-{{orderData[0].discountOnMrp | currency: currencyCode:true}}</td>
+                        </tr>
+                        <tr *ngIf="orderData[0].additionalDiscount">
+                          <td>Additional Discount</td>
+                          <td>-{{orderData[0].additionalDiscount | currency: currencyCode:true}}</td>
+                        </tr>
+                        <tr *ngIf="orderData[0].couponDiscount !== 0">
+                          <td>Coupon Discount</td>
+                          <td>-{{orderData[0].couponDiscount | currency: currencyCode:true}}</td>
+                        </tr>
+                        <tr *ngIf="orderData[0].membershipDiscount">
+                          <td>Membership Discount</td>
+                          <td>-{{orderData[0].membershipDiscount | currency: currencyCode:true}}</td>
+                        </tr>
+
+                        <tr *ngIf="orderData[0].extraChargeOnOrder?.charge">
+                          <td>{{orderData[0].extraChargeOnOrder.name || 'Extra Charge'}}</td>
+                          <td>{{orderData[0].extraChargeOnOrder.charge | currency: currencyCode:true:'.2-2'}}</td>
+                        </tr>
+                        <tr *ngIf="orderData[0].extraChargeOnPayment?.charge">
+                          <td>{{orderData[0].extraChargeOnPayment.name || 'Payment Gateway Charge'}}</td>
+                          <td>{{orderData[0].extraChargeOnPayment.charge | currency: currencyCode:true:'.2-2'}}</td>
+                        </tr>
+
+                        <tr
+                          *ngIf="orderData[0].hasOwnProperty('storePickupObj') && orderData[0].storePickupObj.hasOwnProperty('charges'); else noStorePickup;">
+                          <td>Store Pickup Charges</td>
+                          <td>{{orderData[0].storePickupObj.charges | currency: currencyCode:true:'0.0'}}</td>
+                        </tr>
+                        <ng-template #noStorePickup>
+                          <tr>
+                            <td>Delivery</td>
+                            <td>
+                              <p *ngIf="orderData[0].delivery">
+                                {{orderData[0].delivery | currency: currencyCode:true:'0.0'}}
+                              </p>
+                              <p *ngIf="!orderData[0].delivery" style="color: var(--ion-color-success);">Free</p>
+                            </td>
+                          </tr>
+                        </ng-template>
+
+                        <tr *ngIf="orderData[0].totalAddonsPrice">
+                          <td>Add Ons</td>
+                          <td>{{orderData[0].totalAddonsPrice | currency: currencyCode:true:'.2-2'}}</td>
+                        </tr>
+
+                        <tr *ngIf="orderData[0].defaultGst !== 0">
+                          <td>{{taxType}}</td>
+                          <td>+ {{getTotalGst() | currency: currencyCode:true:'0.0'}}</td>
+                        </tr>
+
+                        <tr *ngIf="showUnavailablePrice()">
+                          <td>Total Unavailable</td>
+                          <td>-{{orderData[0].unavailablePrice | currency: currencyCode:true:'0.0'}}</td>
+                        </tr>
+                      </table>
+                      <div class="sub-total-wrap">
+                        <table>
+                          <tr>
+                            <td>
+                              <h3>Total Amount</h3>
+                              <br>
+                              <span>(Incl of all taxes)</span>
+                            </td>
+                            <td>
+                              <h3>{{orderData[0].totalAmountToPaid | currency: currencyCode:true}}</h3>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                      <div *ngIf="orderData[0].walletAmount || orderData[0].cashbackAmount || isPartialOrder()">
+                        <table>
+                          <tr *ngIf="orderData[0].walletAmount">
+                            <td>
+                              <h3>Wallet Amount</h3>
+                            </td>
+                            <td>
+                              <h3>-{{orderData[0].walletAmount | currency: currencyCode:true:'0.0'}}</h3>
+                            </td>
+                          </tr>
+                          <tr *ngIf="orderData[0].cashbackAmount">
+                            <td>
+                              <h3>Cashback Used</h3>
+                            </td>
+                            <td>
+                              <h3>-{{orderData[0].cashbackAmount | currency: currencyCode:true:'0.0'}}</h3>
+                            </td>
+                          </tr>
+                          <tr *ngIf="isPartialOrder() && orderData[0].partialPayment.online.amount;">
+                            <td>
+                              <h3>Paid Onlne</h3>
+                            </td>
+                            <td>
+                              <h3>-{{orderData[0].partialPayment.online.amount | currency: currencyCode:true:'0.0'}}
+                              </h3>
+                            </td>
+                          </tr>
+                        </table>
+                        <div class="sub-total-wrap">
+                          <table>
+                            <tr>
+                              <td>
+                                <h3 *ngIf="!orderData[0].payment.completed">Amount Payable</h3>
+                                <h3 *ngIf="orderData[0].payment.completed">Amount Paid</h3>
+                              </td>
+                              <td>
+                                <h3>{{getFinalAmount() | currency: currencyCode:true:'0.0'}}</h3>
+                              </td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="unavailable-tax" *ngIf="orderData[0].unavailableGst">
+                        <tr>
+                          <td>Unavailable {{taxType}}</td>
+                          <td>-{{orderData[0].unavailableGst | currency: currencyCode:true:'.2-2'}}</td>
+                        </tr>
+                        <tr>
+                          <td>Final {{taxType}}</td>
+                          <td>{{getTotalGst() - orderData[0].unavailableGst | currency: currencyCode:true:'.2-2'}}</td>
+                        </tr>
+                      </div>
+                      <div class="white-sep"></div>
+                      <!--<div class="pay-method-wrap">
+                          <table>
+                            <tr>
+                              <td>Payment Method</td>
+                              <td>Google Pay BHIM UPI</td>
+                            </tr>
+                          </table>
+                        </div>-->
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+            <div class="content-card" *ngIf="orderData[0].hasOwnProperty('rating')">
+              <div class="divider"></div>
+              <p class="content-heading">Order Review</p>
+              <hr class="line">
+              <div class="user-rating">
+                <ionic4-star-rating activeIcon="ios-star" defaultIcon="ios-star-outline"
+                  [activeColor]="getStarColor(orderData[0].rating.rating)" defaultColor="#e1e1e1" readonly="true"
+                  [rating]="orderData[0].rating.rating" fontSize="15px" halfStar='true'>
+                </ionic4-star-rating>
+                <p class="user-rating-review">{{orderData[0].rating.review}}</p>
+                <div class="user-rating-photos" *ngIf="orderData[0].rating.photos && orderData[0].rating.photos.length">
+                  <ion-img [src]="photo.mob" *ngFor="let photo of orderData[0].rating.photos; let i=index;"
+                    class="previewImg"></ion-img>
+                </div>
+                <p class="user-rating-date">Rated On {{reviewDate() | date:'dd MMMM yyyy'}}</p>
+              </div>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

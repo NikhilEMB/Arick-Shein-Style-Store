@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons style="margin-left: -8px;" slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-menu-button style="margin-left: 8px;" slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Import Orders</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+
+        <ion-col id="scroll" size="6">
+          <div class="sectionArea">
+            <h2>Import fields</h2>
+            <div>
+
+              <ion-item>
+                <ion-label>Delivery Agent</ion-label>
+                <ion-checkbox slot="end" mode="ios" disabled [checked]="buttonState === 'Import'"></ion-checkbox>
+              </ion-item>
+
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col size="6">
+          <div class="sectionArea">
+            <h2>Instructions</h2>
+          </div>
+          <div style="margin-top: 10px;">
+            <ol>
+              <li>Simply select the CSV file containing the the list of delivery agent(s) phone no.</li>
+              <li style="font-weight: bold">The format for the delivery agent is as follows : </li>
+              <ol>
+                <li>[ +919988776655 ]</li>
+              </ol>
+              <li>Right now only the updating of delivery agent is supported.</li>
+            </ol>
+          </div>
+        </ion-col>
+        
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer no-border class="page-footer" style="border-top: 1px solid #ccc;">
+  <div class="main-container" style="display: flex; align-content: center; justify-content: space-between; align-items: center;">
+    <div class="upload-btn-wrapper">
+      <ion-button [disabled]="saveDisable()" shape="round" class="btn-1 i-start" color="success" (click)="importOrdersHandler($event, buttonState)" >
+        <i *ngIf="buttonState === 'Import'" class="flaticon-null-20 margin-icon"></i>
+        <i *ngIf="buttonState === 'Upload'" class="flaticon-null-16"></i>
+        {{buttonState}} CSV
+      </ion-button>
+      <ng-container *ngIf="buttonState !== 'Import'">
+        <input type="file" name="myfile" (change)="importOrdersHandler($event, buttonState)"/>
+      </ng-container>
+    </div>
+  </div>
+</ion-footer>

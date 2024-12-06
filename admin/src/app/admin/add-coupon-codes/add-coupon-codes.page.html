@@ -1,0 +1,340 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center *ngIf="editCodeData === undefined">New coupon code</ion-title>
+    <ion-title text-center *ngIf="editCodeData !== undefined">Edit coupon code</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="solid" color="secondary" >
+      <span class="icon" slot="start">
+        <i class="flaticon-null" slot="start"></i>
+        <span class="count">5</span>
+      </span>
+    </ion-button>
+    <ion-button fill="solid" color="secondary" >
+      <span class="icon" slot="start">
+        <i class="flaticon-shopping-bag" slot="start"></i>
+        <span class="count">2</span>
+      </span>
+    </ion-button>
+  </div>
+</ion-header>
+
+
+<super-tabs no-shadow no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Details</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Products</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container>
+    <super-tab>
+      <ion-content >
+        <div class="main-container">
+          <ion-grid >
+            <ion-row>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <ion-label>Code name</ion-label>
+                  <ion-input type="text" class="form-input" [(ngModel)]="name" (ionChange)="toUpperCaseInput(name)"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <ion-label>Description</ion-label>
+                  <ion-input type="text" class="form-input" [(ngModel)]="description"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label>QTY</ion-label>
+                  <ion-input type="number" class="form-input" [(ngModel)]="qty"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label>Usage / User</ion-label>
+                  <ion-input type="number" class="form-input" [(ngModel)]="perUser"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label>Applicable above order amount</ion-label>
+                  <ion-input type="number" class="form-input" [(ngModel)]="minOrderAmount"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12">
+                <div class="flex-label">
+                  <ion-label>Discount type</ion-label>
+                  <div class="flex-label ion-padding-start">
+                    <span>Flat</span>
+                    <ion-toggle color="primary" (ionChange)="changeDiscountType()" [checked]="type === 'percentage'"></ion-toggle>
+                    <span>%</span>
+                  </div>
+                </div>
+              </ion-col>
+              <ng-container *ngIf="type === 'percentage'; else flatDiscountType">
+              
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label>Percentage</ion-label>
+                  <ion-input type="number" class="form-input" [(ngModel)]="amount"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label>Max Discount</ion-label>
+                  <ion-input type="number" class="form-input" [(ngModel)]="maxDiscount"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label>Valid upto</ion-label>
+                  <ion-datetime class="form-input" [(ngModel)]="validUpto" displayFormat="D MMM YYYY" placeholder="Select Date"
+                [min]="minDate" max="2099-10-31"></ion-datetime>
+                </div>
+              </ion-col>
+              </ng-container>
+              <ng-template class="acc-space-bwn" #flatDiscountType>
+                <ion-col size="6">
+                  <div class="input-wrap">
+                    <ion-label>Flat Amount</ion-label>
+                    <ion-input type="number" class="form-input" [(ngModel)]="amount"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="6">
+                  <div class="input-wrap">
+                    <ion-label>Valid upto</ion-label>
+                    <ion-datetime class="form-input" [(ngModel)]="validUpto" displayFormat="D MMM YYYY" placeholder="Select Date"
+                  [min]="minDate" max="2099-10-31"></ion-datetime>
+                  </div>
+                </ion-col>
+              </ng-template>
+              
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <div class="flex-label">
+                    <ion-label>Applicable on Cash On Delivery</ion-label>
+                    <ion-toggle [(ngModel)]="codAvailable"></ion-toggle>
+                  </div>
+                </div>
+              </ion-col>
+              
+              <ion-col size="3">
+                <div class="input-wrap">
+                  <div class="flex-label">
+                    <ion-label>Make this coupon user specific</ion-label>
+                    <ion-toggle [(ngModel)]="specificUsers.isAllowed"></ion-toggle>
+                  </div>
+                </div>
+              </ion-col>
+              
+              <ion-col size="9">
+                <ion-button class="btn-2 i-start" (click)="openUsersModal()" shape="round" fill="outline" *ngIf="specificUsers.isAllowed">
+                  <i class="flaticon-null-5 margin-icon"></i>
+                  Add Users
+                </ion-button>
+              </ion-col>
+              
+            </ion-row>
+          </ion-grid>
+          <div class="ion-no-padding" *ngIf="specificUsers.users.length>0 && specificUsers.isAllowed">
+            <div class="list-header">
+              <ion-grid class="ion-no-padding">
+                <ion-row class="headings">
+                  <ion-col size="3">
+                    <p>Name</p>
+                  </ion-col>
+                  <ion-col size="6" >
+                    <p>Phone Number</p>
+                  </ion-col>
+                  <ion-col size="1">
+                    <p>Delete</p>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+            <div class="list-container">
+                <ion-item *ngFor="let item of specificUsers.users; let i = index">
+                  <ion-grid class="row-background ion-no-padding ion-align-items-center">
+                    <ion-row class="ion-align-items-center">
+                      <ion-col size="3">
+                        <p class="ion-text-capitalize ion-text-center">{{item.name}}</p>
+                      </ion-col>
+                      <ion-col size="6">
+                        <p class="ion-text-capitalize ion-text-center">{{item.phoneNo}}</p>
+                      </ion-col>
+                      <ion-col size="1" class="ion-text-center">
+                        <div class="ion-text-center" (click)="removeUser(i)">
+                          <i class="flaticon-null-21"></i>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </div>
+          </div>
+        </div>
+      </ion-content>
+ 
+
+          
+    </super-tab>
+
+    <super-tab class="products-tab">
+      
+        <ion-content>
+          <div class="main-container">
+          <p *ngIf="editCodeData === undefined; else notApplicableProducts;" style="text-align: center;">This can be access when coupon code is saved.
+          </p>
+            
+          <ng-template #notApplicableProducts>
+            <ion-list lines="none" class="applicable-status-box">
+              <br>
+              <p *ngIf="type === 'flat'" class="m-l-5-p info-txt">Products can only be added in case of PERCENTAGE discount type</p>
+              <ion-list-header>
+                <ion-label>Applicable status</ion-label>
+              </ion-list-header>
+              <hr class="line">
+              <ion-item (click)="applicableStatusToggle('all')">
+                <ion-label>All</ion-label>
+                <ion-radio value="all" slot="end" [checked]="applicableStatus === 'all'"></ion-radio>
+              </ion-item>
+              <ion-item (click)="applicableStatusToggle('applicable')">
+                <ion-label>Applicable</ion-label>
+                <ion-radio value="applicable" slot="end" [checked]="applicableStatus === 'applicable'"></ion-radio>
+              </ion-item>
+              <ion-item (click)="applicableStatusToggle('notApplicable')">
+                <ion-label>Not applicable</ion-label>
+                <ion-radio value="notApplicable" slot="end" [checked]="applicableStatus === 'notApplicable'"></ion-radio>
+              </ion-item>
+          </ion-list>
+          <div class="flex-space-between ion-padding">
+            <p class="ion-text-capitalize" *ngIf="applicableStatus === 'notApplicable'">
+              Products on which coupon will not be applied</p>
+            <p class="ion-text-capitalize" *ngIf="applicableStatus === 'applicable'">
+              Products on which coupon will be applied</p>
+            <div>
+              <ion-button class="btn-2 i-start" (click)="openSelectProductModal('categories')" shape="round" fill="outline" *ngIf="applicableStatus !== 'all' && editCodeData !== undefined && type === 'percentage'">
+                <i class="flaticon-null-5 margin-icon"></i>
+                Add Categories
+              </ion-button>&nbsp;&nbsp;
+              <ion-button class="btn-2 i-start" (click)="openSelectProductModal('brands')" shape="round" fill="outline" *ngIf="applicableStatus !== 'all' && editCodeData !== undefined && type === 'percentage'">
+                <i class="flaticon-null-5 margin-icon"></i>
+                Add Brands
+              </ion-button>&nbsp;&nbsp;
+              <ion-button class="btn-2 i-start" (click)="openCouponCodeModal()" shape="round" fill="outline" *ngIf="applicableStatus !== 'all' && editCodeData !== undefined && type === 'percentage'">
+                <i class="flaticon-null-5 margin-icon"></i>
+                Add Product
+              </ion-button>
+            </div>
+          </div>
+          <div class="ion-no-padding" *ngIf="applicableStatus !== 'all'">
+          <!-- <div class="no-data ion-text-center" *ngIf="!editCodeData.notApplicableProducts.length; else showProducts">
+            <img src="assets/img/no-product.png" alt="">
+            <h6>No Products</h6>
+          </div> -->
+          <ng-container *ngIf="editCodeData.notApplicableProducts.length">
+              <div class="list-header" >
+              <ion-grid class="ion-no-padding">
+                <ion-row class="headings">
+                  <ion-col size="3">
+                    <p>Image</p>
+                  </ion-col>
+                  <ion-col size="6" >
+                    <p>Name</p>
+                  </ion-col>
+                  <ion-col size="1">
+                    <p>Delete</p>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+            <div class="list-container">
+                <ion-item *ngFor="let item of editCodeData.notApplicableProducts; let i = index">
+                  <ion-grid class="row-background ion-no-padding ion-align-items-center">
+                    <ion-row class="ion-align-items-center" *ngIf='item.data'>
+                      <ion-col size="3" class="ion-text-center">
+                        <ion-thumbnail style="margin: auto;" class="thumbnail">
+                          <img class="loading"
+                            *ngIf="item.data.coverPic && !item.data.coverPic.thumb && item.data.coverPic.url"
+                            src="{{item.data.coverPic.url}}">
+                          <img class="loading" *ngIf="item.data.coverPic && item.data.coverPic.thumb"
+                            src="{{item.data.coverPic.thumb}}">
+                          <img *ngIf="!item.coverPic" src="assets/img/placeholder-img.jpg">
+                        </ion-thumbnail>
+                      </ion-col>
+                      <ion-col size="6">
+                        <p class="ion-text-capitalize ion-text-center">{{item.data.prodName}}</p>
+                      </ion-col>
+                      <ion-col size="1" class="ion-text-center">
+                        <div class="ion-text-center cursor-p" (click)="removeNotApplicableProduct(i)">
+                          <i class="flaticon-null-21"></i>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row class="ion-align-items-center" *ngIf='!item.data'>
+                      <ion-col size="3" class="ion-text-center">
+                        <ion-thumbnail style="margin: auto;" class="thumbnail">
+                          <img class="loading"
+                            *ngIf="item.coverPic && !item.coverPic.thumb && item.coverPic.url"
+                            src="{{item.coverPic.url}}">
+                          <img class="loading" *ngIf="item.coverPic && item.coverPic.thumb"
+                            src="{{item.coverPic.thumb}}">
+                          <img *ngIf="!item.coverPic" src="assets/img/placeholder-img.jpg">
+                        </ion-thumbnail>
+                      </ion-col>
+                      <ion-col size="6">
+                        <p class="ion-text-capitalize ion-text-center">{{item.prodName}}</p>
+                      </ion-col>
+                      <ion-col size="1" class="ion-text-center">
+                        <div class="ion-text-center" (click)="removeNotApplicableProduct(i)">
+                          <i class="flaticon-null-21"></i>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </div>
+            </ng-container>
+          </div>
+        </ng-template>
+        </div>
+        </ion-content>
+      
+    </super-tab>
+  </super-tabs-container>
+</super-tabs>
+
+<!-- New Code Footer-->
+<ion-footer *ngIf="editCodeData === undefined"  no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="addNewCouponCode()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>
+<!-- New code Footer-->
+
+<!-- Edit Code Footer-->
+<ion-footer *ngIf="editCodeData !== undefined" no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="presentAlertConfirm();" shape="round" class="btn-1 i-start" color="danger">
+      <i class="flaticon-null-21"></i>
+      Delete
+    </ion-button>
+    <ion-button (click)="editCouponCode()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>
+<!-- Edit Code Footer-->

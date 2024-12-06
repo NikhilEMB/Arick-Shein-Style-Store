@@ -1,0 +1,212 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button" defaultHref="homepage-setting"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">{{title}}</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+  </div>
+</ion-header>
+
+
+  <ion-content>
+    <div class="main-container">
+     <ion-grid *ngIf="widgetData">
+       <ion-row>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Section Name</ion-label>
+            <ion-input class="form-input" [(ngModel)]="sectionName"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12" *ngIf="title == 'Product List'">
+          <!-- Showcase image upload -->
+          <div style="margin-top: 4px;">
+            <div class="upload-btn-wrapper">
+              <ion-button class="" shape="round">
+                 <i class="flaticon-null-16"></i>&nbsp;Upload showcase image
+              </ion-button>
+              <input type="file" name="myFile" (change)="uploadShowcaseImg($event.target.files)" />
+            </div>
+          </div>
+          <div *ngIf="imgUrlData">
+            <div class="dFlex">
+              <!-- <p>Background image Preview</p> -->
+              <ion-button shape="round" size="small" color="danger" (click)="deleteShowcaseImage()">
+                <i class="flaticon-null-21"></i>&nbsp;
+                Delete showcase image
+              </ion-button>
+            </div>
+            <br>
+            <img  class="showcaseImage" [src]='imgUrlData'>
+          </div>
+        </ion-col>
+
+         <div *ngIf="widgetData.type == 'product-carousel'" class="flex-space-between">
+            <div><ion-label>Show Products With Reel: </ion-label></div>
+            <div class="flex-label"><ion-label>Enable</ion-label>
+              <ion-toggle [checked]="productsWithReel" [(ngModel)]="productsWithReel"></ion-toggle>
+            </div>
+          </div>
+
+        <ion-col size="12">
+          <ion-button class="t-a-c" (click)="saveWidget()"  shape="round" *ngIf="mode == 'new'">
+            Save
+          </ion-button>
+          <ion-button class="t-a-c" (click)="saveWidget()"  shape="round" *ngIf="mode == 'edit'">
+            Update
+          </ion-button>
+        </ion-col>
+       </ion-row>
+     </ion-grid>
+
+     <div class="" *ngIf="mode == 'edit'">
+      <ion-button (click)="addNewProduct()">Add Products</ion-button>
+      <div class="no-data ion-text-center" *ngIf="noCaraouselProducts; else showCaraouselProducts">
+        <img src="assets/img/no-product.png" alt="">
+        <h6>No Products</h6>
+      </div>
+      <ng-template #showCaraouselProducts>
+        <div *ngIf="title !== 'Product List'" style="margin-top: 8px;">
+          <ion-button (click)="addGroup()" *ngIf="!vendorId">Add Group</ion-button>
+          <!-- Group Table Start-->
+               <div *ngIf="widgetData.groups?.length" class="m-t-10">
+                 <h4 class="t-a-c">Grouping of Product Carousel</h4>
+                 <p class="impText" >Only 10 products per group allowed</p>
+                 <div class="tableArea">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>S.No:</th>
+                        <!-- <th>Group Image</th> -->
+                        <th>Group Name</th>
+                        <th>Products</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let group of widgetData.groups; let i=index;">
+                        <td>{{i+1}}</td>
+                        <!-- <td style="width: 25%;">
+                          <div class="imageWrapper">
+                            <div class="upload-btn-wrapper">
+                              <ion-button size="small" shape="round">upload image</ion-button>
+                              <input type="file" name="myFile" (change)="uploadGroupImage($event.target.files, i)"/>
+                            </div>
+                            <img [src]="group.groupImg" *ngIf="group.groupImg" style="width: 20%;" alt="">
+                            <p *ngIf="!group.groupImg">No Image</p>
+                          </div>
+                        </td> -->
+                        <td> {{group.name}}</td>
+                        <td class="prodTd">
+                         <ion-select multiple placeholder="Select Products" [value]="group.products" [(ngModel)]="group.products">
+                           <ion-select-option *ngFor="let item of caraouselProducts" [value]="item.productID">{{item.productData.prodName}}
+                           </ion-select-option>
+                         </ion-select>
+                        </td>
+                        <td>
+                          
+                      <i class="flaticon-null-21 cursor-p deleteIcon" color="danger"  (click)="removeGroup(i)"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                 </div>             
+               <ion-button color="success" (click)="saveGroups()" *ngIf="!vendorId" style="margin-top: 8px;">Save Groups</ion-button>
+             </div>
+             <ion-button color="success" (click)="saveGroups()" *ngIf="!vendorId && !widgetData.groups?.length" style="margin-left: 8px;">Save Groups</ion-button>
+          <!-- Group Table end -->
+
+         
+        </div>
+        
+       
+        <!-- heading -->
+        <div class="list-header">
+          
+          <ion-grid class="ion-no-padding">
+            <ion-row >
+              <ion-col class="img">
+                <p>image</p>
+              </ion-col>
+              <ion-col class="name">
+                <p>name</p>
+              </ion-col>
+              <ion-col class="action">
+                <p>Action</p>
+              </ion-col>
+              <ion-col class="reorder">
+                <p>reorder</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          </div>
+          <!-- heading -->
+           <!-- product  list -->
+           <div class="list-container">
+       
+        <ion-list class="ion-no-padding row-border" *ngIf="caraouselProducts; else loadingProducts">
+          <ion-reorder-group (ionItemReorder)="onReorderProducts($event)" disabled="false" class="ion-no-padding">
+            <div *ngFor="let item of caraouselProducts; let i = index">
+            <ion-item *ngIf="item.productData">
+                <ion-grid class="row-background ion-no-padding ion-align-items-center">
+                  <ion-row class="ion-align-items-center">
+                    <ion-col class="img">
+                      <ion-thumbnail style="margin-left: 5%;" class="thumbnail">
+                        <img class="loading" *ngIf="item.productData.coverPic && !item.productData.coverPic.thumb && item.productData.coverPic.url" [src]="item.productData.coverPic.url">
+                        <img class="loading" *ngIf="item.productData.coverPic && item.productData.coverPic.thumb" [src]="item.productData.coverPic.thumb">
+                        <img *ngIf="!item.productData.coverPic" src="assets/img/placeholder-img.jpg">
+                      </ion-thumbnail>
+                    </ion-col>
+                    <ion-col class="name">
+                      <p class="">{{item.productData.prodName}}</p>
+                    </ion-col>
+                    <ion-col class="action">
+                      <ion-button class="action-btn" fill="clear" (click)="deleteCaraouselProductsConfirm(item.productID, i)">
+                        <i class="flaticon-null-21" slot="icon-only"></i>
+                      </ion-button>
+                    </ion-col>
+                    <ion-col class="reorder">
+                      <ion-reorder>
+                        <div class="flat-sort">
+                          <i class="flaticon-menu"></i>
+                        </div>
+                      </ion-reorder>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+            </ion-item>
+            </div>
+          </ion-reorder-group>
+        </ion-list>
+        <ng-template #loadingProducts>
+          <ion-grid class="row-border ion-no-padding" >
+            <ion-row class="row-background" *ngFor="let x of [1,2,3,4,5,6,7,8,9,10]">
+              <ion-col size="3">
+                <ion-thumbnail>
+                  <ion-skeleton-text style="margin: auto;"></ion-skeleton-text>
+                </ion-thumbnail>
+              </ion-col>
+              <ion-col size="6">
+                <h3>
+                  <ion-skeleton-text animated style="width: 90%;margin: auto;"></ion-skeleton-text>
+                </h3>
+              </ion-col>
+              <ion-col size="3">
+                <h3>
+                  <ion-skeleton-text animated style="width: 60%;margin: auto;"></ion-skeleton-text>
+                </h3>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ng-template>
+           </div>
+       
+      </ng-template>
+       
+     </div>
+  </div>
+  </ion-content>
+  

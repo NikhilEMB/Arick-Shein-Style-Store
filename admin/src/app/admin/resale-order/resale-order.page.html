@@ -1,0 +1,187 @@
+<ion-header class="templates-header">
+  <ion-toolbar>
+    <ion-title class="templates-header-title">Reselling Details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="content-dark-bg">
+
+  <!-- resale invoice -->
+  <div class="content-wrap" *ngIf="onlyView && resale.order.invoice.url">
+    <p class="heading">{{ 'RESALE_ORDER.invoice' | translate }}</p>
+
+    <ion-button (click)="viewInvoice()" expand="block" fill="clear" shape="round">
+      {{'RESALE_ORDER.download_invoice' | translate}}
+    </ion-button>
+    
+  </div>
+  <!-- resale invoice -->
+
+  <!-- your details -->
+  <div class="content-wrap" *ngIf="resellerForm">
+    <p class="heading">{{ checkViewBy() | translate }} {{ 'RESALE_ORDER.details' | translate}}</p>
+
+    <form [formGroup]="resellerForm">
+      <ion-item [ngClass]="{'valid-border': isResellerControlValid('name'), 'invalid-border': !isResellerControlValid('name')}" lines="none">
+        <ion-label position="floating">{{'RESALE_ORDER.name' | translate}}</ion-label>
+        <ion-input [readonly]="onlyView" type="text" formControlName="name" placeholder="{{'SHARED.please_enter' | translate}} {{'RESALE_ORDER.name' | translate}}"></ion-input>
+      </ion-item>
+  
+      <ion-item [ngClass]="{'valid-border': isResellerControlValid('gstNo'), 'invalid-border': !isResellerControlValid('gstNo')}" lines="none">
+        <ion-label position="floating">{{taxType}} {{'RESALE_ORDER.number' | translate}} ({{'SHARED.optional' | translate}})</ion-label>
+        <ion-input [readonly]="onlyView" type="text" formControlName="gstNo" placeholder="{{'SHARED.please_enter' | translate}} {{taxType}} {{'RESALE_ORDER.number' | translate}}"></ion-input>
+      </ion-item>
+    </form>
+  </div>
+
+  <!-- customer details -->
+  <div class="content-wrap" *ngIf="customerForm">
+    <p class="heading">{{'RESALE_ORDER.cutsomer_details' | translate}}</p>
+
+    <form [formGroup]="customerForm">
+      <ion-item [ngClass]="{'valid-border': isCustomerControlValid('name'), 'invalid-border': !isCustomerControlValid('name')}" lines="none">
+        <ion-label position="floating">{{'RESALE_ORDER.name' | translate}}</ion-label>
+        <ion-input [readonly]="onlyView" type="text" formControlName="name" placeholder="{{'SHARED.please_enter' | translate}} {{'RESALE_ORDER.name' | translate}}"></ion-input>
+      </ion-item>
+
+      <div formGroupName="address">
+        <ion-item [ngClass]="{'valid-border': isCustomerControlValid('complete', 'address'), 'invalid-border': !isCustomerControlValid('complete', 'address')}" lines="none">
+          <ion-label position="floating">{{'RESALE_ORDER.complete_address' | translate}}</ion-label>
+          <ion-textarea [readonly]="onlyView" rows="3" type="text" formControlName="complete" placeholder="{{'SHARED.please_enter' | translate}} {{'RESALE_ORDER.complete_address' | translate}}"></ion-textarea>
+        </ion-item>
+
+        <ion-row>
+          <ion-col size="6" class="ion-no-padding p-r-7">
+            <ion-item [ngClass]="{'valid-border': isCustomerControlValid('city', 'address'), 'invalid-border': !isCustomerControlValid('city', 'address')}" lines="none">
+              <ion-label position="floating">{{'RESALE_ORDER.city' | translate}}</ion-label>
+              <ion-input [readonly]="onlyView" type="text" formControlName="city" placeholder="{{'SHARED.please_enter' | translate}} {{'RESALE_ORDER.city' | translate}}"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6" class="ion-no-padding">
+            <ion-item [ngClass]="{'valid-border': isCustomerControlValid('state', 'address'), 'invalid-border': !isCustomerControlValid('state', 'address')}" lines="none">
+              <ion-label position="floating">{{'RESALE_ORDER.state' | translate}}</ion-label>
+              <ion-input type="text" formControlName="state" placeholder="{{'SHARED.select' | translate}} {{'RESALE_ORDER.state' | translate}}" readonly (click)="openStateModal()"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-item [ngClass]="{'valid-border': isCustomerControlValid('pincode', 'address'), 'invalid-border': !isCustomerControlValid('pincode', 'address')}" lines="none">
+          <ion-label position="floating">{{'RESALE_ORDER.pincode' | translate}}</ion-label>
+          <ion-input [readonly]="onlyView" type="text" formControlName="pincode" placeholder="{{'SHARED.please_enter' | translate}} {{'RESALE_ORDER.pincode' | translate}}"></ion-input>
+        </ion-item>
+      </div>
+  
+      <ion-item [ngClass]="{'valid-border': isCustomerControlValid('gstNo'), 'invalid-border': !isCustomerControlValid('gstNo')}" lines="none">
+        <ion-label position="floating">{{taxType}} {{'RESALE_ORDER.number' | translate}} ({{'SHARED.optional' | translate}})</ion-label>
+        <ion-input [readonly]="onlyView" type="text" formControlName="gstNo" placeholder="{{'SHARED.please_enter' | translate}} {{taxType}} {{'RESALE_ORDER.number' | translate}}"></ion-input>
+      </ion-item>
+    </form>
+  </div>
+
+  <!-- profit management -->
+  <div class="content-wrap" *ngIf="products.length">
+    <p class="heading">{{'RESALE_ORDER.profit_management' | translate}}</p>
+    <div class="product" *ngFor="let product of products; let i=index">
+      <ion-item class="ion-no-padding" lines="none">
+  
+        <div *ngIf="product.img.mob" slot="start"
+          [ngStyle]="{'background': 'url(' + getProductImg(product) + ') no-repeat center', 'background-size': 'contain'}"
+          class="product-image"></div>
+  
+        <ion-label>
+          
+          <h3 class="product-name ion-text-wrap">{{product.name}}</h3>
+  
+          <h6 class="product-description ion-text-capitalize">{{getProductDesc(product)}}</h6>
+  
+          <h3 class="product-quantity" *ngIf="getProductType(product) !== 'pieces'">
+            {{'SHARED.quantity' | translate}}: {{product.quantity}}</h3>
+  
+        </ion-label>
+      </ion-item>
+  
+      <div class="resale-table">
+        <div class="tax-info" *ngIf="product.gst">
+          <ion-text color="danger">Prices are inclusive of {{product.gst}}% tax </ion-text>
+        </div>
+        <table>
+          <tbody>
+            <tr>
+              <td>{{'RESALE_ORDER.purchased_price' | translate}}</td>
+              <td>{{getPrices(i, 'purchasedAt') | currency: currencyCode:true}}</td>
+            </tr>
+            <tr>
+              <td>{{'RESALE_ORDER.quantity' | translate}}</td>
+              <td>{{getQty(i)}}</td>
+            </tr>
+            <tr class="bottom-border">
+              <td>{{'RESALE_ORDER.total_pp' | translate}}</td>
+              <td>{{getPrices(i, 'purchasedAt') * getQty(i) | currency: currencyCode:true}}</td>
+            </tr>
+            <tr>
+              <td>{{'RESALE_ORDER.reselling_price' | translate}}</td>
+              <td>
+                <input [readonly]="onlyView" type="number" [(ngModel)]="resale.order.products[i].resaleAt" (ngModelChange)="calculatePriceDetails()">
+              </td>
+            </tr>
+            <tr>
+              <td>{{'RESALE_ORDER.quantity' | translate}}</td>
+              <td>{{getQty(i)}}</td>
+            </tr>
+            <tr class="bottom-border">
+              <td>{{'RESALE_ORDER.total_rp' | translate}}</td>
+              <td>{{getPrices(i, 'resaleAt') * getQty(i) | currency: currencyCode:true}}</td>
+            </tr>
+            <tr>
+              <td>{{ checkViewBy() | translate }} {{'RESALE_ORDER.profit' | translate}}</td>
+              <td class="profit">{{(getPrices(i, 'resaleAt') - getPrices(i, 'purchasedAt')) * getQty(i) | currency: currencyCode:true}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <hr class="line" *ngIf="i !== (products.length - 1)">
+    </div>
+  </div>
+
+  <!-- price details -->
+  <div class="content-wrap">
+    <p class="heading">{{'RESALE_ORDER.price_details' | translate}}</p>
+    <table class="prices-table">
+      <tbody>
+        <tr>
+          <td>{{'RESALE_ORDER.subtotal' | translate}}</td>
+          <td>{{resale.order.priceDetails.subtotal | currency: currencyCode:true}}</td>
+        </tr>
+        <tr>
+          <td>{{taxType}}</td>
+          <td>{{resale.order.priceDetails.gst | currency: currencyCode:true}}</td>
+        </tr>
+        <tr>
+          <td>{{'RESALE_ORDER.total_rp' | translate}}</td>
+          <td>{{resale.order.priceDetails.resaleAt | currency: currencyCode:true}}</td>
+        </tr>
+        <tr>
+          <td>{{'RESALE_ORDER.total_pp' | translate}}</td>
+          <td>{{resale.order.priceDetails.purchasedAt | currency: currencyCode:true}}</td>
+        </tr>
+        <tr>
+          <td>{{'RESALE_ORDER.total_profit' | translate}}</td>
+          <td class="profit">{{resale.order.priceDetails.profit | currency: currencyCode:true}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</ion-content>
+
+<ion-footer *ngIf="!onlyView">
+  <ion-button (click)="saveResale()" expand="block" class="footer-button">
+    {{'SHARED.save' | translate}}
+  </ion-button>
+</ion-footer>

@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="templates-header-title" *ngIf="modalChoice === 'videoModal'">
+      Help Video - {{selectedRoute}}
+    </ion-title>
+    <ion-title class="templates-header-title" *ngIf="modalChoice === 'featuresModal'">
+      {{routeChoice}}
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button fill="outline" size="small" shape="round" style="margin-right: 1rem;">
+        <a [href]="safeLink" target="_blank" rel="noopener noreferrer">Open in New Tab</a>
+      </ion-button>
+      &nbsp;
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scroll-y='false'>
+  <div class="fullSize" *ngIf="modalChoice === 'videoModal'">
+    <iframe [src]="safeLink" width="100%" height="100%" frameborder="0"></iframe>
+  </div>
+
+  <div class="fullSize" *ngIf="modalChoice === 'featuresModal'">
+    <iframe [src]="safeLink" width="100%" height="100%" frameborder="0"></iframe>
+  </div>
+</ion-content>

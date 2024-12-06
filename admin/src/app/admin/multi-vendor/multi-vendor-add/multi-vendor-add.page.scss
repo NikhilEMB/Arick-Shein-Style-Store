@@ -1,0 +1,286 @@
+.main{
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 30px;
+    background: white;
+    text-align: center;
+    width: 60vw;
+    margin: 0% auto;
+    height: 100vh
+}
+
+.toggle{
+    display: flex;
+    margin: 0% auto
+  }
+  
+  .data-field{
+    display: flex;
+    justify-content: space-between;
+    margin: 0% auto;
+  }
+
+.toggleSub{
+    font-size: large;
+    display: inline-flex;
+    justify-content: space-between;
+    width: 30vw;
+}
+
+ion-toggle{
+    margin-top: -10px
+}
+
+.item-inner{
+    min-height: 1px !important;
+    }
+
+.label-md{
+    margin-bottom: 1px!important;
+    margin-top: 1px!important;
+}
+
+ion-item-divider{
+    margin-top: 0px;
+    min-height: 1px!important;
+    background: lightgray;
+    opacity: 50%
+}
+
+input{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.item{
+    display: flex;
+    justify-content: space-evenly
+}
+
+.card{
+    border: 1px solid lightgray;
+    width: 30vw;
+    margin: 0% auto
+}
+
+.buttons{
+    display: flex;
+    justify-content: space-evenly
+}
+
+#cardBtn1{
+    border-radius: 10px;
+    color: white;
+    background: black;
+    padding: 5px;
+    width: 80px
+}
+
+#cardBtn2{
+    border-radius: 10px;
+    color: white;
+    background: var(--ion-color-primary);
+    padding: 5px;
+    width: 80px
+}
+
+.tab{
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px lightgray;
+    font-size: large !important;
+    font-weight: 500;
+    border-bottom: 1px solid lightgray;
+}
+
+.form{
+    text-align: left;
+    width: 20vw;
+    margin: 0% auto
+}
+
+.regionSelect{
+    border: 1px solid lightgray;
+    padding: 5px
+}
+
+.removeBtn{
+    color: #f40d30;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #f40d30;
+    background: white
+}
+
+.info-txt {
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
+    width: 150px;
+    margin-top: 8px
+  }
+  .uploaded-doc-imgs{
+    width: 70px;
+    height: 70px;
+  }
+// Products Tab
+.bs-links{
+  display: inline-block;
+}
+.list-container {
+  // margin-top: 110px;
+  margin-top: unset;
+}
+.commission-list{
+  background: var(--ion-color-medium)!important;
+  ion-item{
+    --background: var(--ion-color-medium)!important;
+    ion-radio{
+      margin-right: 5px;
+    }
+  }
+}
+.list-header{
+  // top: 20px;
+  // position: relative;
+  position: unset;
+  top: unset;
+}
+ion-col.img, ion-col.qty{
+    width: 100px;
+    max-width: 100px;
+  }
+  ion-col.price{width:120px ;max-width: 120px;}
+  ion-col.name{
+    width: 350px;
+    max-width: 350px;
+    cursor:pointer;
+  }
+  ion-col.action{
+    width: 100px;
+    max-width: 100px;
+    ion-button{
+      margin-right:15px;
+    }
+  }
+  
+  ion-col.variant-title{width: 450px;
+  .variant-title-text{display: block;text-align: right;width: 100%;}
+  }
+//   ion-col.variant-price{width:100px ;max-width: 100px;}
+//   ion-col.action{width:200px ;max-width: 200px;}
+  
+  
+  .form-input{margin-top: 0;}
+  .product-img-wrapper {
+    position: relative;
+  }
+  .product-active {
+    background-color: green;
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    border-radius: 30px;
+    border: 1px solid green;
+    margin-right: 10%;
+  }
+  .product-inactive {
+    background-color: red;
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    border-radius: 30px;
+    border: 1px solid red;
+    margin-right: 10%;
+  }
+  
+  .form-input{padding-left: 8px;padding-right: 8px;}
+  ion-item.sc-ion-input-md-h:not(.item-label), ion-item:not(.item-label) .sc-ion-input-md-h {
+     --padding-start: 10px; 
+  }
+  .add-btn{
+    margin-right:20px;
+  }
+
+// Orders Tab
+.list-container-orders{
+  margin-top: 45px;
+  ion-grid{
+    padding: 0;
+    ion-row{
+      border-bottom: var(--ion-color-medium) 1px solid;
+      ion-col{
+        padding:16px 8px;
+        align-items: center;
+        display: inline-flex;
+      }
+    }
+  }
+}
+.Pending{
+  color: black
+}
+
+.Confirmed{
+  color: darkblue
+}
+
+.Dispatched{
+  color: #9B870C
+}
+
+.Delivered{
+  color: darkgreen
+}
+
+.Cancelled, .Returned{
+  color: darkred
+}
+
+// Reports Tab
+.report-table table tbody td {
+  color: black;
+}
+
+.footerBtn{
+  text-align: center;
+  ion-button{
+    margin: 8px;
+  }
+}
+
+.statusList {
+  text-align: center;
+  p {
+    font-size: medium;
+    border: 1px solid lightgray;
+    padding: 10px;
+    margin: 8px;
+    cursor: pointer;
+    text-transform: capitalize;
+    border-radius: 6px;
+  }
+}
+
+@media screen and(min-height: 1200px) {
+  #scroll1,
+  #scroll2 {
+    height: 92vh;
+  }
+}
+
+.main-btn{
+    padding: 16px;
+    background: #fff;
+    text-align: center;
+}
+
+.wrap-address{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 6px;
+    ion-input{
+      margin-left: 5px;
+    }
+}

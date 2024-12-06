@@ -1,0 +1,1033 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start"
+      class="menu-btn">
+      <ion-icon slot="icon-only"
+        name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Delivery Setting</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="solid"
+      color="secondary">
+      <span class="icon"
+        slot="start">
+        <i class="flaticon-null"
+          slot="start"></i>
+        <span class="count">5</span>
+      </span>
+    </ion-button>
+    <ion-button fill="solid"
+      color="secondary">
+      <span class="icon"
+        slot="start">
+        <i class="flaticon-shopping-bag"
+          slot="start"></i>
+        <span class="count">2</span>
+      </span>
+    </ion-button>
+  </div>
+</ion-header>
+
+<super-tabs>
+
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Settings</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>States / Pincodes</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container>
+
+    <!-- 1st Tab -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container"
+          style="width: 100%;">
+          <ion-grid>
+            <ion-row>
+              <ion-col size=2
+                id="scroll1"
+                style="margin-top: 8px;">
+                <ion-button expand="block"
+                  (click)="createNewDeliveryType()"
+                  style="margin: 8px 0 0 8px;">
+                  Add New +
+                </ion-button>
+                <div class="statusList">
+                  <div *ngIf="newDeliveryType.length">
+                    <p [id]="'field' + idx"
+                      style="z-index: 1000"
+                      *ngFor='let item of newDeliveryType; let idx=index'
+                      (click)="newSelection(idx)">
+                      {{item.id}}
+                      <button *ngIf="idx != 0"
+                        style="float: right; background-color: transparent; z-index: 1001;">
+                        <i class="flaticon-null-17"
+                          style="margin-right: 5px;"
+                          (click)="removeProfile(item.id, idx)"></i>
+                      </button>
+                    </p>
+                  </div>
+                </div>
+              </ion-col>
+              <ion-col size=2
+                id="scroll1"
+                style="margin-top: 8px; border-left: 1px solid lightgray;">
+                <div class="statusList">
+                  <p [id]="i"
+                    *ngFor='let item of sidemenu; let i=index'
+                    (click)='changeComponent(i)'>{{item}}</p>
+                </div>
+              </ion-col>
+              <ion-col size=8
+                style="margin-top: 8px; border-left: 1px solid lightgray;"
+                id="scroll2">
+                <ion-col>
+                  <ion-button (click)="saveAllDeliverySetting()"
+                    color="success">
+                    <i class="flaticon-null-20 margin-icon"></i>&nbsp;
+                    Save
+                  </ion-button>
+                </ion-col>
+                <br>
+                <ion-col>
+                  <ion-grid [ngSwitch]="selectedId">
+                    <ion-row>
+                      <ion-col size="6"
+                        *ngSwitchCase="0">
+                        <div class="input-wrap">
+                          <ion-label>Default delivery amount ({{currencyCode}})
+                          </ion-label>
+                          <ion-input type="tel"
+                            class="form-input"
+                            [(ngModel)]="defaultDeliveryAmt"></ion-input>
+                        </div>
+                      </ion-col>
+                      <ion-col size="6"
+                        *ngSwitchCase="1">
+                        <ion-col size="6"
+                          *ngSwitchCase="1">
+                          <div style="display: flex;align-items: center">
+                            <p>Allow free delivery for order</p>&nbsp;&nbsp;
+                            <div class="toggle-btn">
+                              <label class="switch">
+                                <input color="primary"
+                                  type="checkbox"
+                                  [checked]="allowFreeDelivery"
+                                  (click)="freeDeliveryToggle()">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                          <br><br>
+                          <div class="input-wrap"
+                            *ngIf="allowFreeDelivery == true">
+                            <ion-label>Free delivery above amount
+                              ({{currencyCode}})
+                            </ion-label>
+                            <ion-input type="tel"
+                              class="form-input"
+                              [(ngModel)]="freeDeliveryAmt"></ion-input>
+                          </div>
+                        </ion-col>
+                      </ion-col>
+                      <div *ngSwitchCase="2">
+                        <ion-col size="12">
+                          <div style="display: flex;align-items: center;">
+                            <!-- <ion-label>Allow Store pickup</ion-label>&nbsp; -->
+                            <!-- <ion-toggle color="primary"
+                              (ionChange)="storePickupToggle()"
+                              [checked]="isStorePickup">
+                            </ion-toggle> -->
+                            <p>Allow store pickup</p>&nbsp;&nbsp;
+                            <div class="toggle-btn">
+                              <label class="switch">
+                                <input color="primary"
+                                  type="checkbox"
+                                  [checked]="isStorePickup"
+                                  (click)="storePickupToggle()">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="12"
+                          *ngIf="isStorePickup">
+                          <div class="input-wrap">
+                            <ion-label>Store pickup charges ({{currencyCode}})
+                            </ion-label>
+                            <ion-input type="tel"
+                              class="form-input"
+                              [(ngModel)]="storePickupCharges"></ion-input>
+                          </div>
+                        </ion-col>
+                      </div>
+                      <div *ngSwitchCase="3">
+                        <ion-col size="12">
+                          <div style="display: flex;align-items: center;">
+                            <div>Allow Delivery based on Km</div>&nbsp;&nbsp;
+                            <div class="toggle-btn">
+                              <label class="switch">
+                                <input type="checkbox"
+                                  (click)="deliveryBasedToggle()"
+                                  [checked]="isKmBasedDelivery">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="12"
+                          *ngIf="isKmBasedDelivery">
+                          <div style="display: flex;align-items: center;">
+                            <div>Delivery by Km Slabs</div>&nbsp;&nbsp;
+                            <div class="toggle-btn">
+                              <label class="switch">
+                                <input type="checkbox"
+                                  (click)="activeKmSlab()"
+                                  [checked]="kmSlabs.active">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                          <br>
+                          <div *ngIf='!kmSlabs.active'>
+                            <div class="input-wrap">
+                              <ion-label>Delivery Charges per km
+                                ({{currencyCode}})
+                              </ion-label>
+                              <ion-input type="tel"
+                                class="form-input"
+                                [(ngModel)]="chargesPerKm"></ion-input>
+                            </div>
+                            <div class="input-wrap">
+                              <ion-label>Maximum delivery charges
+                                ({{currencyCode}})
+                              </ion-label>
+                              <ion-input type="tel"
+                                class="form-input"
+                                [(ngModel)]="maxDeliveryOfKm"></ion-input>
+                            </div>
+                          </div>
+                          <div *ngIf='kmSlabs.active'>
+                            <div style="display: flex;align-items: center;">
+                              <ion-button (click)='enterSlabData()'>
+                                <p
+                                  *ngIf="kmSlabs.slabs && kmSlabs.slabs.length == 0">
+                                  Create Slab</p>
+                                <p
+                                  *ngIf="kmSlabs.slabs && kmSlabs.slabs.length > 0">
+                                  Add Slab</p>
+                              </ion-button>&nbsp;&nbsp;
+                              <ion-button (click)="removeSlabs()">
+                                Remove All Slabs
+                              </ion-button>
+                            </div>
+                            <br>
+                            <ion-grid
+                              *ngIf="kmSlabs.slabs && kmSlabs.slabs.length > 0"
+                              class="ion-no-padding data-table ion-text-center"
+                              style="margin-top: 12px;width: 400px;">
+                              <ion-row>
+                                <ion-col>Range</ion-col>
+                                <ion-col>Cost</ion-col>
+                                <ion-col>Free Delivery Amount</ion-col>
+                              </ion-row>
+                              <ion-row
+                                *ngFor="let slab of kmSlabs.slabs; let i=index;"
+                                style="border-top: 1px solid lightgray;">
+                                <ion-col>
+                                  <p>{{slab.range[0]}} - {{slab.range[1]}}</p>
+                                </ion-col>
+                                <ion-col>
+                                  <p>{{slab.cost}}</p>
+                                </ion-col>
+                                <ion-col>
+                                  <p>{{slab.freeDeliveryAmount}}</p>
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+                          </div>
+                        </ion-col>
+                      </div>
+                      <div *ngSwitchCase="4">
+                        <ion-col size="6"
+                          *ngIf="isDeliveryBasedOnWeight">
+                          <div style="display: flex;align-items: center;">
+                            <div>Delivery Based On Weight</div>&nbsp;&nbsp;
+                            <div class="toggle-btn">
+                              <label class="switch">
+                                <input type="checkbox"
+                                  (click)="deliveryWeightBasedToggle()"
+                                  [checked]="deliveryByWeight.active">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <div *ngIf="isDeliveryBasedOnWeight">
+                          <div *ngIf="deliveryByWeight.active">
+                            <div style="display: flex;align-items: center;">
+                              <div>Delivery by Weight Slabs</div>&nbsp;&nbsp;
+                              <div class="toggle-btn">
+                                <label class="switch">
+                                  <input type="checkbox"
+                                    (click)="activeWeightSlab()"
+                                    [checked]="weightSlabs.active">
+                                  <span class="slider round"></span>
+                                </label>
+                              </div>
+                            </div>
+                            <br>
+                            <div *ngIf='!weightSlabs.active'>
+                              <div class="input-wrap">
+                                <ion-label>Charges Per 100Gm ({{currencyCode}})
+                                </ion-label>
+                                <ion-input type="number"
+                                  class="input-border"
+                                  [(ngModel)]="deliveryByWeight.cost">
+                                </ion-input>
+                              </div>
+                              <br>
+                              <div class="ds-alignment">
+                                <p class="delivery-wt-txt">
+                                  Delivery weight upto
+                                  &nbsp;<ion-input type="number"
+                                    class="input-border"
+                                    [(ngModel)]="deliveryByWeight.baseWeight">
+                                  </ion-input>
+                                  &nbsp;Grams is
+                                  {{currencyCode}}
+                                  &nbsp;<ion-input type="number"
+                                    class="input-border"
+                                    [(ngModel)]="deliveryByWeight.baseCost">
+                                  </ion-input>
+                                </p>
+                              </div>
+                            </div>
+                            <div *ngIf='weightSlabs.active'>
+                              <div style="display: flex;align-items: center;">
+                                <ion-button (click)='enterWeightSlabData()'>
+                                  <p
+                                    *ngIf="weightSlabs.slabs && weightSlabs.slabs.length == 0">
+                                    Create Slab</p>
+                                  <p
+                                    *ngIf="weightSlabs.slabs && weightSlabs.slabs.length > 0">
+                                    Add Slab</p>
+                                </ion-button>&nbsp;&nbsp;
+                                <ion-button (click)="removeWeightSlabs()">
+                                  Remove All Slabs
+                                </ion-button>
+                              </div>
+                              <br>
+                              <ion-grid
+                                *ngIf="weightSlabs.slabs && weightSlabs.slabs.length > 0"
+                                class="ion-no-padding data-table ion-text-center"
+                                style="margin-top: 12px;width: 400px;">
+                                <ion-row>
+                                  <ion-col>Range</ion-col>
+                                  <ion-col>Cost</ion-col>
+                                </ion-row>
+                                <ion-row
+                                  *ngFor="let slab of weightSlabs.slabs; let i=index;"
+                                  style="border-top: 1px solid lightgray;">
+                                  <ion-col>
+                                    <p>{{slab.range[0]}} - {{slab.range[1]}}</p>
+                                  </ion-col>
+                                  <ion-col>
+                                    <p>{{slab.cost}}</p>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngSwitchCase="5">
+                        <ion-col size="12">
+                          <div style="display: flex;align-items: center;">
+                            <!-- <ion-label>Allow Instant Delivery</ion-label>&nbsp;
+                            <ion-toggle color="primary"
+                              [(ngModel)]="instantDelivery.isActive"></ion-toggle> -->
+                            <p>Allow instant delivery</p>&nbsp;&nbsp;
+                            <div class="toggle-btn">
+                              <label class="switch">
+                                <input color="primary"
+                                  type="checkbox"
+                                  [checked]="instantDelivery.isActive"
+                                  (click)="allowInstantDelivery()">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="12"
+                          *ngIf="instantDelivery.isActive">
+                          <div class="input-wrap">
+                            <ion-label>Enter Instant Delivery Time (In Hours)
+                            </ion-label>
+                            <ion-input type="number"
+                              class="form-input"
+                              [(ngModel)]="instantDelivery.time"></ion-input>
+                          </div>
+                        </ion-col>
+                      </div>
+                      <div *ngSwitchCase="6">
+                        <ion-col size="12">
+                          <div style="display: flex;align-items: center;">
+                            <!-- <ion-label>Allow Delivery By Store</ion-label>&nbsp;
+                            <ion-toggle color="primary"
+                              [(ngModel)]="isStoreDelivery.isActive"></ion-toggle> -->
+                            <p>Allow Delivery by Store</p>&nbsp;&nbsp;
+                            <div class="toggle-btn">
+                              <label class="switch">
+                                <input color="primary"
+                                  type="checkbox"
+                                  [checked]="isStoreDelivery.isActive"
+                                  (click)="allowDeliverybyStore()">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="12"
+                          *ngIf="isStoreDelivery.isActive">
+                          <div class="input-wrap">
+                            <ion-label>Enter Store Estimated Delivery Time
+                            </ion-label>
+                            <ion-input type="text"
+                              class="form-input"
+                              [(ngModel)]="isStoreDelivery.estimatedTime"
+                              (click)="enterEstimatedTime(0, '', 'isStoreDelivery')"
+                              readonly></ion-input>
+                          </div>
+                        </ion-col>
+                        <ion-col size="12"
+                          *ngIf="isStoreDelivery.isActive">
+                          <div style="display: flex;align-items: center;">
+                            <!-- <ion-label>Allow Delivery schedule</ion-label>&nbsp;
+                            <ion-toggle color="primary"
+                              (ionChange)="deliveryScheduleToggle()"
+                              [checked]="isDeliverySchedule">
+                            </ion-toggle> -->
+                            <p>Allow Delivery Schedule</p>&nbsp;&nbsp;
+                            <div class="toggle-btn">
+                              <label class="switch">
+                                <input color="primary"
+                                  type="checkbox"
+                                  [checked]="isDeliverySchedule"
+                                  (click)="deliveryScheduleToggle()">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="12"
+                          *ngIf="isDeliverySchedule && isStoreDelivery.isActive">
+                          <div style="display: flex;align-items: center;">
+                            <!-- <ion-label>Is Delivery schedule mandatory</ion-label>
+                            &nbsp;
+                            <ion-toggle color="primary"
+                              (ionChange)="deliveryScheduleMandatoryToggle()"
+                              [checked]="isDeliveryScheduleMandatory"></ion-toggle> -->
+                            <p>Is delivery schedule mandatory</p>&nbsp;&nbsp;
+                            <div class="toggle-btn">
+                              <label class="switch">
+                                <input color="primary"
+                                  type="checkbox"
+                                  [checked]="isDeliveryScheduleMandatory"
+                                  (click)="deliveryScheduleMandatoryToggle()">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ng-container
+                          *ngIf="isDeliverySchedule && isStoreDelivery.isActive">
+                          <ion-col size="12">
+                            <div class="input-wrap">
+                              <ion-label>Max number of days for Delivery
+                              </ion-label>
+                              <ion-input type="number"
+                                class="form-input"
+                                [(ngModel)]="maxDaysOfDelivery"></ion-input>
+                            </div>
+                          </ion-col>
+
+                          <ion-col size="12">
+                            <div style="display: flex;align-items: center;">
+                              <!-- <ion-label>Allow same day delivery</ion-label>&nbsp;
+                              <ion-toggle color="primary"
+                                (ionChange)="allowSameDayDeliveryToggle()"
+                                [checked]="allowSameDayDelivery"></ion-toggle> -->
+                              <p>Allow same day delivery</p>&nbsp;&nbsp;
+                              <div class="toggle-btn">
+                                <label class="switch">
+                                  <input color="primary"
+                                    type="checkbox"
+                                    [checked]="allowSameDayDelivery"
+                                    (click)="allowSameDayDeliveryToggle()">
+                                  <span class="slider round"></span>
+                                </label>
+                              </div>
+                            </div>
+                          </ion-col>
+                          <ion-col size="12"
+                            *ngIf="allowSameDayDelivery">
+                            <div class="input-wrap">
+                              <ion-label>Minimum hours required to prepare order
+                              </ion-label>
+                              <ion-input type="number"
+                                class="form-input"
+                                [(ngModel)]="minHrs"></ion-input>
+                            </div>
+                          </ion-col>
+                          <ion-col size="12"
+                            *ngIf="allowSameDayDelivery">
+                            <div class="input-wrap">
+                              <ion-label>Last delivery time</ion-label>
+                              <ion-datetime class="form-input time-picker"
+                                displayFormat="hh:mm A"
+                                pickerFormat="hh:mm A"
+                                [(ngModel)]="lastDeliveryTime"></ion-datetime>
+                            </div>
+                          </ion-col>
+                          <ion-col size="12">
+                            <div class="input-wrap">
+                              <ion-label>Days</ion-label>
+                              <div class="ds-days-container">
+                                <div *ngFor="let x of days;let i = index;"
+                                  [ngClass]="{'ds-days-inactive': !x.active, 'ds-days-active': x.active}"
+                                  (click)="daySelectToggle(i)">
+                                  {{x.day}}
+                                </div>
+                              </div>
+                            </div>
+                          </ion-col>
+                          <ion-col size="12">
+                            <ion-label>Time:</ion-label>
+                          </ion-col>
+                          <ion-col size="5">
+                            <ion-datetime class="form-input time-picker"
+                              displayFormat="hh:mm A"
+                              pickerFormat="hh:mm A"
+                              [(ngModel)]="time.start"
+                              placeholder="Select Start Time"></ion-datetime>
+                          </ion-col>
+                          <ion-col size="5">
+                            <ion-datetime class="form-input time-picker"
+                              displayFormat="hh:mm A"
+                              pickerFormat="hh:mm A"
+                              [(ngModel)]="time.end"
+                              placeholder="Select End Time"></ion-datetime>
+                          </ion-col>
+                          <ion-col size="2">
+                            <ion-button (click)="addTimeSchedule()"
+                              fill="outline"
+                              shape="round"
+                              class="btn-sml m-t-16"
+                              [disabled]="disableAddTimeSchedule()">
+                              Add
+                            </ion-button>
+                          </ion-col>
+                          <ion-col size="12">
+                            <div class="timer-wraper">
+                              <ion-chip outline
+                                color="dark"
+                                *ngFor="let time of timeSchedules; let i = index;">
+                                <ion-label>{{time.start}} - {{time.end}}
+                                </ion-label>
+                                <ion-icon name="close-circle"
+                                  (click)="removeTimeSchedule(i)"></ion-icon>
+                              </ion-chip>
+                            </div>
+                          </ion-col>
+                          <ion-col size="12"
+                            *ngIf="!currentSelection || currentSelection.id === 'standard'">
+                            <div class="manage-slots"
+                              *ngIf="scheduledDates.length && timeSchedules.length">
+                              <div class="ds-alignment">
+                                <p class="ds-headings">Manage slots</p>
+                                <ion-button (click)="updateSlot()"
+                                  fill="outline"
+                                  shape="round"
+                                  size="small"
+                                  [disabled]="!manageSlots.date">
+                                  Update
+                                </ion-button>
+                              </div>
+                              <br>
+                              <div class="c-c-a">
+                                <ion-select class="border"
+                                  (ionChange)="selectDate($event)"
+                                  placeholder="Select date"
+                                  style="border: 2px solid lightgray">
+                                  <ion-select-option [value]="date"
+                                    *ngFor="let date of scheduledDates">{{date |
+                                    date}}
+                                  </ion-select-option>
+                                </ion-select>
+                              </div>
+                              <div *ngIf="manageSlots.slots.length">
+                                <ion-grid class="ion-no-padding data-table">
+                                  <ion-row
+                                    style="display: flex;align-items: center;text-align: center;">
+                                    <ion-col>Slot</ion-col>
+                                    <ion-col>Order Limit</ion-col>
+                                    <ion-col>Orders Received</ion-col>
+                                    <ion-col>Active</ion-col>
+                                  </ion-row>
+                                  <ion-row
+                                    *ngFor="let slot of manageSlots.slots; let i=index;"
+                                    style="display: flex;align-items: center;text-align: center;">
+                                    <ion-col>
+                                      {{slot.start}}-{{slot.end}}
+                                    </ion-col>
+                                    <ion-col>
+                                      <ion-input class="input-border"
+                                        type="number"
+                                        [(ngModel)]="slot.orderLimit">
+                                      </ion-input>
+                                    </ion-col>
+                                    <ion-col>
+                                      <p>{{slot.orderCreated || 0}}</p>
+                                    </ion-col>
+                                    <ion-col>
+                                      <div class="toggle-btn">
+                                        <label class="switch">
+                                          <input type="checkbox"
+                                            (click)="manageSlotsActive(i)"
+                                            [checked]="slot.active">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </div>
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
+                              </div>
+                            </div>
+                          </ion-col>
+                        </ng-container>
+                      </div>
+                      <div *ngSwitchCase="7">
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col size="12">
+                              <ion-text color="danger">
+                                <p>Note: You can select either pincode or area
+                                </p>
+                              </ion-text>
+                              <div class="flex-label">
+                                <!-- <ion-label>Pincode</ion-label>
+                                <ion-toggle color="primary"
+                                  (ionChange)="changeDeliveryType($event)"
+                                  [checked]="deliveryType == 'areas'"></ion-toggle>
+                                <ion-label>Area</ion-label> -->
+                                <p>PinCode</p>&nbsp;&nbsp;
+                                <div class="toggle-btn">
+                                  <label class="switch">
+                                    <input color="primary"
+                                      type="checkbox"
+                                      [checked]="deliveryType == 'areas'"
+                                      (click)="changeDeliveryType($event)">
+                                    <span class="slider round"></span>
+                                  </label>
+                                </div>&nbsp;&nbsp;
+                                <p>Area</p>&nbsp;&nbsp;
+                              </div>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                        <div class="ds-content"
+                          *ngIf="!showLoader && deliveryType == 'pincodes'">
+                          <ion-grid>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-text color="danger">
+                                  <p>Please <b
+                                      (click)="presentImportInstructions()"
+                                      style="cursor: pointer;">ClICK HERE</b>
+                                    to read import Instructions</p>
+                                </ion-text>
+                              </ion-col>
+                              <ion-col size="4">
+                                <div class="flex-label">
+                                  <!-- <ion-label>allow all pincodes</ion-label>
+                                  <ion-toggle color="primary"
+                                    (ionChange)="allowAllPincodesToggle()"
+                                    [checked]="isAllowAllPincodes"></ion-toggle> -->
+                                  <p>Allow all pincodes</p>&nbsp;&nbsp;
+                                  <div class="toggle-btn">
+                                    <label class="switch">
+                                      <input color="primary"
+                                        type="checkbox"
+                                        [checked]="isAllowAllPincodes"
+                                        (click)="allowAllPincodesToggle()">
+                                      <span class="slider round"></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </ion-col>
+                              <ion-col size="4">
+                                <div class="flex-label">
+                                  <ion-button (click)="openPincodeModal()"
+                                    fill="outline"
+                                    shape="round"
+                                    size="small">
+                                    Search Pincode
+                                  </ion-button>
+                                </div>
+                              </ion-col>
+                              <ion-col size="4">
+                                <div class="flex-label">
+                                  <div class="upload-btn-wrapper"
+                                    (click)="exportPincodes()">
+                                    <button class="upload-btn btn-1 i-start"> <i
+                                        class="flaticon-null-16"></i>
+                                      Export Pincodes CSV</button>
+                                  </div>
+                                  <!-- <ion-button (click)="exportPincodes()" fill="outline" shape="round" size="small">
+                                    Export Pincodes
+                                  </ion-button> -->
+                                  <div class="upload-btn-wrapper">
+                                    <button class="upload-btn btn-1 i-start"> <i
+                                        class="flaticon-null-16"></i>Import
+                                      Pincode
+                                      CSV</button>
+                                    <input type="file"
+                                      #inputFile
+                                      name="myfile"
+                                      (change)="importPincodes($event)"
+                                      accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                                  </div>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+
+                          <ion-grid class="ion-no-padding">
+                            <ion-row *ngIf="deliveryPincodes.length > 0">
+                              <ion-col size="2">
+                                <p>Pincodes</p>
+                              </ion-col>
+                              <ion-col size="1">
+                                <p>Cost</p>
+                              </ion-col>
+                              <ion-col size="2">
+                                <p>Min Amount</p>
+                              </ion-col>
+                              <ion-col size="2"
+                                *ngIf="allowFreeDelivery == true">
+                                <p>Free Delivery above Amount</p>
+                              </ion-col>
+                              <ion-col size="2">
+                                <p>Estimated Delivery time
+                                  <br>
+                                  (Format: Days:Hours:Mins)
+                                </p>
+                              </ion-col>
+                              <ion-col size="1">
+                                <p>Active</p>
+                              </ion-col>
+                              <ion-col size="2">
+                                Remove
+                              </ion-col>
+                            </ion-row>
+
+                            <ion-row
+                              *ngFor="let x of deliveryPincodes; let i = index;">
+                              <ion-col size="2">
+                                <ion-input type="tel"
+                                  class="form-input"
+                                  [(ngModel)]="x.pincode"></ion-input>
+                              </ion-col>
+                              <ion-col size="1">
+                                <ion-input type="tel"
+                                  class="form-input"
+                                  [(ngModel)]="x.cost"></ion-input>
+                              </ion-col>
+                              <ion-col size="2">
+                                <ion-input type="number"
+                                  class="form-input"
+                                  [(ngModel)]="x.minAmnt"></ion-input>
+                              </ion-col>
+                              <ion-col size="2"
+                                *ngIf="allowFreeDelivery == true">
+                                <ion-input type="number"
+                                  class="form-input"
+                                  [(ngModel)]="x.freeDeliveryAmnt"></ion-input>
+                              </ion-col>
+                              <ion-col size="2">
+                                <ion-input type="text"
+                                  class="form-input"
+                                  [(ngModel)]="x.estimatedDeliveryTime"
+                                  (click)="enterEstimatedTime(i, x, 'pincode')"
+                                  readonly></ion-input>
+                              </ion-col>
+                              <ion-col size="1">
+                                <ion-toggle color="success"
+                                  (ionChange)="changePinActiveToggle(i)"
+                                  [checked]="x.active">
+                                </ion-toggle>
+                              </ion-col>
+                              <ion-col size="2">
+                                <ion-button (click)="removePincode(i)"
+                                  color="danger"
+                                  class="btm-sml i-start"
+                                  shape="round"
+                                  fill="outline">
+                                  Remove
+                                </ion-button>
+                              </ion-col>
+                            </ion-row>
+                            <br>
+                            <ion-row class="ion-justify-content-center">
+                              <ion-button (click)="addPincode()"
+                                fill="outline"
+                                shape="round"
+                                size="small">
+                                Add Pincode
+                              </ion-button>
+                            </ion-row>
+                          </ion-grid>
+                        </div>
+                        <!-- Area -->
+                        <div class="ds-content"
+                          *ngIf="!showLoader && deliveryType == 'areas'">
+                          <ion-grid>
+                            <ion-row class="ion-justify-content-center">
+                              <ion-button (click)="addBlankArea()"
+                                fill="outline"
+                                shape="round"
+                                size="small">
+                                Add Area Manually
+                              </ion-button>
+                              <p class="or-text">OR</p>
+                              <ion-button (click)="openAreaModal()"
+                                fill="outline"
+                                shape="round"
+                                size="small">
+                                Add Area through map
+                              </ion-button>
+                            </ion-row>
+                          </ion-grid>
+                          <br>
+                          <ion-grid class="ion-no-padding">
+                            <ion-row *ngIf="deliveryAreas.length > 0">
+                              <ion-col size="2">
+                                <p>Latitude</p>
+                              </ion-col>
+                              <ion-col size="2">
+                                <p>Longitude</p>
+                              </ion-col>
+                              <ion-col size="1">
+                                <p>Radius(In Km)</p>
+                              </ion-col>
+                              <ion-col size="1">
+                                <p>Cost</p>
+                              </ion-col>
+                              <ion-col size="1">
+                                <p>Min Amount</p>
+                              </ion-col>
+                              <ion-col size="1"
+                                *ngIf="allowFreeDelivery == true">
+                                <p>Free Delivery above Amount</p>
+                              </ion-col>
+                              <ion-col size="2">
+                                <p>Estimated Delivery time
+                                  <br>
+                                  (Format: Days:Hours:Mins)
+                                </p>
+                              </ion-col>
+                              <ion-col size="1">
+                                <p>Active</p>
+                              </ion-col>
+                              <ion-col size="1">
+                                Remove
+                              </ion-col>
+                            </ion-row>
+
+                            <ion-row
+                              *ngFor="let x of deliveryAreas; let i = index;">
+                              <ion-col size="2">
+                                <ion-input type="number"
+                                  class="form-input"
+                                  [(ngModel)]="x.lat"></ion-input>
+                              </ion-col>
+                              <ion-col size="2">
+                                <ion-input type="number"
+                                  class="form-input"
+                                  [(ngModel)]="x.lng"></ion-input>
+                              </ion-col>
+                              <ion-col size="1">
+                                <ion-input type="number"
+                                  class="form-input"
+                                  [(ngModel)]="x.radius"></ion-input>
+                              </ion-col>
+                              <ion-col size="1">
+                                <ion-input type="number"
+                                  class="form-input"
+                                  [(ngModel)]="x.cost"></ion-input>
+                              </ion-col>
+                              <ion-col size="1">
+                                <ion-input type="number"
+                                  class="form-input"
+                                  [(ngModel)]="x.minAmnt"></ion-input>
+                              </ion-col>
+                              <ion-col size="1"
+                                *ngIf="allowFreeDelivery == true">
+                                <ion-input type="number"
+                                  class="form-input"
+                                  [(ngModel)]="x.freeDeliveryAmnt"></ion-input>
+                              </ion-col>
+                              <ion-col size="2">
+                                <ion-input type="text"
+                                  class="form-input"
+                                  [(ngModel)]="x.estimatedDeliveryTime"
+                                  (click)="enterEstimatedTime(i, x, 'area')"
+                                  readonly></ion-input>
+                              </ion-col>
+                              <ion-col size="1">
+                                <ion-toggle color="success"
+                                  [(ngModel)]="x.active"></ion-toggle>
+                              </ion-col>
+                              <ion-col size="1">
+                                <ion-button (click)="removeArea(i)"
+                                  color="danger"
+                                  class="btm-sml i-start remove-area-btn"
+                                  shape="round"
+                                  fill="outline">
+                                  Remove
+                                </ion-button>
+                              </ion-col>
+                            </ion-row>
+                            <br>
+                          </ion-grid>
+                        </div>
+                      </div>
+                      <div *ngSwitchCase="8">
+                        <div class="input-wrap">
+                          <ion-label>GST Percentage
+                          </ion-label>
+                          <ion-input type="number"
+                            class="form-input" [(ngModel)]="gstPerc"></ion-input>
+                        </div>
+                      </div>
+                    </ion-row>
+                  </ion-grid>
+                </ion-col>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <!-- 2nd Tab -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container"
+          style="width: 100%;">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="2">
+                <div class="statusList">
+                  <p (click)="locationType = 'states'; secondTabActiveElement = 1" [ngClass]="secondTabActiveElement === 1 ? 'tile-bg-active' : 'tile-bg-inactive'">
+                    States
+                  </p>
+                  <p (click)="locationType = 'pincodes'; secondTabActiveElement = 2" [ngClass]="secondTabActiveElement === 2 ? 'tile-bg-active' : 'tile-bg-inactive'">
+                    Pincodes
+                  </p>
+                </div>
+              </ion-col>
+              <ion-col size=8
+                style="margin-top: 8px; border-left: 1px solid lightgray;"
+                id="scroll2">
+                <ion-col>
+                  <ion-button (click)="saveLocations()"
+                    color="success">
+                    <i class="flaticon-null-20 margin-icon"></i>&nbsp;
+                    Save
+                  </ion-button>
+                </ion-col>
+                <br>
+                <ion-col>
+                  <!-- For States -->
+                  <ion-grid [hidden]="locationType == 'pincodes'">
+                    <ion-row *ngFor="let state of availableLocations.states; let i = index">
+                      <ion-col size="4">
+                        <div class="input-wrap">
+                          <ion-label>State</ion-label>
+                          <div class="form-input state-wrapper"
+                            (click)="openStateModal(i)">
+                            <div *ngIf="state.state">{{state.state}}
+                            </div>
+                            <div *ngIf="!state.state">Select State</div>
+                            <div>
+                              <i class="flaticon-null-13"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div class="input-wrap">
+                          <ion-label>Type</ion-label>
+                          <ion-select multiple class="form-input" placeholder="Select Type" (ionChange)="setStateTypes($event, i)" [(ngModel)]="state.types" [value]="state.types">
+                                <ion-select-option *ngFor="let item of newDeliveryType" value="{{item.id}}">{{item.id}}</ion-select-option>
+                          </ion-select>
+                        </div>
+                      </ion-col>
+                      <ion-col size="1" class="vertical-center">
+                        <i class="flaticon-null-19 remove-icon" (click)="removeLocation('states', i)"></i>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row class="ion-justify-content-center">
+                      <ion-button (click)="addMoreLocation('states')" fill="outline" shape="round" size="small">
+                        Add More States
+                      </ion-button>
+                    </ion-row>
+                  </ion-grid>
+                  <!-- For Pincodes -->
+                  <ion-grid [hidden]="locationType == 'states'">
+                    <ion-row *ngFor="let pincode of availableLocations.pincodes; let i = index">
+                      <ion-col size="4">
+                        <div class="input-wrap">
+                          <ion-label>Pincode</ion-label>
+                          <ion-input type="text" class="form-input" [(ngModel)]="pincode.pincode"></ion-input>
+                        </div>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div class="input-wrap">
+                          <ion-label>Type</ion-label>
+                          <ion-select placeholder="Select Type" multiple [(ngModel)]="pincode.types">
+                            <ng-container *ngFor="let item of newDeliveryType">
+                              <ion-select-option value="{{item.id}}">{{item.id}}</ion-select-option>
+                            </ng-container>
+                          </ion-select>
+                        </div>
+                      </ion-col>
+                      <ion-col size="1" class="vertical-center">
+                        <i class="flaticon-null-19 remove-icon" (click)="removeLocation('pincodes', i)"></i>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row class="ion-justify-content-center">
+                      <ion-button (click)="addMoreLocation('pincodes')" fill="outline" shape="round" size="small">
+                        Add More Pincodes
+                      </ion-button>
+                    </ion-row>
+                  </ion-grid>
+                </ion-col>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+  </super-tabs-container>
+
+</super-tabs>

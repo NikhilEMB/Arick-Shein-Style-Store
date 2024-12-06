@@ -1,0 +1,230 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>BroadCast Message</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="solid"
+      color="secondary">
+      <span class="icon"
+        slot="start">
+        <i class="flaticon-null"
+          slot="start"></i>
+        <span class="count">5</span>
+      </span>
+    </ion-button>
+    <ion-button fill="solid"
+      color="secondary">
+      <span class="icon"
+        slot="start">
+        <i class="flaticon-shopping-bag"
+          slot="start"></i>
+        <span class="count">2</span>
+      </span>
+    </ion-button>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="main-container ion-text-center"
+    style="width: 100%">
+    <ion-grid style="margin-top: 10px">
+      <ion-row>
+        <ion-col style="height: 80vh;overflow-y: auto;">
+          <ion-grid class="left-align">
+            <ion-row>
+              <ion-col size="12">
+                <ion-text color="danger">
+                  <p>Note: You can send Broadcast Message only once in
+                    {{broadcastHrs}} Hour(s). Broadcast message will be sent
+                    only to active users (users who still have app on their
+                    phone).
+                    Broadcast Message won’t be sent to users who have deleted
+                    app.</p>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <ion-label>Notification Title (Only 65 Characters will be
+                    shown in Notification Title)</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="msg.title"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <ion-label>Broadcast Message (only first 240 characters will
+                    be displayed in notification without image and only 65
+                    characters will be displayed with image)</ion-label>
+                  <ion-textarea class="form-input ion-text-left m-t-16"
+                    rows="6"
+                    [(ngModel)]="msg.message"
+                    placeholder="Type a message"></ion-textarea>
+                </div>
+              </ion-col>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <ion-label>Broadcast Image</ion-label>
+                  <ion-text color="danger">
+                    <p>Image size for best view : 1024 px x 512 px</p>
+                  </ion-text>
+                  <div class="upload-btn-wrapper"
+                    style="display: block;margin-top: 12px;">
+                    <button class="upload-btn btn-1 i-start"> <i
+                        class="flaticon-null-16"></i>upload</button>
+                    <input type="file"
+                      name="myfile"
+                      (change)="uploadImage($event.target.files)"
+                      multiple />
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <div class="img-container">
+            <div *ngIf="imageResponse.length !== 0">
+              <div class="img-wrap"
+                *ngFor="let img of imageResponse; let i = index">
+                <img class="category-img"
+                  [src]="img.url" />
+                <div class="overlay">
+                  <ion-button class="btn-2"
+                    shape="round"
+                    color="danger"
+                    fill="clear"
+                    (click)="removeImage(i)">
+                    <ion-icon name="trash"
+                      slot="icon-only"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ion-grid>
+            <ion-row class="m-t-26">
+              <ion-col size="12">
+                <div class="assign-delivery">
+                  <!-- <div style="display: flex;align-items: center;">
+                    <p>Select Groups</p>
+                  </div>
+                  <br> -->
+                  <ion-list *ngIf="groups">
+                    <ion-item lines="none" class="border">
+                      <ion-label>Select Groups</ion-label>
+                      <ion-select [(ngModel)]="msg.groups" multiple placeholder="Select Groups">
+                        <ng-container *ngFor="let group of groups">
+                          <ion-select-option [value]="group.id">{{group.name}}
+                          </ion-select-option>
+                        </ng-container>
+                      </ion-select>
+                    </ion-item>
+                  </ion-list>
+                  <ion-text color="danger t-a-l">
+                    <p>Note: You can broadcast message upto 10 Groups.</p>
+                  </ion-text>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row class="m-t-26">
+              <ion-col size="12">
+                <ion-text color="danger">
+                  <p class="left-align">Note: Broadcast Message Linking will
+                    work only on app version 1.0.50 and above. (1.0.50 will be
+                    released in June, 2021)</p>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <p class="left-align">Notification Linking</p>
+                <ion-list>
+                  <ion-radio-group [value]="bannerData.link.type">
+                    <ion-item class="bs-links"
+                      *ngFor="let link of linkTypes; let i=index;"
+                      lines="none"
+                      (click)="selectLinkType(i)">
+                      <ion-radio slot="start"
+                        [value]="link"></ion-radio>
+                      <ion-label *ngIf="link === 'subcategory'">
+                        Subcategory : <ng-container
+                          *ngIf="(link === bannerData.link.type) ">
+                          {{bannerData.link.name}}</ng-container>
+                      </ion-label>
+                      <ion-label *ngIf="link != 'subcategory'">
+                        {{link}} : <ng-container
+                          *ngIf="(link === bannerData.link.type) ">
+                          {{bannerData.link.name}}</ng-container>
+                      </ion-label>
+                    </ion-item>
+                  </ion-radio-group>
+
+                </ion-list>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <ion-button class="btn-1"
+            shape="round"
+            (click)="sendMessage()">
+            <i class="flaticon-null-15"></i>&nbsp;&nbsp;
+            Send BroadCast Message
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <div
+            style="position: absolute;text-align: center;z-index: 999;width: 100%;background: white;font-weight: bold;font-size: 16px">
+            <p style="font-size: 16px;">Broadcast Message History</p>
+          </div>
+          <br>
+          <div style="height: 80vh;overflow-y: auto;">
+            <div *ngFor="let message of allMessages; let i=index"
+              style="text-align: left; padding: 10px; border: 1px solid lightgray;margin-bottom: 10px;">
+              <p style="text-align: center;font-size: 12px;">Broadcasted on
+                {{getDateTimeFormat(message.createdAt.toDate())}}</p>
+              <br>
+              <div
+                style="display: flex;align-content: center;justify-content: space-between;align-items: center;">
+                <div>
+                  <p *ngIf="message.title">
+                    <strong>Title</strong>&nbsp;:&nbsp;<span>{{message.title}}</span>
+                  </p>
+                  <p *ngIf="message.message">
+                    <strong>Message</strong>&nbsp;:&nbsp;<span>{{message.message}}</span>
+                  </p>
+                </div>
+                <div class="img-container"
+                  *ngIf="message.images.length !== 0">
+                  <div>
+                    <img class="category-img"
+                      [src]="message.images[0].url"
+                      width="150"
+                      (click)="imageZoom(message)" />
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div style="text-align: center;margin: 0% auto;">
+                <ion-button fill="outline"
+                  shape="round"
+                  size="small"
+                  class="add-btn"
+                  (click)="sendMessageAgain(message)"
+                  color="dark">
+                  Send Again
+                </ion-button>
+              </div>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

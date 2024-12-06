@@ -1,0 +1,91 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Add Filter</ion-title>
+  </ion-toolbar>
+</ion-header> 
+
+<ion-content>
+  <div class="main-container">
+    <br>
+    <div class="toggle">
+        <p>Active</p>&nbsp;&nbsp;&nbsp;
+        <div class="toggle-btn">
+          <label class="switch">
+            <input type="checkbox" (click)="toggleActive()" [checked]="filter.active">
+            <span class="slider round"></span>
+          </label>
+        </div>
+    </div>
+    <br>
+    <div class="data-field">
+      <div class="data-field-txt">
+        Name
+      </div>
+      <div>
+        <ion-input type="text" [(ngModel)]="filter.name" class="form-input"></ion-input>
+      </div>
+    </div>
+    <br>
+  <div class="data-field">
+    <div class="data-field-txt">
+      Values
+    </div>
+    <div>
+      <ion-input type="text" [(ngModel)]="value" class="form-input"></ion-input>
+      <br>
+      <ion-button (click)="addFilter()" fill="outline" shape="round" size="small" [disabled]="!value">
+        Add
+      </ion-button>
+    </div>
+  </div>
+  <br>
+  <div class="dataTable">
+      <div *ngIf="filter.values.length">
+        <ion-grid class="ion-no-padding data-table ion-text-center">
+          <ion-row>
+            <ion-col>Values</ion-col>
+            <ion-col>Remove</ion-col>
+          </ion-row>
+          <ion-row *ngFor="let filterValue of filter.values; let i=index;">
+            <ion-col>
+              {{filterValue}}
+            </ion-col>
+            <ion-col (click)="removeFilter(i)">
+              <i class="flaticon-null-17"></i>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+  </div>
+  <br>
+  <div class="data-field">
+    <div class="data-field-txt">
+      Link Categories
+    </div>
+    <div class="border content-alignment f-s-14 c-b-link m-t-10" (click)="onClickAdd('categories')">
+      <ion-text>{{getLinkedLength('categories')}} Categories Linked</ion-text>
+      &nbsp;&nbsp;<i class="flaticon-null-5"></i>
+    </div>
+  </div>
+  <br>
+  <div class="data-field">
+    <div class="data-field-txt">
+      Link Brands
+    </div>
+    <div class="border content-alignment f-s-14 c-b-link m-t-10" (click)="onClickAdd('brands')">
+      <ion-text>{{getLinkedLength('brands')}} Brands Linked</ion-text>
+      &nbsp;&nbsp;<i class="flaticon-null-5"></i>
+    </div>
+  </div>
+  <br><br>
+  <ion-row class="ion-justify-content-center">
+    <ion-button (click)="saveFilter()" fill="outline" shape="round" >
+      Save
+    </ion-button>
+  </ion-row>
+  </div>
+</ion-content>

@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>User Cart Details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="!showLoading && cartItems?.length">
+  <ion-row style="text-align: center;font-weight: 500;padding-block: 10px 15px;">
+    <ion-col>
+      <p>Image</p>
+    </ion-col>
+    <ion-col>
+      <p>Name</p>
+    </ion-col>
+    <ion-col>
+      <p>Quantity</p>
+    </ion-col> 
+    <ion-col>
+      <p>Variant</p>
+    </ion-col>
+    <ion-col>
+      <p>Color</p>
+    </ion-col>
+    <ion-col>
+      <p>Price</p>
+    </ion-col>             
+    <ion-col>
+      <p>Total Price</p>
+    </ion-col>             
+  </ion-row>
+    <div *ngFor='let product of cartItems'>
+      <ion-row style="text-align: center;display: flex;align-items: center;">
+        <ion-col>
+          <img class="loading" *ngIf="product.img && !product.img.thumb && product.img.url" src="{{product.img.url}}" height="35">
+          <img class="loading" *ngIf="product.img && product.img.thumb" src="{{product.img.thumb}}" height="35">
+          <img *ngIf="!product.img" src="assets/img/placeholder-img.jpg" height="35">
+        </ion-col>
+        <ion-col>
+          <p>{{product.name}}</p>
+        </ion-col>
+        <ion-col>
+          <p>{{product.quantity}}</p>
+        </ion-col>
+        <ion-col>
+          <p>{{product.pack ? product.pack?.variantType : '--'}}
+            {{product.pack ? '('+ product.pack?.weight +')' : ''}}
+          </p>
+        </ion-col> 
+        <ion-col>
+          <p>{{product.color ? product.color?.name : '--'}}</p>
+        </ion-col> 
+        <ion-col>
+          <p>{{product.price}}</p>
+        </ion-col>                
+        <ion-col>
+          <p>{{getTotalAmount(product).totalAmount}}</p>
+        </ion-col>                
+      </ion-row>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!showLoading && cartItems?.length<1">
+    <p style="text-align: center;margin-block: 20px;">Cart is empty!</p>
+  </ng-container>
+</ion-content>
+  

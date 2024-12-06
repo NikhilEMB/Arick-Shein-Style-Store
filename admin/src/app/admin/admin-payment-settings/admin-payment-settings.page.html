@@ -1,0 +1,683 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start"
+      class="menu-btn">
+      <ion-icon slot="icon-only"
+        name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Payment Setting</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="solid"
+      color="secondary">
+      <span class="icon"
+        slot="start">
+        <i class="flaticon-null"
+          slot="start"></i>
+        <span class="count">5</span>
+      </span>
+    </ion-button>
+    <ion-button fill="solid"
+      color="secondary">
+      <span class="icon"
+        slot="start">
+        <i class="flaticon-shopping-bag"
+          slot="start"></i>
+        <span class="count">2</span>
+      </span>
+    </ion-button>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="main-container"
+    style="width: 100%;">
+    <ion-grid>
+      <ion-row>
+        <ion-col size=2
+          id="scroll1">
+          <div class="statusList">
+            <p [id]="i"
+              *ngFor='let item of sidemenu; let i=index'
+              (click)='changeComponent(i)'>{{item}}</p>
+          </div>
+        </ion-col>
+        <ion-col size=10
+          style="margin-top: 8px; border-left: 1px solid lightgray;"
+          id="scroll2">
+          <ion-col>
+            <ion-button (click)="onClickSavePaymentSettings()"
+              color="success">
+              <i class="flaticon-null-20 margin-icon"></i>
+              Save
+            </ion-button>
+          </ion-col>
+          <br>
+          <ion-col>
+            <div class="spinner"
+              *ngIf="showLoader; else showPaymentSettingsData">
+              <ion-spinner color="primary"></ion-spinner>
+            </div>
+            <ng-template #showPaymentSettingsData>
+              <br>
+              <ion-grid [ngSwitch]="selectedId">
+                <ion-row>
+                  <ion-col size="12"
+                    *ngSwitchCase="0">
+                    <div class="input-wrap">
+                      <div class="flex-label">
+                        <ion-label>Auto Confirm order</ion-label>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox"
+                              (click)="autoConfirmOrderToggle()"
+                              [checked]="autoConfirmOrder == true">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </ion-col>
+                  <ion-col size="12"
+                    *ngSwitchCase="1">
+                    <div class="input-wrap">
+                      <div class="flex-label">
+                        <ion-label>Generate Invoice</ion-label>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox"
+                              (click)="generateInvoiceToggle()"
+                              [checked]="generateInvoice == true">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </ion-col>
+                  <div *ngSwitchCase="2">
+                    <ion-col size="6"
+                      *ngSwitchCase="2">
+                      <div class="input-wrap">
+                        <div class="flex-label">
+                          <ion-label>GST Applicable</ion-label>&nbsp;&nbsp;
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input type="checkbox"
+                                (click)="gstToggle()"
+                                [checked]="isGstApplicable">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6"
+                      *ngIf="isGstApplicable">
+                      <div class="input-wrap">
+                        <ion-label>GST No.</ion-label>
+                        <ion-input type="tel"
+                          class="form-input"
+                          [(ngModel)]="gstNo"></ion-input>
+                      </div>
+                    </ion-col>
+                  </div>
+                  <ion-col size="12"
+                    *ngSwitchCase="3">
+                    <div class="input-wrap">
+                      <ion-label>{{taxName}}</ion-label>
+                      <ion-input type="tel"
+                        class="form-input"
+                        [(ngModel)]="panNo"></ion-input>
+                    </div>
+                  </ion-col>
+                  <ion-col size="6"
+                    *ngSwitchCase="4">
+                    <div class="input-wrap">
+                      <ion-label>Minimum order amount ({{currencyCode}})
+                      </ion-label>
+                      <ion-input type="tel"
+                        class="form-input"
+                        [(ngModel)]="minOrderAmount"></ion-input>
+                    </div>
+                  </ion-col>
+                  <ion-col size="6"
+                    *ngSwitchCase="5">
+                    <div class="input-wrap">
+                      <ion-label>Maximum order amount ({{currencyCode}})
+                      </ion-label>
+                      <ion-input type="tel"
+                        class="form-input"
+                        [(ngModel)]="maxOrderAmount"></ion-input>
+                    </div>
+                  </ion-col>
+                  <ion-col size="12"
+                    *ngSwitchCase="6">
+                    <div class="input-wrap">
+                      <div class="flex-label">
+                        <ion-label>Allow Cash on Delivery</ion-label>
+                        &nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox"
+                              (click)="codToggleChange()"
+                              [checked]="isCod">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </ion-col>
+                  <ion-row *ngSwitchCase="7">
+                    <ion-col size="12">
+                      <div class="input-wrap">
+                        <ion-label>Max % of Cash On Delivery Allowed</ion-label>
+                        <ion-input type="number"
+                          class="form-input"
+                          [(ngModel)]="codPercentage"></ion-input>
+                      </div>
+                    </ion-col>
+                    <ion-col size="12">
+                      <div class="input-wrap">
+                        <ion-label>% of Online Payment</ion-label>
+                        <ion-input type="number"
+                          class="form-input"
+                          value="{{100-codPercentage}}"
+                          readonly></ion-input>
+                      </div>
+                    </ion-col>
+
+                    <!-- TODO - COD -->
+                    <ion-col size="12">
+                      <div class="input-wrap">
+                        <div class="flex-space-between">
+                          <div>
+                            <ion-label>Extra Charges</ion-label>
+                          </div>
+                        </div>
+                        <br />
+                        <div class="flex-label">
+                          <p>Flat</p>&nbsp;&nbsp;
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input color="primary"
+                                type="checkbox"
+                                (click)="extraChargesType($event)"
+                                [checked]="extraChargeType != 'flat'">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>&nbsp;&nbsp;
+                          <p>Percentage ( % )</p>&nbsp;&nbsp;
+                        </div>
+                        <div class="extra-charges">
+
+                          <div class="flex-space-between">
+                            <div>
+                              <ion-label style="margin-right: 20px;">Charge Name
+                              </ion-label>
+                            </div>
+                            <ion-input class="form-input"
+                              [(ngModel)]="chargeName"
+                              type="text"
+                              style="max-width: 10rem; margin-right: 20px;">
+                            </ion-input>
+                          </div>
+
+                          <div class="flex-space-between">
+                            <div>
+                              <ion-label style="margin-right: 20px;">Charges
+                                {{charCOD}}</ion-label>
+                            </div>
+                            <ion-input class="form-input"
+                              [(ngModel)]="extraCharges"
+                              type="number"
+                              style="max-width: 10rem; margin-right: 20px;">
+                            </ion-input>
+                          </div>
+
+                          <div *ngIf="toggleStateCOD == 'perc'">
+                            <div class="flex-space-between">
+                              <div>
+                                <ion-label style="margin-right: 20px;">Max
+                                  Amount
+                                </ion-label>
+                              </div>
+                              <ion-input class="form-input"
+                                [(ngModel)]="maxCharge"
+                                type="number"
+                                style="max-width: 10rem; margin-right: 20px;">
+                              </ion-input>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </ion-col>
+
+                  </ion-row>
+                  <ion-col size="12"
+                    *ngSwitchCase="8">
+                    <div class="input-wrap">
+                      <div class="flex-space-between">
+
+                        <div class="flex-label">
+                          <ion-label>Enable RazorPay</ion-label>&nbsp;&nbsp;
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input type="checkbox"
+                                (click)="razorpayToggleChange()"
+                                [checked]="razorpayActive == true">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <br />
+                      <div>
+                        <ion-label>RazorPay ID</ion-label>
+                        <ion-input type="text"
+                          class="form-input"
+                          [(ngModel)]="razorpayId"></ion-input>
+                      </div>
+                      <br />
+                      <div>
+                        <ion-label>RazorPay Key Secret</ion-label>
+                        <ion-input type="text"
+                          class="form-input"
+                          [(ngModel)]="razorpayKeySecret"></ion-input>
+                      </div>
+                      <br />
+                      <div>
+                        <div class="flex-space-between">
+                          <div class="flex-label">
+                            <ion-label>Enable Instant Refund</ion-label>&nbsp;&nbsp;
+                            <div class="toggle-btn">
+                            <label class="switch">
+                              <input type="checkbox"
+                                (click)="razorpayInstantRefundToggleChange()"
+                                [checked]="razorpayInstantRefund == true">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                          </div>
+                        </div>
+                      </div>
+                      <br />
+                      <div>
+                        <p style="color: red;">
+                          *** Razorpay charges a small transaction fee to process Instant refunds. The fees is deducted directly from your account balance and reflects under the <a style="color: blue" href="https://dashboard.razorpay.com/app/payments/" target="_blank">Razorpay Dashboard Refunds tab</a>.
+                           In cases where the Instant refund fails and the refund takes 5-7 working days, the levied fee is credited back to your account balance. The fee break-up is shown in the end-of-the-month invoice generated by Razorpay. You can view and download the details from the Instant Refunds Reports from the Razorpay Dashboard.
+                        </p>
+                      </div>
+                      <br />
+
+                      <!-- TODO - RAZORPAY -->
+                      <div class="input-wrap">
+                        <div class="flex-space-between">
+                          <div>
+                            <ion-label>Extra Charges</ion-label>
+                          </div>
+                        </div>
+                        <br />
+                        <div class="flex-label">
+                          <p>Flat</p>&nbsp;&nbsp;
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input color="primary"
+                                type="checkbox"
+                                (click)="extraChargesTypeRazorpay($event)"
+                                [checked]="extraChargeTypeRazorpay != 'flat'">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>&nbsp;&nbsp;
+                          <p>Percentage ( % )</p>&nbsp;&nbsp;
+                        </div>
+                        <div class="extra-charges">
+
+                          <div class="flex-space-between">
+                            <div>
+                              <ion-label style="margin-right: 20px;">Charge Name
+                              </ion-label>
+                            </div>
+                            <ion-input class="form-input"
+                              [(ngModel)]="chargeNameRazorpay"
+                              type="text"
+                              style="max-width: 10rem; margin-right: 20px;">
+                            </ion-input>
+                          </div>
+
+                          <div class="flex-space-between">
+                            <div>
+                              <ion-label style="margin-right: 20px;">Charges
+                                {{charRZP}}</ion-label>
+                            </div>
+                            <ion-input class="form-input"
+                              [(ngModel)]="extraChargesRazorpay"
+                              type="number"
+                              style="max-width: 10rem; margin-right: 20px;">
+                            </ion-input>
+                          </div>
+
+                          <div *ngIf="toggleStateRZP == 'perc'">
+                            <div class="flex-space-between">
+                              <div>
+                                <ion-label style="margin-right: 20px;">Max
+                                  Amount
+                                </ion-label>
+                              </div>
+                              <ion-input class="form-input"
+                                [(ngModel)]="maxChargeRazorpay"
+                                type="number"
+                                style="max-width: 10rem; margin-right: 20px;">
+                              </ion-input>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+
+                    </div>
+                  </ion-col>
+                  <ion-col size="12"
+                    *ngSwitchCase="9">
+                    <div class="input-wrap">
+                      <div class="flex-space-between">
+
+                        <div class="flex-label">
+                          <ion-label>Enable Paytm</ion-label>&nbsp;&nbsp;&nbsp;
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input type="checkbox"
+                                (click)="paytmToggleChange()"
+                                [checked]="paytmActive">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <br />
+                      <div>
+                        <ion-label>Paytm ID</ion-label>
+                        <ion-input type="text"
+                          class="form-input"
+                          [(ngModel)]="paytmMerchantId"></ion-input>
+                      </div>
+                      <br />
+                      <ion-text color="danger">
+                        <p>Please contact support team after updating this, it
+                          will not work in real time</p>
+                      </ion-text>
+                      <br />
+                      <div>
+                        <ion-label>Paytm Key Secret</ion-label>
+                        <ion-input type="text"
+                          class="form-input"
+                          [(ngModel)]="paytmKey"></ion-input>
+                      </div>
+                      <br />
+                      <ion-text color="danger">
+                        <p>Please contact support team after updating this, it
+                          will not work in real time</p>
+                      </ion-text>
+                      <br />
+
+                      <!-- TODO - PAYTM -->
+                      <div class="input-wrap">
+                        <div class="flex-space-between">
+                          <div>
+                            <ion-label>Extra Charges</ion-label>
+                          </div>
+                        </div>
+                        <br />
+                        <div class="flex-label">
+                          <p>Flat</p>&nbsp;&nbsp;
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input color="primary"
+                                type="checkbox"
+                                (click)="extraChargesTypePaytm($event)"
+                                [checked]="extraChargeTypePaytm != 'flat'">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>&nbsp;&nbsp;
+                          <p>Percentage ( % )</p>&nbsp;&nbsp;
+                        </div>
+                        <div class="extra-charges">
+
+                          <div class="flex-space-between">
+                            <div>
+                              <ion-label style="margin-right: 20px;">Charge Name
+                              </ion-label>
+                            </div>
+                            <ion-input class="form-input"
+                              [(ngModel)]="chargeNamePaytm"
+                              type="text"
+                              style="max-width: 10rem; margin-right: 20px;">
+                            </ion-input>
+                          </div>
+
+                          <div class="flex-space-between">
+                            <div>
+                              <ion-label style="margin-right: 20px;">Charges
+                                {{charPT}}</ion-label>
+                            </div>
+                            <ion-input class="form-input"
+                              [(ngModel)]="extraChargesPaytm"
+                              type="number"
+                              style="max-width: 10rem; margin-right: 20px;">
+                            </ion-input>
+                          </div>
+
+                          <div *ngIf="toggleStatePT == 'perc'">
+                            <div class="flex-space-between">
+                              <div>
+                                <ion-label style="margin-right: 20px;">Max
+                                  Amount
+                                </ion-label>
+                              </div>
+                              <ion-input class="form-input"
+                                [(ngModel)]="maxChargePaytm"
+                                type="number"
+                                style="max-width: 10rem; margin-right: 20px;">
+                              </ion-input>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+
+                    </div>
+                  </ion-col>
+                  <ion-row *ngSwitchCase="10">
+                    <ion-col size="4">
+                      <div class="img-container"
+                        (click)="openGatewaySettings('ccAvenue')">
+                        <img
+                          src="../../../assets/img/payment-gateways/ccavenue.png"
+                          alt="CCAvenue Payment">
+                      </div>
+                    </ion-col>
+                    <ion-col size="4">
+                      <div class="img-container"
+                        (click)="openGatewaySettings('stripe')">
+                        <img
+                          src="../../../assets/img/payment-gateways/stripe.png"
+                          alt="Stripe Payment">
+                      </div>
+                    </ion-col>
+                    <ion-col size="4">
+                      <div class="img-container"
+                        (click)="openGatewaySettings('paypal')">
+                        <img
+                          src="../../../assets/img/payment-gateways/paypal.png"
+                          alt="Paypal Payment">
+                      </div>
+                    </ion-col>
+                    <ion-col size="4">
+                      <div class="img-container"
+                        (click)="openGatewaySettings('cashfree')">
+                        <img
+                          src="../../../assets/img/payment-gateways/cashfree.jpg"
+                          alt="CashFree Payment">
+                      </div>
+                    </ion-col>
+                    <!-- <ion-col size="4">
+                        <div class="img-container" (click)="openGatewaySettings('payU')">
+                          <img
+                            src="../../../assets/img/payment-gateways/payU.png"
+                            alt="PayU Payment">
+                        </div>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div class="img-container" (click)="openGatewaySettings('paykun')">
+                          <img src="../../../assets/img/payment-gateways/paykun.png" alt="Paykun Payment">
+                        </div>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div class="img-container" (click)="openGatewaySettings('atom')">
+                          <img src="../../../assets/img/payment-gateways/atom.png" alt="atom Payment">
+                        </div>
+                      </ion-col> -->
+                  </ion-row>
+                  <ion-col size="12"
+                    *ngSwitchCase="11">
+                    <div class="flex-label">
+                      <ion-label>UPI Payment With Screenshot (Save Transaction
+                        Costs)</ion-label>&nbsp;&nbsp;
+                      <div class="toggle-btn">
+                        <label class="switch">
+                          <input type="checkbox"
+                            (click)="upiManualToggle()"
+                            [checked]="upiManual.active">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </div>
+                    <div *ngIf="upiManual.active">
+                      <p>Payment Details</p>
+                      <ion-textarea type="text"
+                        rows="4"
+                        class="input-border"
+                        [(ngModel)]="upiManual.upiId">
+                      </ion-textarea>
+                      <br>
+                      <p>QR Code</p>
+                      <div>
+                        <!-- new images-->
+                        <div class="dropzone"
+                          appDropzone
+                          (dropped)="onDrop($event)">
+                          <h3>Drag and Drop a File</h3>
+
+                          <div class="file">
+                            <input class="file-input"
+                              multiple
+                              type="file"
+                              (change)="onDrop($event.target.files)">
+                          </div>
+                        </div>
+                        <div class="ps-qr"
+                          *ngIf="upiManual.qrCode">
+                          <h3>Uploaded</h3>
+                          <div class="ps-qr-remove-btn"
+                            (click)="removeImage()">
+                            <i class="flaticon-null-17"></i>
+                          </div>
+                          <img src="{{upiManual.qrCode}}" />
+                        </div>
+                      </div>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <ion-row *ngSwitchCase="12">
+                  <ion-row>
+                    <ion-col>
+                      <div class="input-wrap">
+                        <div class="flex-label">
+                          <ion-label>Custom Payment option</ion-label>
+                          <ion-toggle [(ngModel)]="custom.active"></ion-toggle>
+                        </div>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row *ngIf="custom.active">
+                    <ion-col size="12">
+                      <div class="input-wrap">
+                        <ion-label>
+                          Payment Option Name
+                        </ion-label>
+                        <ion-input type="text"
+                          class="form-input"
+                          placeholder="Eg - Pay By Cheque"
+                          [(ngModel)]="custom.name"></ion-input>
+                      </div>
+                    </ion-col>
+                    <ion-col size="12">
+                      <div class="input-wrap">
+                        <ion-label>
+                          Payment Details
+                        </ion-label>
+                        <ion-input type="text"
+                          class="form-input"
+                          [(ngModel)]="custom.details"></ion-input>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div class="input-wrap">
+                        <div class="flex-label">
+                          <ion-label>Make Text Details mandatory from customer
+                          </ion-label>
+                          <ion-toggle [(ngModel)]="custom.textMandatory">
+                          </ion-toggle>
+                        </div>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div class="input-wrap">
+                        <div class="flex-label">
+                          <ion-label>Make Image mandatory from customer
+                          </ion-label>
+                          <ion-toggle [(ngModel)]="custom.imageMandatory">
+                          </ion-toggle>
+                        </div>
+                      </div>
+                    </ion-col>
+                    <ion-col size="12">
+                      <div>
+                        <p>Add Image</p>
+                        <div>
+                          <!-- new images-->
+                          <div class="dropzone"
+                            appDropzone
+                            (dropped)="onDrop($event, 'customPayment')">
+                            <h3>Drag and Drop a File</h3>
+                            <div class="file">
+                              <input class="file-input"
+                                type="file"
+                                (change)="onDrop($event.target.files, 'customPayment')"
+                                accept="image/*">
+                            </div>
+                          </div>
+                          <div class="ps-qr"
+                            *ngIf="custom.image.url">
+                            <h3>Uploaded</h3>
+                            <div class="ps-qr-remove-btn"
+                              (click)="removeImage('customPayment')">
+                              <i class="flaticon-null-17"></i>
+                            </div>
+                            <img src="{{custom.image.url}}" />
+                          </div>
+                        </div>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-row>
+              </ion-grid>
+            </ng-template>
+          </ion-col>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="shop-categories" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center>{{categoryName}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <div *ngIf="showLoader; else subcategoriesLoaded;" class="spinner">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <ng-template #subcategoriesLoaded>
+    <div class="no-data" *ngIf="showNoSubcategories; else showSubcategories" text-center>
+      <img src="assets/img/no-category.png" alt="">
+      <h6>No subcategories</h6>
+    </div>
+    <ng-template #showSubcategories>
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col size-xs="6" size-sm="4" size-md="4" size-lg="3" *ngFor="let item of subcategories; let i = index"
+            class="ion-no-padding">
+            <div class="grid-border">
+              <div>
+                <ion-thumbnail (click)="onClickSubcategory(item)">
+                  <img class="loading" *ngIf="item.image && item.image.mob" src="{{item.image.mob}}">
+                  <img class="loading" *ngIf="item.image && !item.image.mob && item.image.url" src="{{item.image.url}}">
+                </ion-thumbnail>
+              </div>
+              <div>
+                <p class="product-name">{{item.name.trim()}}</p>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+    
+    
+  </ng-template>
+  
+  
+</ion-content>

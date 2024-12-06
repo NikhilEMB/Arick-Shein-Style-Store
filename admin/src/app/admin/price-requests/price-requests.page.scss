@@ -1,0 +1,80 @@
+.bottom-border {
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .search-product {
+    border: 1px solid #ccc;
+    border-radius: 25px;
+  }
+  
+  .margining {
+    margin-top: 10px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .message-box {
+    position: relative;
+  }
+  
+  .flaticon-null-22::before {
+    margin: 15px;
+    color: #ccc;
+  }
+  
+  ion-input {
+    --padding-bottom: 3px;
+    --padding-top: 5px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    width: 80vw
+  }
+  
+  :host {
+    .item-interactive.ion-valid {
+      --highlight-background: var(--ion-color-primary);
+    }
+  }
+
+  .spinner {
+      text-align: center;
+      margin-top: 50%;
+  }
+
+  .no-data {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    left: 50%;
+    margin-left: -65px;
+  }
+  
+  .no-data img {
+    width: 130px;
+  }
+
+  .pic-avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .grid-wrapper {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    text-align: center
+  }
+
+  .req-row {
+    background: white;
+    border-bottom: 1px solid #dedede;
+  }
+
+  .flaticon-null-23{
+    color: white;
+    font-size: 16px;
+    font-weight: bold
+  }

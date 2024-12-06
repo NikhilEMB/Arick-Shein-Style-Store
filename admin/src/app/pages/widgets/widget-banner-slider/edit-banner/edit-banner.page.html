@@ -1,0 +1,129 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button" defaultHref="homepage-setting"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center" >Banners</ion-title>
+  </ion-toolbar>  
+  <div class="header-cart-btn">
+    
+  </div>
+</ion-header>
+
+
+  <ion-content>
+    <div class="main-container" *ngIf="bannerData">
+     <ion-grid>
+       <ion-row>
+        <ion-col size="12">
+          <ion-button (click)="saveBanner()"  shape="round" *ngIf="mode == 'new'">
+            Save
+          </ion-button>
+        </ion-col>
+       </ion-row>
+     </ion-grid>
+     <div class="input-wrap" *ngIf="widgetType == 'image-banner' && vendorId == ''">
+        <ion-label>Section Name</ion-label>
+        <ion-input class="form-input" [(ngModel)]="sectionName"></ion-input>
+        <br>
+        <ion-button (click)="saveSection()">save name</ion-button>
+    </div>
+<div class="slides-wrapper" *ngIf="mode == 'edit'">
+  <p style="font-size: 15px;font-weight: bold;margin-bottom: 5px;text-align: center;">App Slides</p>
+  <div style="display: flex;justify-content: center;">
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="addNewSlide('app')">
+      <ion-icon name="add-circle" slot="start"></ion-icon>
+      Add new App Slide
+    </ion-button>
+  </div>
+  <div class="list-container">
+  <ion-reorder-group (ionItemReorder)="onReorderBanners($event)" disabled="false" class="ion-no-padding" *ngIf="slidesData.length">
+    <ion-item *ngFor="let slide of slidesData; let i=index" lines="none">
+      <div style="display: flex;justify-content: space-between;width: 60%;align-content: center;align-items: center;margin: auto;">
+      <ion-reorder>
+        <div class="flat-sort">
+          <i class="flaticon-menu"></i>
+        </div>
+      </ion-reorder>
+      <!-- <ion-spinner *ngIf="!slide.image.thumb && !slide.image.org && !slide.image.mob" name="lines-small"></ion-spinner> -->
+      <div *ngIf="slide.image">
+        <ion-img *ngIf="slide && slide.image.mob" [src]="slide.image.mob" class="previewImg"></ion-img>
+        <ion-img *ngIf="slide && !slide.image.mob && slide.image.org" [src]="slide.image.org" class="previewImg"></ion-img>
+        <ion-img *ngIf="slide && slide.image.thumb && slide.image.org && !slide.image.mob" [src]="slide.image.thumb" class="previewImg"></ion-img>
+        <ion-img *ngIf="slide && !slide.image.thumb && !slide.image.org && !slide.image.mob" src="../../../../../assets/img/img-preloader.png" class="previewImg"></ion-img>
+      </div>
+      <p *ngIf="slide.link.name!= '' ">{{slide.link.name}}</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'external'">External Link</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'contactUs'">Contact Us</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'referEarn'">Refer & Earn</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'feedback'">Feedback</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'offers'">Offers</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'membership'">Membership</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'pdf'">PDF File</p>
+      <div>
+        <ion-button class="action-btn" fill="clear" (click)="editSlide(slide.id, 'app', slide)">
+          <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+        </ion-button>
+        <ion-button class="action-btn" fill="clear" (click)="deleteSlideConfirm(slide.id, i, 'app')">
+          <i class="flaticon-null-21" slot="icon-only"></i>
+        </ion-button>
+        <ion-toggle [checked]="slide.active" (ionChange)="changeSlideStatus($event, slide.id, 'app')" style="margin-bottom: -20px;"></ion-toggle>
+      </div>
+      </div>
+    </ion-item>
+  </ion-reorder-group>
+  </div>
+  <div class="divider"></div>
+  <p style="font-size: 15px;font-weight: bold;margin-bottom: 5px;text-align: center;">Web Slides</p>
+  <div style="display: flex;justify-content: center;">
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="addNewSlide('web')">
+      <ion-icon name="add-circle" slot="start"></ion-icon>
+      Add new Web Slide
+    </ion-button>
+  </div>
+  <div class="list-container">
+    <ion-reorder-group (ionItemReorder)="onReorderWebBanners($event)" disabled="false" class="ion-no-padding" *ngIf="webSlidesData.length">
+      <ion-item *ngFor="let slide of webSlidesData; let i=index" class="ion-no-padding" lines="none">
+        <div style="display: flex;justify-content: space-between;width: 60%;align-content: center;align-items: center;margin: auto">
+        <ion-reorder>
+          <div class="flat-sort">
+            <i class="flaticon-menu"></i>
+          </div>
+        </ion-reorder>
+        <div slot="start" *ngIf="slide.image">
+          <ion-img *ngIf="slide && slide.image.mob" [src]="slide.image.mob" class="previewImg"></ion-img>
+          <ion-img *ngIf="slide && !slide.image.mob && slide.image.org" [src]="slide.image.org" class="previewImg"></ion-img>
+          <ion-img *ngIf="slide && slide.image.thumb && slide.image.org && !slide.image.mob" [src]="slide.image.thumb" class="previewImg"></ion-img>
+          <ion-img *ngIf="slide && !slide.image.thumb && !slide.image.org && !slide.image.mob" src="../../../../../assets/img/img-preloader.png" class="previewImg"></ion-img>
+        </div>
+        <p *ngIf="slide.link.name!= '' ">{{slide.link.name}}</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'external'">External Link</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'contactUs'">Contact Us</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'referEarn'">Refer & Earn</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'feedback'">Feedback</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'offers'">Offers</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'membership'">Membership</p>
+      <p *ngIf="slide.link.name == '' && slide.link.type == 'pdf'">PDF File</p>
+        <div>
+          <ion-button class="action-btn" fill="clear" (click)="editSlide(slide.id,'web', slide)">
+            <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+          </ion-button>
+          <ion-button class="action-btn" fill="clear" (click)="deleteSlideConfirm(slide.id, i, 'web')">
+            <i class="flaticon-null-21" slot="icon-only"></i>
+          </ion-button>
+          <ion-toggle [checked]="slide.active" (ionChange)="changeSlideStatus($event, slide.id, 'web')" style="margin-bottom: -20px;"></ion-toggle>
+        </div>
+        </div>
+      </ion-item>
+    </ion-reorder-group>
+  </div>
+</div>
+ 
+  </div>
+  </ion-content>
+  
+  <!-- <ion-footer style="text-align: center;padding: 1rem;">
+    <ion-button (click)="saveSection()">save banner</ion-button>
+  </ion-footer> -->
+  

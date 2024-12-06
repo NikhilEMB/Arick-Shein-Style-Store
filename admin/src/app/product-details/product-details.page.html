@@ -1,0 +1,136 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="shop" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center style="margin-left: 48px;">product details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToCart()">
+        <i class="flaticon-shopping-cart"></i>
+        <span class="cart-badge" *ngIf="cartLength !== 0">{{cartLength}}</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+  <div *ngIf="showLoader" class="spinner">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <div *ngIf="data && !showLoader">
+    <ion-slides pager="true" [options]="slideOpts" loop="true" *ngIf="data.images.length !== 0">
+      <ion-slide *ngFor="let img of data.images; let i = index;">
+        <div class="product-images"
+          [ngStyle]="{'background': 'url(' + img.mob + ') no-repeat center', 'background-size': 'contain'}"
+          (click)="imageZoom(data.images, i)"></div>
+      </ion-slide>
+    </ion-slides>
+    <div *ngIf="data.images.length === 0" class="product-image-default"></div>
+
+  </div>
+  <ion-grid *ngIf="data && !showLoader" class="padding">
+    <div *ngIf="data.discount && data.discount !== '' && data.discount !== '0'" class="pd-off-percent">
+      {{data.discount}}% off
+    </div>
+    <div *ngIf="data.stopWhenNoQty && data.productQty === '0'" style="color: var(--ion-color-danger-shade);text-transform: uppercase;">
+      Out of Stock
+    </div>
+    <ion-row>
+      <ion-col>
+        <p class="prod-name">{{data.prodName}}</p>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-justify-content-between" *ngIf="!data.isPriceList;else showPriceList">
+      <ion-col size-xs="4" size-sm="3" size-md="3">
+        <ion-row class="ion-justify-content-start counter">
+          <ion-col size="3" class="ion-no-padding">
+            <ion-icon name="remove" (click)="decrementQuantity()" class="minus-icon"></ion-icon>
+          </ion-col>
+          <ion-col size="6" class="ion-no-padding">
+            <span class="counter-value">{{currentQuantity}}</span>
+          </ion-col>
+          <ion-col size="3" class="ion-no-padding">
+            <ion-icon name="add" (click)="incrementQuantity()" class="add-icon"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col>
+        <div *ngIf="!data.isPriceList;else showPriceList" style="text-align: end;">
+          <div *ngIf="data.discount && data.discount !== '' && data.discount !== '0'; else showOriginalPrice;">
+            <span class="discounted-prod-price">{{getDiscountedProduct(data.prodPrice, data.discount) | currency: 'INR':true:'0.0'}}</span>
+            <span class="pd-original-price"><del>{{data.prodPrice | currency: 'INR':true:'0.0'}}</del></span>
+          </div>
+          <ng-template #showOriginalPrice>
+            <div class="prod-price">
+              {{data.prodPrice * currentQuantity | currency: 'INR':true}}
+            </div>
+          </ng-template>          
+        </div>
+      </ion-col>
+    </ion-row>
+    <ng-template #showPriceList>
+      <ion-row class="ion-justify-content-between">
+        <ion-col>
+          <div class="prod-desc">
+            {{data.priceList[0].weight}}
+          </div>
+        </ion-col>
+        <ion-col>
+          <div *ngIf="data.discount && data.discount !== '' && data.discount !== '0'; else showPriceListOriginalPrice;">
+            <span class="discounted-prod-price">{{getDiscountedProduct(data.priceList[0].price, data.discount) | currency: 'INR':true:'0.0'}}</span>
+            <span class="pd-original-price"><del>{{data.priceList[0].price | currency: 'INR':true:'0.0'}}</del></span>
+          </div>
+          <ng-template #showPriceListOriginalPrice>
+            <div class="prod-price">
+              {{data.priceList[0].price | currency: 'INR':true:'0.0'}}
+            </div>
+          </ng-template>
+        </ion-col>
+      </ion-row>
+    </ng-template>
+    <ion-row>
+      <ion-col>
+        <p class="prod-desc">{{data.prodDesc}}</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<div [hidden]="data && data.stopWhenNoQty && data.productQty === '0'">
+<ion-footer class="product-details-footer" *ngIf="!showLoader && !data.isPriceList">
+  <ion-grid class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ion-col size="6" class="ion-no-padding">
+        <ion-title class="add-to-cart-btn" text-center (click)="addToCart();" *ngIf="!showGoToCart"><i
+            class="flaticon-shopping-cart"></i><span class="bottom-buttons">add to cart</span></ion-title>
+        <ion-title class="add-to-cart-btn" text-center (click)="goToCart();" *ngIf="showGoToCart"><i
+            class="flaticon-shopping-cart"></i><span class="bottom-buttons">go to cart</span></ion-title>
+      </ion-col>
+      <ion-col size="6" class="ion-no-padding">
+        <ion-title class="buy-now-btn" text-center (click)="buyNowOrder()">
+          <span class="bottom-buttons" style="margin-left: 0px;">buy now</span><i
+            class="flaticon-null-20 margin-icon"></i>
+        </ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
+
+<ion-footer class="product-details-footer" *ngIf="!showLoader && data.isPriceList && !data.stopWhenNoQty && data.productQty !== '0'">
+  <ion-grid class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ion-col size="6" class="ion-no-padding">
+        <ion-title class="add-to-cart-btn" text-center (click)="priceListAddToCart();"><i
+            class="flaticon-shopping-cart"></i><span class="bottom-buttons">add to cart</span></ion-title>
+      </ion-col>
+      <ion-col size="6" class="ion-no-padding">
+        <ion-title class="buy-now-btn" text-center (click)="openBuyNowPriceListModal()">
+          <span class="bottom-buttons" style="margin-left: 0px;">buy now</span><i
+            class="flaticon-null-20 margin-icon"></i>
+        </ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
+</div>

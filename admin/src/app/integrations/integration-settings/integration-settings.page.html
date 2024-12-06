@@ -1,0 +1,1138 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{capitalizeFirstLetter(integrationChoice)}} Settings</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <!-- POS Start -->
+    <!-- Marg Details -->
+    <ion-row *ngIf="integrationChoice === 'marg'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Marg Active</ion-label>
+            <ion-toggle [(ngModel)]="margDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="margDetails.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Marg Id</ion-label>
+            <ion-input class="form-input" [(ngModel)]="margDetails.credentials.margId"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap"
+            *ngIf="margDetails.active">
+            <ion-label>Company Code</ion-label>
+            <ion-input type="text" class="form-input" [(ngModel)]="margDetails.credentials.companyCode"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap"
+            *ngIf="margDetails.active">
+            <ion-label>Key</ion-label>
+            <ion-input type="text" class="form-input" [(ngModel)]="margDetails.credentials.key"></ion-input>
+          </div>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+    <!-- POS End -->
+
+    <!-- Delivery Starts -->
+    <!-- Shiprocket Details -->
+    <ion-row *ngIf="integrationChoice === 'shiprocket'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Shiprocket Active</ion-label>
+            <ion-toggle [(ngModel)]="shiprocketDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+        <ng-container *ngIf="shiprocketDetails.active">
+          <ion-col size="12">
+            <div class="input-wrap">
+              <div class="flex-label">
+                <ion-label>Calculate delivery charges manually</ion-label>
+                <ion-toggle [(ngModel)]="shiprocketDetails.metaData.chargesManual"></ion-toggle>
+              </div>
+            </div>
+          </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Email</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="shiprocketDetails.credentials.email"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Password</ion-label>
+            <ion-input type="text" class="form-input"
+              [(ngModel)]="shiprocketDetails.credentials.password"></ion-input>
+          </div>
+        </ion-col>
+        </ng-container>
+    </ion-row>
+
+    <!-- Shyplite Details -->
+    <ion-row *ngIf="integrationChoice === 'shyplite'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Shyplite Active</ion-label>
+            <ion-toggle [(ngModel)]="shypliteDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+        <ng-container *ngIf="shypliteDetails.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>App ID</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="shypliteDetails.credentials.appId"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Public Key</ion-label>
+            <ion-input type="text" class="form-input"
+              [(ngModel)]="shypliteDetails.credentials.key"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Private Key</ion-label>
+            <ion-input type="text" class="form-input"
+              [(ngModel)]="shypliteDetails.credentials.secret"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Seller ID</ion-label>
+            <ion-input type="text" class="form-input"
+              [(ngModel)]="shypliteDetails.credentials.sellerId"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Pickup Address ID</ion-label>
+            <ion-input type="text" class="form-input"
+              [(ngModel)]="shypliteDetails.credentials.pickupAddressId"></ion-input>
+            <ion-text class="ion-color ion-color-danger">** Pickup Address ID can be found in your Shyplite Dashboard.</ion-text><br>
+            <ion-text class="ion-color ion-color-danger">** Click on - Profile > Settings > Warehouses</ion-text><br>
+            <ion-text class="ion-color ion-color-danger">** Now select your preferred Address ID from the list(s).</ion-text>
+          </div>
+        </ion-col>
+        </ng-container>
+    </ion-row>
+
+    <!-- Dunzo Details -->
+    <ion-row *ngIf="integrationChoice === 'dunzo'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Dunzo Active</ion-label>
+            <ion-toggle [(ngModel)]="dunzoDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="dunzoDetails.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <div class="flex-label">
+              <ion-label>Calculate delivery charges manually</ion-label>
+              <ion-toggle [(ngModel)]="dunzoDetails.metaData.chargesManual"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Client ID</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="dunzoDetails.credentials.clientId"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Client Secret</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="dunzoDetails.credentials.clientSecret"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Dunzo Host</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="dunzoDetails.credentials.dunzoHost"></ion-input>
+            <ion-text class="ion-color ion-color-danger">** You must follow this format : - ( https://dunzo.in/api/v1/token ).</ion-text><br>
+            <ion-text class="ion-color ion-color-danger">** Remember that their should be no ( / ) in the end of the link.</ion-text>
+          </div>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+
+    <!-- Porter -->
+    <ion-row *ngIf="integrationChoice === 'porter'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Porter Active</ion-label>
+            <ion-toggle [(ngModel)]="porterDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="porterDetails.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <div class="flex-label">
+              <ion-label>Calculate delivery charges manually</ion-label>
+              <ion-toggle [(ngModel)]="porterDetails.metaData.chargesManual"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>API Key</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="porterDetails.credentials.apiKey"></ion-input>
+          </div>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+
+    <!-- NimbusPost Details -->
+    <ion-row *ngIf="integrationChoice === 'nimbuspost'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Nimbuspost Active</ion-label>
+            <ion-toggle [(ngModel)]="nimbuspostDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="nimbuspostDetails.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <div class="flex-label">
+              <ion-label>Calculate delivery charges manually</ion-label>
+              <ion-toggle [(ngModel)]="nimbuspostDetails.metaData.chargesManual"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Email</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="nimbuspostDetails.credentials.email"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Password</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="nimbuspostDetails.credentials.password"></ion-input>
+          </div>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+
+    <ion-row *ngIf="integrationChoice === 'delhivery'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Delhivery Active</ion-label>
+            <ion-toggle [(ngModel)]="delhiveryDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="delhiveryDetails.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <div class="flex-label">
+              <ion-label>Calculate delivery charges manually</ion-label>
+              <ion-toggle [(ngModel)]="delhiveryDetails.metaData.chargesManual"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Token</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="delhiveryDetails.credentials.token"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Pickup point / Warehouse Name</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="delhiveryDetails.credentials.warehouse"></ion-input>
+          </div>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+
+    <ion-row *ngIf="integrationChoice === 'pickrr'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Pickrr Active</ion-label>
+            <ion-toggle [(ngModel)]="pickrrDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="pickrrDetails.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <div class="flex-label">
+              <ion-label>Calculate delivery charges manually</ion-label>
+              <ion-toggle [(ngModel)]="pickrrDetails.metaData.chargesManual"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Auth Token</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="pickrrDetails.credentials.authToken"></ion-input>
+          </div>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+
+    <ion-row *ngIf="integrationChoice === 'fastbeetle'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>FastBeetle Active</ion-label>
+            <ion-toggle [(ngModel)]="fastbeetleDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="fastbeetleDetails.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <div class="flex-label">
+              <ion-label>Calculate delivery charges manually</ion-label>
+              <ion-toggle [(ngModel)]="fastbeetleDetails.metaData.chargesManual"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>API Key</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="fastbeetleDetails.credentials.apiKey"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Merchant ID</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="fastbeetleDetails.credentials.merchantId"></ion-input>
+          </div>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+
+    <!-- Zoho CRM
+    <ion-row *ngIf="integrationChoice === 'zoho'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Zoho Active</ion-label>
+            <ion-toggle [(ngModel)]="zohoDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="zohoDetails.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Client ID</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="zohoDetails.credentials.clientId"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Client Secret</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="zohoDetails.credentials.clientSecret"></ion-input>
+          </div>
+        </ion-col>
+      </ng-container>
+    </ion-row> -->
+
+    <!-- Delivery Ends -->
+
+    <!-- Email Integrations Start -->
+    <ion-row *ngIf="integrationChoice === 'sendgrid'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Sendgrid Active</ion-label>
+            <ion-toggle [(ngModel)]="sendgridDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="sendgridDetails.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Email</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="sendgridDetails.credentials.email"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>API Key</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="sendgridDetails.credentials.apiKey"></ion-input>
+          </div>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+
+    <ion-row *ngIf="integrationChoice === 'omsguru'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>OMSGuru Active</ion-label>
+            <ion-toggle [(ngModel)]="omsGuruDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="omsGuruDetails.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Token</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="omsGuruDetails.credentials.token"></ion-input>
+            <ion-text class="ion-color ion-color-danger">** Find your API Token from the OMSGuru Dashboard :</ion-text><br>
+            <ion-text class="ion-color ion-color-danger">** Go to -> Profile > Summary > OMSGuru API > Key</ion-text>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>OMS-CID</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="omsGuruDetails.credentials.omscid"></ion-input>
+            <ion-text class="ion-color ion-color-danger">** Find your OMS-CID from the OMSGuru Dashboard :</ion-text><br>
+            <ion-text class="ion-color ion-color-danger">** Go to -> Profile > Summary > #YOURCLIENTID</ion-text><br>
+            <ion-text class="ion-color ion-color-danger">** Note - Exclude the ( # ) symbol from your OMSGuru Client ID before entering it here.</ion-text>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Warehouse ID</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="omsGuruDetails.credentials.warehouseId"></ion-input>
+            <ion-text class="ion-color ion-color-danger">** Find your OMS-CID from the OMSGuru Dashboard :</ion-text><br>
+            <ion-text class="ion-color ion-color-danger">** From the Navigation section click on the Inventory drop down and select Warehouses.</ion-text><br>
+            <ion-text class="ion-color ion-color-danger">** Now, from the provided warehouse list select the desired Warehouse ID.</ion-text>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Email / Username / User ID</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="omsGuruDetails.credentials.username"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Password</ion-label>
+            <ion-input class="form-input" type="password"
+              [(ngModel)]="omsGuruDetails.credentials.password"></ion-input>
+          </div>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+
+    <ion-row *ngIf="integrationChoice === 'zohoInventory'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Zoho Inventory Active</ion-label>
+            <ion-toggle [(ngModel)]="zohoInventoryDetails.active"></ion-toggle>
+          </div>
+        </div>
+        <ng-container *ngIf="zohoInventoryDetails.active">
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Client ID</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="zohoInventoryDetails.credentials.clientId"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Client Secret</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="zohoInventoryDetails.credentials.clientSecret"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Redirect URI</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="zohoInventoryDetails.credentials.redirectURI"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Organization ID</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="zohoInventoryDetails.credentials.organizationId"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12" *ngIf="zohoInventoryDetails.credentials.clientId && zohoInventoryDetails.credentials.clientSecret && zohoInventoryDetails.credentials.redirectURI">
+            <div class="input-wrap">
+              <ion-button style="margin-right: 16px;" mode="ios" shape="round" (click)="generateZohoAuthLink()">Generate Grant Token</ion-button>
+              <ion-button style="margin-right: 16px;" mode="ios" shape="round" (click)="initZohoInventoryServices('customer')" [disabled]="zohoInventoryDetails.initCustomerSync">Initiate Customer Sync</ion-button>
+              <ion-button style="margin-right: 16px;" mode="ios" shape="round" (click)="initZohoInventoryServices('product')" [disabled]="zohoInventoryDetails.initProdSync">Initiate Product Sync</ion-button>
+              <ion-button mode="ios" shape="round" (click)="initZohoInventoryServices('order')" [disabled]="zohoInventoryDetails.initSalesOrderSync">Initiate Order Sync</ion-button>
+            </div>
+          </ion-col>
+          <ion-col size="12" *ngIf="zohoInventoryGrantTokenLink !== ''">
+            <div class="input-wrap">
+              <ion-label>Enter the URL here : </ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="zohoInventoryDetails.credentials.generateZohoAuthLink"></ion-input>
+            </div>
+          </ion-col>
+        </ng-container>
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row *ngIf="integrationChoice === 'twilio_order_notification'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Twilio Active</ion-label>
+            <ion-toggle [(ngModel)]="twilioOrderDetails.active"></ion-toggle>
+          </div>
+        </div>
+        <ng-container *ngIf="twilioOrderDetails.active">
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Account SID</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="twilioOrderDetails.credentials.accountSid"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Auth Token</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="twilioOrderDetails.credentials.authToken"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Valid Twilio Number</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="twilioOrderDetails.credentials.twilioNumber"></ion-input>
+            </div>
+          </ion-col>
+        </ng-container>
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row *ngIf="integrationChoice === 'msg91'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Msg91 Active</ion-label>
+            <ion-toggle [(ngModel)]="msg91Details.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="msg91Details.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>SMS Sender ID</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="msg91Details.credentials.smsSenderId"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>SMS Key</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="msg91Details.credentials.smsKey"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div style="border-bottom: 1px solid #ccc;">
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Template ID's</ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Confirmed</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="msg91Details.credentials.templateId.confirmed"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Cancelled</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="msg91Details.credentials.templateId.cancelled"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Delivered</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="msg91Details.credentials.templateId.delivered"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Dispatched</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="msg91Details.credentials.templateId.dispatched"></ion-input>
+          </div>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+
+    <ion-row *ngIf="integrationChoice === 'twilio'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Twilio Active</ion-label>
+            <ion-toggle [(ngModel)]="twilioDetails.active"></ion-toggle>
+          </div>
+        </div>
+        <ng-container *ngIf="twilioDetails.active">
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Account SID</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="twilioDetails.credentials.accountSid"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Auth Token</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="twilioDetails.credentials.authToken"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Valid Twilio Number</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="twilioDetails.credentials.twilioNumber"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap" style="border-top: 1px solid #ccc; padding-top: 20px;">
+              <ion-label>Custom Twilio Actions</ion-label>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <div class="flex-label" style="margin-top: -15px;">
+                <ion-label>Message for new users</ion-label>
+                <ion-toggle [(ngModel)]="twilioDetails.events.onCreateUser.active"></ion-toggle>
+              </div>
+            </div>
+          </ion-col>
+          <ng-container *ngIf="twilioDetails.events.onCreateUser.active">
+            <ion-col size="12">
+              <ion-item>
+                <ion-textarea mode="ios" width="80%" auto-grow="true" placeholder="Enter the SMS body here..." [(ngModel)]="twilioDetails.events.onCreateUser.body"></ion-textarea>
+                <ion-button (click)="addFormatting()">Add New Line</ion-button>
+              </ion-item>
+            </ion-col>
+          </ng-container>
+        </ng-container>
+      </ion-col>
+    </ion-row>
+
+
+    <ion-row *ngIf="integrationChoice === 'twilio_promotion'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Twilio Active</ion-label>
+            <ion-toggle [(ngModel)]="twilioPromotionDetails.active"></ion-toggle>
+          </div>
+        </div>
+        <ng-container *ngIf="twilioPromotionDetails.active">
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Account SID</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="twilioPromotionDetails.credentials.accountSid"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Auth Token</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="twilioPromotionDetails.credentials.authToken"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Valid Twilio Number</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="twilioPromotionDetails.credentials.twilioNumber"></ion-input>
+            </div>
+          </ion-col>
+        </ng-container>
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row *ngIf="integrationChoice === 'aisensy_promotion'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>AiSensy Active</ion-label>
+            <ion-toggle [(ngModel)]="aisensyDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="aisensyDetails.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>API Key</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="aisensyDetails.credentials.apiKey"></ion-input>
+          </div>
+        </ion-col>
+
+        <!-- Multiple Campaign -->
+        <ng-container *ngIf="aisensyDetails.campDetails">
+          <ion-col size="12">
+            <p>Add Campaign</p>
+            <ng-container>
+              <div class="dFlex">
+                <div class="input-wrap">
+                  <ion-input class="form-input" placeholder="Add Campaign Name" [(ngModel)]="campBodyAisensy.campaignName"></ion-input>
+                </div>
+                <ion-button (click)="addCampObj('aisensy')" fill="outline" size="small">
+                  <i class="flaticon-null-28"></i>&nbsp;Save
+                </ion-button>
+              </div>
+            </ng-container>
+
+            <!-- Campaign Details -->
+              <ng-container *ngIf="campArrayAisensy.length">
+                <br>
+                <p>Saved Campaign(s)</p>
+                <ng-container *ngFor="let campItem of campArrayAisensy,index as i">
+                  <div class="dFlex">
+                    <div class="input-wrap">
+                      <ion-input class="form-input" [(ngModel)]="campItem.campaignName"></ion-input>
+                    </div>
+                    <ion-button (click)="deleteCampObj('aisensy', i)" fill="clear" color="dark" size="small">
+                      <i class="flaticon-null-21"></i>
+                    </ion-button>
+                  </div>
+                </ng-container>
+              </ng-container>
+          </ion-col>
+
+        </ng-container>
+        
+        </ng-container>
+    </ion-row>
+
+    <ion-row *ngIf="integrationChoice === 'interakt_promotion'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Interakt Active</ion-label>
+            <ion-toggle [(ngModel)]="interaktDetailsPromotion.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ng-container *ngIf="interaktDetailsPromotion.active">
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>API Key</ion-label>
+            <ion-input class="form-input"
+              [(ngModel)]="interaktDetailsPromotion.credentials.apiKey"></ion-input>
+          </div>
+        </ion-col>
+
+        <!-- Multiple Campaign -->
+        <ng-container *ngIf="interaktDetailsPromotion.campDetails">
+          <ion-col size="12">
+            <p>Add Template</p>
+            <ng-container>
+              <div class="dFlex">
+                <div class="input-wrap">
+                  <ion-input class="form-input" placeholder="Add Campaign Name" [(ngModel)]="campBodyInterakt.campaignName"></ion-input>
+                </div>
+                <ion-button (click)="addCampObj('interakt')" fill="outline" size="small">
+                  <i class="flaticon-null-28"></i>&nbsp;Save
+                </ion-button>
+              </div>
+            </ng-container>
+
+            <!-- Campaign Details -->
+              <ng-container *ngIf="campArrayInterakt.length">
+                <br>
+                <p>Saved Template(s)</p>
+                <ng-container *ngFor="let campItem of campArrayInterakt,index as i">
+                  <div class="dFlex">
+                    <div class="input-wrap">
+                      <ion-input class="form-input" [(ngModel)]="campItem.campaignName"></ion-input>
+                    </div>
+                    <ion-button (click)="deleteCampObj('interakt', i)" fill="clear" color="dark" size="small">
+                      <i class="flaticon-null-21"></i>
+                    </ion-button>
+                  </div>
+                </ng-container>
+              </ng-container>
+          </ion-col>
+
+        </ng-container>
+        
+        </ng-container>
+    </ion-row>
+
+    <ion-row *ngIf="integrationChoice === 'interakt_order_notification'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Interakt Active</ion-label>
+            <ion-toggle [(ngModel)]="interaktDetailsOrder.active"></ion-toggle>
+          </div>
+        </div>
+        <ng-container *ngIf="interaktDetailsOrder.active">
+          <ion-col size="12">
+            <div class="input-wrap" style="border-bottom: 1px solid rgb(0 0 0/25%); padding-bottom: 8px;">
+              <ion-label>API Key</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="interaktDetailsOrder.credentials.apiKey"></ion-input><br>
+              <ion-text mode="ios" class="ion-color ion-color-danger">** You can find the API Key in the Interakt dashboard</ion-text><br>
+              <ion-text mode="ios" class="ion-color ion-color-danger">** Interakt Dashboard -> Settings -> Developer Settings -> Secret Key</ion-text><br>
+            </div>
+            <div class="input-wrap">
+              <ion-label>Creating Template(s)</ion-label><br><br>
+              <ion-text class="ion-color ion-color-danger">** You have to create the following 4 template(s) for order notifications on the interakt dashboard and get them approved.</ion-text><br>
+              <ion-text class="ion-color ion-color-danger">** Set the display name accordingly as provided below.</ion-text><br>
+              <ion-text class="ion-color ion-color-danger">** Set the category as " Account Update ".</ion-text><br>
+              <ion-text class="ion-color ion-color-danger">** Set the language as only " English ".</ion-text><br><br>
+              <ion-text>** Copy paste the following template(s) as the template body in the respective template(s).</ion-text><br><br>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-subtitle>1. Display Name - order_confirmed</ion-card-subtitle>
+                  <ion-card-title>Template Body</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <pre>
+Hi {{templateVal1}},
+                  
+ORDER CONFIRMED ✅
+                  
+Thank you for your order. Your Order id is {{templateVal2}}.
+                  
+We will inform you when we dispatch your order.
+                  
+{{templateVal3}}
+                  </pre>
+                </ion-card-content>
+              </ion-card>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-subtitle>2. Display Name - order_dispatched</ion-card-subtitle>
+                  <ion-card-title>Template Body</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <pre>
+Hi {{templateVal1}}, 
+
+ORDER DISPATCHED 🚀 
+                    
+Your order with Order id {{templateVal2}} is dispatched and will reach to you soon. 
+                    
+{{templateVal3}}
+                  </pre>
+                </ion-card-content>
+              </ion-card>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-subtitle>3. Display Name - order_cancelled</ion-card-subtitle>
+                  <ion-card-title>Template Body</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <pre>
+Hi {{templateVal1}},
+
+ORDER CANCELLED ❌ 
+                    
+Your order with Order id {{templateVal2}} is cancelled. 
+                    
+{{templateVal3}}
+                  </pre>
+                </ion-card-content>
+              </ion-card>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-subtitle>4. Display Name - order_delivered</ion-card-subtitle>
+                  <ion-card-title>Template Body</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <pre>
+Hi {{templateVal1}},
+
+ORDER DELIVERED 🏠
+                    
+Your order with Order id {{templateVal2}} is delivered at your selected address.
+                    
+Thank you for shopping with us.
+                    
+{{templateVal3}}
+                  </pre>
+                </ion-card-content>
+              </ion-card><br>
+              <ion-text>** Specified Values :</ion-text><br><br>
+              <ion-text>{{templateVal1}} - The Users name receiving the order.</ion-text><br>
+              <ion-text>{{templateVal2}} - The order ID for the specified order.</ion-text><br>
+              <ion-text>{{templateVal3}} - The Store name</ion-text><br>
+            </div>
+          </ion-col>
+        </ng-container>
+      </ion-col>
+    </ion-row>    
+
+    <ion-row *ngIf="integrationChoice === 'aisensy_order_notification'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Interakt Active</ion-label>
+            <ion-toggle [(ngModel)]="aisensyDetailsOrder.active"></ion-toggle>
+          </div>
+        </div>
+        <ng-container *ngIf="aisensyDetailsOrder.active">
+          <ion-col size="12">
+            <div class="input-wrap" style="border-bottom: 1px solid rgb(0 0 0/25%); padding-bottom: 8px;">
+              <ion-label>API Key</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="aisensyDetailsOrder.credentials.apiKey"></ion-input><br>
+              <ion-text mode="ios" class="ion-color ion-color-danger">** You can find the API Key in the Aisensy dashboard</ion-text><br>
+              <ion-text mode="ios" class="ion-color ion-color-danger">** Aisensy Dashboard -> Manage -> API Key</ion-text><br>
+            </div>
+            <div class="input-wrap">
+              <ion-label>Creating Template(s)</ion-label><br><br>
+              <ion-text class="ion-color ion-color-danger">** You have to create the following 4 campaign(s) with 4 templates for order notifications on the Aisensy dashboard and get them approved.</ion-text><br>
+              <ion-text class="ion-color ion-color-danger">** Name the campaigns and the templates the same, for e.g. [ order_confirmed ] will be the name for the campaign and the template as well.</ion-text><br>
+              <ion-text>** Copy paste the following template(s) as the template body in the respective template(s).</ion-text><br><br>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-subtitle>1. Campaign / Template Name - order_confirmed</ion-card-subtitle>
+                  <ion-card-title>Template Body</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <pre>
+Hi {{templateVal1}},
+                  
+ORDER CONFIRMED ✅
+                  
+Thank you for your order. Your Order id is {{templateVal2}}.
+                  
+We will inform you when we dispatch your order.
+                  
+{{templateVal3}}
+                  </pre>
+                </ion-card-content>
+              </ion-card>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-subtitle>2. Campaign / Template Name - order_dispatched</ion-card-subtitle>
+                  <ion-card-title>Template Body</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <pre>
+Hi {{templateVal1}}, 
+
+ORDER DISPATCHED 🚀 
+                    
+Your order with Order id {{templateVal2}} is dispatched and will reach to you soon. 
+                    
+{{templateVal3}}
+                  </pre>
+                </ion-card-content>
+              </ion-card>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-subtitle>3. Campaign / Template Name - order_cancelled</ion-card-subtitle>
+                  <ion-card-title>Template Body</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <pre>
+Hi {{templateVal1}},
+
+ORDER CANCELLED ❌ 
+                    
+Your order with Order id {{templateVal2}} is cancelled. 
+                    
+{{templateVal3}}
+                  </pre>
+                </ion-card-content>
+              </ion-card>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-subtitle>4. Campaign / Template Name - order_delivered</ion-card-subtitle>
+                  <ion-card-title>Template Body</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <pre>
+Hi {{templateVal1}},
+
+ORDER DELIVERED 🏠
+                    
+Your order with Order id {{templateVal2}} is delivered at your selected address.
+                    
+Thank you for shopping with us.
+                    
+{{templateVal3}}
+                  </pre>
+                </ion-card-content>
+              </ion-card><br>
+              <ion-text>** Specified Values :</ion-text><br><br>
+              <ion-text>{{templateVal1}} - The Users name receiving the order.</ion-text><br>
+              <ion-text>{{templateVal2}} - The order ID for the specified order.</ion-text><br>
+              <ion-text>{{templateVal3}} - The Store name</ion-text><br>
+            </div>
+          </ion-col>
+        </ng-container>
+      </ion-col>
+    </ion-row>    
+
+    <ion-row *ngIf="integrationChoice === 'zoho'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>ZOHO Active</ion-label>
+            <ion-toggle [(ngModel)]="zohoDetails.active"></ion-toggle>
+          </div>
+        </div>
+        <ng-container *ngIf="zohoDetails.active">
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Client ID</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="zohoDetails.credentials.clientId"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Client Secret</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="zohoDetails.credentials.clientSecret"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Code</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="zohoDetails.credentials.code"></ion-input>
+            </div>
+          </ion-col>
+        </ng-container>
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row  *ngIf="integrationChoice === 'Shopify Orders Sync'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Shopify Orders Sync Active</ion-label>
+            <ion-toggle [(ngModel)]="shopifyOrdersSyncDetails.active"></ion-toggle>
+          </div>
+        </div>
+        <ng-container *ngIf="shopifyOrdersSyncDetails.active">
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Store Name</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="shopifyOrdersSyncDetails.credentials.storeName"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>API Version</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="shopifyOrdersSyncDetails.credentials.apiVersion"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>API Key</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="shopifyOrdersSyncDetails.credentials.apiKey"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>API Secret</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="shopifyOrdersSyncDetails.credentials.apiSecret"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Storefront API Key</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="shopifyOrdersSyncDetails.credentials.storefrontApiKey"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="input-wrap">
+              <ion-label>Access Token</ion-label>
+              <ion-input class="form-input"
+                [(ngModel)]="shopifyOrdersSyncDetails.credentials.accessToken"></ion-input>
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="input-wrap">
+              <ion-button shape="round" (click)="setShopifyWebhooks()">Set Webhooks for Orders Sync</ion-button>
+            </div>
+          </ion-col>
+        </ng-container>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</ion-content>
+
+<ion-footer no-border
+  class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveSettings()"
+      [disabled]="disableSaveAdv()"
+      shape="round"
+      class="btn-1 i-start"
+      color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

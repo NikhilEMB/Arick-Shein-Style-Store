@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-title>View Issue</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row *ngIf="supportTypeData.attachments">
+      <ion-col size="4" *ngFor="let item of supportTypeData.attachments.imageUrl">
+        <div class="imgBox">
+          <img [src]="item" alt="" (click)="imgZoom(item)">
+        </div>       
+      </ion-col>
+      <ion-col size="4" *ngIf="supportTypeData.attachments.pdfUrl">
+        <div class="imgBox" style="padding: 44px;">
+          <ion-button (click)="openDocument()">Uploaded Document <br><ion-icon name="cloud-download"></ion-icon></ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <div class="feedbacks-wrapper">
+          <div class="feedbacks-wrap">
+            <p class="title">{{supportTypeData.title}}</p>
+            <p class="labels">Description</p>
+            <div class="description">
+              <p>{{supportTypeData.description}}</p>
+            </div>
+            <span class="date">Created, {{supportTypeData.createdAt.toDate() | date: 'medium'}}</span>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <p class="labels">Comments</p>
+        <div class="input-wrap">
+          <textarea type="text" placeholder="Write a comment..." [(ngModel)]="newComment.msg" rows="3"></textarea>
+        </div>
+
+        <div class="scroller" *ngIf="allComment">
+          <div class="commentBox" *ngFor="let item of allComment">
+            <p>{{item.msg}}</p>
+            <span class="date">{{item.postedAt.toDate() | date: 'medium'}} ago</span>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-button expand="full" color="danger" (click)="onClickAddComment()" [disabled]="!newComment.msg">
+    Add Comment
+    <ion-icon name="checkmark-circle"></ion-icon>
+  </ion-button>
+</ion-footer>

@@ -1,0 +1,18 @@
+.sf-active-header {
+    color: var(--ion-color-primary);
+    font-size: 15px;
+}
+
+.sf-list {
+    ion-label {
+        text-transform: capitalize;
+        font-size: 14px;
+    }
+    .filter-values {
+        margin-left: 20px;
+        ion-checkbox {
+            width: 14px;
+            height: 14px;
+        }
+    }
+}

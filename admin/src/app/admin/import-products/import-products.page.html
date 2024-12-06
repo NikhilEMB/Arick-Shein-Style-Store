@@ -1,0 +1,178 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Import Products</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <ion-grid>
+      <ion-row class="ion-text-center">
+          <ion-col size="4" >
+            <ion-button class="csv-sample-btn" [disabled]="isImporting">
+              <a href="../../../assets/files/sample-csv-format.csv" download>Download CSV FORMAT</a>
+              </ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <div class="upload-btn-wrapper">
+              <button class="upload-btn btn-1 i-start" [disabled]="isImporting"> <i class="flaticon-null-16"></i>Upload CSV</button>
+              <input type="file" name="myfile" (change)="convertFile($event)" [disabled]="isImporting" />
+            </div>
+          </ion-col>
+          <ion-col size="4" *ngIf="!isImporting">
+            <ion-button [disabled]="!isValidCSV" (click)="importProducts()">
+              Start Import Process
+             </ion-button>
+          </ion-col>
+          <ion-col size="4" *ngIf="isImporting">
+           <h3>Importing Products........</h3>
+          </ion-col>
+      </ion-row>
+      <ion-row class="ion-text-center" *ngIf="jsonData && jsonData.length > 1 && isValidCSV">
+        <ion-col>
+            <h2>{{jsonData.length - 1}} Products to be Imported </h2>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  
+    <div  class="table-container">
+
+      <div class="head" *ngIf="jsonData">
+        <ion-grid class="ion-no-padding">
+          <ion-row>
+            <ion-col *ngFor="let item of headers; let i=index">{{item}}</ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+      <div class="body" *ngIf="jsonData">
+        <ion-grid class="ion-no-padding">
+          <ng-container *ngFor="let items of jsonData; let di=index">
+          <ion-row *ngIf="di > 0">
+            <ion-col [class.error]="true" [ngClass]="{'imported':importedProducts[di]}" *ngFor="let item of items; let i=index">{{item}}</ion-col>
+          </ion-row>
+          </ng-container>
+        </ion-grid>
+      </div>
+
+      <div class="import-data">
+        <h2>
+          CSV Import Rules:
+        </h2>
+        <p>
+          1. Format of CSV will be exactly similar to sample CSV which you can download by clicking on Download CSV FORMAT Button. 
+        </p>
+        <p>
+          2. SKU is mandatory. Rest all fields you can leave empty. Don't delete or change order of any column. If you don't want to add data, just leave those fields empty.
+          Example: - if you want to update just price and discount price, just fill data in those 2 columns. 
+        </p>
+        <p>
+          3. First row will be same header row present in sample and from 2nd row, your data will be entered. No other information.
+        </p>
+        <p>
+          4. Max 1000 products can be added or updated in a single process. 
+        </p>
+        <p>
+          5. SKU should be unique and you need to maintian that in your csv. It would be easier for you to create different csv for different groups. 
+        </p>
+        <br/>
+        <br/>
+        <h2>
+          CSV Import Rules:
+        </h2>
+        <p>
+          1. SKU : Mandatory
+          Unique Id like 1,2,3 or alphanumeric like PRD001, PRD 002 or VEG1,VEG2…FRUITS1,FRUITS2…. Or you can use unique product ids if you have.
+          Please keep these ids as safe because next time time when you update the product you will use only these ids to update. Make it according to your convenience. Keep short CSV for upto 500 products separated by categories or brands. It will be easy for you to manage.
+          Make sure these values are different for all csvs like for pulses csv, you can start with PUL1, PUL2…
+        </p>
+        <p>
+         2. NAME: Name of the product
+        </p>
+        <p>
+          3. ACTIVE: YES or NO. If YES, product will show to customer, if NO, product will not show to customer. You can change this anytime from admin panel
+         </p>
+         <p>
+          4. IS VARIANT: YES or NO. 
+           No - for single price product
+           Yes - for variants
+           This option is to create multiple variants of the product like multiple weights, sizes, pieces, packs  or any other variants you like to create
+         </p>
+         <p>
+          5. VARIANT TYPE : YES or NO. Empty if variants is NO. If Variants is yes, choose weight, size, pieces, other.
+         </p>
+         <p>
+          6. VARIANT NAME : Empty if variants is NO. Variants separated by comma.
+          Weight example :                    1 Kg, 2 Kg, 3 Kg, 5 kg, 10 Kg
+          Size example : XXS, XS, S, M, L, XL, XXL, XXL
+          Pieces example: 100, 200, 500, 1000.  For pieces, just specify numbers and in case of variant as pieces, price will be per piece price.
+          Other example: pack of 2, pack of 3, pack of 10
+         </p>
+         <p>
+          7. PRICE : Numeric (Incl GST)
+          If variants is YES, all prices by comma separated like 100,200,300,400,500 where price is for respective variant
+         </p>
+         <p>
+          8. DISCOUNTED PRICE :  Numeric (Incl GST)
+          Discount % will be calculated automatically based on this price
+          If variants is yes, all discounted prices by comma separated like 80,180,280,380,480
+         </p>
+         <p>
+          9. PURCHASE PRICE : Numeric. Optional
+          Will be used for displaying profit reports in coming release. 
+         </p>
+         <p>
+          10. QUANTITY :For inventory management
+          If variants is yes, all quantities by comma separated like 10,5,20,15,30,40
+         </p>
+         <p>
+          11. SHIPPING WEIGHT : (in Grams)
+          If variants is yes, all shipping weights by comma separated like 50,100,150, 200, 250
+         </p>
+         <p>
+          12. MIN QUANTITY : In number should be greater than 0. A customer has to order atleast this number to buy this product.
+          If variants is yes, it will be same for all variants
+         </p>
+         <p>
+          13. MAX QUANTITY :In number should be greater than 0 and minimum quantity. A Customer can't buy more than this number for this product.
+          If variants is yes, it will be same for all variants
+         </p>
+         <p>
+          14. DESCRIPTION : Text / HTML, Please note just basic HTML, no video or external scripts.
+         </p>
+         <p>
+          15. HSN CODE : FOR TAX Return Management
+         </p>
+         <p>
+          16. TAX: In Number , example:  5. Dont add % to this number.
+         </p>
+         <p>
+          17. COLOR: Name, hex code
+          Example :Red, #FF0000
+         </p>
+         <p>
+          18. KEYWORDS: All Keywords Separated by comma
+          Example: Aata, Flour, పిండి….. You can use any language. Add ing names in native language will help users to search with those names
+         </p>
+         <p>
+          19. OUT OF STOCK : YES /  No, if this is yes, system will show out of stock when quantity is 0. Please note, this will not work if there is no value in quantity.
+          Default value is NO
+         </p>
+         <p>
+          20. CATEGORIES - SUBCATEGORIES : All categories and subcategories semi colon separated. While writing subcategories add "category-" to subcategories.
+          Category Name 1; Category Name 1-Subcategory 1;  Category Name 1-Subcategory 2;  Category Name 2; Category Name 2-Subcategory 1;  Category Name 2-Subcategory 2;...
+          Please use exact names of categories and subcategories which you have created in admin panel. Make sure you don’t have multiple categories with same name.
+         </p>
+         <p>
+          21. BRANDS: Name of brands semi colon separated
+          brand1;brand2;brand3
+          Please use exact names of brands which you have created in admin panel.
+         </p>
+      </div>
+
+    </div>
+  </div>
+</ion-content>

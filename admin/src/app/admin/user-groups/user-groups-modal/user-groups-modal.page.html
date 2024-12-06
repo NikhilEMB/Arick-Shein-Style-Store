@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add New Group</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <div class="input-wrap">
+          <ion-label>Group Name</ion-label>
+          <ion-input class="form-input" [(ngModel)]="group.name" placeholder="Group name" autocapitalize="on"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <ion-button class="btn-2 i-start" (click)="openUsersModal()" shape="round">
+          <i class="flaticon-null-5 margin-icon"></i>
+          Add Users
+        </ion-button>
+      </ion-col>
+      <ion-col size="12">
+        <div class="ion-no-padding" *ngIf="users?.length>0">
+          <div class="list-container">
+              <ion-item *ngFor="let user of users; let i = index">
+                <ion-grid class="row-background ion-no-padding ion-align-items-center">
+                  <ion-row class="ion-align-items-center">
+                    <ion-col size="1">
+                      <p class="ion-text-capitalize ion-text-center">{{i+1}}</p>
+                    </ion-col>
+                    <ion-col size="3">
+                      <p class="ion-text-capitalize ion-text-center">{{user.name}}</p>
+                    </ion-col>
+                    <ion-col size="5">
+                      <p class="ion-text-capitalize ion-text-center">{{user.phoneNo}}</p>
+                    </ion-col>
+                    <ion-col size="1" class="ion-text-center">
+                      <div class="ion-text-center cursor-p" (click)="removeUser(i)">
+                        <i class="flaticon-null-21"></i>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </div>
+        </div>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveSettings()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

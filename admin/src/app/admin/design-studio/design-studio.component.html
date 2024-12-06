@@ -1,0 +1,1778 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Design Studio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+  <div class="main-container" style="width: 100%">
+    <ion-grid>
+      <ion-row>
+        <ion-col size=2 id="scroll1">
+          <div class="statusList">
+            <div style="display: flex;align-items: center;justify-content: center;">
+              <span>Design studio active</span>&nbsp;&nbsp;
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input type="checkbox" (click)="activeDesignStudio()" [checked]="isStudioActive">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <p id="status1" (click)="getGlobal()">Global</p>
+            <p id="status2" (click)="getHeader()">Header</p>
+            <p id="status3" (click)="getPages()">Pages</p>
+            <p id="status4" (click)="getCategories()">Categories</p>
+            <p id="status5" (click)="getBrands()">Brands</p>
+            <!-- <p id="status5" (click)="getServices()">Services</p> -->
+          </div>
+        </ion-col>
+        <ion-col size=2.5 id="scroll2">
+          <div class="statusList" *ngIf="dataType == 'global'">
+            <p (click)="changeGlobalOptions('itemStyle')" id="global1">Categories & Brands</p>
+            <p (click)="changeGlobalOptions('productStyle')" id="global2">Products</p>
+            <p (click)="changeGlobalOptions('productDetailStyle')" id="global3">Products Detail</p>
+          </div>
+          <div class="statusList" *ngIf="dataType ==  'header'">
+            <div *ngFor="let item of dataList,let i = index">
+              <p (click)='headOptions(item.name)' [id]="item.name">{{item.name}}</p>
+            </div>
+          </div>
+          <div class="statusList" *ngIf="dataType ==  'pages' ">
+            <div *ngFor="let item of dataList,let i = index">
+              <p (click)='showSubList(i)' style="display: flex;justify-content: space-between;">{{item.name || item.id}}
+                <span
+                  *ngIf='item.sections && item.sections.length > 0 && !item.active'>&nbsp;&nbsp;<strong>▼</strong></span>
+                <span
+                  *ngIf='item.sections && item.sections.length > 0 && item.active'>&nbsp;&nbsp;<strong>▲</strong></span>
+              </p>
+              <div *ngIf='item.active'>
+                <p *ngFor='let subItem of item.sections,let j = index' [id]="'section' + i + j"
+                  style="display: flex;justify-content: space-between;" (click)='selectSection(i,j)'>
+                  <span>ᐅ&nbsp;&nbsp;{{dataList[i].sections[j].sectionName}}
+                    <span
+                      *ngIf="dataList[i].sections[j].widgetType == 'image-banner' && !dataList[i].sections[j].sectionName">
+                      image banner
+                    </span>
+                    <span *ngIf="dataList[i].sections[j].widgetType == 'banner-slider'">banner slider</span>
+                    <span
+                      *ngIf="dataList[i].sections[j].widgetType == 'image-block' && !dataList[i].sections[j].sectionName">
+                      image block
+                    </span>
+                    <span
+                      *ngIf="dataList[i].sections[j].widgetType == 'video-block' && !dataList[i].sections[j].sectionName">
+                      video block
+                    </span>
+                    <!-- <span *ngIf="dataList[i].sections[j].widgetType == 'image-block'">image block</span> -->
+                    <!-- <span *ngIf="dataList[i].sections[j].widgetType == 'video-block'">video block</span> -->
+                    <span *ngIf="dataList[i].sections[j].widgetType == 'form'">form</span>
+                    <span *ngIf="dataList[i].sections[j].widgetType == 'document'">document</span>
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="statusList" *ngIf="dataType == 'categories'">
+            <div *ngFor="let item of dataList,let i = index">
+              <p (click)='showSubList(i)' style="display: flex;justify-content: space-between;" [id]="'category' + i">
+                {{item.name}}
+                <span
+                  *ngIf='item.subist && item.sublist.length > 0 && !item.active'>&nbsp;&nbsp;<strong>▼</strong></span>
+                <span
+                  *ngIf='item.sublist && item.sublist.length > 0 && item.active'>&nbsp;&nbsp;<strong>▲</strong></span>
+              </p>
+              <div *ngIf='item.active'>
+                <p *ngFor='let subItem of item.sublist,let j = index'
+                  style="display: flex;justify-content: space-between;" (click)='selectSubCat(i,j)'>
+                  <span>ᐅ&nbsp;&nbsp;</span>{{subItem.name}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="statusList" *ngIf="dataType ==  'brands'">
+            <div *ngFor="let item of dataList,let i = index">
+              <p (click)='selectListItem(i)' [id]="'brand' + i">{{item.name}}</p>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size=7.5 id="scroll3" style="margin-top: 8px;">
+          <div *ngIf="dataType == 'global'">
+            <div *ngIf="globalOption == 'itemStyle' ">
+              <p style="font-size: medium;font-weight: bold;text-align: center;">Select global style for
+                Categories, Brands and Services
+              </p>
+              <br>
+              <div style="text-align: center;">
+                <ion-button (click)="saveGlobalItemStyle()" shape="round" class="btn-1 i-start" color="success"
+                  fill="outline">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+              <br>
+              <div style="display: flex;">
+                <div>Categories should take fixed height</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeFixedHeight()" [checked]="isFixedHeight">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <div style="display: flex; margin-top: .5rem;">
+                <p>Product Filter Show</p>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeShowFilter()" [checked]="isFilterActive">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;" *ngIf="isFixedHeight == true">
+                <p>Enter height for section:</p>&nbsp;&nbsp;
+                <input placeholder="Enter height" type="number" [(ngModel)]='fixedHeight'
+                  style="width: 100px;text-align: center;" />
+              </div>
+              <br>
+              <div style="display: flex;text-align: center;align-items: center;">
+                Number of items per row:&nbsp;&nbsp;&nbsp;&nbsp;
+                Desktop:&nbsp;&nbsp;
+                <select (change)="selectLargeGridNo($event.target.value)" [(ngModel)]='largeGridNo'>
+                  <option value=5 selected>5</option>
+                  <option value=4>4</option>
+                  <option value=3>3</option>
+                  <option value=2>2</option>
+                  <option value=1>1</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                Laptop:&nbsp;&nbsp;
+                <select (change)="selectMediumGridNo($event.target.value)" [(ngModel)]='mediumGridNo'>
+                  <option value=5>5</option>
+                  <option value=4 selected>4</option>
+                  <option value=3>3</option>
+                  <option value=2>2</option>
+                  <option value=1>1</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                Mobile:&nbsp;&nbsp;
+                <select (change)="selectSmallGridNo($event.target.value)" [(ngModel)]='smallGridNo'>
+                  <option value=2 selected>2</option>
+                  <option value=1>1</option>
+                </select>
+              </div>
+              <br>
+              <p>Style of items:</p>
+              <br>
+              <div style="display: flex;flex-wrap: wrap;">
+                <div class="itemImgFlex">
+                  <input type="radio" id='a' value="category-one" name="globalCatStyle">&nbsp;&nbsp;
+                  <label for='a'><img src='../../../assets/img/design-studio/category/category_style1.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='b' value="category-two" name="globalCatStyle">&nbsp;&nbsp;
+                  <label for='b'><img src='../../../assets/img/design-studio/category/category_style2.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='c' value="category-three" name="globalCatStyle">&nbsp;&nbsp;
+                  <label for='c'><img src='../../../assets/img/design-studio/category/category_style3.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='d' value="category-four" name="globalCatStyle">&nbsp;&nbsp;
+                  <label for='d'><img src='../../../assets/img/design-studio/category/category_style4.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='e' value="category-five" name="globalCatStyle">&nbsp;&nbsp;
+                  <label for='e'><img src='../../../assets/img/design-studio/category/category_style5.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='f' value="category-six" name="globalCatStyle">&nbsp;&nbsp;
+                  <label for='f'><img src='../../../assets/img/design-studio/category/category_style6.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='g' value="category-seven" name="globalCatStyle">&nbsp;&nbsp;
+                  <label for='g'><img src='../../../assets/img/design-studio/category/category_style7.PNG'></label>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="globalOption == 'productStyle' ">
+              <p style="font-size: medium;font-weight: bold;text-align: center;">Select global style for Products
+              </p>
+              <br>
+              <div style="text-align: center;">
+                <ion-button (click)="saveGlobalProductStyle()" shape="round" class="btn-1 i-start" color="success"
+                  fill="outline">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <div>Products should take fixed height</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeFixedHeight()" [checked]="isFixedHeight">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="">
+                <br>
+                <div style="display: flex;align-items: center;">
+                  <div>Show variant on product thumb</div>&nbsp;&nbsp;
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input type="checkbox" (click)="toggleShowVariant()" [checked]="showVariant">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;" *ngIf="isFixedHeight == true">
+                <p>Enter height for section:</p>&nbsp;&nbsp;
+                <input placeholder="Enter height" type="number" [(ngModel)]='fixedHeight'
+                  style="width: 100px;text-align: center;" />
+              </div>
+              <br>
+              <div style="display: flex;text-align: center;align-items: center;">
+                Number of items per row:&nbsp;&nbsp;&nbsp;&nbsp;
+                Desktop:&nbsp;&nbsp;
+                <select (change)="selectLargeGridNo($event.target.value)" [(ngModel)]='largeGridNo'>
+                  <option value=5 selected>5</option>
+                  <option value=4>4</option>
+                  <option value=3>3</option>
+                  <option value=2>2</option>
+                  <option value=1>1</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                Laptop:&nbsp;&nbsp;
+                <select (change)="selectMediumGridNo($event.target.value)" [(ngModel)]='mediumGridNo'>
+                  <option value=5>5</option>
+                  <option value=4 selected>4</option>
+                  <option value=3>3</option>
+                  <option value=2>2</option>
+                  <option value=1>1</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                Mobile:&nbsp;&nbsp;
+                <select (change)="selectSmallGridNo($event.target.value)" [(ngModel)]='smallGridNo'>
+                  <option value=2 selected>2</option>
+                  <option value=1>1</option>
+                </select>
+              </div>
+              <br>
+              <p>Style for Products:</p>
+              <br>
+              <div style="display: flex;flex-wrap: wrap;">
+                <div class="itemImgFlex">
+                  <input type="radio" id='a' value="product-one" name="globalProductStyle">&nbsp;&nbsp;
+                  <label for='a'><img src='../../../assets/img/design-studio/product/product_style1.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='b' value="product-two" name="globalProductStyle">&nbsp;&nbsp;
+                  <label for='b'><img src='../../../assets/img/design-studio/product/product_style2.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='c' value="product-three" name="globalProductStyle">&nbsp;&nbsp;
+                  <label for='c'><img src='../../../assets/img/design-studio/product/product_style3.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='d' value="product-four" name="globalProductStyle">&nbsp;&nbsp;
+                  <label for='d'><img src='../../../assets/img/design-studio/product/product_style4.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='e' value="product-five" name="globalProductStyle">&nbsp;&nbsp;
+                  <label for='e'><img src='../../../assets/img/design-studio/product/product_style5.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='f' value="product-six" name="globalProductStyle">&nbsp;&nbsp;
+                  <label for='f'><img src='../../../assets/img/design-studio/product/product_style6.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='g' value="product-seven" name="globalProductStyle">&nbsp;&nbsp;
+                  <label for='g'><img src='../../../assets/img/design-studio/product/product_style7.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='h' value="product-eight" name="globalProductStyle">&nbsp;&nbsp;
+                  <label for='h'><img src='../../../assets/img/design-studio/product/product_style8.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='i' value="product-nine" name="globalProductStyle">&nbsp;&nbsp;
+                  <label for='i'><img src='../../../assets/img/design-studio/product/product_style9.png'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='j' value="product-ten" name="globalProductStyle">&nbsp;&nbsp;
+                  <label for='j'><img src='../../../assets/img/design-studio/product/product_style10.png'></label>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="globalOption == 'productDetailStyle'">
+              <p style="font-size: medium;font-weight: bold;text-align: center;">Select global style for Product Detail
+              </p>
+              <br>
+              <div style="text-align: center;">
+                <ion-button (click)="saveGlobalProductDetailStyle()" shape="round" class="btn-1 i-start" color="success"
+                  fill="outline">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+              <br>
+              <!-- <div style="display: flex;align-items: center;">
+                <div>Products should take fixed height</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeFixedHeight()" [checked]="isFixedHeight">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;" *ngIf="isFixedHeight == true">
+                <p>Enter height for section:</p>&nbsp;&nbsp;
+                <input placeholder="Enter height" type="number" [(ngModel)]='fixedHeight'
+                  style="width: 100px;text-align: center;" />
+              </div> -->
+
+              <div class="">
+                <br>
+                <div style="display: flex;align-items: center;">
+                  <div>Fixed image height</div>&nbsp;&nbsp;
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input type="checkbox" (click)="activeImageHeight()" [checked]="isFixedImageHeight">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+                <br>
+                <div style="display: flex;align-items: center;" *ngIf="isFixedImageHeight == true">
+                  <p>Enter height for image:</p>&nbsp;&nbsp;
+                  <input placeholder="Enter height" type="number" [(ngModel)]='FixedImageHeight'
+                    style="width: 100px;text-align: center;" />
+                </div>
+              </div>
+              <div class="">
+                <br>
+                Choose image style: &nbsp;
+                <select (change)="selectImageStyle($event.target.value)" [(ngModel)]='imageStyleGrid'>
+                  <option value="40-60" selected>Small image</option>
+                  <option value="50-50">Medium image</option>
+                  <option value="60-40">Large image</option>
+                </select>
+              </div>
+
+              <!-- <div class="">
+                <br>
+                <p>Select image style</p>
+
+              </div> -->
+
+              <!-- <div class="">
+                <br>
+                <p>Style for Product Detail Page:</p>
+                <br>
+                <div style="display: flex;flex-wrap: wrap;">
+                  <div class="itemImgFlex">
+                    <input type="radio" id='a' value="productDetail-one" name="globalProductDetailStyle">&nbsp;&nbsp;
+                    <label for='a'><img src='../../../assets/img/no-product.png'></label>
+                  </div>
+                  <br>
+                  <div class="itemImgFlex">
+                    <input type="radio" id='b' value="productDetail-two" name="globalProductDetailStyle">&nbsp;&nbsp;
+                    <label for='b'><img src='../../../assets/img/no-product.png'></label>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+          </div>
+          <div *ngIf="dataType == 'header'">
+            <div *ngIf="headerOptionType == 'Header Style'" class="headerImages">
+              <p class="heading">Select custom style for header</p>
+              <br>
+              <div style="text-align: center;">
+                <ion-button (click)="saveHeaderStyle()" shape="round" class="btn-1 i-start" color="success"
+                  fill="outline">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+              <br>
+              <div style="display: flex;">
+                Width taken by section:&nbsp;&nbsp;&nbsp;&nbsp;
+                <div>
+                  <span style="margin-left: 8px;">
+                    <input type="radio" id='wa' value="full-width" name="headerWidth">&nbsp;&nbsp;
+                    <label for='wa'>Full Width</label>
+                  </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span>
+                    <input type="radio" id='wb' value="box-width" name="headerWidth">&nbsp;&nbsp;
+                    <label for='wb'>Box Width</label>
+                  </span>
+                </div>
+              </div>
+              <div>
+                <h5>Header Colors</h5>
+                <div style="display: flex;align-items: center;margin-bottom: .5rem;">
+                  <div style="display: flex;align-items: center;">
+                    <p>Background Color</p>&nbsp;&nbsp;<input type="color"
+                      style="background: white;height: 30px;width: 100px;" [(ngModel)]='headerBackgroundColor'>
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div style="display: flex;align-items: center;">
+                    <p>Foreground Color</p>&nbsp;&nbsp;<input type="color"
+                      style="background: white;height: 30px;width: 100px;" [(ngModel)]='headerForegroundColor'>
+                  </div>
+                </div>
+                <span class="infoText">Note: Header colors only applicable in header number 4 and 6.</span>
+              </div>
+              <br>
+              <h5>Header Styles</h5>
+              <p>1) Header one</p>
+              <div class="headerImgFlex">
+                <input type="radio" id='a' value="header-one" name="headerStyle">&nbsp;&nbsp;
+                <label for='a'>
+                  <img src='../../../assets/img/design-studio/header/header-style1.PNG'>
+                </label>
+              </div>
+              <br>
+              <p>2) Header two</p>
+              <div class="headerImgFlex">
+                <input type="radio" id='b' value="header-two" name="headerStyle">&nbsp;&nbsp;
+                <label for='b'>
+                  <img src='../../../assets/img/design-studio/header/header-style2.PNG'>
+                </label>
+              </div>
+              <br>
+              <p>3) Header three</p>
+              <div class="headerImgFlex">
+                <input type="radio" id='c' value="header-three" name="headerStyle">&nbsp;&nbsp;
+                <label for='c'>
+                  <img src='../../../assets/img/design-studio/header/header-style3.PNG'></label>
+              </div>
+              <br>
+              <p>4) Header four <span class="infoText">( Suitable for maximum 4 menu items. )</span></p>
+              <div class="headerImgFlex">
+                <input type="radio" id='d' value="header-four" name="headerStyle">&nbsp;&nbsp;
+                <label for='d'>
+                  <img src='../../../assets/img/design-studio/header/header-style4.PNG'></label>
+              </div>
+              <!-- <br>
+              <p>5) Header five</p>
+              <div class="headerImgFlex">
+                <input type="radio" id='e' value="header-five" name="headerStyle">&nbsp;&nbsp;
+                <label for='e'>
+                  <img src='../../../assets/img/design-studio/header/header-style5.PNG'></label>
+              </div>
+              <br>
+              <p>6) Header six</p>
+              <div class="headerImgFlex">
+                <input type="radio" id='f' value="header-six" name="headerStyle">&nbsp;&nbsp;
+                <label for='f'>
+                  <img src='../../../assets/img/design-studio/header/header-style6.png'></label>
+              </div>
+              <br>
+              <p>7) Header seven</p>
+              <div class="headerImgFlex">
+                <input type="radio" id='g' value="header-seven" name="headerStyle">&nbsp;&nbsp;
+                <label for='g'>
+                  <img src='../../../assets/img/design-studio/header/header-style7.png'></label>
+              </div>
+              <br>
+              <p>8) Header eight</p>
+              <div class="headerImgFlex">
+                <input type="radio" id='h' value="header-eight" name="headerStyle">&nbsp;&nbsp;
+                <label for='h'>
+                  <img src='../../../assets/img/design-studio/header/header-style8.png'></label>
+              </div>
+              <br>
+              <p>9) Header nine</p>
+              <div class="headerImgFlex">
+                <input type="radio" id='i' value="header-nine" name="headerStyle">&nbsp;&nbsp;
+                <label for='i'>
+                  <img src='../../../assets/img/design-studio/header/header-style9.png'></label>
+              </div> -->
+            </div>
+            <div *ngIf="headerOptionType == 'Logo'">
+              <p class="heading">Change height and width of logo</p>
+              <br>
+              <div style="text-align: center;">
+                <ion-button (click)="saveLogoSettings()" shape="round" class="btn-1 i-start" color="success"
+                  fill="outline">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+              <!-- <div style="display: flex; margin-top: .5rem;">
+                <p>Custom Size Show</p>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeCustomSizeShow()" [checked]="isCustomSizeActive">
+                    <span class="slider round"></span>
+                  </label>
+                </div> -->
+              <div class="dFlex">
+                <div style="display: flex;">
+                  <p>Custom Size Show</p>&nbsp;&nbsp;
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input type="checkbox" (click)="activeCustomSizeShow()" [checked]="isCustomSizeActive">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+                <div class="">
+                  <div class="upload-btn-wrapper">
+                    <button class="upload-btn btn-1 i-start"> <i class="flaticon-null-16"></i>Upload logo</button>
+                    <input type="file" name="myfile" (change)="uploadLogo($event.target.files)" />
+                  </div>
+                </div>
+              </div>
+              <div class="dFlexCustom" *ngIf="isCustomSizeActive">
+                <div class="flexChild">
+                  <div class="flexInput">
+                    <p>Height:&nbsp;&nbsp;</p>
+                    <ion-range min="1" max="800" [(ngModel)]='logoHeight' (ngModelChange)="setRam()"></ion-range>
+                  </div>
+                  <div class="flexInput">
+                    <p>Width:&nbsp;&nbsp;</p>
+                    <ion-range type="range" min="1" max="800" [(ngModel)]='logoWidth' (ngModelChange)="setRam()">
+                    </ion-range>
+                  </div>
+                </div>
+                <div class="flexChild">
+                  <div class="flexInput">
+                    <p>Height:&nbsp;&nbsp;</p>
+                    <ion-input class="" type="number" [(ngModel)]='logoHeight' (ngModelChange)="setRam()"
+                      placeholder="Enter height"></ion-input>
+                  </div>
+                  <div class="flexInput">
+                    <p>Width:&nbsp;&nbsp;</p>
+                    <ion-input type="number" [(ngModel)]='logoWidth' (ngModelChange)="setRam()"
+                      placeholder="Enter width"></ion-input>
+                  </div>
+                </div>
+                <br>
+                <!-- <img id='logoImage' src="../../../assets/img/shop-logo.png" height="logoHeight" width="logoWidth"
+                  style="background: var(--ion-color-primary)"> -->
+              </div>
+              <div *ngIf="logoUrlData">
+                <div class="dFlex">
+                  <p>Custom Logo Preview</p>
+                  <ion-button shape="round" size="small" color="danger" (click)="deleteCustomLogo()">
+                    <i class="flaticon-null-21"></i>&nbsp;
+                    Delete Custom Logo
+                  </ion-button>
+                </div>
+                <br>
+                <img id='logoImage' [src]='logoUrlData' height="logoHeight" width="logoWidth">
+              </div>
+              <div *ngIf="!logoUrlData">
+                <p>Logo preview not available</p>
+              </div>
+            </div>
+            <div *ngIf="headerOptionType == 'Notification Bar'">
+              <p class="heading">Customize Notification Bar</p>
+              <br>
+              <div style="text-align: center;">
+                <ion-button (click)="saveNotificationSettings()" shape="round" class="btn-1 i-start" color="success"
+                  fill="outline">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <div>Show</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeNoti()" [checked]="isNotiActive">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Text:</p>&nbsp;&nbsp;<input placeholder="Enter Notification Text Here..." style="padding: 8px;"
+                  [(ngModel)]='notiText'>
+              </div>
+              <br>
+              <p>Color:</p>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Background Color</p>&nbsp;&nbsp;<input type="color"
+                  style="background: white;height: 30px;width: 100px;" [(ngModel)]='notiBackgroundColor'
+                  (ngModelChange)="setNotiColor()">
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Foreground Color</p>&nbsp;&nbsp;<input type="color"
+                  style="background: white;height: 30px;width: 100px;" [(ngModel)]='notiForegroundColor'
+                  (ngModelChange)="setNotiColor()">
+              </div>
+              <br>
+              <p>Preview:</p>
+              <br>
+              <div id='notiSample' style="height: 30px;line-height: 30px;">
+                <p style="text-align: center;">Sample Text For Reference</p>
+              </div>
+            </div>
+            <div *ngIf="headerOptionType == 'Info Bar'">
+              <p class="heading">Customize Info Bar</p>
+              <br>
+              <div style="text-align: center;">
+                <ion-button (click)="saveInfoSettings()" shape="round" class="btn-1 i-start" color="success"
+                  fill="outline">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <div>Show</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeInfo()" [checked]="isInfoActive">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Left Text:</p>&nbsp;&nbsp;<input placeholder="Enter Left Text Here..." style="padding: 8px;"
+                  [(ngModel)]='infoLeftText'>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Right Text:</p>&nbsp;&nbsp;<input placeholder="Enter Right Text Here..." style="padding: 8px;"
+                  [(ngModel)]='infoRightText'>
+              </div>
+              <br>
+              <p>Color:</p>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Background Color</p>&nbsp;&nbsp;<input type="color"
+                  style="background: white;height: 30px;width: 100px;" [(ngModel)]='infoBackgroundColor'
+                  (ngModelChange)="setInfoColor()">
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Foreground Color</p>&nbsp;&nbsp;<input type="color"
+                  style="background: white;height: 30px;width: 100px;" [(ngModel)]='infoForegroundColor'
+                  (ngModelChange)="setInfoColor()">
+              </div>
+              <br>
+              <p>Preview:</p>
+              <br>
+              <div id='infoSample' style="height: 30px;line-height: 30px;">
+                <p style="text-align: center;float: left;">&nbsp;&nbsp;Sample Left Text</p>
+                <p style="text-align: center;float: right;">Sample Right Text&nbsp;&nbsp;</p>
+              </div>
+            </div>
+            <div *ngIf="headerOptionType == 'Login Button'">
+              <p class="heading">Customize Login Button</p>
+              <br>
+              <div style="text-align: center;">
+                <ion-button (click)="saveLoginBtn()" shape="round" class="btn-1 i-start" color="success" fill="outline">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <div>Show</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeLogin()" [checked]="isLoginActive">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Text:</p>&nbsp;&nbsp;<input placeholder="Text for Login Button..." style="padding: 8px;"
+                  [(ngModel)]='loginText'>
+              </div>
+              <!-- <br>
+              <p>Color:</p>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Background Color</p>&nbsp;&nbsp;<input type="color"
+                  style="background: white;height: 30px;width: 100px;" [(ngModel)]='loginBackgroundColor'>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Foreground Color</p>&nbsp;&nbsp;<input type="color"
+                  style="background: white;height: 30px;width: 100px;" [(ngModel)]='loginForegroundColor'>
+              </div> -->
+            </div>
+            <div *ngIf="headerOptionType == 'Wishlist Button'">
+              <p class="heading">Customize Wishlist Button</p>
+              <br>
+              <div style="text-align: center;">
+                <ion-button (click)="saveWishlistBtn()" shape="round" class="btn-1 i-start" color="success"
+                  fill="outline">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <div>Show</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeWishlist()" [checked]="isWishlistActive">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Text:</p>&nbsp;&nbsp;<input placeholder="Text for Wishlist Button..." style="padding: 8px;"
+                  [(ngModel)]='wishlistText'>
+              </div>
+              <!-- <br>
+              <p>Color:</p>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Background Color</p>&nbsp;&nbsp;<input type="color"
+                  style="background: white;height: 30px;width: 100px;" [(ngModel)]='wishBackgroundColor'>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Foreground Color</p>&nbsp;&nbsp;<input type="color"
+                  style="background: white;height: 30px;width: 100px;" [(ngModel)]='wishForegroundColor'>
+              </div> -->
+            </div>
+            <div *ngIf="headerOptionType == 'Cart Button'">
+              <p class="heading">Customize Cart Button</p>&nbsp;&nbsp;
+              <br>
+              <div style="text-align: center;">
+                <ion-button (click)="saveCartBtn()" shape="round" class="btn-1 i-start" color="success" fill="outline">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <div>Show</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeCart()" [checked]="isCartActive">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Text:</p>&nbsp;&nbsp;<input placeholder="Text for Cart Button..." style="padding: 8px;"
+                  [(ngModel)]='cartText'>
+              </div>
+              <!-- <br>
+              <p>Color:</p>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Background Color</p>&nbsp;&nbsp;<input type="color"
+                  style="background: white;height: 30px;width: 100px;" [(ngModel)]='cartBackgroundColor'>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Foreground Color</p>&nbsp;&nbsp;<input type="color"
+                  style="background: white;height: 30px;width: 100px;" [(ngModel)]='cartForegroundColor'>
+              </div> -->
+            </div>
+            <div *ngIf="headerOptionType == 'Search Bar'">
+              <p class="heading">Customize Search Bar</p>
+              <br>
+              <div style="text-align: center;">
+                <ion-button (click)="saveSeachBar()" shape="round" class="btn-1 i-start" color="success" fill="outline">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <div>Show</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeSearch()" [checked]="isSearchActive">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Placeholder Text:</p>&nbsp;&nbsp;<input placeholder="Placeholder Text for Search Bar..."
+                  style="padding: 8px;" [(ngModel)]='searchText'>
+              </div>
+            </div>
+            <div *ngIf="headerOptionType == 'Menu'">
+              <p class="heading">Create custom menu for header</p>
+              <br>
+              <div style="text-align: center;">
+                <ion-button (click)='saveMenuData()' shape="round" class="btn-1 i-start" color="success" fill="outline">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <div>Show</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeMenu()" [checked]="menuData.show">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <!-- <br>
+              <div style="display: flex;align-items: center;">
+                <p>Background Color</p>&nbsp;&nbsp;<input type="color"
+                  style="background: white;height: 30px;width: 100px;" [(ngModel)]='menuBackgroundColor'>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;">
+                <p>Foreground Color</p>&nbsp;&nbsp;<input type="color"
+                  style="background: white;height: 30px;width: 100px;" [(ngModel)]='menuForegroundColor'>
+              </div> -->
+              <br>
+              <div>
+                <ion-button (click)='getMenuItem()' color="success">Add Menu Items +</ion-button>&nbsp;&nbsp;
+                <ion-button (click)='getDropdownItem()' color="success">Add Dropdown Menu +</ion-button>
+              </div>
+              <br>
+              <div>
+                <div *ngIf='menuData && menuData.menuItems.length > 0'>
+                  <div *ngFor='let item of menuData.menuItems,let i = index '
+                    style="padding: 5px;border-bottom: 1px solid lightgray;">
+                    <div *ngIf='!item.dropdownMenu || (item.dropdownMenu && item.dropdownMenu == false)'>
+                      <div style="display: flex;align-items: center;justify-content: space-between;">
+                        <div style="display: flex;align-items: center;">
+                          <i class="flaticon-null-19 remove-icon" (click)="deleteMenuItem(i)"></i>&nbsp;&nbsp;
+                          <input placeholder="Enter Title..." [(ngModel)]='item.title'>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf='item.dropdownMenu && item.dropdownMenu == true'>
+                      <div style="display: flex;align-items: center;justify-content: space-between;">
+                        <div style="display: flex;align-items: center;">
+                          <i class="flaticon-null-19 remove-icon" (click)="deleteMenuItem(i)"></i>&nbsp;&nbsp;
+                          <input placeholder="Enter Title..." [(ngModel)]='item.title'>
+                        </div>
+                        <div style="display: flex;align-items: center;">
+                          <ion-button (click)='getDropMenuItem(i)'>Add Dropdown Items +</ion-button>
+                        </div>
+                      </div>
+                      <div *ngIf='item.dropdownMenuData' style="padding-top: 4px;padding-left: 24px;">
+                        <div *ngFor='let dropItem of item.dropdownMenuData,let j = index'>
+                          <div style="display: flex;align-items: center;justify-content: space-between;">
+                            <div style="display: flex;align-items: center;">
+                              <i class="flaticon-null-19 remove-icon" (click)="deleteDropMenuItem(i,j)"></i>&nbsp;&nbsp;
+                              <input placeholder="Enter Title..." [(ngModel)]='dropItem.title'>
+                            </div>
+                            <div style="display: flex;align-items: center;">
+                              <ion-button (click)='getSubMenuItem(i,j)' style="margin: 5px;">Add Submenu Items +
+                              </ion-button>
+                            </div>
+                          </div>
+                          <div *ngIf='dropItem.subMenuData' style="padding-top: 4px;padding-left: 24px;">
+                            <p *ngFor='let subItem of dropItem.subMenuData,let k = index'
+                              style="padding: 8px;display: flex;align-items: center;">
+                              <i class="flaticon-null-19 remove-icon"
+                                (click)="deleteSubMenuItem(i,j,k)"></i>&nbsp;&nbsp;
+                              <input placeholder="Enter Title..." [(ngModel)]='subItem.title'>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="dataType == 'categories' && selectedSubItem == '' ">
+            <p style="font-size: medium;font-weight: bold;text-align: center;">Select custom style for {{selectedItem}}
+            </p>
+            <br>
+            <div style="text-align: center;">
+              <ion-button (click)="saveStyleCategory()" shape="round" class="btn-1 i-start" color="success"
+                fill="outline">
+                <i class="flaticon-null-20 margin-icon"></i>
+                Save
+              </ion-button>
+            </div>
+            <br>
+            <div style="display: flex;align-items: center;">
+              <div>Category should take fixed height</div>&nbsp;&nbsp;
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input type="checkbox" (click)="activeFixedHeight()" [checked]="isFixedHeight">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <div class="">
+              <div style="display: flex;align-items: center; margin-top: .7rem;">
+                <div>Show variant on product thumb</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="toggleShowVariant()" [checked]="showVariant">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; margin-top: .7rem;">
+              <p>Product Filter Show For Categories</p>&nbsp;&nbsp;
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input type="checkbox" (click)="activeShowFilter()" [checked]="isFilterActive">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <br>
+            <div style="display: flex;align-items: center;" *ngIf="isFixedHeight == true">
+              <p>Enter height for section:</p>&nbsp;&nbsp;
+              <input placeholder="Enter height" type="number" [(ngModel)]='fixedHeight'
+                style="width: 100px;text-align: center;" />
+            </div>
+            <br>
+            <div style="display: flex;text-align: center;align-items: center;">
+              Number of items per row:&nbsp;&nbsp;&nbsp;&nbsp;
+              Desktop:&nbsp;&nbsp;
+              <select (change)="selectLargeGridNo($event.target.value)" [(ngModel)]='largeGridNo'>
+                <option value=5 selected>5</option>
+                <option value=4>4</option>
+                <option value=3>3</option>
+                <option value=2>2</option>
+                <option value=1>1</option>
+              </select>&nbsp;&nbsp;&nbsp;&nbsp;
+              Laptop:&nbsp;&nbsp;
+              <select (change)="selectMediumGridNo($event.target.value)" [(ngModel)]='mediumGridNo'>
+                <option value=5>5</option>
+                <option value=4 selected>4</option>
+                <option value=3>3</option>
+                <option value=2>2</option>
+                <option value=1>1</option>
+              </select>&nbsp;&nbsp;&nbsp;&nbsp;
+              Mobile:&nbsp;&nbsp;
+              <select (change)="selectSmallGridNo($event.target.value)" [(ngModel)]='smallGridNo'>
+                <option value=2 selected>2</option>
+                <option value=1>1</option>
+              </select>
+            </div>
+            <br>
+            <ion-segment style="border-bottom: 1px solid lightgray;" value="subCat">
+              <ion-segment-button value="subCat" (click)="segmentChange('subCat')">
+                <ion-label style="font-size: small;">Style for Subcategory</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="prod" (click)="segmentChange('prod')">
+                <ion-label style="font-size: small;">Style for Products</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+            <br>
+            <div style="display: flex;flex-wrap: wrap;" [hidden]='currentCatOption == "prod"'>
+              <div class="itemImgFlex">
+                <input type="radio" id='a' value="category-one" name="categoryStyle">&nbsp;&nbsp;
+                <label for='a'><img src='../../../assets/img/design-studio/category/category_style1.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='b' value="category-two" name="categoryStyle">&nbsp;&nbsp;
+                <label for='b'><img src='../../../assets/img/design-studio/category/category_style2.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='c' value="category-three" name="categoryStyle">&nbsp;&nbsp;
+                <label for='c'><img src='../../../assets/img/design-studio/category/category_style3.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='d' value="category-four" name="categoryStyle">&nbsp;&nbsp;
+                <label for='d'><img src='../../../assets/img/design-studio/category/category_style4.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='e' value="category-five" name="categoryStyle">&nbsp;&nbsp;
+                <label for='e'><img src='../../../assets/img/design-studio/category/category_style5.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='f' value="category-six" name="categoryStyle">&nbsp;&nbsp;
+                <label for='f'><img src='../../../assets/img/design-studio/category/category_style6.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='g' value="category-seven" name="categoryStyle">&nbsp;&nbsp;
+                <label for='g'><img src='../../../assets/img/design-studio/category/category_style7.PNG'></label>
+              </div>
+            </div>
+            <div style="display: flex;flex-wrap: wrap;" [hidden]='currentCatOption == "subCat"'>
+              <div class="itemImgFlex">
+                <input type="radio" id='a2' value="product-one" name="categoryProductStyle">&nbsp;&nbsp;
+                <label for='a2'><img src='../../../assets/img/design-studio/product/product_style1.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='b2' value="product-two" name="categoryProductStyle">&nbsp;&nbsp;
+                <label for='b2'><img src='../../../assets/img/design-studio/product/product_style2.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='c2' value="product-three" name="categoryProductStyle">&nbsp;&nbsp;
+                <label for='c2'><img src='../../../assets/img/design-studio/product/product_style3.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='d2' value="product-four" name="categoryProductStyle">&nbsp;&nbsp;
+                <label for='d2'><img src='../../../assets/img/design-studio/product/product_style4.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='e2' value="product-five" name="categoryProductStyle">&nbsp;&nbsp;
+                <label for='e2'><img src='../../../assets/img/design-studio/product/product_style5.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='f2' value="product-six" name="categoryProductStyle">&nbsp;&nbsp;
+                <label for='f2'><img src='../../../assets/img/design-studio/product/product_style6.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='g2' value="product-seven" name="categoryProductStyle">&nbsp;&nbsp;
+                <label for='g2'><img src='../../../assets/img/design-studio/product/product_style7.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='h2' value="product-eight" name="categoryProductStyle">&nbsp;&nbsp;
+                <label for='h2'><img src='../../../assets/img/design-studio/product/product_style8.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='i2' value="product-nine" name="categoryProductStyle">&nbsp;&nbsp;
+                <label for='i2'><img src='../../../assets/img/design-studio/product/product_style9.png'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='j2' value="product-ten" name="categoryProductStyle">&nbsp;&nbsp;
+                <label for='j2'><img src='../../../assets/img/design-studio/product/product_style10.png'></label>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="dataType == 'categories' && selectedSubItem != '' ">
+            <p style="font-size: medium;font-weight: bold;text-align: center;">Select custom style for {{selectedItem}}
+              : {{selectedSubItem}}
+            </p>
+            <br>
+            <div style="text-align: center;">
+              <ion-button (click)="saveSubcatStyle()" shape="round" class="btn-1 i-start" color="success"
+                fill="outline">
+                <i class="flaticon-null-20 margin-icon"></i>
+                Save
+              </ion-button>
+            </div>
+            <br>
+            <div style="display: flex;align-items: center;">
+              <div>Subcategories should take fixed height</div>&nbsp;&nbsp;
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input type="checkbox" (click)="activeFixedHeight()" [checked]="isFixedHeight">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <div class="">
+              <br>
+              <div style="display: flex;align-items: center;">
+                <div>Show variant on product thumb</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="toggleShowVariant()" [checked]="showVariant">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div style="display: flex;align-items: center;" *ngIf="isFixedHeight == true">
+              <p>Enter height for section:</p>&nbsp;&nbsp;
+              <input placeholder="Enter height" type="number" [(ngModel)]='fixedHeight'
+                style="width: 100px;text-align: center;" />
+            </div>
+            <br>
+            <div style="display: flex;text-align: center;align-items: center;">
+              Number of items per row:&nbsp;&nbsp;&nbsp;&nbsp;
+              Desktop:&nbsp;&nbsp;
+              <select (change)="selectLargeGridNo($event.target.value)" [(ngModel)]='largeGridNo'>
+                <option value=5 selected>5</option>
+                <option value=4>4</option>
+                <option value=3>3</option>
+                <option value=2>2</option>
+                <option value=1>1</option>
+              </select>&nbsp;&nbsp;&nbsp;&nbsp;
+              Laptop:&nbsp;&nbsp;
+              <select (change)="selectMediumGridNo($event.target.value)" [(ngModel)]='mediumGridNo'>
+                <option value=5>5</option>
+                <option value=4 selected>4</option>
+                <option value=3>3</option>
+                <option value=2>2</option>
+                <option value=1>1</option>
+              </select>&nbsp;&nbsp;&nbsp;&nbsp;
+              Mobile:&nbsp;&nbsp;
+              <select (change)="selectSmallGridNo($event.target.value)" [(ngModel)]='smallGridNo'>
+                <option value=2 selected>2</option>
+                <option value=1>1</option>
+              </select>
+            </div>
+            <br>
+            <p>Style for Products:</p>
+            <br>
+            <div style="display: flex;flex-wrap: wrap;">
+              <div class="itemImgFlex">
+                <input type="radio" id='a' value="product-one" name="subcatStyle">&nbsp;&nbsp;
+                <label for='a'><img src='../../../assets/img/design-studio/product/product_style1.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='b' value="product-two" name="subcatStyle">&nbsp;&nbsp;
+                <label for='b'><img src='../../../assets/img/design-studio/product/product_style2.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='c' value="product-three" name="subcatStyle">&nbsp;&nbsp;
+                <label for='c'><img src='../../../assets/img/design-studio/product/product_style3.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='d' value="product-four" name="subcatStyle">&nbsp;&nbsp;
+                <label for='d'><img src='../../../assets/img/design-studio/product/product_style4.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='e' value="product-five" name="subcatStyle">&nbsp;&nbsp;
+                <label for='e'><img src='../../../assets/img/design-studio/product/product_style5.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='f' value="product-six" name="subcatStyle">&nbsp;&nbsp;
+                <label for='f'><img src='../../../assets/img/design-studio/product/product_style6.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='g' value="product-seven" name="subcatStyle">&nbsp;&nbsp;
+                <label for='g'><img src='../../../assets/img/design-studio/product/product_style7.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='h' value="product-eight" name="subcatStyle">&nbsp;&nbsp;
+                <label for='h'><img src='../../../assets/img/design-studio/product/product_style8.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='i' value="product-nine" name="subcatStyle">&nbsp;&nbsp;
+                <label for='i'><img src='../../../assets/img/design-studio/product/product_style9.png'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='j' value="product-ten" name="subcatStyle">&nbsp;&nbsp;
+                <label for='j'><img src='../../../assets/img/design-studio/product/product_style10.png'></label>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="dataType == 'brands'">
+            <p style="font-size: medium;font-weight: bold;text-align: center;">Select custom style for brand :
+              {{selectedItem}}
+            </p>
+            <br>
+            <div style="text-align: center;">
+              <ion-button (click)="saveStyleBrand()" shape="round" class="btn-1 i-start" color="success" fill="outline">
+                <i class="flaticon-null-20 margin-icon"></i>
+                Save
+              </ion-button>
+            </div>
+            <br>
+            <div style="display: flex;align-items: center;">
+              <div>Brands should take fixed height</div>&nbsp;&nbsp;
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input type="checkbox" (click)="activeFixedHeight()" [checked]="isFixedHeight">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <div style="display: flex; margin-top: .7rem;">
+              <p>Product Filter Show For Brands</p>&nbsp;&nbsp;
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input type="checkbox" (click)="activeShowFilter()" [checked]="isFilterActive">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <br>
+            <div style="display: flex;align-items: center;" *ngIf="isFixedHeight == true">
+              <p>Enter height for section:</p>&nbsp;&nbsp;
+              <input placeholder="Enter height" type="number" [(ngModel)]='fixedHeight'
+                style="width: 100px;text-align: center;" />
+            </div>
+            <br>
+            <div style="display: flex;text-align: center;align-items: center;">
+              Number of items per row:&nbsp;&nbsp;&nbsp;&nbsp;
+              Desktop:&nbsp;&nbsp;
+              <select (change)="selectLargeGridNo($event.target.value)" [(ngModel)]='largeGridNo'>
+                <option value=5 selected>5</option>
+                <option value=4>4</option>
+                <option value=3>3</option>
+                <option value=2>2</option>
+                <option value=1>1</option>
+              </select>&nbsp;&nbsp;&nbsp;&nbsp;
+              Laptop:&nbsp;&nbsp;
+              <select (change)="selectMediumGridNo($event.target.value)" [(ngModel)]='mediumGridNo'>
+                <option value=5>5</option>
+                <option value=4 selected>4</option>
+                <option value=3>3</option>
+                <option value=2>2</option>
+                <option value=1>1</option>
+              </select>&nbsp;&nbsp;&nbsp;&nbsp;
+              Mobile:&nbsp;&nbsp;
+              <select (change)="selectSmallGridNo($event.target.value)" [(ngModel)]='smallGridNo'>
+                <option value=2 selected>2</option>
+                <option value=1>1</option>
+              </select>
+            </div>
+            <br>
+            <p>Style for Products:</p>
+            <br>
+            <div style="display: flex;flex-wrap: wrap;">
+              <div class="itemImgFlex">
+                <input type="radio" id='a' value="product-one" name="brandStyle">&nbsp;&nbsp;
+                <label for='a'><img src='../../../assets/img/design-studio/product/product_style1.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='b' value="product-two" name="brandStyle">&nbsp;&nbsp;
+                <label for='b'><img src='../../../assets/img/design-studio/product/product_style2.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='c' value="product-three" name="brandStyle">&nbsp;&nbsp;
+                <label for='c'><img src='../../../assets/img/design-studio/product/product_style3.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='d' value="product-four" name="brandStyle">&nbsp;&nbsp;
+                <label for='d'><img src='../../../assets/img/design-studio/product/product_style4.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='e' value="product-five" name="brandStyle">&nbsp;&nbsp;
+                <label for='e'><img src='../../../assets/img/design-studio/product/product_style5.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='f' value="product-six" name="brandStyle">&nbsp;&nbsp;
+                <label for='f'><img src='../../../assets/img/design-studio/product/product_style6.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='g' value="product-seven" name="brandStyle">&nbsp;&nbsp;
+                <label for='g'><img src='../../../assets/img/design-studio/product/product_style7.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='h' value="product-eight" name="brandStyle">&nbsp;&nbsp;
+                <label for='h'><img src='../../../assets/img/design-studio/product/product_style8.PNG'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='i' value="product-nine" name="brandStyle">&nbsp;&nbsp;
+                <label for='i'><img src='../../../assets/img/design-studio/product/product_style9.png'></label>
+              </div>
+              <br>
+              <div class="itemImgFlex">
+                <input type="radio" id='j' value="product-ten" name="brandStyle">&nbsp;&nbsp;
+                <label for='j'><img src='../../../assets/img/design-studio/product/product_style10.png'></label>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="dataType == 'pages'">
+            <ng-container *ngIf="dataList.length; else noPageDesign">
+              <p style="font-size: medium;font-weight: bold;text-align: center;">Select custom style for section. Type:
+                {{widgetType}}
+              </p>
+              <br>
+              <div style="text-align: center;">
+                <ion-button (click)="saveStyleSection()" shape="round" class="btn-1 i-start" color="success"
+                  fill="outline">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+            </ng-container>
+            <ng-template #noPageDesign>
+              <p style="font-size: medium;font-weight: bold;text-align: center;">No widget available for design studio
+              </p>
+            </ng-template>
+            <br>
+            <div
+              *ngIf="widgetType == 'banner-slider' || widgetType == 'image-block' || widgetType == 'video-block' || widgetType == 'text-block' || widgetType == 'form' || widgetType == 'document'">
+
+              <br>
+              <div style="display: flex;">
+                Width taken by section:&nbsp;&nbsp;&nbsp;&nbsp;
+                <div>
+                  <span style="margin-left: 8px;">
+                    <input type="radio" id='wa' value="full-width" name="sectionWidth">&nbsp;&nbsp;
+                    <label for='wa'>Full Width</label>
+                  </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span>
+                    <input type="radio" id='wb' value="box-width" name="sectionWidth">&nbsp;&nbsp;
+                    <label for='wb'>Box Width</label>
+                  </span>
+                </div>
+              </div>
+              <div *ngIf="widgetType !== 'banner-slider'">
+                <br>
+                <div>Background image and Color</div>&nbsp;&nbsp;
+                <div style="display: flex;align-items: center;">
+                  <input type="color" [(ngModel)]="widgetBgColor">
+                  <div class="upload-btn-wrapper">
+                    <ion-button size="small" class="upload-btn btn-1 i-start">
+                      <i class="flaticon-null-16"></i>Upload Image
+                    </ion-button>
+                    <input type="file" (change)="uploadBgImage($event.target.files)" />
+                  </div>
+                </div>
+                <div *ngIf="widgetBgImage">
+                  <div class="dFlex">
+                    <p>Background image Preview</p>
+                    <ion-button shape="round" size="small" color="danger" (click)="deleteWidgetBgImage()">
+                      <i class="flaticon-null-21"></i>&nbsp;
+                      Delete background image
+                    </ion-button>
+                  </div>
+                  <br>
+                  <img id='widgetImage' class="widgetImage" [src]='widgetBgImage'>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="widgetType == 'image-banner'">
+              <div style="display: flex;">
+                Width taken by section:&nbsp;&nbsp;&nbsp;&nbsp;
+                <div>
+                  <span style="margin-left: 8px;">
+                    <input type="radio" id='wa' value="full-width" name="sectionWidth">&nbsp;&nbsp;
+                    <label for='wa'>Full Width</label>
+                  </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span>
+                    <input type="radio" id='wb' value="box-width" name="sectionWidth">&nbsp;&nbsp;
+                    <label for='wb'>Box Width</label>
+                  </span>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;">
+                <div>Show as carousal</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeCarousal()" [checked]="isCarousalActive">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;text-align: center;align-items: center;" *ngIf="isCarousalActive">
+                Number of items per row:&nbsp;&nbsp;&nbsp;&nbsp;
+                Desktop:&nbsp;&nbsp;
+                <select (change)="selectLargeGridNo($event.target.value)" [(ngModel)]='largeGridNo'>
+                  <option value=5 selected>5</option>
+                  <option value=4>4</option>
+                  <option value=3>3</option>
+                  <option value=2>2</option>
+                  <option value=1>1</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                Laptop:&nbsp;&nbsp;
+                <select (change)="selectMediumGridNo($event.target.value)" [(ngModel)]='mediumGridNo'>
+                  <option value=5>5</option>
+                  <option value=4 selected>4</option>
+                  <option value=3>3</option>
+                  <option value=2>2</option>
+                  <option value=1>1</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                Mobile:&nbsp;&nbsp;
+                <select (change)="selectSmallGridNo($event.target.value)" [(ngModel)]='smallGridNo'>
+                  <option value=5>5</option>
+                  <option value=4>4</option>
+                  <option value=4.5>4.5</option>
+                  <option value=3>3</option>
+                  <option value=2 selected>2</option>
+                  <option value=2.5>2.5</option>
+                  <option value=1>1</option>
+                </select>
+              </div>
+              <div *ngIf="bannerLength >= 3">
+                <br>
+                <div style="display: flex;">
+                  <div>Show display Format</div>&nbsp;&nbsp;
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input type="checkbox" (click)="activeDisplayFormat()" [checked]="isDisplayFormat">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+                <div *ngIf="isDisplayFormat">
+                  <br>
+                  <div style="display: flex;">
+                    <div>Display format</div>&nbsp;&nbsp;
+                    <select (change)="selectDisplayFormat($event.target.value)" [(ngModel)]='displayFormat'>
+                      <option value="Option1" selected>1 by 2</option>
+                      <option value="Option2">2 by 1</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <br>
+                <div>Background image and Color</div>&nbsp;&nbsp;
+                <div style="display: flex;align-items: center;">
+                  <input type="color" [(ngModel)]="widgetBgColor">
+                  <div class="upload-btn-wrapper">
+                    <ion-button size="small" class="upload-btn btn-1 i-start">
+                      <i class="flaticon-null-16"></i>Upload Image
+                    </ion-button>
+                    <input type="file" (change)="uploadBgImage($event.target.files)" />
+                  </div>
+                </div>
+                <div *ngIf="widgetBgImage">
+                  <div class="dFlex">
+                    <p>Background image Preview</p>
+                    <ion-button shape="round" size="small" color="danger" (click)="deleteWidgetBgImage()">
+                      <i class="flaticon-null-21"></i>&nbsp;
+                      Delete background image
+                    </ion-button>
+                  </div>
+                  <br>
+                  <img id='widgetImage' class="widgetImage" [src]='widgetBgImage'>
+                </div>
+              </div>
+
+            </div>
+            <div
+              *ngIf="widgetType == 'categories' || widgetType == 'brands' || widgetType == 'services' || widgetType == 'vendors'">
+              <br>
+              <div style="display: flex;align-items: center;">
+                <div>Section should take fixed height</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeFixedHeight()" [checked]="isFixedHeight">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <div *ngIf="widgetType == 'categories'">
+                <br>
+                <div style="display: flex;">
+                  <div>Show as carousal</div>&nbsp;&nbsp;
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input type="checkbox" (click)="activeCarousal()" [checked]="isCarousalActive">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;" *ngIf="isFixedHeight == true">
+                <p>Enter height for section:</p>&nbsp;&nbsp;
+                <input placeholder="Enter height" type="number" [(ngModel)]='fixedHeight'
+                  style="width: 100px;text-align: center;" />
+              </div>
+              <br>
+              <div style="display: flex;">
+                Width taken by section:&nbsp;&nbsp;&nbsp;&nbsp;
+                <div>
+                  <span style="margin-left: 8px;">
+                    <input type="radio" id='wa' value="full-width" name="sectionWidth">&nbsp;&nbsp;
+                    <label for='wa'>Full Width</label>
+                  </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span>
+                    <input type="radio" id='wb' value="box-width" name="sectionWidth">&nbsp;&nbsp;
+                    <label for='wb'>Box Width</label>
+                  </span>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;text-align: center;align-items: center;">
+                Number of items per row:&nbsp;&nbsp;&nbsp;&nbsp;
+                Desktop:&nbsp;&nbsp;
+                <select (change)="selectLargeGridNo($event.target.value)" [(ngModel)]='largeGridNo'>
+                  <option value=5 selected>5</option>
+                  <option value=4>4</option>
+                  <option value=3>3</option>
+                  <option value=2>2</option>
+                  <option value=1>1</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                Laptop:&nbsp;&nbsp;
+                <select (change)="selectMediumGridNo($event.target.value)" [(ngModel)]='mediumGridNo'>
+                  <option value=5>5</option>
+                  <option value=4 selected>4</option>
+                  <option value=3>3</option>
+                  <option value=2>2</option>
+                  <option value=1>1</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                Mobile:&nbsp;&nbsp;
+                <select (change)="selectSmallGridNo($event.target.value)" [(ngModel)]='smallGridNo'>
+                  <option value=2 selected>2</option>
+                  <option value=1>1</option>
+                </select>
+              </div>
+              <div>
+                <br>
+                <div>Background image and Color</div>&nbsp;&nbsp;
+                <div style="display: flex;align-items: center;">
+                  <input type="color" [(ngModel)]="widgetBgColor">
+                  <div class="upload-btn-wrapper">
+                    <ion-button size="small" class="upload-btn btn-1 i-start">
+                      <i class="flaticon-null-16"></i>Upload Image
+                    </ion-button>
+                    <input type="file" (change)="uploadBgImage($event.target.files)" />
+                  </div>
+                </div>
+                <div *ngIf="widgetBgImage">
+                  <div class="dFlex">
+                    <p>Background image Preview</p>
+                    <ion-button shape="round" size="small" color="danger" (click)="deleteWidgetBgImage()">
+                      <i class="flaticon-null-21"></i>&nbsp;
+                      Delete background image
+                    </ion-button>
+                  </div>
+                  <br>
+                  <img id='widgetImage' class="widgetImage" [src]='widgetBgImage'>
+                </div>
+              </div>
+              <br>
+              <p>Style for items:</p>
+              <br>
+              <div style="display: flex;flex-wrap: wrap;">
+                <div class="itemImgFlex">
+                  <input type="radio" id='a' value="category-one" name="sectionStyle">&nbsp;&nbsp;
+                  <label for='a'><img src='../../../assets/img/design-studio/category/category_style1.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='b' value="category-two" name="sectionStyle">&nbsp;&nbsp;
+                  <label for='b'><img src='../../../assets/img/design-studio/category/category_style2.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='c' value="category-three" name="sectionStyle">&nbsp;&nbsp;
+                  <label for='c'><img src='../../../assets/img/design-studio/category/category_style3.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='d' value="category-four" name="sectionStyle">&nbsp;&nbsp;
+                  <label for='d'><img src='../../../assets/img/design-studio/category/category_style4.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='e' value="category-five" name="sectionStyle">&nbsp;&nbsp;
+                  <label for='e'><img src='../../../assets/img/design-studio/category/category_style5.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='f' value="category-six" name="sectionStyle">&nbsp;&nbsp;
+                  <label for='f'><img src='../../../assets/img/design-studio/category/category_style6.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='g' value="category-seven" name="sectionStyle">&nbsp;&nbsp;
+                  <label for='g'><img src='../../../assets/img/design-studio/category/category_style7.PNG'></label>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="widgetType == 'product-carousel' || widgetType == 'product-list' ">
+              <br>
+              <div style="display: flex;align-items: center;">
+                <div>Image should take fixed height</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="activeFixedHeight()" [checked]="isFixedHeight">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="">
+                <br>
+                <div style="display: flex;align-items: center;">
+                  <div>Show variant on product thumb</div>&nbsp;&nbsp;
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input type="checkbox" (click)="toggleShowVariant()" [checked]="showVariant">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div style="display: flex;align-items: center;" *ngIf="isFixedHeight == true">
+                <p>Enter height for image:</p>&nbsp;&nbsp;
+                <input placeholder="Enter height" type="number" [(ngModel)]='fixedHeight'
+                  style="width: 100px;text-align: center;" />
+              </div>
+              <br>
+              <div style="display: flex;">
+                Width taken by section:&nbsp;&nbsp;&nbsp;&nbsp;
+                <div>
+                  <span style="margin-left: 8px;">
+                    <input type="radio" id='wa' value="full-width" name="sectionWidth">&nbsp;&nbsp;
+                    <label for='wa'>Full Width</label>
+                  </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span>
+                    <input type="radio" id='wb' value="box-width" name="sectionWidth">&nbsp;&nbsp;
+                    <label for='wb'>Box Width</label>
+                  </span>
+                </div>
+              </div>
+              <div *ngIf="widgetType == 'product-list'">
+                <br>
+                <div style="display: flex;">
+                  <div>Showcase Image Alignment</div>&nbsp;&nbsp;
+                  <!-- (change)="selectDisplayFormat($event.target.value)" [(ngModel)]='displayFormat' -->
+                  <select (change)="selectDisplayAlignment($event.target.value)" [(ngModel)]='displayAlignment'>
+                    <option value="left" selected>Left</option>
+                    <option value="top">Top</option>
+                    <option value="right">Right</option>
+                    <option value="bottom">Bottom</option>
+                  </select>
+                </div>
+                <br>
+              </div>
+              <br>
+              <div style="display: flex;text-align: center;align-items: center;">
+                Number of items per row:&nbsp;&nbsp;&nbsp;&nbsp;
+                Desktop:&nbsp;&nbsp;
+                <select (change)="selectLargeGridNo($event.target.value)" [(ngModel)]='largeGridNo'>
+                  <option value=5 selected>5</option>
+                  <option value=4>4</option>
+                  <option value=3>3</option>
+                  <option value=2>2</option>
+                  <option value=1>1</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                Laptop:&nbsp;&nbsp;
+                <select (change)="selectMediumGridNo($event.target.value)" [(ngModel)]='mediumGridNo'>
+                  <option value=5>5</option>
+                  <option value=4 selected>4</option>
+                  <option value=3>3</option>
+                  <option value=2>2</option>
+                  <option value=1>1</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                Mobile:&nbsp;&nbsp;
+                <select (change)="selectSmallGridNo($event.target.value)" [(ngModel)]='smallGridNo'>
+                  <option value=2 selected>2</option>
+                  <option value=1>1</option>
+                </select>
+              </div>
+              <div>
+                <br>
+                <div>Background image and Color</div>&nbsp;&nbsp;
+                <div style="display: flex;align-items: center;">
+                  <input type="color" [(ngModel)]="widgetBgColor">
+                  <div class="upload-btn-wrapper">
+                    <ion-button size="small" class="upload-btn btn-1 i-start">
+                      <i class="flaticon-null-16"></i>Upload Image
+                    </ion-button>
+                    <input type="file" (change)="uploadBgImage($event.target.files)" />
+                  </div>
+                </div>
+                <div *ngIf="widgetBgImage">
+                  <div class="dFlex">
+                    <p>Background image Preview</p>
+                    <ion-button shape="round" size="small" color="danger" (click)="deleteWidgetBgImage()">
+                      <i class="flaticon-null-21"></i>&nbsp;
+                      Delete background image
+                    </ion-button>
+                  </div>
+                  <br>
+                  <img id='widgetImage' class="widgetImage" [src]='widgetBgImage'>
+                </div>
+              </div>
+              <br>
+              <p>Style for items:</p>
+              <br>
+              <div style="display: flex;flex-wrap: wrap;">
+                <div class="itemImgFlex">
+                  <input type="radio" id='a' value="product-one" name="sectionProductStyle">&nbsp;&nbsp;
+                  <label for='a'><img src='../../../assets/img/design-studio/product/product_style1.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='b' value="product-two" name="sectionProductStyle">&nbsp;&nbsp;
+                  <label for='b'><img src='../../../assets/img/design-studio/product/product_style2.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='c' value="product-three" name="sectionProductStyle">&nbsp;&nbsp;
+                  <label for='c'><img src='../../../assets/img/design-studio/product/product_style3.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='d' value="product-four" name="sectionProductStyle">&nbsp;&nbsp;
+                  <label for='d'><img src='../../../assets/img/design-studio/product/product_style4.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='e' value="product-five" name="sectionProductStyle">&nbsp;&nbsp;
+                  <label for='e'><img src='../../../assets/img/design-studio/product/product_style5.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='f' value="product-six" name="sectionProductStyle">&nbsp;&nbsp;
+                  <label for='f'><img src='../../../assets/img/design-studio/product/product_style6.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='g' value="product-seven" name="sectionProductStyle">&nbsp;&nbsp;
+                  <label for='g'><img src='../../../assets/img/design-studio/product/product_style7.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='h' value="product-eight" name="sectionProductStyle">&nbsp;&nbsp;
+                  <label for='h'><img src='../../../assets/img/design-studio/product/product_style8.PNG'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='i' value="product-nine" name="sectionProductStyle">&nbsp;&nbsp;
+                  <label for='i'><img src='../../../assets/img/design-studio/product/product_style9.png'></label>
+                </div>
+                <br>
+                <div class="itemImgFlex">
+                  <input type="radio" id='j' value="product-ten" name="sectionProductStyle">&nbsp;&nbsp;
+                  <label for='j'><img src='../../../assets/img/design-studio/product/product_style10.png'></label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

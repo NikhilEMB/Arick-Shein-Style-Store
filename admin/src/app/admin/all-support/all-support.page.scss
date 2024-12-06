@@ -1,0 +1,65 @@
+.main-container {
+  width: 100%;
+}
+#scroll1 {
+  overflow: hidden;
+  height: 82vh;
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+#scroll2 {
+  overflow: hidden;
+  height: 82vh;
+  margin-top: 8px;
+  border-left: 1px solid lightgray;
+  padding: 1rem;
+  &:hover {
+    overflow-y: auto;
+  }
+}
+.statusList {
+  text-align: center;
+  p {
+    font-size: medium;
+    border: 1px solid lightgray;
+    padding: 10px;
+    margin: 8px;
+    cursor: pointer;
+    text-transform: capitalize;
+    border-radius: 6px;
+  }
+}
+
+.feedbacks-wrap {
+  //   margin-top: 10px;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+  &:hover {
+    box-shadow: 0 2px 5px #ccc;
+  }
+  p {
+    margin-bottom: 8px;
+  }
+  .btn-wrap {
+    text-align: right;
+  }
+  span {
+    margin-left: 5px;
+    .flaticon-call::before {
+      font-size: 10px;
+    }
+    .flaticon-null-7::before {
+      font-size: 10px;
+    }
+  }
+}
+@media screen and(min-height: 1200px) {
+  #scroll1,
+  #scroll2 {
+    height: 92vh;
+  }
+}

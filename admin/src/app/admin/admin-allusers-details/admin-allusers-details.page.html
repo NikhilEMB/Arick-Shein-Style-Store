@@ -1,0 +1,496 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="user-cart" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center style="margin-left: 48px;">{{udata.name}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs no-shadow no-border [activeTabIndex]="activeTabIndex">
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Orders</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Details</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Wallet</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Settings</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Advanced</ion-label>
+    </super-tab-button>
+
+    <super-tab-button>
+      <ion-label>Points</ion-label>
+    </super-tab-button>
+
+  </super-tabs-toolbar>
+
+  <super-tabs-container>
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+        <div class="spinner" *ngIf="ordersLoader; else ordersLoaded;">
+          <ion-spinner color="primary"></ion-spinner>
+        </div>
+        <ng-template #ordersLoaded>
+          <div class="no-data" *ngIf="!orders.length; else ordersHasLength;" text-center>
+            <img src="assets/img/no-orders.png" alt="">
+            <h6>No orders</h6>
+          </div>
+          <ng-template #ordersHasLength>
+            <div *ngFor="let order of orders; let i=index">
+              <div class="aud-order-id">
+                Order Id: ORD{{order.orderId}}
+              </div>
+              <div class="aud-products-container">
+                <div class="aud-placed-on" *ngIf="order.createdAt">
+                  Placed On {{order.createdAt.toDate() | date}} by <span>{{order.userName}}</span>
+                </div>
+                <ion-list class="ion-no-padding" lines="none" *ngIf="order?.products[0]">
+                  <ion-item class="ion-no-padding">
+                    <div slot="start"
+                      [ngStyle]="{'background': 'url(' + order.products[0].img.mob + ') no-repeat center', 'background-size': 'contain'}"
+                      class="aud-product-image">
+                      <div class="aud-more" *ngIf="order.products.length > 1">+ {{order.products.length - 1}} more</div>
+                    </div>
+                    <ion-label>
+                      <h2 class="aud-product-price ion-text-wrap">
+                        {{order.totalAmountToPaid | currency: currencyCode:true:'0.0'}}
+                      </h2>
+                      <h3 class="aud-product-name ion-text-wrap">{{order.products[0].name}} <span
+                          *ngIf="order.products.length > 1">+ {{order.products.length - 1}} more</span>
+                      </h3>
+                      <h5>{{order.status}}<span><i class="flaticon-null-20"></i></span></h5>
+                    </ion-label>
+                  </ion-item>
+                  <div class="aud-action-btn"
+                    *ngIf="order.deliveryStatus === 'inProgress' && (order.status === 'Confirmed' || order.status === 'Dispatched'); else showOnlyViewOrder">
+                    <ion-grid>
+                      <ion-row class="ion-justify-content-center" style="opacity: .6;font-size: small;">
+                        <ion-col size="12">
+                          Delivery agent has started delivery
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6">
+                          <ion-button (click)="onClickViewDetails(order.orderId)" size="small" shape="round">
+                            View Order
+                          </ion-button>
+                        </ion-col>
+                        <ion-col size="6">
+                          <ion-button (click)="onClickTrackOrder(order.deliveryAgentId, order.deliveryLatLng)"
+                            size="small" shape="round" color="dark">
+                            Track Order
+                          </ion-button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </div>
+                  <ng-template #showOnlyViewOrder>
+                    <div class="aud-view-details-btn">
+                      <ion-button (click)="onClickViewDetails(order.orderId)" size="small" shape="round">
+                        View Order
+                      </ion-button>
+                    </div>
+                  </ng-template>
+                </ion-list>
+              </div>
+            </div>
+          </ng-template>
+        </ng-template>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+        <div style="text-align: center;">
+          <ion-button (click)="saveUserData()" shape="round" class="btn-1 i-start" color="success" fill="outline">
+            <i class="flaticon-null-20 margin-icon"></i>
+            Save
+          </ion-button>&nbsp;&nbsp;
+        </div>
+        <div style="padding: 10px;margin: 6px">
+          <ion-button (click)='showEditDetails = !showEditDetails' *ngIf='!showEditDetails'>Edit User Details</ion-button>
+          <ion-button (click)='showEditDetails = !showEditDetails' *ngIf='showEditDetails'>View User Details</ion-button>
+          <br><br>
+          <div *ngIf='!showEditDetails'>
+            <p *ngIf = 'udata.name'><strong>Name</strong> : {{udata.name}}</p>
+            <p *ngIf = '!udata.name'><strong>Name</strong> : <span style="color: red;">Not Provided</span></p>
+            <br>
+            <p *ngIf = 'udata.email'><strong>Email</strong> : {{udata.email}}</p>
+            <p *ngIf = '!udata.email'><strong>Email</strong> : <span style="color: red;">Not Provided</span></p>
+            <br>
+            <p *ngIf = 'udata.birthday'><strong>Birthday</strong> : {{getDateTimeFormat(udata.birthday) | date}}</p>
+            <p *ngIf = '!udata.birthday'><strong>Birthday</strong>  : <span style="color: red;">Not Provided</span></p>
+            <br>
+            <p *ngIf = 'udata.phoneNo'><strong>Phone No</strong> : {{udata.phoneNo}}</p>
+            <p *ngIf = '!udata.phoneNo'><strong>Phone No</strong> : <span style="color: red;">Not Provided</span></p>
+            <br>
+            <p *ngIf = 'udata.customerGstNo'><strong>Customer Gst No</strong> : {{udata.customerGstNo}}</p>
+            <p *ngIf = '!udata.customerGstNo'><strong>Customer Gst No</strong> : <span style="color: red;">Not Provided</span></p>
+            <br>
+            <p *ngIf = 'udata.customInput'><strong>Custom Input</strong> : {{udata.customInput}}</p>
+            <p *ngIf = '!udata.customInput'><strong>Custom Input</strong> : <span style="color: red;">Not Provided</span></p>
+          </div>
+          <div *ngIf='showEditDetails'>
+            <div style="display: flex;align-items: center;">
+              <strong>Name&nbsp;:</strong>&nbsp;<input placeholder="Enter Name" [(ngModel)]='udata.name'/>
+            </div>
+            <br>
+            <div style="display: flex;align-items: center;">
+              <strong>Email&nbsp;:</strong>&nbsp;<input placeholder="Enter Email" [(ngModel)]='udata.email'/>
+            </div>
+            <br>
+            <p *ngIf = 'udata.birthday'><strong>Birthday</strong> : {{getDateTimeFormat(udata.birthday) | date}}</p>
+            <p *ngIf = '!udata.birthday'><strong>Birthday</strong>  : <span style="color: red;">Not Provided</span></p>
+            <br>
+            <p *ngIf = 'udata.phoneNo'><strong>Phone No</strong> : {{udata.phoneNo}}</p>
+            <p *ngIf = '!udata.phoneNo'><strong>Phone No</strong> : <span style="color: red;">Not Provided</span></p>
+            <br>
+            <div style="display: flex;align-items: center;">
+              <strong>Customer Gst No&nbsp;:</strong>&nbsp;<input placeholder="Enter Gst No" [(ngModel)]='udata.customerGstNo'/>
+            </div>
+            <br>
+            <div style="display: flex;align-items: center;">
+              <strong>Custom Input&nbsp;:</strong>&nbsp;<input placeholder="Enter Custom Input" [(ngModel)]='udata.customInput'/>
+            </div>
+          </div>
+        </div>
+        <div class="spinner" *ngIf="addressLoader; else addressLoaded;">
+          <ion-spinner color="primary"></ion-spinner>
+        </div>
+        <ng-template #addressLoaded>
+          <div class="no-data" *ngIf="!addresses.length; else addressesHasLength;" text-center>
+            <img src="assets/img/no-user.png" alt="">
+            <h6>No saved addresses</h6>
+          </div>
+          <ng-template #addressesHasLength>
+            <div class="address-card" *ngFor="let address of addresses; let i=index">
+              <div>
+                <div *ngIf = '!showEditAddress[i]' style="margin-bottom: 8px;">
+                  <p class="user-name">{{address.name}}</p>
+                  <p class="address">{{address.address}}</p>
+                  <p class="phone-no">{{address.phoneNo}}</p>
+                  <ng-container *ngIf="address?.additionalPhoneNo">
+                    <p class="phone-no">{{address.additionalPhoneNo}}</p>
+                  </ng-container>
+                </div>
+                <div *ngIf = 'showEditAddress[i]'>
+                  <div style="display: flex;align-items: center;">
+                    <p>Name&nbsp;:</p>&nbsp;<input placeholder="Enter Name for Address" [(ngModel)]='address.name'/>&nbsp;&nbsp;
+                    <p>Phone No&nbsp;:</p>&nbsp;<input placeholder="Enter Phone Number for Address" [(ngModel)]='address.phoneNo'/>&nbsp;&nbsp;
+                    <ng-container *ngIf="address?.additionalPhoneNo">
+                      <p>additional Phone No&nbsp;:</p>&nbsp;<input placeholder="Additional Phone Number for Address" [(ngModel)]='address.additionalPhoneNo'/>&nbsp;&nbsp;
+                    </ng-container>
+                    <p>City&nbsp;:</p>&nbsp;<input placeholder="Enter City" [(ngModel)]='address.city'/>
+                  </div>
+                  <br>
+                  <div style="display: flex;align-items: center;">
+                    <p>Address&nbsp;:</p>&nbsp;<input placeholder="Enter Address" [(ngModel)]='address.address'/>&nbsp;&nbsp;
+                    <div class="state-div">
+                      <p>State</p>
+                      <div class="form-input state-wrapper"
+                        (click)="openStateModal(i)">
+                        <div *ngIf="address.state">{{address.state}}
+                        </div>
+                        <div *ngIf="!address.state">Select State</div>
+                        <div>
+                          <i class="flaticon-null-13"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <p>State&nbsp;:</p>&nbsp;<input placeholder="Enter Address" [(ngModel)]='address.state'/> -->
+                    &nbsp;&nbsp;
+                    <p>Pincode&nbsp;:</p>&nbsp;<input placeholder="Enter Address" [(ngModel)]='address.pincode'/>
+                  </div>
+                </div>
+                <ion-button (click)='showEditAddress[i] = !showEditAddress[i]' *ngIf='!showEditAddress[i]'>Edit Address</ion-button>
+                <ion-button (click)='showEditAddress[i] = !showEditAddress[i]' *ngIf='showEditAddress[i]'>View Address</ion-button>
+              </div>
+            </div>
+          </ng-template>
+        </ng-template>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content class="ion-padding">
+        <div class="main-container">
+          <ion-button (click)="getMoneyAddType('addMoney')" shape="round" class="btn-1 i-start" color="success">
+           
+            Add money
+          </ion-button>
+
+          <ion-button (click)="getMoneyAddType('chargeUser')" shape="round" class="btn-1 i-start" color="primary">
+           
+            Charge User
+          </ion-button>
+
+        <div class="spinner" *ngIf="walletLoader; else txnsLoaded;">
+          <ion-spinner color="primary"></ion-spinner>
+        </div>
+      
+        <ng-template #txnsLoaded>
+          <div class="no-data" *ngIf="!transactions.length; else txnsHasLength;" text-center>
+            <img src="assets/img/no-user.png" alt="">
+            <h6>No wallet transactions</h6>
+          </div>
+          <ng-template #txnsHasLength>
+            <div class="inline-align">
+              <h6>
+                Wallet Balance:
+              </h6>
+              <h6>
+                {{balance | currency:currencyCode:true}}
+              </h6>
+            </div>
+            <div class="inline-align">
+              <h6>
+                Cashback Balance:
+              </h6>
+              <h6>
+                {{cashbackBalance | currency:currencyCode:true}}
+              </h6>
+            </div>
+            <div class="trans-wrapper">
+              <div *ngFor="let t of transactions" class="trans-conatiner">
+                <div class="inline-align">
+                  <h6 class="trans-msg">{{t.message}}</h6>
+                  <ion-text color="success" *ngIf="t.type === 'credit'" class="trans-type">+{{t.amount}}</ion-text>
+                  <ion-text color="danger" *ngIf="t.type === 'debit'" class="trans-type">-{{t.amount}}</ion-text>
+                </div>
+                <div class="reason my-10" *ngIf="t.reason">
+                  {{t.reason}}
+                </div>
+                <div class="trans-date">
+                  {{t.createdAt.toDate() | date}}
+                </div>
+              </div>
+            </div>
+            <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreTxns($event)">
+              <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more transactions...">
+              </ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+          </ng-template>
+        </ng-template>
+        </div>
+      </ion-content>
+   
+    </super-tab>
+
+    <super-tab>
+        <ion-content class="ion-padding">
+          <div style="display: flex;" *ngIf='appAllowFeature'>
+            <div>Allow user to access app and website</div>&nbsp;&nbsp;
+            <div class="toggle-btn">
+              <label class="switch">
+                <input type="checkbox" (click)="appAccessToggle()" [checked]="allowAppAccess">
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <br><br>
+          </div>
+          <div class="assign-delivery">
+            <div style="display: flex;align-items: center;">
+              <p>Set Default Delivery Agent</p>
+            </div>
+            <br>
+            <ion-item lines="none">
+              <ion-label>Delivery Agent</ion-label>
+              <ion-select [(ngModel)]="udata.defaultDeliveryAgentId" interface="popover" [placeholder]="selectAgentPh"
+                (ionChange)="onChangeDeliveryAgent($event)" *ngIf="!noDeliveryAgents && allDeliveryAgents.length">
+                <ion-select-option value="" >No Delivery Agent
+                </ion-select-option>
+                <ion-select-option [value]="agents.id" *ngFor="let agents of allDeliveryAgents">{{agents.name}}
+                </ion-select-option>
+              </ion-select>
+              <ion-select interface="popover" [placeholder]="selectAgentPh" (ionChange)="onSetupDeliveryAgent()"
+                *ngIf="noDeliveryAgents">
+                <ion-select-option>Setup Delivery Agent</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+          <br>
+          <div>
+            <p>Additional Information</p>
+            <ion-item lines="none">
+              <textarea placeholder="Enter User Information" class="userInfo" [(ngModel)]="udata.additionalInfo"></textarea>
+            </ion-item>
+            <br>
+            <div class="assign-delivery">
+              <div style="display: flex;align-items: center;">
+                <p>Select Groups</p>
+              </div>
+              <br>
+              <ion-list *ngIf="groups">
+                <ion-item lines="none">
+                  <ion-label>Groups</ion-label>
+                  <ion-select [(ngModel)]="udata.groups" multiple placeholder="Select Groups">
+                    <ng-container *ngFor="let group of groups">
+                      <ion-select-option [value]="group.id">{{group.name}}
+                      </ion-select-option>
+                    </ng-container>
+                  </ion-select>
+                </ion-item>
+              </ion-list>
+            </div>
+            <br>
+            <ion-button (click)="saveAdditonalInfo()" shape="round" class="btn-1 i-start" color="success">
+              <i class="flaticon-null-20 margin-icon"></i>
+              <p>Save</p>
+            </ion-button>
+          </div>
+        </ion-content>
+      </super-tab>
+
+      <super-tab>
+        <ion-content>
+          <div class="main-container">
+            <ion-segment value = "cart" style="border-bottom: 1px solid lightgray;">
+              <ion-segment-button value = "cart" (click)='getCartItems()'>
+                <ion-label style="font-size: small;">Products in Cart</ion-label>
+              </ion-segment-button>
+              <ion-segment-button (click)='getSearches()'>
+                <ion-label style="font-size: small;">Searches</ion-label>
+              </ion-segment-button>
+            </ion-segment>  
+            <br>
+            <div *ngIf="currentTab == 'cart' ">
+              <ion-row style="text-align: center;font-weight: 500;">
+                <ion-col>
+                  <p>Image</p>
+                </ion-col>
+                <ion-col>
+                  <p>Name</p>
+                </ion-col>
+                <ion-col>
+                  <p>Quantity</p>
+                </ion-col> 
+                <ion-col>
+                  <p>Variant</p>
+                </ion-col>
+                <ion-col>
+                  <p>Color</p>
+                </ion-col>
+                <ion-col>
+                  <p>Price</p>
+                </ion-col>             
+                <ion-col>
+                  <p>Total Price</p>
+                </ion-col>             
+              </ion-row>
+              <div *ngFor='let product of cartItems'>
+                <ion-row style="text-align: center;display: flex;align-items: center;">
+                  <ion-col>
+                    <img class="loading" *ngIf="product.img && !product.img.thumb && product.img.url" src="{{product.img.url}}" height="35">
+                    <img class="loading" *ngIf="product.img && product.img.thumb" src="{{product.img.thumb}}" height="35">
+                    <img *ngIf="!product.img" src="assets/img/placeholder-img.jpg" height="35">
+                  </ion-col>
+                  <ion-col>
+                    <p>{{product.name}}</p>
+                  </ion-col>
+                  <ion-col>
+                    <p>{{product.quantity}}</p>
+                  </ion-col>
+                  <ion-col>
+                    <p>{{product.pack ? product.pack?.variantType : '--'}}
+                      {{product.pack ? '('+ product.pack?.weight +')' : ''}}
+                    </p>
+                  </ion-col> 
+                  <ion-col>
+                    <p>{{product.color ? product.color?.name : '--'}}</p>
+                  </ion-col> 
+                  <ion-col>
+                    <p>{{product.price}}</p>
+                  </ion-col>                
+                  <ion-col>
+                    <p>{{getTotalAmount(product).totalAmount}}</p>
+                  </ion-col>                
+                </ion-row>
+              </div>
+              <br>
+              <ion-text color="danger" *ngIf="showWarning" style="text-align: center;">
+                <p style="font-size: medium;">Limited Results visible, Please upgrade to Premium Plan. If already in premium plan, contact support</p>
+              </ion-text>
+            </div>
+            <div *ngIf="currentTab == 'search' ">
+              <ion-row style="text-align: center;">
+                <ion-col>
+                  <p>Word</p>
+                </ion-col>
+                <ion-col>
+                  <p>Source</p>
+                </ion-col>
+                <ion-col>
+                  <p>Searched At</p>
+                </ion-col>                
+              </ion-row>
+              <br>
+              <div *ngFor='let item of searchItems'>
+                <ion-row style="text-align: center;display: flex;align-items: center;">
+                  <ion-col>
+                    <p>{{item.value}}</p>
+                  </ion-col>
+                  <ion-col>
+                    <p *ngIf="item.source == 'app' ">App</p>
+                    <p *ngIf="item.source == 'web' ">Website</p>
+                  </ion-col>
+                  <ion-col>
+                    <p>{{getDateTimeFormat(item.searchedAt.toDate())}}</p>
+                  </ion-col>                
+                </ion-row>
+              </div>
+              <br>
+              <ion-text color="danger" *ngIf="showWarning" style="text-align: center;">
+                <p style="font-size: medium;">Limited Results visible, Please upgrade to Premium Plan. If already in premium plan, contact support</p>
+              </ion-text>
+            </div>
+          </div>
+        </ion-content>
+      </super-tab>
+
+      <super-tab>
+        <ion-content class="ion-padding">
+          <div class="main-container">
+            <div class="add-points-btn">
+              <p>Total Points: {{udata && udata.point && udata.point.totalPoints ? udata.point.totalPoints : 0}}</p>
+              <ion-button (click)="addPointsAlert()">Add Points</ion-button>
+            </div>
+       
+            <div class="tableArea">
+              <table>
+                <thead>
+                  <tr class="header">
+                    <th>Sr No.</th>
+                    <th>Message</th>
+                    <th>Type</th>
+                    <th>Points</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let pointTxn of pointTransactions; index as i">
+                    <td>{{i + 1}}</td>
+                    <td>{{pointTxn.msg}}</td>
+                    <td>{{pointTxn.type}}</td>
+                    <td>{{pointTxn.point}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+          </div>
+        </ion-content>
+     
+      </super-tab>
+
+  </super-tabs-container>
+</super-tabs>

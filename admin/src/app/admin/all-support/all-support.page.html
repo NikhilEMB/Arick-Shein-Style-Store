@@ -1,0 +1,250 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Support</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs (tabChange)="onTabSelect($event)">
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Issues</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Queries</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Requirements</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container swipeEnabled="true">
+    <super-tab>
+      <ion-content class="ion-no-padding">
+        <div class="main-container">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="2" id="scroll1">
+                <ion-button expand="block" (click)="createNewIssue('issue')" style="margin: 8px 0 0 8px;">
+                  Add New +
+                </ion-button>
+                <div class="statusList">
+                  <div *ngIf="supportList.length">
+                    <p style="z-index: 1000" *ngFor='let item of supportList; let idx=index'
+                      (click)="onClickStatustItem(idx,item)"
+                      [ngStyle]="{'background-color': activeProjectIndex === idx ? 'var(--ion-color-categories-background)' : 'white' }">
+                      {{item}}
+                    </p>
+                  </div>
+                </div>
+              </ion-col>
+
+              <ion-col size="10" id="scroll2">
+                <div class="feedbacks-wrapper" *ngFor="let item of issues; let i = index">
+                  <div class="feedbacks-wrap" *ngIf="item.status == 'pending' && activeButton === 'Pending'">
+                    <p><strong>Title: </strong>{{item.title}}</p>
+                    <p><strong>Description: </strong>{{item.description}}</p>
+                    <p><strong>Date: </strong>{{item.createdAt.toDate() | date: 'medium'}}</p>
+
+                    <div class="btn-wrap">
+                      <ion-button (click)="viewDetails(i)" shape="round">
+                        view details <i class="flaticon-null-7"></i>
+                      </ion-button>
+                    </div>
+                  </div>
+                  <div class="feedbacks-wrap" *ngIf="item.status == 'inProgress' && activeButton === 'In Progress'">
+                    <p><strong>Title: </strong>{{item.title}}</p>
+                    <p><strong>Description: </strong>{{item.description}}</p>
+                    <p><strong>Date: </strong>{{item.createdAt.toDate() | date: 'medium'}}</p>
+
+                    <div class="btn-wrap">
+                      <ion-button (click)="viewDetails(i)" shape="round">
+                        view details <i class="flaticon-null-7"></i>
+                      </ion-button>
+                    </div>
+                  </div>
+                  <div class="feedbacks-wrap" *ngIf="item.status == 'resolved' && activeButton === 'Resolved'">
+                    <p><strong>Title: </strong>{{item.title}}</p>
+                    <p><strong>Description: </strong>{{item.description}}</p>
+                    <p><strong>Date: </strong>{{item.createdAt.toDate() | date: 'medium'}}</p>
+
+                    <div class="btn-wrap">
+                      <ion-button (click)="viewDetails(i)" shape="round">
+                        view details <i class="flaticon-null-7"></i>
+                      </ion-button>
+                    </div>
+                  </div>
+                  <div class="feedbacks-wrap" *ngIf="item.status == 'rejected' && activeButton === 'Rejected'">
+                    <p><strong>Title: </strong>{{item.title}}</p>
+                    <p><strong>Description: </strong>{{item.description}}</p>
+                    <p><strong>Date: </strong>{{item.createdAt.toDate() | date: 'medium'}}</p>
+
+                    <div class="btn-wrap">
+                      <ion-button (click)="viewDetails(i)" shape="round">
+                        view details <i class="flaticon-null-7"></i>
+                      </ion-button>
+                    </div>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+        <ion-content class="ion-no-padding">
+        <div class="main-container">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="2" id="scroll1">
+                <ion-button expand="block" (click)="createNewIssue('queries')" style="margin: 8px 0 0 8px;">
+                  Add New +
+                </ion-button>
+                <div class="statusList">
+                  <div *ngIf="supportList.length">
+                    <p style="z-index: 1000" *ngFor='let item of supportList; let idx=index'
+                      (click)="onClickStatustItem(idx,item)"
+                      [ngStyle]="{'background-color': activeProjectIndex === idx ? 'var(--ion-color-categories-background)' : 'white' }">
+                      {{item}}
+                    </p>
+                  </div>
+                </div>
+              </ion-col>
+              
+              <ion-col size="10" id="scroll2">
+                <div class="feedbacks-wrapper" *ngFor="let item of queries; let i = index">
+                  <div class="feedbacks-wrap" *ngIf="item.status == 'pending' && activeButton === 'Pending'">
+                    <p><strong>Title: </strong>{{item.title}}</p>
+                    <p><strong>Description: </strong>{{item.description}}</p>
+                    <p><strong>Date: </strong>{{item.createdAt.toDate() | date: 'medium'}}</p>
+                    <div class="btn-wrap">
+                      <ion-button (click)="viewDetails(i)" shape="round">
+                        view details <i class="flaticon-null-7"></i>
+                      </ion-button>
+                    </div>
+                  </div>
+
+                  <div class="feedbacks-wrap" *ngIf="item.status == 'inProgress' && activeButton === 'In Progress'">
+                    <p><strong>Title: </strong>{{item.title}}</p>
+                    <p><strong>Description: </strong>{{item.description}}</p>
+                    <p><strong>Date: </strong>{{item.createdAt.toDate() | date: 'medium'}}</p>
+                    <div class="btn-wrap">
+                      <ion-button (click)="viewDetails(i)" shape="round">
+                        view details <i class="flaticon-null-7"></i>
+                      </ion-button>
+                    </div>
+                  </div>
+
+                  <div class="feedbacks-wrap" *ngIf="item.status == 'resolved' && activeButton === 'Resolved'">
+                    <p><strong>Title: </strong>{{item.title}}</p>
+                    <p><strong>Description: </strong>{{item.description}}</p>
+                    <p><strong>Date: </strong>{{item.createdAt.toDate() | date: 'medium'}}</p>
+                    <div class="btn-wrap">
+                      <ion-button (click)="viewDetails(i)" shape="round">
+                        view details <i class="flaticon-null-7"></i>
+                      </ion-button>
+                    </div>
+                  </div>
+
+                  <div class="feedbacks-wrap" *ngIf="item.status == 'rejected' && activeButton === 'Rejected'">
+                    <p><strong>Title: </strong>{{item.title}}</p>
+                    <p><strong>Description: </strong>{{item.description}}</p>
+                    <p><strong>Date: </strong>{{item.createdAt.toDate() | date: 'medium'}}</p>
+
+                    <div class="btn-wrap">
+                      <ion-button (click)="viewDetails(i)" shape="round">
+                        view details <i class="flaticon-null-7"></i>
+                      </ion-button>
+                    </div>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+        <ion-content class="ion-no-padding">
+        <div class="main-container">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="2" id="scroll1">
+                <ion-button expand="block" (click)="createNewIssue('requirements')" style="margin: 8px 0 0 8px;">
+                  Add New +
+                </ion-button>
+                <div class="statusList">
+                  <div *ngIf="supportList.length">
+                    <p style="z-index: 1000" *ngFor='let item of supportList; let idx=index'
+                      (click)="onClickStatustItem(idx,item)"
+                      [ngStyle]="{'background-color': activeProjectIndex === idx ? 'var(--ion-color-categories-background)' : 'white' }">
+                      {{item}}
+                    </p>
+                  </div>
+                </div>
+              </ion-col>
+              
+              <ion-col size="10" id="scroll2">
+                <div class="feedbacks-wrapper" *ngFor="let item of requirements; let i = index">
+                  <div class="feedbacks-wrap" *ngIf="item.status == 'pending' && activeButton === 'Pending'">
+                    <p><strong>Title: </strong>{{item.title}}</p>
+                    <p><strong>Description: </strong>{{item.description}}</p>
+                    <p><strong>Date: </strong>{{item.createdAt.toDate() | date: 'medium'}}</p>
+                    <div class="btn-wrap">
+                      <ion-button (click)="viewDetails(i)" shape="round">
+                        view details <i class="flaticon-null-7"></i>
+                      </ion-button>
+                    </div>
+                  </div>
+
+                  <div class="feedbacks-wrap" *ngIf="item.status == 'inProgress' && activeButton === 'In Progress'">
+                    <p><strong>Title: </strong>{{item.title}}</p>
+                    <p><strong>Description: </strong>{{item.description}}</p>
+                    <p><strong>Date: </strong>{{item.createdAt.toDate() | date: 'medium'}}</p>
+                    <div class="btn-wrap">
+                      <ion-button (click)="viewDetails(i)" shape="round">
+                        view details <i class="flaticon-null-7"></i>
+                      </ion-button>
+                    </div>
+                  </div>
+
+                  <div class="feedbacks-wrap" *ngIf="item.status == 'resolved' && activeButton === 'Resolved'">
+                    <p><strong>Title: </strong>{{item.title}}</p>
+                    <p><strong>Description: </strong>{{item.description}}</p>
+                    <p><strong>Date: </strong>{{item.createdAt.toDate() | date: 'medium'}}</p>
+                    <div class="btn-wrap">
+                      <ion-button (click)="viewDetails(i)" shape="round">
+                        view details <i class="flaticon-null-7"></i>
+                      </ion-button>
+                    </div>
+                  </div>
+                  
+                  <div class="feedbacks-wrap" *ngIf="item.status == 'rejected' && activeButton === 'Rejected'">
+                    <p><strong>Title: </strong>{{item.title}}</p>
+                    <p><strong>Description: </strong>{{item.description}}</p>
+                    <p><strong>Date: </strong>{{item.createdAt.toDate() | date: 'medium'}}</p>
+
+                    <div class="btn-wrap">
+                      <ion-button (click)="viewDetails(i)" shape="round">
+                        view details <i class="flaticon-null-7"></i>
+                      </ion-button>
+                    </div>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+  </super-tabs-container>
+</super-tabs>

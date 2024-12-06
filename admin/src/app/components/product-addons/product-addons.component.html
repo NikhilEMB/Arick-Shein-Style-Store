@@ -1,0 +1,26 @@
+<div class="product-addons">
+  <h6 class="heading">
+    <span>Add-ons</span>
+    <span>{{product.addOns.totalPrice | currency: currencyCode:true}}</span>
+  </h6>
+  <div class="addons">
+    <ion-grid class="ion-no-padding">
+      <ion-row *ngFor="let addonOption of product.addOns.options | keyvalue">
+        <ion-col size="6" class="ion-no-padding">
+          <ng-container *ngFor="let addon of addonOption.value; let i=index">
+            <ng-container *ngFor="let option of addon.options; let j=index">
+              <span> {{option.name}} </span>
+              <span *ngIf="i !== addonOption.value.length -1 || j !== addon.options.length -1">+</span>
+            </ng-container>
+          </ng-container>
+        </ion-col>
+        <ion-col size="3" class="ion-no-padding">
+          X {{addonOption.value[0].quantity}}
+        </ion-col>
+        <ion-col size="3" class="ion-no-padding per-addon-price">
+          {{getPerAddonPrice(addonOption) | currency: currencyCode:true}}
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</div>

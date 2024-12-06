@@ -1,0 +1,145 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-title text-center>Add Input</ion-title>
+    <div slot="end" style="padding: 15px">
+      <i class="flaticon-null-19" (click)="closeModal()"></i>
+    </div>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div style="display: flex;justify-content: space-around">
+    <ion-button size="small" shape="round" (click)="changeType('line')">Add line input
+    </ion-button>
+    <ion-button size="small" shape="round" (click)="changeType('multiLine')">Add paragraph input
+    </ion-button>
+    <ion-button size="small" shape="round" (click)="changeType('options')">Add multiple choice input
+    </ion-button>
+  </div>
+  <br>
+  <div style="display: flex; justify-content: center">
+    <ion-button size="small" shape="round" (click)="changeType('document')">Add document input
+    </ion-button>
+  </div>
+  <br><br>
+  <div *ngIf="inputMode == 'line'">
+    <ion-col>
+      <div class="input-wrap">
+        <ion-label>Input Name</ion-label>
+        <ion-input class="form-input" [(ngModel)]="inputName"></ion-input>
+      </div>
+    </ion-col>
+    <ion-col>
+      <div class="input-wrap">
+        <ion-label>Input Type</ion-label>
+         <ion-select class="form-input" (ionChange)="addType($event)" placeholder="Select Type">
+          <ion-select-option value="text" >Text</ion-select-option>
+          <ion-select-option value="number" >Number</ion-select-option>
+          <ion-select-option value="date" >Date</ion-select-option>
+          <ion-select-option value="email" >Email</ion-select-option>
+        </ion-select>
+      </div>
+    </ion-col>
+    <ion-col>
+      <div class="toggle">
+        <p>User input required</p>&nbsp;&nbsp;&nbsp;
+        <div class="toggle-btn">
+          <label class="switch">
+            <input type="checkbox" (click)="toggleActive()" [checked]="inputRequired">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </ion-col>
+  </div>
+  <div *ngIf="inputMode == 'multiLine'">
+    <ion-col>
+      <div class="input-wrap">
+        <ion-label>Input Name</ion-label>
+        <ion-input class="form-input" [(ngModel)]="inputName"></ion-input>
+      </div>
+    </ion-col>
+    <ion-col>
+      <div class="toggle">
+        <p>User input required</p>&nbsp;&nbsp;&nbsp;
+        <div class="toggle-btn">
+          <label class="switch">
+            <input type="checkbox" (click)="toggleActive()" [checked]="inputRequired">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </ion-col>
+  </div>
+  <div *ngIf="inputMode == 'options'">
+    <ion-col>
+      <div class="input-wrap">
+        <ion-label>Input Name</ion-label>
+        <ion-input class="form-input" [(ngModel)]="inputName"></ion-input>
+      </div>
+    </ion-col>
+    <ion-col>
+      <div class="input-wrap">
+        <ion-label>Input Type</ion-label>
+         <ion-select class="form-input" (ionChange)="addType($event)" placeholder="Select Type">
+          <ion-select-option value="radio" >Single choice</ion-select-option>
+          <ion-select-option value="checkbox" >Multiple choice</ion-select-option>
+        </ion-select>
+      </div>
+    </ion-col>
+    <ion-col>
+      <div class="input-wrap">
+        <ion-label>Add option</ion-label>
+        <div style="display: flex;align-items: center;">
+          <ion-input class="form-input" [(ngModel)]="option"></ion-input>&nbsp;&nbsp;
+          <ion-button fill="outline" shape="round" size="small" (click)="addOption()" style="margin-top: 12px;">
+            Add
+          </ion-button>
+        </div>
+      </div>
+    </ion-col>
+    <ion-chip *ngFor='let option of inputOptions'>
+      <ion-label>{{option}}</ion-label>
+      <ion-icon name="close-circle" (click)='removeOption(option)'></ion-icon>
+    </ion-chip>
+    <ion-col>
+      <div class="toggle">
+        <p>User input required</p>&nbsp;&nbsp;&nbsp;
+        <div class="toggle-btn">
+          <label class="switch">
+            <input type="checkbox" (click)="toggleActive()" [checked]="inputRequired">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </ion-col>
+  </div>
+  <div *ngIf="inputMode == 'document'">
+    <ion-col>
+      <div class="input-wrap">
+        <ion-label>Input Name</ion-label>
+        <ion-input class="form-input" [(ngModel)]="inputName"></ion-input>
+      </div>
+    </ion-col>
+    <ion-col>
+      <div class="toggle">
+        <p>User input required</p>&nbsp;&nbsp;&nbsp;
+        <div class="toggle-btn">
+          <label class="switch">
+            <input type="checkbox" (click)="toggleActive()" [checked]="inputRequired">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </ion-col>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col style="text-align: center;">
+        <ion-button color="success" fill="outline" shape="round" (click)="submitData()">Done
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

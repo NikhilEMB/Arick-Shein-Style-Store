@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start">
+      <img src="../../../assets/img/shop-logo.png">
+    </div>
+    <ion-title>Forms</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="t-a-c">
+        <ion-button size="small" color="danger" (click)="addForm()">Add New Form</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div *ngIf="showLoader; else showForms" class="spinner">
+          <ion-spinner color="primary"></ion-spinner>
+        </div>
+
+        <div class="no-data ion-text-center" *ngIf="forms && forms.length==0">
+          <img src="assets/img/no-product.png" alt="">
+          <h6>No Forms Available</h6>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ng-template #showForms>
+      <ion-row>
+        <ion-col>
+          <div class="tableArea">
+           <table>
+             <thead>
+               <tr class="header">
+                 <th>S.No</th>
+                 <th>Form Title</th>
+                 <th>Action</th>
+               </tr>
+             </thead>
+             <tbody>
+               <tr *ngFor="let form of forms; let i = index">
+                 <td>{{i+1}}</td>
+                 <td class="cursor-p" (click)="viewForm(form.id)">{{form.formTitle}}</td>
+                 <td>
+                  <ion-button fill="outline" shape="round" (click)="viewForm(form.id)">
+                    View Form
+                  </ion-button>
+                 </td>
+                 <!-- <td>
+                  <i class="flaticon-null-21 cursor-p deleteIcon" (click)="deleteForm(form.id, i)"></i>
+                 </td> -->
+               </tr>
+             </tbody>
+           </table>
+          </div> 
+        </ion-col>
+      </ion-row>
+    </ng-template>
+  </ion-grid>
+
+</ion-content>

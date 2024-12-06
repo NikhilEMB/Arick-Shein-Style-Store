@@ -1,0 +1,85 @@
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Mutiple Regions</ion-title>
+  </ion-toolbar>
+</ion-header>  
+
+<ion-content>
+  <div class="main">
+    <br><br>
+    <div class="toggle">
+      <p>Active</p>
+      <div class="toggle-btn">
+        <label class="switch">
+          <input type="checkbox" (click)="subscriptionsActiveToggle()" [checked]="isMultiRegionActive">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <br>
+    <div class="toggle" *ngIf='type'>
+      <p>Region type : </p>
+      <ion-select class="regionSelect"  [(ngModel)]="type"
+        (ionChange)="changeType($event)" placeholder="Select Type" style="border: 1px solid lightgray;margin-top: 5px">
+        <ion-select-option value="pincodes">Pincodes</ion-select-option>
+        <ion-select-option value="area">Area</ion-select-option>
+      </ion-select>
+    </div>
+    <div class="list-header">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col class="name">
+            <p>Region</p>
+          </ion-col>
+          <ion-col class="name">
+            <p>Active</p>
+          </ion-col>
+          <ion-col class="name">
+            <p>Action</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <div class="list-container">
+      <ion-grid>
+        <ion-row *ngFor="let region of regions; let i = index" class="order-row">
+          <ion-col class="name">
+            <p class="ion-text-capitalize" (click)="editRegion(i)">{{region.name}}</p>
+          </ion-col>
+          <ion-col class="name">
+            <div class="toggle-btn">
+              <label class="switch">
+                <input type="checkbox" (click)="toggleRegionActive(i)" [checked]="region.active">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </ion-col>
+          <ion-col class="action">
+            <ion-button (click)="editRegion(i)" class="btn-sml i-start" fill="outline"
+              shape="round">
+              Edit
+            </ion-button>&nbsp;&nbsp;
+            <ion-button (click)="deleteRegion(region.id)" class="btn-sml i-start m-s-btn" fill="outline"
+              shape="round">
+              Delete
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <br><br>
+    <div class="page-footer">
+      <ion-row class="ion-justify-content-center">
+        <ion-button fill="outline" shape="round" size="small" (click)="gotoMultiRegionAdd()">
+          Add New
+        </ion-button>
+      </ion-row>
+    </div>
+  </div>
+</ion-content>

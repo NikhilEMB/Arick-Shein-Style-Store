@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="templates-header-title">Invoices</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-list class="ion-no-padding list" lines="none">
+          <ion-item class="ion-no-padding" *ngFor="let vendor of orderDetails.vendors; let i = index">
+            <ion-grid class="ion-no-padding">
+              <ion-row class="ion-align-items-center">
+                <ion-col size="6">
+                  <p class="ion-text-capitalize"><b>Sold By: {{vendor.vendor.name}}</b></p>
+                  <p class="ion-text-capitalize " *ngFor="let product of vendor.products; let j = index">{{j+1}}. {{product.name}}
+                  </p>
+                </ion-col>
+                <ion-col size="4">
+                  <ion-button class="btn-sml" shape="round" fill="outline" (click)="downloadInvoice(vendor.invoice)">Download</ion-button>
+                </ion-col>
+              </ion-row>
+              <div class="border-bottom"></div>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="getExtraChargeInvoice() as invoiceUrl;">
+      <ion-col>
+        <ion-button class="btn-sml" shape="round" fill="outline" (click)="downloadInvoice(invoiceUrl)">Download Extra Charge Invoice</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

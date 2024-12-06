@@ -1,0 +1,129 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="addNewCouponCode()">
+      <ion-icon name="add-circle" slot="start"></ion-icon>
+      Add new Coupon
+    </ion-button>
+    <ion-button fill="solid" color="secondary">
+      <span class="icon" slot="start">
+        <i class="flaticon-null" slot="start"></i>
+        <span class="count">5</span>
+      </span>
+    </ion-button>
+    <ion-button fill="solid" color="secondary">
+      <span class="icon" slot="start">
+        <i class="flaticon-shopping-bag" slot="start"></i>
+        <span class="count">2</span>
+      </span>
+    </ion-button>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+
+  <div class="no-data ion-text-center" *ngIf="noCouponCodes; else showCouponCodes">
+    <img src="assets/img/no-product.png" alt="">
+    <h6>No Coupon Codes</h6>
+  </div>
+  <ng-template #showCouponCodes>
+     <!-- heading -->
+    <div class="list-header" >
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col>
+          <div class="input-wrap">
+            <div class="flex-label">
+              <div>Show All Coupons To Users</div>&nbsp;&nbsp;
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input type="checkbox" (click)="setShowAllCoupons()" [checked]="showAllCoupons">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <br>
+            <ion-text color="danger" style="text-transform: none;">When OFF, the customers will not see any coupon but they can use the coupons by entering the coupon code manually.</ion-text>
+          </div>
+          </ion-col>
+        </ion-row>
+        <ion-row >
+          <ion-col size="3">
+            <p >Coupon Code</p>
+          </ion-col>
+          <ion-col size="3">
+            <p>Qty</p>
+          </ion-col>
+          <ion-col size="3">
+            <p>Discount</p>
+          </ion-col>
+          <ion-col size="3">
+            <p>Action</p>
+          </ion-col>
+          
+        </ion-row>
+      </ion-grid>
+      </div>
+      <!-- heading -->
+      <!-- coupon  list -->
+      <div class="list-container">
+    <ion-list class="ion-no-padding row-border" *ngIf="couponCodes.length; else loadingCouponCodes">
+  
+          <ion-item class="ion-no-padding"  *ngFor="let code of couponCodes; let i = index">
+            <ion-grid class="row-background ion-no-padding ion-align-items-center">
+              <ion-row class="ion-align-items-center">
+                <ion-col size="3" class="ion-text-center">
+                  <p class="ion-text-capitalize">{{code.name}}</p>
+                </ion-col>
+                <ion-col size="3" >
+                  <p class="ion-text-capitalize">{{code.usage}}/{{code.qty}}</p>
+                </ion-col>
+                <ion-col size="3">
+                  <p class="ion-text-capitalize" *ngIf="code.type === 'percentage'">{{code.amount}}%</p>
+                  <p class="ion-text-capitalize" *ngIf="code.type === 'flat'">{{code.amount | currency: 'INR':true:'0.0'}}</p>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-button class="action-btn" fill="clear" (click)="editCouponCode(code)">
+                    <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                  </ion-button>
+                  <ion-button class="action-btn" fill="clear" (click)="presentAlertConfirm(code.id)">
+                    <i class="flaticon-null-21" slot="icon-only"></i>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+       
+    </ion-list>
+    <ng-template #loadingCouponCodes>
+      <ion-grid class="row-border ion-no-padding" *ngIf="!couponCodes.length">
+        <ion-row class="row-background" *ngFor="let x of [1,2,3,4,5,6,7,8,9,10]">
+          <ion-col size="5">
+            <h3>
+              <ion-skeleton-text animated style="width: 90%;margin: auto;"></ion-skeleton-text>
+            </h3>
+          </ion-col>
+          <ion-col size="4">
+            <h3>
+              <ion-skeleton-text animated style="width: 60%;margin: auto;"></ion-skeleton-text>
+            </h3>
+          </ion-col>
+          <ion-col size="3">
+            <h3>
+              <ion-skeleton-text animated style="width: 60%;margin: auto;"></ion-skeleton-text>
+            </h3>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+    </div>
+     <!-- coupon  list -->
+  </ng-template>
+</div>
+</ion-content>

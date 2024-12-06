@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Vendor Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <br>
+    <ion-grid class="t-a-l">
+      <ion-row>
+        <ion-col size="12" style="display: flex;justify-content: center;">
+          <ion-button (click)="saveSettings()" shape="round" class="btn-1 i-start" color="success"
+            fill="outline">
+            <i class="flaticon-null-20 margin-icon"></i>
+            Save Settings
+          </ion-button>
+        </ion-col>
+        <ion-col size="12" style="margin-top: 8px;">
+          <div class="input-wrap">
+            <div style="display:flex">
+              <ion-label>Active</ion-label>
+              <ion-toggle [(ngModel)]="settings.active"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12" *ngIf="settings.active">
+          <div class="input-wrap">
+            <div style="display:flex">
+              <ion-label>Show Vendor Details To Users</ion-label>
+              <ion-toggle [(ngModel)]="settings.showVendorInfo"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+        <!-- <ion-col size="12" *ngIf="settings.active">
+          <div class="input-wrap">
+            <div style="display:flex">
+              <ion-label>Allow only 1 vendor in a region</ion-label>
+              <ion-toggle [(ngModel)]="settings.oneVendorPerRegion"></ion-toggle>
+            </div>
+          </div>
+        </ion-col> -->
+        <ion-col size="12" *ngIf="settings.active">
+          <div class="input-wrap">
+            <div style="display:flex">
+              <ion-label>Show Vendors based on KM</ion-label>
+              <ion-toggle [(ngModel)]="settings.vendorKmBased"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12" *ngIf="settings.active && settings.vendorKmBased">
+          <div class="input-wrap">
+            <div style="display:flex; align-items: center;">
+              <ion-label>Max Distance for vendors to be visible</ion-label>&nbsp;&nbsp;
+              <ion-input type='number' [(ngModel)]="settings.vendorKmDistance"
+                style="border: 1px solid;max-width: 200px;" min='0'></ion-input>&nbsp;&nbsp;Kms
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12" *ngIf="settings.active && settings.vendorKmBased">
+          <div class="input-wrap">
+            <div style="display:flex">
+              <ion-label>Calculate delivery cost based on km</ion-label>
+              <ion-toggle [(ngModel)]="settings.calcDeliveryBasedOnKm"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12" *ngIf="settings.active && isSeparateVendorInvoicesAllowed">
+          <div class="input-wrap">
+            <div style="display:flex">
+              <ion-label>Make seperate invoices for vendors</ion-label>
+              <ion-toggle [(ngModel)]="settings.multipleVendorInvoices"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

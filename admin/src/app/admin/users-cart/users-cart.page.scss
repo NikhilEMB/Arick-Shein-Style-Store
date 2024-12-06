@@ -1,0 +1,36 @@
+.list-header {
+  width: 100%;
+  max-width: 1200px;
+}
+
+.list-container {
+  margin-top: 95px;
+}
+
+.image {
+  width: 100px;
+  max-width: 100px;
+  text-align: center;
+  justify-content: center;
+}
+.cart-length {
+  width: 100px;
+  max-width: 100px;
+}
+.last-updated {
+  width: 170px;
+  max-width: 170px;
+}
+
+.action,
+.view {
+  width: 124px;
+  max-width: 124px;
+  text-align: center;
+  justify-content: center;
+}
+
+.user {
+  width: calc(100% - 324px);
+  max-width: 600px;
+}

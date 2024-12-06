@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-title>add-points</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="main-point-box">
+    <ion-row>
+      <ion-col class="input-box" size="12">
+
+        <ion-select [(ngModel)]="pointDetails.type" placeholder="Select Type">
+          <ion-select-option value="credit">Credit</ion-select-option>
+          <ion-select-option value="debit">Debit</ion-select-option>
+        </ion-select>
+
+      </ion-col>
+
+      <ion-col class="input-box" size="12">
+        <ion-input type="number" name="point" placeholder="Enter Points" [(ngModel)]="pointDetails.point"></ion-input>
+      </ion-col>
+
+      <ion-col class="input-box" size="12">
+        <ion-textarea type="text" name="msg" placeholder="Enter Message"  [(ngModel)]="pointDetails.msg"></ion-textarea>
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-button expand="full" color="primary" (click)="onClickSubmit()"
+    [disabled]="!pointDetails.type && (!pointDetails.point && pointDetails!==null)">Submit<ion-icon name="checkmark-circle"></ion-icon>
+  </ion-button>
+</ion-footer>

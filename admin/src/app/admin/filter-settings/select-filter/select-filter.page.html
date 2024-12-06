@@ -1,0 +1,42 @@
+<ion-header class="modal-header">
+    <ion-toolbar>
+      <ion-title class="modal-header-title">Select Filter</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="closeModal()">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+  
+    <div *ngIf="!adminFilters.length && !isLoading">
+      <p class="no-data-txt">No filters</p>
+    </div>
+  
+    <div *ngIf="adminFilters.length > 0">
+      <ion-list class="sf-list" *ngFor="let filter of adminFilters; let i=index">
+        <ion-item lines="none" (click)="toggleFiltersActive(i)">
+          <ion-label [ngClass]="{'sf-active-header': filter.active}">{{filter.name}}</ion-label>
+          <ion-checkbox slot="end" [checked]="filter.active"></ion-checkbox>
+        </ion-item>
+  
+        <div *ngIf="filter.active" class="filter-values">
+          <ion-item *ngFor="let filterValue of filter.values; let j=index;" lines="none" (click)="selectFilters(i, j)">
+            <ion-label>{{filterValue.value}}</ion-label>
+            <ion-checkbox slot="end" [checked]="filterValue.isChecked"></ion-checkbox>
+          </ion-item>
+        </div>
+        <hr class="line">
+      </ion-list>
+    </div>
+  
+  </ion-content>
+  
+  <ion-footer>
+    <ion-button (click)="onClickSave()" expand="block" class="footer-button">
+      Save
+    </ion-button>
+  </ion-footer>
+  

@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Free product</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container fixed-height">
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col size="12">
+          <div>
+            <div class="flex-label">
+              <ion-label>Active</ion-label>
+              <ion-toggle [(ngModel)]="freeProductsLimit" (ionChange)="toggleActive()"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ng-container *ngIf="freeProductsLimit">
+      <ion-row *ngIf="limits.length > 0">
+        <ion-col size="2">
+          <p>Order Amount Limit</p>
+        </ion-col>
+        <ion-col size="2" >
+          <p>Per User Limit</p>
+        </ion-col>
+        <ion-col size="5" >
+          <p>Product</p>
+        </ion-col>
+        <ion-col size="1" class="t-a-c">
+          <p>Active</p>
+        </ion-col>
+        <ion-col size="2" class="t-a-c">
+          Action
+        </ion-col>
+      </ion-row>
+      
+        <ion-row *ngFor="let limit of limits; let i = index">
+          <ion-col size="2">
+              <ion-input class="form-input" type="number" [(ngModel)]="limit.orderAmount"></ion-input>
+          </ion-col>
+          <ion-col size="2">
+              <ion-input class="form-input" type="number" [(ngModel)]="limit.perUser"></ion-input>
+          </ion-col>
+          <ion-col size="5">
+              <ion-input class="form-input" (click)="presentProductsModal(i)" value="{{limit.product.name}} {{limit.product.variant ? limit.product.variant : ''}}" readonly></ion-input>
+          </ion-col>
+          <ion-col size="1" class="vertical-center">
+            <ion-toggle color="primary" [(ngModel)]="limit.active"></ion-toggle>
+          </ion-col>
+          <ion-col size="2" class="vertical-center" style="justify-content: space-around;">
+            <ion-button (click)="remove(i, limit)" fill="outline" shape="round" size="small">
+              Remove
+            </ion-button>
+            <ion-button (click)="saveDetails(limit)" color="success" fill="outline" shape="round" size="small">
+              Save
+            </ion-button>
+            <!-- <i class="flaticon-null-19 remove-icon" (click)="remove(i)"></i> -->
+          </ion-col>
+        </ion-row>
+      <ion-row class="ion-justify-content-center">
+        <ion-button (click)="addMore()" fill="outline" shape="round" size="small">
+          Add More Order Limits
+        </ion-button>
+      </ion-row>
+    </ng-container>
+    </ion-grid>
+  </div>
+</ion-content>
+

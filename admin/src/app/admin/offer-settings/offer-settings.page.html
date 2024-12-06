@@ -1,0 +1,95 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Offers Setting</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+  <div class="main-container">
+
+    <div class="no-data ion-text-center" *ngIf="allOffers && allOffers.length < 1">
+      <img src="assets/img/no-category.png" alt="">
+      <h6>No Offers</h6>
+    </div>
+    
+    <!-- no data -->
+
+    <!-- heading -->
+    <div class="list-header" *ngIf="allOffers && allOffers.length > 0">
+      <ion-grid class="ion-no-padding">
+        <ion-row >
+          <ion-col class="img">
+            <p>image</p>
+          </ion-col>
+          <ion-col class="name">
+            <p>name</p>
+          </ion-col>
+          <ion-col class="name">
+            <p>Actions</p>
+          </ion-col>
+          <ion-col class="reorder">
+            <p>reorder</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      </div>
+      <!-- heading -->
+
+      <!-- categories list -->
+    <div class="list-container" *ngIf="allOffers && allOffers.length > 0">
+    
+    <ion-list class="ion-no-padding row-border">
+      <ion-reorder-group (ionItemReorder)="onReorderOffers($event)" disabled="false" class="ion-no-padding">
+        <ion-item *ngFor="let offer of allOffers; let i = index">
+          <ion-grid class="ion-no-padding">
+            <ion-row >
+              <ion-col  class="img">
+                <ion-thumbnail style="margin-left: 5%;" class="thumbnail" *ngIf="offer.images.length">
+                  <img *ngIf="!offer.images[0].mob && offer.images[0].url" img-preloader="{{offer.images[0].url}}">
+                  <img *ngIf="offer.images[0].mob" img-preloader="{{offer.images[0].mob}}">
+                </ion-thumbnail>
+                <ion-thumbnail style="margin-left: 5%;" class="thumbnail" *ngIf="!offer.images.length">
+                  <img src='assets/img/img-preloader.png'>
+                </ion-thumbnail>
+              </ion-col>
+              <ion-col class="name">
+                <p class="ion-text-capitalize">{{offer.name}}</p>
+              </ion-col>
+              <ion-col class="action">
+                <ion-button class="action-btn" fill="clear" (click)="editOffer(offer)">
+                  <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                </ion-button>
+                <ion-button class="action-btn" fill="clear" (click)="deleteOfferConfirm(offer.id)">
+                  <i class="flaticon-null-21" slot="icon-only"></i>
+                </ion-button>
+              </ion-col>
+              <ion-col class="reorder">
+                <ion-reorder>
+                  <div class="flat-sort">
+                    <i class="flaticon-menu"></i>
+                  </div>
+                </ion-reorder>
+             
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-reorder-group>
+    </ion-list>
+   
+    </div>
+    <div class="page-footer">
+      <ion-row class="ion-justify-content-center">
+        <ion-button (click)="addOffer()" fill="outline" shape="round" size="small">
+          Add Offer
+        </ion-button>
+      </ion-row>
+    </div>
+
+  
+  </div>
+</ion-content>

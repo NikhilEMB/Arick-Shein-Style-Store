@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Add Multi Region</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main">
+    <br><br>
+    <div class="data-field">
+      <p>Active</p>
+      <div class="toggle-btn">
+        <label class="switch">
+          <input type="checkbox" (click)="toggleActive()" [checked]="region.active">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <br><br>
+    <div class="data-field">
+      <div class="data-field-txt">
+        Region Name
+      </div>
+      <br>
+      <div>
+        <input type="text" [(ngModel)]="region.name" />
+      </div>
+    </div>
+    <br><br>
+    <div *ngIf="type && (type == 'pincodes')">
+      <div class="data-field">
+        <div class="data-field-txt">
+          Region Pincodes
+        </div>
+        <br>
+        <div>
+          <input type="number" [(ngModel)]="pincode" class="pincode-input"/>&nbsp;&nbsp;&nbsp;&nbsp;
+          <ion-button fill="outline" shape="round" size="small" (click)="addPincode()" [disabled]="!pincode">
+            Add
+          </ion-button>
+        </div>
+      </div>
+      <br>
+      <div style="justify-content: center;padding: 10px">
+        <div *ngIf="region.pincodes.length">
+          <br><br>
+          <ion-grid class="ion-no-padding data-table ion-text-center">
+              <ion-row class="ion-text-capitalize">
+                <ion-col>Pincode</ion-col>
+                <ion-col>Remove</ion-col>
+              </ion-row>
+              <ion-row *ngFor="let  pin of region.pincodes; let i=index;">
+                <ion-col>
+                    {{pin}}
+                </ion-col>
+                <ion-col (click)="removePin(i)">
+                    <i class="flaticon-null-17"></i>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="type && (type == 'area')">
+      <div class="data-field">
+        <div class="data-field-txt">
+          Radius for region (in Kms)
+        </div>
+        <br>
+        <div>
+          <input type="number" [(ngModel)]="radius" />
+        </div>
+      </div>
+      <br>
+      <div class="data-field" *ngIf="center">
+        <div class="data-field-txt">
+          Current latitude
+        </div>
+        <br>
+        <div>
+          <input type="number" [(ngModel)]="latitude" />
+        </div>
+      </div>
+      <br>
+      <div class="data-field" *ngIf="center">
+        <div class="data-field-txt">
+          Current longitude
+        </div>
+        <br>
+        <div>
+          <input type="number" [(ngModel)]="longitude" />
+        </div>
+      </div>
+      <br>
+      <ion-button fill="outline" shape="round" (click)="changeCenter()">
+        Change center
+      </ion-button>
+      <br>
+      <p>Drag the map and place marker on the center of region</p>
+      <br>
+      <div id="centerMarker">
+        <img src="../../../../assets/img/location.png" title="Current center for region"/>
+      </div>
+      <google-map height="500px" width="100%" [center]="center" #GoogleMap (centerChanged)='centerChanged()'>
+      </google-map>
+    </div>
+    <br>
+    <div class="page-footer">
+        <ion-button fill="outline" shape="round" (click)="saveRegion()">
+          Save
+        </ion-button>
+    </div>
+  </div>
+</ion-content>

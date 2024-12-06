@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Refer And Earn</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main">
+    <br><br>
+    <div class="active">
+      <p>Active</p>
+      <div class="toggle-btn">
+        <label class="switch">
+          <input type="checkbox" (click)="referralActiveToggle()" [checked]="settings.active">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <br><br>
+    <div class="cashback">
+      <p>Cashback for referrer</p>
+      <div class="cashback-type">
+        <span class="flat">FLAT</span> 
+        <div class="toggle-btn">
+          <label class="switch">
+            <input type="checkbox" (click)="referrerCashbackTypeToggle()" [checked]="settings.referrerCashbackType === 'percentage'">
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <span class="percent">%</span>
+      </div>
+      <input placeholder="Enter cashback amount" [(ngModel)]="settings.referrerCashback" type="number" class="form-input" *ngIf="settings.referrerCashbackType === 'flat'"/>
+      <input placeholder="Enter cashback in percentage" [(ngModel)]="settings.referrerCashbackPercent" type="number" class="form-input" *ngIf="settings.referrerCashbackType === 'percentage'"/>
+      <br><br>
+      <p>Cashback for friends who sign up</p>
+      <input [(ngModel)]="settings.friendCashback" type="number" class="form-input"/>
+      <br><br>
+      <p>Number of times cashback to referrer</p>
+      <input [(ngModel)]="settings.cashbackCount" type="number" class="form-input"/>
+    </div>
+    <br>
+    <div class="page-footer">
+      <ion-row class="ion-justify-content-center">
+        <ion-button fill="outline" shape="round" size="small" (click)="onClickSave()">
+          Save
+        </ion-button>
+      </ion-row>
+    </div>
+  </div>
+</ion-content>
+  

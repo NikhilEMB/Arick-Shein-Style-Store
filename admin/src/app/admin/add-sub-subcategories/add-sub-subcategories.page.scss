@@ -1,0 +1,35 @@
+.img-container {
+  text-align: center;
+  padding-top: 20px;
+  .img-wrap {
+    width: 300px;
+    display: inline-block;
+    position: relative;
+    border: var(--ion-color-medium) 1px solid;
+    border-radius: 16px;
+    overflow: hidden;
+    ion-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+    }
+  }
+}
+
+.product-headings {
+  background: var(--ion-color-medium);
+  padding: 8px;
+  margin: 0 -16px;
+}
+
+.loading {
+  background: transparent url("https://s5.gifyu.com/images/377-2.gif") center
+    no-repeat;
+}
+
+super-tabs,
+super-tabs-container,
+super-tab {
+  width: 100%;
+  max-width: 100%;
+}

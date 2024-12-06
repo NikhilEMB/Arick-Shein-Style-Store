@@ -1,0 +1,55 @@
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.schedulesBox {
+  border-bottom: 1px solid lightgray;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+
+  .firstHalf {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .slotWrapper {
+    .scheduleList {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+
+      .inputWrapper {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+      }
+      .slotInput {
+        width: 120px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        margin: 0 8px 8px 8px;
+        &:hover {
+          border: 1px solid #000;
+        }
+      }
+    }
+  }
+  .secondHalf {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .slotBtn {
+    color: #000;
+    i {
+      color: #4a4a4a;
+      font-size: 22px;
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+}

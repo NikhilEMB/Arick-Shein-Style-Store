@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button" defaultHref="admin-home"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+  <div class="spinner" *ngIf="showLoader; else feedbacksLoaded;">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+
+  <ng-template #feedbacksLoaded>
+    <div class="no-data ion-text-center" *ngIf="!feedbacks.length; else feedbacksHasLength;">
+      <img src="assets/img/no-category.png" alt="">
+      <h6>No feedbacks</h6>
+    </div>
+    <ng-template #feedbacksHasLength>
+      <div class="feedbacks-wrapper">
+        <div class="feedbacks-wrap" *ngFor="let feed of feedbacks">
+          <p>{{feed.description}}</p>
+          <p><strong>By:</strong>{{feed.userName}}</p>
+          <p><strong>Date: </strong>{{feed.createdAt.toDate() | date:'medium'}}</p>
+          <div class="btn-wrap">
+            <ion-button (click)="viewDetails(feed)" shape="round">
+              view details <i class="flaticon-null-7"></i>
+            </ion-button>
+          </div>
+        </div> 
+      </div>
+    </ng-template>
+  </ng-template>
+  </div>
+</ion-content>

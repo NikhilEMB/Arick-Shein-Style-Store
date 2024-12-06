@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Form Submissions</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+  <p *ngIf='noForms' style="text-align: center;padding: 20px;font-size: large;">No submissions yet!</p>
+  <div *ngIf='!noForms'>
+    <ion-grid *ngFor="let form of allForms; let i=index;" class='dataTable'>
+      <div style="display: flex; align-items: center;justify-content: space-between;">
+        <div style="display: flex;">
+          <p><strong>{{i+1}} )</strong></p>&nbsp;&nbsp;
+          <p *ngIf='users[i] && users[i].name'><strong>User Name:</strong> {{users[i].name}}</p>&nbsp;&nbsp;
+          <p *ngIf='users[i] && users[i].phoneNo'><strong>User Number:</strong> {{users[i].phoneNo}}</p>&nbsp;&nbsp;
+          <p *ngIf='formTitles[i] && formTitles[i].formTitle'><strong>Form Title:</strong> {{formTitles[i].formTitle}}</p>
+        </div>
+        <ion-button (click) = "deleteForm(i)" >Delete</ion-button>
+      </div>
+      <br>
+      <ion-row class="ion-text-capitalize" style="background: lightgray">
+        <ion-col>Field</ion-col>
+        <ion-col>Value</ion-col>
+      </ion-row>
+      <ion-row *ngFor="let submission of form.formData | keyvalue; let i=index;">
+        <ion-col>
+          {{submission.key}}
+        </ion-col>
+        <ion-col *ngIf="!isValidHttpUrl(submission.value)">
+          {{submission.value}}
+        </ion-col>
+        <ion-col *ngIf="isValidHttpUrl(submission.value)">
+          <a href="{{submission.value}}" target="_blank">View Uploaded File</a>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  </div>
+</ion-content>

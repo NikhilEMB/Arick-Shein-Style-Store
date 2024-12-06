@@ -1,0 +1,1149 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>{{editProductId ? 'Edit' : 'New' }} Service</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs no-shadow no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Basic</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Description</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Schedule</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Categories and Brands</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Images</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Advanced (optional)</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <!-- Booking -->
+  <super-tabs-container>
+    <!-- Basic -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <div class="flex-space-between">
+                    <div>
+                      <ion-label>
+                        Service Name (please don't use "/" in name)
+                      </ion-label>
+                    </div>
+                    <!--  *ngIf="userRole != 'vendor'" -->
+                    <div class="flex-label">
+                      <ion-label>Show</ion-label>&nbsp;&nbsp;
+                      <ion-col size="2" class="ion-no-padding">
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input color="primary" type="checkbox" [checked]="booking.status"
+                              [disabled]="editShowDisable()" (click)="updateNewProductStatus(booking.status)">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                    </div>
+                  </div>
+                  <ion-input class="form-input" [(ngModel)]="booking.prodName"></ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col class="flex" size='4'>
+                <ion-label>Allow Payment</ion-label>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input color="primary" type="checkbox" (click)="allowPaymentToggle()"
+                      [checked]="booking.allowPayment">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </ion-col>
+              <!-- <ion-col class="flex" size='4'>
+                <ion-label><strong>Show out of stock for 0 quantity</strong>
+                </ion-label>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input color="primary" type="checkbox" (click)="stopOrderWhenNoQtyToggle()"
+                      [checked]="booking.stopWhenNoQty">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </ion-col> -->
+              <ion-col class="flex" size='4'>
+                <div class="flex" *ngIf="userRole != 'vendor'">
+                  <ion-label>Allow Address</ion-label>&nbsp;&nbsp;
+                  <ion-col size="2" class="ion-no-padding">
+                    <div class="toggle-btn">
+                      <label class="switch">
+                        <input color="primary" type="checkbox" (click)="toggleCheckbox('allowAddress')"
+                          [checked]="booking.allowAddress">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </ion-col>
+                </div>
+              </ion-col>
+              <ion-col class="headings" style="display: flex;align-items: center;" size='4'>
+                <div>Gst Exclusive</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox" (click)="toggleGstExclusive()" [checked]="booking.gstExclusive">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </ion-col>
+              <br>
+              <ion-col size="4">
+                <ion-label>
+                  Price ( {{ booking.gstExclusive ? 'exclusive':'inclusive'}} of all taxes)
+                </ion-label>
+                <ion-input type="number" class="form-input" [(ngModel)]="booking.prodPrice"></ion-input>
+              </ion-col>
+
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label>
+                    Discounted Price ( {{ booking.gstExclusive ? 'exclusive':'inclusive'}} of all taxes)
+                  </ion-label>
+                  <ion-input type="number" class="form-input" [(ngModel)]="booking.discountedPrice"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label>Purchase Price </ion-label>
+                  <ion-input type="number" class="form-input" [(ngModel)]="booking.purchasePrice"></ion-input>
+                </div>
+              </ion-col>
+              <!-- <ion-col size="4">
+                <ion-label>Quantity</ion-label>
+                <ion-input type="text" class="form-input" [(ngModel)]="booking.productQty"></ion-input>
+              </ion-col>
+              <ion-col size="4">
+                <ion-label> Min Quantity</ion-label>
+                <ion-input type="number" class="form-input" [(ngModel)]="booking.minQty"></ion-input>
+              </ion-col>
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label>Max Quantity </ion-label>
+                  <ion-input type="number" class="form-input" [(ngModel)]="booking.maxQty"></ion-input>
+                </div>
+              </ion-col> -->
+              <!-- <ion-col size="12">
+                <div class="flex" *ngIf="userRole != 'vendor'">
+                  <ion-label>Allow Address</ion-label>&nbsp;&nbsp;
+                  <ion-col size="2" class="ion-no-padding">
+                    <div class="toggle-btn">
+                      <label class="switch">
+                        <input color="primary" type="checkbox" (click)="toggleCheckbox('allowAddress')"
+                          [checked]="booking.allowAddress">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </ion-col>
+                </div>
+              </ion-col> -->
+            </ion-row>
+            <br />
+            <ion-row>
+              <ion-col size="10">
+                <div class="input-wrap">
+                  <ion-label>Keywords (Search)</ion-label>
+                  <ion-input class="form-input" [(ngModel)]="keyword" autocapitalize></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="2">
+                <ion-button class="btn-2 m-t-36" fill="outline" shape="round" (click)="addSearchKeywords()">
+                  Add </ion-button>
+              </ion-col>
+              <ion-col size="12" *ngIf="booking.searchKeywords">
+                <ion-chip outline color="dark" *ngFor="let x of booking.searchKeywords; let i = index;">
+                  <ion-icon name="close-circle" (click)="removeKeyword(i)"></ion-icon>
+                  <ion-label>{{x}}</ion-label>
+                </ion-chip>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>Service Code</ion-label>
+                  <ion-input class="form-input" [(ngModel)]="booking.productCode"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>HSN Code</ion-label>
+                  <ion-input class="form-input" [(ngModel)]="booking.hsnCode"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label> GST (%)</ion-label>
+                  <ion-input type="number" class="form-input" [(ngModel)]="booking.gst"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>Barcode Number</ion-label>
+                  <ion-input type="text" class="form-input" [(ngModel)]="booking.barcodeNo"></ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <!-- Description -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-row>
+            <ion-col size="12">
+              <p style="font-weight: bold;">Service Description</p>
+              <br>
+              <ckeditor [(ngModel)]="booking.prodDesc" [config]="ckeConfig"></ckeditor>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12" style="margin-top:1rem;">
+              <p style="font-weight: bold;">Service Short Description</p>
+              <br>
+              <ckeditor [config]="ckeConfig" [(ngModel)]="booking.prodShortDesc"></ckeditor>
+            </ion-col>
+          </ion-row>
+          <br>
+          <ng-container *ngIf="editProductId">
+            <ion-button shape="round" class="btn-1 i-start" color="primary" (click)="addNewSection()"
+              style="margin-bottom: 15px; margin-top: 15px;">
+              <ion-icon name="add-circle" slot="start"></ion-icon>
+              Add New Section
+            </ion-button>
+            <ion-reorder-group (ionItemReorder)="SectionReorder($event)" disabled="false">
+              <ion-item *ngFor="let item of productSections; let i = index">
+                <div class="section">
+                  <div style="display: inline-flex">
+                    <ion-reorder slot="end"> <i class="flaticon-menu"></i>
+                    </ion-reorder>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <p style="margin-top: -12px;font-size: large">Section
+                      {{i+1}}</p>
+                  </div>
+                  <br><br>
+                  <div class="sectionBlock">
+                    <div style="display: block">
+                      <p *ngIf="item.sectionName" class="crop">Name: {{item.sectionName}}</p>
+                      <br *ngIf="item.sectionName">
+                      <p *ngIf="item.widgetType">Type: {{item.widgetType}}</p>
+                    </div>
+                    <div style="display: flex">
+                      <div>
+                        <ion-button (click)="openWidgetEdit(item.widgetType,item.widgetID,i)">
+                          <i class="flaticon-pencil-edit-button" slot="icon-only" slot="icon-only"></i>
+                          &nbsp;Edit
+                        </ion-button>
+                        &nbsp;&nbsp;
+                        <ion-button (click)="deleteSectionConfirm(item.widgetID,i, 'web')">
+                          <i class="flaticon-null-21" slot="icon-only" slot="icon-only"></i>
+                          &nbsp;Delete
+                        </ion-button>
+                      </div>
+                      <ion-list lines="none" style="display: flex;margin-top: -20px;margin-left: 10px">
+                        <ion-item>
+                          <ion-label>App</ion-label>
+                          <ion-toggle [checked]="item.location=='app' || item.location=='all'"
+                            (ionChange)="changeLocationStatus(i,'app')">
+                          </ion-toggle>
+                        </ion-item>
+
+                        <ion-item>
+                          <ion-label>Website</ion-label>
+                          <ion-toggle [checked]="item.location=='web' || item.location=='all'"
+                            (ionChange)="changeLocationStatus(i,'web')">
+                          </ion-toggle>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </div>
+                </div>
+              </ion-item>
+            </ion-reorder-group>
+          </ng-container>
+          <ng-container *ngIf="!editProductId">
+            <ion-text color="danger" style="display: flex;justify-content: center;">
+              <p style="font-weight: bold;font-size: large;">
+                * Once product is created, you can create sections for service description
+              </p>
+            </ion-text>
+          </ng-container>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <!-- Schedule -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-grid>
+            <!-- Active Toggles -->
+            <ion-row>
+              <ion-col class="flex" size='4'>
+                <ion-label>Active Schedule</ion-label>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input color="primary" type="checkbox" (click)="toggleCheckbox('isSchedule')"
+                      [checked]="booking.scheduleData.active">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <!-- Estimated Duration -->
+            <ion-row>
+              <ion-col size="12">
+                <h3>Estimated duration</h3>
+              </ion-col>
+              <ion-col size='3'>
+                <div class="input-wrap">
+                  <ion-label>Months</ion-label>&nbsp;&nbsp;
+                  <ion-input class="form-input" type="number" [(ngModel)]="booking.scheduleData.duration.months">
+                  </ion-input>
+                </div>
+              </ion-col>
+              <ion-col size='3'>
+                <div class="input-wrap">
+                  <ion-label>Days</ion-label>&nbsp;&nbsp;
+                  <ion-input class="form-input" type="number" [(ngModel)]="booking.scheduleData.duration.days">
+                  </ion-input>
+                </div>
+              </ion-col>
+              <ion-col size='3'>
+                <div class="input-wrap">
+                  <ion-label>Hours</ion-label>&nbsp;&nbsp;
+                  <ion-input class="form-input" type="number" [(ngModel)]="booking.scheduleData.duration.hours">
+                  </ion-input>
+                </div>
+              </ion-col>
+              <ion-col size='3'>
+                <div class="input-wrap">
+                  <ion-label>Minutes</ion-label>&nbsp;&nbsp;
+                  <ion-input class="form-input" type="number" [(ngModel)]="booking.scheduleData.duration.minutes">
+                  </ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <!-- Make Schedules  Start-->
+            <ion-row>
+              <ion-col size='4'>
+                <h3>Predefined Schedule</h3>
+                <!-- <div class="flex">
+                  <ion-label>Predefined Slots</ion-label>&nbsp;&nbsp;
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input color="primary" type="checkbox" (click)="toggleCheckbox('predefinedSlot')"
+                        [checked]="booking.scheduleData.isPredefined">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </div> -->
+              </ion-col>
+
+              <!--  *ngIf="booking.scheduleData.isPredefined" -->
+              <ng-container>
+                <ion-col size="12">
+                  <div class="flexJustifySpace">
+                    <h3>Make Schedules</h3>
+                    <ion-button fill="outline" (click)="selectDefaultSchedule()">
+                      Add default Schedules
+                    </ion-button>
+                  </div>
+                  <div class="flex">
+                    <p>Max number of days for booking:</p>&nbsp;&nbsp;
+                    <input placeholder="Enter days" type="number" [(ngModel)]='booking.scheduleData.maxDays'>
+                  </div>
+                  <br>
+                  <ng-container *ngIf="booking.scheduleData.schedules">
+                    <div class="schedulesBox" *ngFor="let item of booking.scheduleData.schedules; index as i">
+                      <div class="firstHalf">
+                        <div class="flex">
+                          <input type='checkbox' (click)="changeSchedule(i)" [checked]='item.active' />&nbsp;&nbsp;
+                          <p><strong>{{item.day | uppercase}}</strong></p>
+                        </div>
+                        <ng-container *ngIf="item.schedule && item.schedule.length > 0">
+                          <div class="slotWrapper">
+                            <div class="scheduleList" *ngFor="let time of item.schedule; index as j">
+                              <div class="inputWrapper">
+                                <input class="slotInput" type="time" [(ngModel)]='time.start'>
+                                <span>-</span>
+                                <input class="slotInput" type="time" [(ngModel)]='time.end'>
+                                <input class="slotInput" type="number" [(ngModel)]='time.slotLimit'
+                                  placeholder="Slot Limit">
+                              </div>
+                              <ion-button class="slotBtn" (click)="removeSlot(i,j)" fill="clear">
+                                <i class="flaticon-null-21"></i>
+                              </ion-button>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </div>
+
+                      <div class="secondHalf">
+                        <ion-button class="slotBtn" (click)="addSlot(i)" fill="clear">
+                          <i class="flaticon-null-28"></i>
+                        </ion-button>
+
+                        <ion-item>
+                          <ion-label>copy</ion-label>
+                          <ion-select class="copyList" [interfaceOptions]="customActionSheetOptions"
+                            (ionChange)="getSelectOption(i,$event.target.value)" multiple="true" mode="ios"
+                            okText="Apply" cancelText="Dismiss">
+                            <ion-select-option *ngFor="let data of booking.scheduleData.schedules, index as k;"
+                              [value]="k" [disabled]="item.day == data.day">
+                              {{data.day}}
+                            </ion-select-option>
+                          </ion-select>
+                        </ion-item>
+
+                        <!-- <ion-button class="slotBtn" fill="clear">
+                          copy
+                        </ion-button> -->
+                      </div>
+                    </div>
+                  </ng-container>
+                </ion-col>
+              </ng-container>
+            </ion-row>
+
+            <!-- Make Schedules End-->
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <!-- Categories and Brands -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height"
+          style="display: flex;flex-wrap: nowrap;flex-direction: row;align-content: center;justify-content: space-around;align-items: flex-start;">
+          <div class="categories-container">
+            <div class="no-data" *ngIf="showNoCategories" text-center>
+              <img src="assets/img/no-category.png" alt="">
+              <h6>No categories</h6>
+            </div>
+            <div class="product-search-wrap" *ngIf="!showNoCategories">
+              <ion-searchbar [(ngModel)]="searchCategory" mode="ios"></ion-searchbar>
+            </div>
+            <div class="categories-wrapper" *ngIf="!showNoCategories">
+              <ion-list>
+                <ion-list-header>
+                  <ion-label class="np-list-header" style="font-size: 16px;font-weight: bold;">Categories
+                  </ion-label>
+                </ion-list-header>
+                <div *ngFor="let category of categories | filter: searchCategory">
+                  <div style="display: flex;justify-content: space-between;align-items: center;">
+                    <ion-item (click)="onClickCategoryCheckBox(category.id)" style="width: 100%;">
+                      <ion-label>{{category.name}}</ion-label>
+                      <ion-checkbox [checked]="editCheckBoxValue(category.id)" color="primary" slot="start">
+                      </ion-checkbox>
+                    </ion-item>
+                    <div (click)="getSubcategories(category.id)" slot="end"
+                      style="z-index: 9999;margin-right: 3%;opacity: .8;" *ngIf="category.isSubcategories">
+                      <i class="flaticon-null-13"
+                        *ngIf="(listOfSubcategoriesInView.hasOwnProperty(category.id) && !listOfSubcategoriesInView[category.id].active) || !listOfSubcategoriesInView.hasOwnProperty(category.id)"></i>
+                      <i class="flaticon-null-14"
+                        *ngIf="listOfSubcategoriesInView.hasOwnProperty(category.id) && listOfSubcategoriesInView[category.id].active"></i>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="(listOfSubcategories[category.id] && listOfSubcategories[category.id].length) && listOfSubcategoriesInView[category.id].active"
+                    style="margin-left: 10%;">
+                    <ng-container *ngFor="let subCat of listOfSubcategories[category.id]">
+                      <div style="display: flex;justify-content: space-between;align-items: center;">
+                        <ion-item (click)="onClickCategoryCheckBox(subCat.id)" style="width: 100%;">
+                          <ion-label>{{subCat.name}}</ion-label>
+                          <ion-checkbox [checked]="editCheckBoxValue(subCat.id)" color="primary" slot="start">
+                          </ion-checkbox>
+                        </ion-item>
+                        <!-- Sub-SubCategory Start -->
+                        <div (click)="getSubOfSubCategories(category.id, subCat.id)" slot="end"
+                          style="z-index: 9999;margin-right: 3%;opacity: .8;" *ngIf="subCat.isSubcategories">
+                          <i class="flaticon-null-13" *ngIf="!subOfSubCategoryToggle[subCat.id]?.active"></i>
+                          <i class="flaticon-null-14" *ngIf="subOfSubCategoryToggle[subCat.id]?.active"></i>
+                        </div>
+                      </div>
+                      <ng-container
+                        *ngIf="subOfSubCategoryToggle[subCat.id]?.active && subOfSubCategories[subCat.id].length">
+                        <div style="margin-left: 10%;">
+                          <ng-container *ngFor="let subSubCat of subOfSubCategories[subCat.id]">
+                            <ion-item (click)="onClickCategoryCheckBox(subSubCat.id)">
+                              <ion-label>{{subSubCat.name}}</ion-label>
+                              <ion-checkbox [checked]="editCheckBoxValue(subSubCat.id)" color="primary" slot="start">
+                              </ion-checkbox>
+                            </ion-item>
+                          </ng-container>
+                        </div>
+                      </ng-container>
+                      <!-- Sub-SubCategory End -->
+                    </ng-container>
+                  </div>
+                </div>
+
+              </ion-list>
+            </div>
+
+
+          </div>
+          <div class="brands-container">
+            <div class="product-search-wrap" *ngIf="!showNoBrands">
+              <ion-searchbar [(ngModel)]="searchBrand" mode="ios"></ion-searchbar>
+            </div>
+            <ion-list *ngIf="!showNoBrands && brands.length">
+              <ion-list-header>
+                <ion-label class="np-list-header" style="font-size: 16px;font-weight: bold;">Brands</ion-label>
+              </ion-list-header>
+              <div *ngFor="let brand of brands | filter: searchBrand">
+                <ion-item (click)="onClickBrandCheckBox(brand.id)" style="width: 100%;">
+                  <ion-label>{{brand.name}}</ion-label>
+                  <ion-checkbox [checked]="editBrandCheckBoxValue(brand.id)" color="primary" slot="start">
+                  </ion-checkbox>
+                </ion-item>
+              </div>
+            </ion-list>
+          </div>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <!-- Images -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <button class="upload-btn btn-1 i-start" (click)="onDrop($event.target.files)">Upload Service
+            Image(s)</button>
+          <h3>Uploads</h3>
+          <div class="no-img" *ngIf="listOfBase64Image.length == 0">
+            No attached images
+          </div>
+
+          <div class="imgs-container" *ngIf="listOfBase64Image.length !== 0">
+            <div class="img-wrap" *ngFor="let img of listOfBase64Image; let i = index">
+              <img [src]="img.base64Img" (click)="onClickEditImage(img.url)" />
+              <div class="overlay">
+                <ion-button class="remove" shape="round" color="danger" fill="clear" (click)="removeImage(i)">
+                  <ion-icon name="trash" slot="icon-only"></ion-icon>
+                </ion-button>
+                <ion-button *ngIf="img.cover == true" class="btn-2 cover" shape="round">
+                  Cover Pic
+                </ion-button>
+                <ion-button *ngIf="img.cover == false" (click)="newProductCoverPic(i)" class="btn-2 cover"
+                  shape="round">
+                  Make Cover
+                </ion-button>
+              </div>
+            </div>
+          </div>
+          <!-- Image List -->
+          <div class="list-header">
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col class="reorder">
+                  <p>Reorder</p>
+                </ion-col>
+                <ion-col class="img">
+                  <p>Image</p>
+                </ion-col>
+                <ion-col class="action">
+                  <p>Action</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div class="list-container">
+            <ion-reorder-group (ionItemReorder)="imagesReorder($event)" disabled="false" class="ion-no-padding">
+              <ion-item *ngFor="let img of booking.images; let i = index" lines="none">
+                <ion-grid class="row-background ion-no-padding ion-align-items-center">
+                  <ion-row class="ion-align-items-center">
+                    <ion-col class="reorder">
+                      <ion-reorder>
+                        <div class="flat-sort">
+                          <i class="flaticon-menu"></i>
+                        </div>
+                      </ion-reorder>
+                    </ion-col>
+                    <ion-col class="img">
+                      <img [src]="img.url" (click)="onClickEditImage(img.url)" height="200px" />
+                    </ion-col>
+                    <ion-col class="action">
+                      <div class="overlay">
+                        <ion-button class="remove" shape="round" color="danger" fill="clear" large
+                          (click)="removeEditImageInData(i, img.url)">
+                          <ion-icon name="trash" slot="icon-only" style=" font-size: 16px;"></ion-icon>
+                        </ion-button>
+                        <ion-button *ngIf="booking.coverPic.imageId == img.imageId" class="btn-2 cover" shape="round"
+                          disabled>
+                          Cover
+                        </ion-button>
+                        <ion-button *ngIf="booking.coverPic.imageId != img.imageId " class="btn-2 cover" shape="round"
+                          (click)="editProductCoverPicInData(i)">
+                          Make Cover
+                        </ion-button>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+                <br>
+              </ion-item>
+            </ion-reorder-group>
+          </div>
+          <!-- Image List -->
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <!-- Advanced (optional) -->
+    <super-tab>
+      <ion-content class="ion-no-padding">
+        <div class="main-container">
+          <ion-grid>
+            <ion-row>
+              <ion-col size=2 id="scroll1">
+                <div class="statusList">
+                  <div [id]="i" *ngFor="let item of sideMenu; index as i" (click)='changeComponent(i)'>
+                    <ng-container *ngIf="userRole !== 'vendor'">
+                      <p>{{item}}</p>
+                    </ng-container>
+                    <ng-container *ngIf="userRole == 'vendor' && item != 'Vendor' && item != 'Specific User Discount'">
+                      <p>{{item}}</p>
+                    </ng-container>
+                  </div>
+                </div>
+              </ion-col>
+              <ion-col size=10 id="scroll2" style="border-left: 1px solid lightgray;">
+                <ng-container [ngSwitch]="selectedId">
+                  <ion-grid>
+                    <!-- Cash on delivery -->
+                    <!-- <ion-row *ngSwitchCase="0">
+                      <ion-col size="12">
+                        <h3>Cash On Delivery</h3>
+                      </ion-col>
+                      <ion-col style="display: flex;align-items: center;">
+                        <div>Cash on delivery (COD) for service</div>
+                        &nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox" (click)="toggleCod()" [checked]="booking.isCod">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                    </ion-row> -->
+                    <!-- Extra Charges -->
+                    <!-- <ion-row *ngSwitchCase="1">
+                      <ion-col size="12">
+                        <h3>Extra Charges</h3>
+                      </ion-col>
+                      <ion-col style="display: flex;align-items: center;">
+                        <ion-label>Extra Charges</ion-label>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox" (click)="toggleExtraCharges()"
+                              [checked]="booking.extraCharges.active">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                      <br>
+                      <ng-container *ngIf='booking.extraCharges.active'>
+                        <ion-row>
+                          <ion-col size="6">
+                            <ion-label>Charge Name / Label</ion-label>
+                            <ion-input type="text" class="form-input" [(ngModel)]="booking.extraCharges.label">
+                            </ion-input>
+                          </ion-col>
+                          <br>
+                          <ion-col size="6">
+                            <ion-label>Cost</ion-label>
+                            <ion-input type="number" class="form-input" [(ngModel)]="booking.extraCharges.charge">
+                            </ion-input>
+                          </ion-col>
+                          <br>
+                          <ion-col style="display: flex;align-items: center;">
+                            <ion-label>Apply this charge for each service
+                              seperately when multiple purchased together
+                            </ion-label>&nbsp;&nbsp;
+                            <div class="toggle-btn">
+                              <label class="switch">
+                                <input type="checkbox" (click)="toggleChargeQty()"
+                                  [checked]="booking.extraCharges.chargeAllQty">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </ion-col>
+                          <br>
+                        </ion-row>
+                      </ng-container>
+                    </ion-row> -->
+                    <!-- Subscription -->
+                    <!-- <ion-row *ngSwitchCase="2">
+                      <ion-col size="12">
+                        <h3>Subscription</h3>
+                      </ion-col>
+                      <ion-text color="danger">
+                        <p *ngIf="!subscriptionFeature">This option is only
+                          available when Subscription feature is on</p>
+                      </ion-text>
+                      <ion-col>
+                        <div *ngIf="subscriptionFeature">
+                          <ion-row class="ion-justify-content-between ion-align-items-center">
+                            <ion-col class="ion-no-padding" style="display: flex;">
+                              <ion-label>Allow Subscriptions</ion-label>
+                              &nbsp;&nbsp;
+                              <div class="toggle-btn">
+                                <label class="switch">
+                                  <input color="primary" type="checkbox" (click)="subIsAllowedToggle()"
+                                    [checked]="booking.subscription.isAllowed">
+                                  <span class="slider round"></span>
+                                </label>
+                              </div>
+                            </ion-col>
+                          </ion-row>
+                          <br>
+                          <div *ngIf="booking.subscription.isAllowed">
+                            <ion-row>
+                              <ion-col size="6" class="ion-no-padding">
+                                <ion-label>Daily Discount (%)</ion-label>
+                                <ion-input type="number" class="form-input"
+                                  [(ngModel)]="booking.subscription.dailyDiscount">
+                                </ion-input>
+                              </ion-col>
+                            </ion-row>
+                            <br>
+                            <ion-row>
+                              <ion-col size="6" class="ion-no-padding">
+                                <ion-label>Weekly Discount (%)</ion-label>
+                                <ion-input type="number" class="form-input"
+                                  [(ngModel)]="booking.subscription.weeklyDiscount">
+                                </ion-input>
+                              </ion-col>
+                            </ion-row>
+                            <br>
+                            <ion-row>
+                              <ion-col size="6" class="ion-no-padding">
+                                <ion-label>Monthly Discount (%)</ion-label>
+                                <ion-input type="number" class="form-input"
+                                  [(ngModel)]="booking.subscription.monthlyDiscount">
+                                </ion-input>
+                              </ion-col>
+                            </ion-row>
+                          </div>
+                        </div>
+                      </ion-col>
+                    </ion-row> -->
+                    <!-- Limited Time Deal -->
+                    <!-- <ion-row *ngSwitchCase="3">
+                      <ion-col size="12">
+                        <h3>Limited Time Deal</h3>
+                      </ion-col>
+                      <ion-text color="danger">
+                        <p *ngIf="!limitedTimeDeal">This option is only
+                          available when Limited Time Deal feature is on</p>
+                      </ion-text>
+                      <ion-col>
+                        <div *ngIf="limitedTimeDeal">
+                          <ion-row>
+                            <ion-col class="ion-no-padding" style="display: flex;">
+                              <ion-label>Limited Time Offer</ion-label>
+                              &nbsp;&nbsp;
+                              <div class="toggle-btn">
+                                <label class="switch">
+                                  <input color="primary" type="checkbox" (click)="dealIsAllowedToggle()"
+                                    [checked]="booking.deal.isAllowed">
+                                  <span class="slider round"></span>
+                                </label>
+                              </div>
+                            </ion-col>
+                          </ion-row>
+                          <br>
+                          <div class="headings">
+                            Start date time
+                          </div>
+                          <ion-row class="ion-align-items-center">
+                            <ion-col size="3">
+                              <ion-datetime class="input-border time-picker" [disabled]="!booking.deal.isAllowed"
+                                placeholder="Date" displayFormat="DD MMM YYYY" [(ngModel)]="booking.deal.start.date"
+                                [min]="minDate"></ion-datetime>
+                            </ion-col>
+                            <ion-col size="1" style="text-align: center;">
+                              -
+                            </ion-col>
+                            <ion-col size="3">
+                              <ion-datetime class="input-border time-picker" [disabled]="!booking.deal.isAllowed"
+                                placeholder="Time" displayFormat="hh:mm A" pickerFormat="hh:mm A"
+                                [(ngModel)]="booking.deal.start.time">
+                              </ion-datetime>
+                            </ion-col>
+                          </ion-row>
+                          <div class="headings">
+                            End date time
+                          </div>
+                          <ion-row class="ion-align-items-center">
+                            <ion-col size="3">
+                              <ion-datetime class="input-border time-picker" [disabled]="!booking.deal.isAllowed"
+                                placeholder="Date" displayFormat="DD MMM YYYY" [(ngModel)]="booking.deal.end.date"
+                                [min]="minDate"></ion-datetime>
+                            </ion-col>
+                            <ion-col size="1" style="text-align: center;">
+                              -
+                            </ion-col>
+                            <ion-col size="3">
+                              <ion-datetime class="input-border time-picker" [disabled]="!booking.deal.isAllowed"
+                                placeholder="Time" displayFormat="hh:mm A" pickerFormat="hh:mm A"
+                                [(ngModel)]="booking.deal.end.time">
+                              </ion-datetime>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row class="ion-align-items-center">
+                            <ion-col size="6">
+                              <div class="headings">
+                                Deal discount
+                              </div>
+                              <ion-input type="number" class="form-input" [(ngModel)]="booking.deal.discount">
+                              </ion-input>
+                            </ion-col>
+                          </ion-row>
+                        </div>
+                      </ion-col>
+                    </ion-row> -->
+                    <!-- Specific User Discount -->
+                    <!-- <ion-row *ngSwitchCase="4">
+                      <ion-col size="12">
+                        <h3>Specific User Discount</h3>
+                      </ion-col>
+                      <ion-text color="danger">
+                        <p *ngIf="!booking.deal.isAllowed">This option is only
+                          available when limited time deal is on</p>
+                      </ion-text>
+                      <ng-container *ngIf="booking.deal.isAllowed">
+                        <ion-col size="6">
+                          <div class="input-wrap">
+                            <div class="flex-label">
+                              <ion-label>Give user specific discount on this
+                                product</ion-label>
+                              <ion-toggle [(ngModel)]="booking.deal.specificUsers.active">
+                              </ion-toggle>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="6" *ngIf="booking.deal.specificUsers.active">
+                          <ion-button class="btn-2 i-start" (click)="openUsersModal()" shape="round" fill="outline">
+                            <i class="flaticon-null-5 margin-icon"></i>
+                            Add Users
+                          </ion-button>
+                        </ion-col>
+                      </ng-container>
+                      <ng-container
+                        *ngIf="booking.deal.isAllowed && booking.deal.specificUsers.active && booking.deal.specificUsers.users.length>0">
+                        <h5 style="margin: 0px;">User List with Discount &nbsp;
+                          <i class="flaticon-null-27 cursor-p" *ngIf="moreUsers" (click)="moreUsers = !moreUsers"></i>
+                          <i class="flaticon-null-28 cursor-p" *ngIf="!moreUsers" (click)="moreUsers = !moreUsers"></i>
+                        </h5>
+                        <div class="ion-no-padding" *ngIf="moreUsers">
+                          <div class="list-header t-a-c">
+                            <ion-grid class="ion-no-padding">
+                              <ion-row class="headings">
+                                <ion-col size="3">
+                                  <p>Name</p>
+                                </ion-col>
+                                <ion-col size="3">
+                                  <p>Phone Number</p>
+                                </ion-col>
+                                <ion-col size="2">
+                                  <p>Discount(%)</p>
+                                </ion-col>
+                                <ion-col size="2">
+                                  <p>Delete</p>
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+                          </div>
+                          <div class="list-container">
+                            <ion-item *ngFor="let item of booking.deal.specificUsers.users; let i = index">
+                              <ion-grid class="row-background ion-no-padding ion-align-items-center">
+                                <ion-row class="ion-align-items-center">
+                                  <ion-col size="3">
+                                    <p class="ion-text-capitalize ion-text-center">
+                                      {{item.name}}</p>
+                                  </ion-col>
+                                  <ion-col size="3">
+                                    <p class="ion-text-capitalize ion-text-center">
+                                      {{item.phoneNo}}</p>
+                                  </ion-col>
+                                  <ion-col size="2">
+                                    <ion-input type="number" class="form-input padding-start-16"
+                                      [(ngModel)]="item.discount"></ion-input>
+                                  </ion-col>
+                                  <ion-col size="2" class="ion-text-center">
+                                    <div class="ion-text-center">
+                                      <i class="flaticon-null-21 cursor-p" (click)="removeUser(i)"></i>
+                                    </div>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                            </ion-item>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </ion-row> -->
+
+
+                    <!-- Seo for Website -->
+                    <ion-row *ngSwitchCase="0">
+                      <ion-col size="12">
+                        <h3>Website SEO</h3>
+                      </ion-col>
+
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <ion-label>Meta Title</ion-label>
+                          <ion-input class="form-input" [(ngModel)]="booking.metaData.pageTitle"></ion-input>
+                        </div>
+                      </ion-col>
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <ion-label>Meta Description</ion-label>
+                          <ion-input class="form-input" [(ngModel)]="booking.metaData.metaDescription"></ion-input>
+                        </div>
+                      </ion-col>
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <ion-label>Meta Keywords</ion-label>
+                          <ion-input class="form-input" [(ngModel)]="booking.metaData.metaKeywords"></ion-input>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+
+                    <!-- Vendors -->
+                    <ion-row *ngSwitchCase="1">
+                      <ion-col size="12">
+                        <h3>Vendors</h3>
+                      </ion-col>
+                      <ion-text *ngIf="!multiVendor" color="danger">
+                        This option is only available when MultiVendor is on.
+                      </ion-text>
+                      <ion-col size="6">
+                        <ng-container *ngIf="multiVendor && vendors.length">
+                          <ion-row>
+                            <div class="headings">
+                              Add Vendor
+                            </div>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12">
+                              <ion-select [value]="booking.vendorId" class="border i-s-p-10"
+                                (ionChange)="addVendor($event)" placeholder="Select Vendor">
+                                <ion-select-option value="">No Vendor</ion-select-option>
+                                <ion-select-option [value]="vendor.id" *ngFor="let vendor of vendors">
+                                  {{vendor.name}}
+                                </ion-select-option>
+                              </ion-select>
+                            </ion-col>
+                          </ion-row>
+                          <br>
+                        </ng-container>
+                      </ion-col>
+                    </ion-row>
+
+                    <!-- Add Ons -->
+                    <ion-row *ngSwitchCase="2">
+                      <ion-col size="12">
+                        <h3>Add Ons</h3>
+                      </ion-col>
+                      <ion-col size="12">
+                        <label>Select Addon Templates:</label>&nbsp;<br>
+                        <select class="selectInput" (change)="changeTemplate($event.target.value)"
+                          [(ngModel)]='booking.templateId'>
+                          <option value="" disabled selected hidden>Please choose</option>
+                          <option value="">None</option>
+                          <option value="{{template.id}}" *ngFor="let template of templatesArray">
+                            {{template.name}}
+                          </option>
+                        </select>
+                      </ion-col>
+                    </ion-row>
+
+                    <!-- Slug Name -->
+                    <ion-row *ngSwitchCase="3">
+                      <ng-container *ngIf="isUniversal && editProductId else noUniversal">
+                        <ion-col>
+                          <div class="input-wrap">
+                            <ion-label>Slug Name
+                              <ion-text color="danger">
+                                (<b class="cursor-p" (click)="sharedService.presentSlugAlert()">CLICK HERE</b> for Slug
+                                Instructions)
+                              </ion-text>
+                            </ion-label>
+                            <div style="display: flex;align-items: center;justify-content: space-between;">
+                              <ion-input type="text" class="form-input" [(ngModel)]='booking.slug.name'
+                                style="width: 80%;"></ion-input>
+                            </div>
+                          </div>
+                        </ion-col>
+                      </ng-container>
+                      <ng-template #noUniversal>
+                        <p>Coming Soon!</p>
+                      </ng-template>
+                    </ion-row>
+
+                    <!-- Custom Input -->
+                    <ion-row *ngSwitchCase="4">
+                      <ion-col size="12">
+                        <h3>Custom Input</h3>
+                      </ion-col>
+                      <ion-col style="display: flex;align-items: center;">
+                        <ion-label>Custom input</ion-label>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox" (click)="toggleCheckbox('customInput')"
+                              [checked]="booking?.additionalInfo?.customInput.active">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                      <ng-container *ngIf="booking?.additionalInfo?.customInput.active">
+                        <ion-col size="12" style="display: flex;align-items: center;">
+                          <ion-label>Mandatory</ion-label>&nbsp;&nbsp;
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input type="checkbox" (click)="toggleCheckbox('customInputRequired')"
+                                [checked]="booking?.additionalInfo?.customInput?.required">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                        </ion-col>
+
+                        <ion-col size="12">
+                          <div class="input-wrap">
+                            <ion-label>Custom Label Name</ion-label>
+                            <ion-input class="form-input" [(ngModel)]="booking?.additionalInfo?.customInput.label">
+                            </ion-input>
+                          </div>
+                        </ion-col>
+                      </ng-container>
+
+                      <ion-text color="danger" *ngIf="!booking?.additionalInfo?.customInput.active">
+                        <p>Custom input is disabled.</p>
+                      </ion-text>
+                    </ion-row>
+
+
+                    <!-- Regions -->
+                    <ion-row *ngSwitchCase="5">
+                      <ion-col size="12">
+                        <h3>Regions</h3>
+                      </ion-col>
+                      <ion-text *ngIf="!multiRegion" color="danger">
+                        <p>This option is only available when Multi Region is on</p>
+                      </ion-text>
+                      <ng-container *ngIf="multiRegion">
+                        <ion-col size="12" style="display: flex;align-items: center;">
+                          <ion-label>Active</ion-label>&nbsp;&nbsp;
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input type="checkbox" (click)="toggleCheckbox('allRegions')"
+                                [checked]="booking.allRegions?.active">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                        </ion-col>
+                        <br>
+                        <ion-col size="12" *ngIf="booking.allRegions.active">
+                          <ng-container *ngFor="let region of this.booking.allRegions.regions,index as i">
+                            <div class="regionWrap">
+                              <div class="flex">
+                                <input type='checkbox' (click)="toggleRegion(i)"
+                                  [checked]='region.active' />&nbsp;&nbsp;
+                                <p><strong>{{region.name | uppercase}}</strong></p>
+                              </div>
+                              <ion-row>
+                                <ion-col class="input-wrap">
+                                  <ion-label>Price</ion-label>
+                                  <ion-input class="form-input" [(ngModel)]="region.price" type="number"></ion-input>
+                                </ion-col>
+                                <ion-col class="input-wrap">
+                                  <ion-label>Discounted Price</ion-label>
+                                  <ion-input class="form-input" [(ngModel)]="region.discountedPrice" type="number">
+                                  </ion-input>
+                                </ion-col>
+                                <!-- <ion-col class="input-wrap">
+                                  <ion-label>Quantity</ion-label>
+                                  <ion-input class="form-input" [(ngModel)]="region.qty" type="number"></ion-input>
+                                </ion-col> -->
+                              </ion-row>
+                            </div>
+                          </ng-container>
+                        </ion-col>
+                      </ng-container>
+                    </ion-row>
+                  </ion-grid>
+
+                  <!-- Clone Service -->
+                  <!-- <ion-grid *ngSwitchCase="7">
+                    <ion-row>
+                      <ion-col>
+                        <ng-container *ngIf="!editProductId">
+                          <ion-text color="danger">
+                            <p>Note: This feature is available when you edit this service.</p>
+                          </ion-text>
+                        </ng-container>
+                        <ng-container *ngIf="editProductId">
+                          <ion-button color="primary" fill="outline" shape="round" size="small"
+                            (click)="cloneProduct()">Clone Product</ion-button>
+                        </ng-container>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid> -->
+                </ng-container>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+  </super-tabs-container>
+  <!-- Booking -->
+
+</super-tabs>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="deleteAlertConfirm();" *ngIf="editProductId" shape="round" class="btn-1 i-start"
+      color="danger">
+      <i class="flaticon-null-21"></i>
+      Delete
+    </ion-button>
+    <ion-button (click)="saveBooking()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title >Order Chat (ORD: {{order.orderId}})</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid id='scroll2'>
+    <div *ngFor="let msg of msgs; let ind = index">
+
+      <!-- Admin message -->
+      <ion-row class="ion-justify-content-end" *ngIf="msg.author == 'admin'">
+
+        <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-right': '5px'}" class="message-admin"
+          style="text-align: left;">
+          <span class="msg-content" [innerHtml]="messageModifications(msg.msg)"></span>
+          <!-- <h6 class="time">
+            <span *ngIf="!isDate(msgs.createdAt)">{{msgs.createdAt.toDate().toISOString() | dateAgo}}</span>
+            <span *ngIf="isDate(msgs.createdAt)">{{msgs.createdAt.toISOString() | dateAgo}}</span>
+            <span *ngIf="!msgs.msgData.published"><i class="flaticon-clock"></i></span>
+           <span *ngIf="msgs.msgData.published"><i class="flaticon-check"></i></span>
+          </h6> -->
+        </div>
+
+        <div style="margin-right: 10px;">
+          <ion-avatar class="avatar-img">
+            <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+          </ion-avatar>
+        </div>
+      </ion-row>
+      <!-- /Admin message -->
+
+      <!-- User message -->
+      <ion-row class="ion-justify-content-start" *ngIf="msg.author == 'user'">
+        <div style="margin-left: 5px;">
+          <ion-avatar class="avatar-img">
+            <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+          </ion-avatar>
+        </div>
+
+        <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-left': '5px'}" class="message-user">
+          <span [innerHtml]="messageModifications(msg.msg)"></span>
+          <!-- <h6 class="time">
+            <span *ngIf="!isDate(msg.createdAt)">{{msgs.createdAt.toDate().toISOString() | dateAgo}}</span>
+          </h6> -->
+        </div>
+      </ion-row>
+      <!-- /User message -->
+    </div>
+  </ion-grid>
+  
+  <!-- <ion-grid style="height: 17vh;">
+  </ion-grid> -->
+
+</ion-content>
+
+<ion-footer>
+  <ion-row align-items-center class="ion-no-padding" style="flex-wrap: wrap;align-content: flex-end;">
+    <ion-col style="justify-content: space-between; display: flex;">
+      <div class="textarea-div ion-no-padding" style="width: 100%;">
+        <textarea class="textareaElement" #myInput rows="1" (keyup.enter)="sendMessage()" [(ngModel)]="adminMsgText"
+          placeholder="Type a message..." (ngModelChange)="changeInMsgInput();"></textarea>
+      </div>&nbsp;
+      <div style="display:flex;justify-content: space-between; align-items: center;">
+      <!-- <div class="upload-btn-wrapper">
+        <ion-button class="btn-2 i-start" style="margin-right: 0px;"> <i class="flaticon-null-16"></i>&nbsp;Image</ion-button>
+        <input type="file" name="myfile" (change)="uploadImage($event.target.files)" />
+      </div>&nbsp; -->
+      <div class="upload-btn-wrapper">
+        <ion-button class="btn-2 i-start" (mousedown)="preventFocusChange($event)" (click)="sendMessage()">
+          <i class="flaticon-null-1"></i> Send
+         </ion-button>
+      </div>
+    </div>
+    </ion-col>
+  </ion-row>
+</ion-footer>

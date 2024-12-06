@@ -1,0 +1,102 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons style="margin-left: -8px;" slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-menu-button style="margin-left: 8px;" slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>{{currentType}} CSV Creator</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+
+        <ion-col id="scroll" size="4">
+          <div class="sectionArea">
+            <h2>Select Fields</h2>
+            <div id="fields">
+              <ion-progress-bar *ngIf="fieldLoader" type="indeterminate"></ion-progress-bar>
+              <ion-list>
+                <div id="mainField">
+                  <ion-label>Select All</ion-label>
+                  <ion-checkbox slot="end" mode="ios" id="mainField" (click)="selectAllFields()"></ion-checkbox>
+                </div>
+                <div id="mainField">
+                  <ion-label>Sku</ion-label>
+                  <ion-checkbox slot="end" mode="ios" id="mainField" [checked]="true" [disabled]="true"></ion-checkbox>
+                </div>
+                <div *ngFor="let mainField of productFields; let i = index;">
+                  <div id="mainField">
+                    <ion-label>{{mainField.name}}</ion-label>
+                    <div class="dropdown">
+                      <i *ngIf="mainField.fields" class="flaticon-download" (click)="dropdown(showDropdown, mainField.value)"></i>
+                      <ion-checkbox slot="end" mode="ios" id="mainField" [(ngModel)]="mainField.active" (click)="handleSelections('main', mainField, i)"></ion-checkbox>
+                    </div>
+                  </div>
+
+                  <div *ngIf="mainField.fields && mainField.value === 'categories'" [class.hide]="showCategory">
+                      <div *ngFor="let subField of mainField.fields; let i = index" id="subField">
+                        <p>{{subField.name}}</p>
+                        <ion-checkbox slot="end" mode="ios" [(ngModel)]="subField.active" (click)="handleSelections('sub', subField, i)" [disabled]="subCatDisable"></ion-checkbox>
+                      </div>
+                  </div>
+
+                  <div *ngIf="mainField.fields && mainField.value === 'brands'" [class.hide]="showBrand">
+                    <div *ngFor="let subField of mainField.fields; let i = index" id="subField">
+                      <p>{{subField.name}}</p>
+                      <ion-checkbox slot="end" mode="ios" [(ngModel)]="subField.active" (click)="handleSelections('sub', subField, i)" [disabled]="subBrandDisable"></ion-checkbox>
+                    </div>
+                  </div>
+
+                </div>
+
+              </ion-list>
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col id="scroll" size="4">
+          <div class="sectionArea">
+            <h2>Selected Fields</h2>
+            <ion-progress-bar *ngIf="!selectedFields[0]" value="0.25" buffer="0.5"></ion-progress-bar>
+            <ion-list *ngIf="selectedFields[0]">
+              <div id="mainFieldSelect">
+                <ion-label>Sku</ion-label>
+              </div>
+              <div id="mainFieldSelect" *ngFor="let selection of selectedFields">
+                <ion-label>{{selection.name}}</ion-label>
+              </div>
+            </ion-list>
+          </div>
+        </ion-col>
+
+        <ion-col size="4">
+          <div class="sectionArea" *ngIf="currentType === 'export products'">
+            <h2>Instructions</h2>
+          </div>
+          <div style="margin-top: 10px;">
+            <ol>
+              <li>SKU is a mandatory field & will be present in all exported csv's.</li>
+              <li>You just have to select the required fields for exporting & then click the following button for the same.</li>
+            </ol>
+          </div>
+        </ion-col>
+        
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer no-border class="page-footer" style="border-top: 1px solid #ccc;">
+  <div class="main-container">
+    <ion-button (click)="exportProductsHandler()" [disabled]="saveDisable()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      {{currentType}} CSV
+    </ion-button>
+  </div>
+</ion-footer>

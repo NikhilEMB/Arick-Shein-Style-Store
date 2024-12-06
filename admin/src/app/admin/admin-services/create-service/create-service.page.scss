@@ -1,0 +1,92 @@
+.cs-data-container {
+  ion-input, ion-datetime {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+}
+
+.cs-wrapper {
+    font-size: 14px;
+}
+
+.cs-headings {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.cs-data-sections {
+    margin-top: 20px;
+}
+
+.cs-upload-imgs {
+    text-align: center;
+}
+
+.cs-service-imgs div {
+    max-width: 100%;
+    position: relative;
+    text-align: center;
+    img {
+        width: 90%;
+        height: 20vh;
+        margin: 10px;
+        object-fit: contain;
+        border: 1px solid #ccc;
+    }
+    div {
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        font-size: 20px;
+    }
+}
+
+.cancel-btn {
+    background-color: var(--ion-color-dark);
+    color: white
+  }
+
+  .save-btn {
+    background-color: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+  }
+
+  .margin-icon {
+    margin-left: 5px;
+  }
+
+  ion-footer ion-title {
+    height: 45px;
+  }
+
+  .bottom-buttons {
+    font-size: 15px;
+    margin-left: 5px;
+  }
+
+  .cs-days-container {
+    display: flex;
+    flex-flow: wrap;
+    .cs-days-inactive {
+      border: 1px solid #ccc;
+      text-align: center;
+      padding: 10px 15px 10px 15px;
+      border-radius: 5px;
+      margin: 4px;
+    }
+    
+    .cs-days-active {
+      border: 1px solid var(--ion-color-chat-border);
+      text-align: center;
+      padding: 10px 15px 10px 15px;
+      border-radius: 5px;
+      margin: 4px;
+      background: var(--ion-color-chat-background);
+    }
+  }
+
+  .time-picker {
+    padding-right: 15px;
+    border: 1px solid lightgray
+  }
+

@@ -1,0 +1,114 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <div class="search-bx">
+      <ion-searchbar mode="ios" placeholder="Search Brands" [(ngModel)]="searchBrand"></ion-searchbar>
+    </div>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+      <ion-button fill="outline" shape="round" class="add-btn" (click)="goToAddNew('add-brand')">
+        <ion-icon name="add-circle" slot="start"></ion-icon>
+        Add new Brand
+      </ion-button>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <!-- no data -->
+    <div class="no-data ion-text-center" *ngIf="showNoBrands">
+      <img src="assets/img/no-category.png" alt="">
+      <h6>No categories</h6>
+    </div>
+    
+    <!-- no data -->
+
+    <!-- heading -->
+    <div class="list-header" *ngIf="!showNoBrands">
+      <ion-grid class="ion-no-padding">
+        <ion-row >
+          <ion-col class="img">
+            <p>image</p>
+          </ion-col>
+          <ion-col class="name">
+            <p>name</p>
+          </ion-col>
+          <ion-col class="action">
+            <p>Action</p>
+          </ion-col>
+          <ion-col class="reorder">
+            <p>reorder</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      </div>
+      <!-- heading -->
+
+      <!-- categories list -->
+    <div class="list-container">
+    
+    <ion-list class="ion-no-padding row-border" *ngIf="brands && brands.length !== 0 && !showNoBrands"> 
+      <ion-reorder-group (ionItemReorder)="onRenderBrands($event)" disabled="false" class="ion-no-padding">
+        <ion-item *ngFor="let brand of brands | filter:searchBrand; let i = index">
+          <ion-grid class="ion-no-padding">
+            <ion-row >
+              <ion-col  class="img">
+                <ion-thumbnail style="margin-left: 5%;" class="thumbnail">
+                  <img *ngIf="brand.image && !brand.image.thumb && brand.image.url" img-preloader="{{brand.image.url}}">
+                  <img *ngIf="brand.image && brand.image.thumb" img-preloader="{{brand.image.thumb}}">
+                  <img *ngIf="brand.image && !brand.image.thumb && !brand.image.url" src="assets/img/img-preloader.png">
+                </ion-thumbnail>
+              </ion-col>
+              <ion-col class="name">
+                <div [ngClass]="{'category-active': brand.status, 'category-inactive': !brand.status}">
+                </div>
+                <p class="ion-text-capitalize">{{brand.name}}</p>
+              </ion-col>
+              <ion-col class="action">
+                <ion-button class="action-btn" fill="clear" (click)="editBrand(brand)">
+                  <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                </ion-button>
+                <ion-button class="action-btn" fill="clear" (click)="deleteBrandConfirm(brand.id, i)">
+                  <i class="flaticon-null-21" slot="icon-only"></i>
+                </ion-button>
+              </ion-col>
+              <ion-col class="reorder">
+                <ion-reorder>
+                  <div class="flat-sort">
+                    <i class="flaticon-menu"></i>
+                  </div>
+                </ion-reorder>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-reorder-group>
+    </ion-list>
+    <ion-grid *ngIf="brands.length === 0 && !showNoBrands">
+      <ion-row class="row-background" *ngFor="let x of [1,2,3,4,5,6,7,8,9,10]">
+        <ion-col size="3">
+          <ion-thumbnail>
+            <ion-skeleton-text style="margin: auto;"></ion-skeleton-text>
+          </ion-thumbnail>
+        </ion-col>
+        <ion-col size="6">
+          <h3>
+            <ion-skeleton-text animated style="width: 90%;margin: auto;"></ion-skeleton-text>
+          </h3>
+        </ion-col>
+        <ion-col size="3">
+          <h3>
+            <ion-skeleton-text animated style="width: 60%;margin: auto;"></ion-skeleton-text>
+          </h3>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    </div>
+    <!-- categories list -->
+    </div>
+</ion-content>
+

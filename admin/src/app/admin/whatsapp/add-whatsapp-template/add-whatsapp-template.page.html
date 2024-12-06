@@ -1,0 +1,282 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start">
+      <img src="../../../../assets/img/shop-logo.png">
+    </div>
+    <ion-title>Create Template</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button (click)="templateType = 'basic'">
+      <ion-label>Basic Template</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)="templateType = 'advance'">
+      <ion-label>Advance Template</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container>
+    <super-tab>
+      <ion-content>
+      <div class="main-container">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <div class="input-wrap">
+                <ion-label>Template Name<span class="red">*</span></ion-label>
+                <ion-input class="form-input" [(ngModel)]="templateDetails.name"></ion-input>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="input-wrap">
+                <ion-label>Category<span class="red">*</span></ion-label>
+                <select class="form-input" [(ngModel)]="templateDetails.category" interface="popover"
+                  style="width: 100%; padding: 9px;">
+                  <option value="utility">Utility</option>
+                  <option value="marketing">Marketing</option>
+                </select>
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <div class="input-wrap">
+                <ion-label>Template Body (Max 1024 characters)<span class="red">*</span></ion-label>
+                <ion-textarea rows="6" type="text" maxlength="1024" class="form-input" [(ngModel)]="templateDetails.components[0].text"></ion-textarea>
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <ion-text color="danger">
+                <p>Note: Once you have created your template it will get submit for approval to whatsapp. It can take up to 24 hours for an approval decision to be made by Whatsapp.</p>
+              </ion-text>
+            </ion-col>
+    
+          </ion-row>
+        </ion-grid>
+      </div>
+    
+    </ion-content>
+    </super-tab>
+
+    <!-- Advance Template -->
+    <super-tab>
+      <ion-content>
+      <div class="main-container" *ngIf="!paidPlanNote.length">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <div class="input-wrap">
+                <ion-label>Template Name<span class="red">*</span></ion-label>
+                <ion-input class="form-input" [(ngModel)]="advanceTemplateDetails.name"></ion-input>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="input-wrap">
+                <ion-label>Category<span class="red">*</span></ion-label>
+                <select class="form-input" [(ngModel)]="advanceTemplateDetails.category" interface="popover"
+                  style="width: 100%; padding: 9px;">
+                  <option value="utility">Utility</option>
+                  <option value="marketing">Marketing</option>
+                </select>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="input-wrap">
+                <ion-label>Header (Optional)</ion-label>
+                <select class="form-input" [(ngModel)]="headerType" interface="popover" style="width: 100%; padding: 9px;">
+                  <option value="none">None</option>
+                  <option value="text">Text</option>
+                  <option value="media">Media</option>
+                </select>
+              </div>
+            </ion-col>
+            <ion-col size="6" *ngIf="headerType == 'text'">
+              <div class="input-wrap">
+                <ion-label>Header Text</ion-label>
+                <ion-input class="form-input" [(ngModel)]="advanceTemplateDetails.components[0].text"></ion-input>
+              </div>
+            </ion-col>
+            <ion-col size="12" *ngIf="headerType == 'media'">
+                <ion-list lines="none" class="option-list">
+                  <ion-radio-group [(ngModel)]="advanceTemplateDetails.components[0].format" (ionChange)="changeHeaderMediaType($event)">
+                  <ion-item>
+                    <ion-label>Image</ion-label>
+                    <ion-radio value="image" slot="start"></ion-radio>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>Video</ion-label>
+                    <ion-radio value="video" slot="start"></ion-radio>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>Document</ion-label>
+                    <ion-radio value="document" slot="start"></ion-radio>
+                  </ion-item>
+                </ion-radio-group>
+                </ion-list>
+            </ion-col>
+            <ion-col size="12" *ngIf="headerType=='media'">
+              <ion-row class="ion-justify-content-center" style="align-items: center;">
+                <div class="upload-btn-wrapper" style="margin-top: 8px; margin-right: 10px;" *ngIf="advanceTemplateDetails.components[0].format == 'image' || advanceTemplateDetails.components[0].format == 'video' || advanceTemplateDetails.components[0].format == 'document'">
+                <button class="upload-btn btn-1 i-start" style="margin-right: 0px;"> <i
+                    class="flaticon-null-16"></i>Upload</button>
+                    <ng-container *ngIf="advanceTemplateDetails.components[0].format == 'image'">
+                      <input type="file" name="myfile" (change)="uploadMedia($event.target.files, advanceTemplateDetails.components[0].format)"
+                        accept="image/*" />
+                    </ng-container>
+                    <ng-container *ngIf="advanceTemplateDetails.components[0].format == 'video'">
+                      <input type="file" name="myfile" (change)="uploadMedia($event.target.files, advanceTemplateDetails.components[0].format)"
+                        accept="video/*" />
+                    </ng-container>
+                    <ng-container *ngIf="advanceTemplateDetails.components[0].format == 'document'">
+                      <input type="file" name="myfile" (change)="uploadMedia($event.target.files, advanceTemplateDetails.components[0].format)"
+                        accept="application/pdf" />
+                    </ng-container>
+                </div>
+                <p *ngIf="uploadedFileDetails?.name">{{uploadedFileDetails.name}}</p>
+              </ion-row>
+            </ion-col>
+            <ion-col size="12">
+              <div class="input-wrap">
+                <ion-label>Template Body (Max 1024 characters)<span class="red">*</span></ion-label>
+                <ion-textarea rows="6" type="text" maxlength="1024" class="form-input" [(ngModel)]="advanceTemplateDetails.components[1].text"></ion-textarea>
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <div class="input-wrap">
+                <ion-label>Footer Message (Max 60 characters) (Optional)</ion-label>
+                <ion-input class="form-input" maxlength="60" [(ngModel)]="advanceTemplateDetails.components[2].text"></ion-input>
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <ion-row>
+                <ion-col size="6">
+                  <div class="input-wrap">
+                    <ion-label>Buttons (Optional)</ion-label>
+                    <select class="form-input" style="width: 100%; padding: 9px;" [(ngModel)]="advanceTemplateDetails.components[3].buttonType" interface="popover" (ionChange)="changeButtonType($event)">
+                      <option value="none">None</option>
+                      <option value="quickReply">Quick Reply</option>
+                      <option value="callToAction">Call To Action</option>
+                    </select>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ng-container *ngIf="advanceTemplateDetails.components[3].buttonType == 'quickReply'">
+                <ion-row>
+                  <ion-col size="6">
+                    <h4>Quick Reply</h4>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-button fill="outline" shape="round" size="small" (click)="addButtons('quickReply')">Add More Quick Reply</ion-button>
+                  </ion-col>
+                </ion-row>
+              <ion-row *ngFor="let quickReplyButton of quickReplyButtons; let i = index">
+                <ion-col size="5">
+                  <div class="input-wrap">
+                    <ion-label>Button Text (Max 25 characters)</ion-label>
+                    <ion-input class="form-input" maxlength="25" [(ngModel)]="quickReplyButton.text"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="5">
+                  <div class="input-wrap">
+                    <ion-label>Button Action</ion-label>
+                    <select class="form-input" interface="popover" style="width: 100%; padding: 9px;"
+                    [(ngModel)]="quickReplyButton.payload">
+                      <option value="menu-entry-point">Menu</option>
+                      <option value="menu-button-1">Menu Button 1</option>
+                      <option value="menu-button-2">Menu Button 2</option>
+                      <option value="menu-button-3">Menu Button 3</option>
+                    </select>
+                  </div>
+                </ion-col>
+                <ion-col size="2" class="vertical-center">
+                  <div>
+                    <i class="flaticon-null-19 remove-icon" (click)="removeButton(i)"></i>
+                  </div>
+                </ion-col>
+              </ion-row>
+              </ng-container>
+
+              <ng-container *ngIf="advanceTemplateDetails.components[3].buttonType == 'callToAction'">
+              <h4>Call To Action</h4>
+              <ion-row>
+                <ion-col size="3">
+                  <div class="input-wrap">
+                    <ion-label>Type of Action</ion-label>
+                    <ion-input class="form-input" [readonly]="true" value="Call Phone No."></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                  <div class="input-wrap">
+                    <ion-label>Button Text</ion-label>
+                    <ion-input class="form-input" maxlength="25" [(ngModel)]="callToActionButtons[0].text"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="2">
+                  <div class="input-wrap">
+                    <ion-label>Country Code</ion-label>
+                    <ion-input class="form-input" maxlength="25" value="+91" [readonly]="true"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="4">
+                  <div class="input-wrap">
+                    <ion-label>Phone Number</ion-label>
+                    <ion-input class="form-input" maxlength="10" [(ngModel)]="callToActionButtons[0].phone_number"></ion-input>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="3">
+                  <div class="input-wrap">
+                    <ion-label>Type of Action</ion-label>
+                    <ion-input class="form-input" [readonly]="true" value="Visit Website"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                  <div class="input-wrap">
+                    <ion-label>Button Text</ion-label>
+                    <ion-input class="form-input" maxlength="25" [(ngModel)]="callToActionButtons[1].text"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="2">
+                  <div class="input-wrap">
+                    <ion-label>URL Type</ion-label>
+                    <ion-input class="form-input" maxlength="25" value="Static" [readonly]="true"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="4">
+                  <div class="input-wrap">
+                    <ion-label>Website URL</ion-label>
+                    <ion-input class="form-input" [(ngModel)]="callToActionButtons[1].url"></ion-input>
+                  </div>
+                </ion-col>
+              </ion-row>
+              </ng-container>
+            </ion-col>
+            <ion-col size="12">
+              <ion-text color="danger">
+                <p>Note: Once you have created your template it will get submit for approval to whatsapp. It can take up to 24 hours for an approval decision to be made by Whatsapp.</p>
+              </ion-text>
+            </ion-col>
+    
+          </ion-row>
+        </ion-grid>
+      </div>
+    
+    </ion-content>
+    </super-tab>
+
+  </super-tabs-container>
+
+</super-tabs>
+
+<ion-footer no-border class="page-footer" *ngIf="!(templateType=='advance' && paidPlanNote.length)">
+  <div class="main-container">
+    <ion-button (click)="save()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save {{templateType | titlecase}}
+    </ion-button>
+  </div>
+</ion-footer>

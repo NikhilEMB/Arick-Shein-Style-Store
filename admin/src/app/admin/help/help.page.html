@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Help</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="solid" color="secondary">
+      <span class="icon" slot="start">
+        <i class="flaticon-null" slot="start"></i>
+        <span class="count">5</span>
+      </span>
+    </ion-button>
+    <ion-button fill="solid" color="secondary">
+      <span class="icon" slot="start">
+        <i class="flaticon-shopping-bag" slot="start"></i>
+        <span class="count">2</span>
+      </span>
+    </ion-button>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+
+  <div>
+    <ion-grid class="search-help margining">
+      <div class="message-box">
+        <ion-row class="ion-align-items-center">
+          <div>
+            <i class="flaticon-null-22"></i>
+          </div>
+          <div class="search-input">
+            <ion-input type="text" placeholder="Search" [(ngModel)]="searchHelpTopic" clearInput></ion-input>
+          </div>
+        </ion-row>
+      </div>
+    </ion-grid>
+  </div>
+
+  <div *ngIf="showLoader; else showHelpContent" class="spinner">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+
+  <ng-template #showHelpContent>
+    <br>
+    <div *ngIf="helpData.length === 0; else showData;">
+      <p>No Help Content</p>
+    </div>
+    <ng-template #showData>
+      <div *ngFor="let data of helpData | filter:searchHelpTopic" class="help-container">
+        <p>{{data.title}}</p>
+        <div class="video-btns">
+          <ion-button (click)="watchVideo(data.video.hindi)" expand="block" class="hindi-video-btn">
+            <span><ion-icon name="logo-youtube"></ion-icon></span><span style="margin-left: 5px;">watch in hindi</span> 
+          </ion-button>
+          <ion-button (click)="watchVideo(data.video.english)" expand="block" class="eng-video-btn">
+            <span><ion-icon name="logo-youtube"></ion-icon></span><span style="margin-left: 5px;">watch in english</span> 
+          </ion-button>
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+  
+</div>
+</ion-content>

@@ -1,0 +1,18 @@
+.usage-item-wrapper {
+    margin-top: 15px;
+}
+
+.usage-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    padding: 14px;
+    box-shadow: 1px 2px 2px #ccc;
+    &-name {
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+    &-count {
+        font-size: 15px;
+    }
+}

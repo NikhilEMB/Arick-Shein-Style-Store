@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Select Pincodes</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row style="align-items: center;">
+      <ion-col size="10">
+        <ion-input type="text" class="form-input" placeholder="Enter State" [(ngModel)]="state"></ion-input>
+      </ion-col>
+      <ion-col size="2" class="ion-justify-content-center vertical-center">
+        <ion-button (click)="searchByState()" fill="outline" shape="round" size="small">
+          Search
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="showPincodeSearch">
+      <ion-col size="12">
+        <ion-input type="text" class="form-input" placeholder="Search Pincode..." [(ngModel)]="pincodeToBeSearch" (ionChange)="searchPincode()"></ion-input>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-row *ngIf="pincodeList.length">
+    <ion-col size="5">
+      <p><strong>District</strong></p>
+    </ion-col>
+    <ion-col size="4">
+      <p><strong>Pincode</strong></p>
+    </ion-col>
+    <ion-col size="3">
+      <ion-label><strong>Select All</strong></ion-label>
+      <input type="checkbox" class="select-all-checkbox" (change)="selectAllPincodes($event)">
+      <!-- <ion-checkbox slot="end" ></ion-checkbox> -->
+    </ion-col>
+  </ion-row>
+    <ion-list class="ion-no-padding list" *ngIf="pincodeList.length" lines="none">  
+      <ion-virtual-scroll [items]="pincodeList" >
+      <ion-item class="ion-no-padding" *virtualItem="let pincodeObj">
+        <ion-grid class="ion-no-padding">
+          <ion-row class="ion-align-items-center">
+            <ion-col size="5">
+              <p class="ion-text-capitalize ion-text-center">{{pincodeObj.districtName}}</p>
+            </ion-col>
+            <ion-col size="4">
+              <p class="ion-text-capitalize ion-text-center">{{pincodeObj.pincode}}</p>
+            </ion-col>
+            <ion-col size="3">
+              <input type="checkbox" [checked]="pincodeObj.selected" [(ngModel)]="pincodeObj.selected" (click)="checkboxClicked(pincodeObj)">
+              <!-- <ion-checkbox slot="end" color="primary"></ion-checkbox> -->
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-virtual-scroll>
+    </ion-list>
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container" style="padding-top: 0px">
+    <ion-button (click)="savePincodes()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Done
+    </ion-button>
+  </div>
+</ion-footer>

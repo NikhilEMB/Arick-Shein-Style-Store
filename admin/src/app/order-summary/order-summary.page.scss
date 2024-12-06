@@ -1,0 +1,219 @@
+.address-card {
+    background: white;
+    padding: 10px;
+    margin: 6px 12px 12px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+ion-content {
+    --background: #F2F2F2;
+}
+
+.user-name {
+    font-size: 15px;
+}
+
+.address {
+    font-size: 13px;
+}
+
+.phone-no {
+    font-size: 13px;
+    margin-bottom: -5px;
+}
+
+.spinner {
+    text-align: center;
+    margin-top: 50%;
+}
+
+.change-address-btn {
+    text-align: center;
+    margin-top: 5%;
+}
+
+ion-list {
+    border-radius: 5px;
+}
+
+.products-container {
+    margin: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px 5px 10px 2px;
+    position: relative;
+}
+
+.product-image {
+    background: transparent url('https://s5.gifyu.com/images/loaderbb19efcc2749e115.gif') center no-repeat;
+    width: 100px;
+    height: 80px;
+}
+
+.product-name {
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+.product-price {
+    color: var(--ion-color-primary);
+    font-size: 16px;
+}
+
+.product-description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 7px;
+    opacity: .5;
+    margin-bottom: -3px;
+    font-size: 12px;
+}
+
+.product-quantity {
+    font-size: 12px;
+}
+
+ion-grid ion-row {
+    justify-content: flex-end;
+    ;
+}
+
+ion-footer {
+    height: 54px;
+}
+
+ion-footer ion-toolbar {
+    --background: white;
+    text-align: center;
+}
+
+.comment-box {
+    border: 1px solid #ececec;
+    border-radius: 5px;
+    margin: 10px;
+    font-size: 14px;
+}
+
+.remove-btn {
+    position: absolute;
+    top: -4px;
+    right: -5px;
+    color: var(--ion-color-primary);
+}
+
+.comment-img-conatiner {
+    margin-right: 10px;
+}
+
+.comment-img {
+    border: 1px solid #ececec;
+    width: 50px;
+    height: 50px;
+}
+
+.price-card {
+    background: white;
+    padding: 10px 10px 0px 10px;
+    margin: 6px 12px 12px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.price-details {
+    font-size: 14px;
+    text-transform: uppercase;
+    opacity: .7;
+}
+
+.line {
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: #ccc;
+    height: 1px;
+    opacity: .4;
+}
+
+.total-items {
+    font-size: 13px;
+}
+
+.price-total {
+    text-align: end;
+}
+
+.price-total p {
+    font-size: 15px;
+}
+
+.total-estimated {
+    font-size: 16px;
+}
+
+.estimated-price {
+    text-align: end;
+}
+
+.estimated-price p {
+    font-size: 17px;
+    color: var(--ion-color-primary);
+}
+
+.view-price-details {
+    margin-top: -10px;
+    font-size: 10px;
+    color: var(--ion-color-primary);
+}
+
+ion-textarea {
+    --padding-top: 0px;
+}
+
+.spinner {
+    margin-top: 50%;
+    text-align: center;
+}
+
+.coupon-code-section {
+    background: white;
+    padding: 15px;
+    margin: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.coupon-code-input {
+    border: 1px solid #e8e8e8;
+    border-radius: 5px;
+    font-size: 13px;
+    width: 70%;
+}
+
+.delivery-schedule-section {
+    background: white;
+    padding: 10px;
+    margin: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.inline-alignment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.code-applied {
+    color: var(--ion-color-success);
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.delivery-date-time {
+    font-size: 14px;
+    --padding-start: 0px;
+}

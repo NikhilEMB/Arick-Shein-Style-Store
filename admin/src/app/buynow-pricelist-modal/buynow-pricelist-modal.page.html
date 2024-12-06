@@ -1,0 +1,41 @@
+<ion-header no-border>
+  <div class="bn-modal-header">
+    <div *ngIf="product">
+      {{product.data.prodName}}
+    </div>
+    <div (click)="closePriceListModal()">
+      <i class="flaticon-null-19"></i>
+    </div>
+  </div>
+</ion-header>
+<div class="inner-content">
+  <div *ngFor="let element of product.data.priceList; let i=index">
+    <div class="bn-pricelist-element">
+      <div style="width: 90%;">
+        <p class="bn-weight">{{element.weight}}</p>
+        <p class="bn-price" *ngIf="product.data.discount && product.data.discount !== '' && product.data.discount !== '0'; else showOriginalPrice;">
+          {{getDiscountedProduct(element.price, product.data.discount) | currency: 'INR':true:'0.0'}}<del class="bn-del-price">{{element.price  | currency: 'INR':true:'0.0'}}</del>
+        </p>
+        <ng-template #showOriginalPrice>
+          <p class="bn-price">{{element.price | currency: 'INR':true:'0.0'}}</p>
+        </ng-template>
+        <div class="bn-counter">
+          <div class="bn-counter-minus">
+            <ion-icon name="remove" (click)="decrementQuantity(i)"></ion-icon>
+          </div>
+          <div class="bn-counter-value">
+            {{element.quantity}}
+          </div>
+          <div class="bn-counter-plus">
+            <ion-icon name="add" (click)="incrementQuantity(i)"></ion-icon>
+          </div>
+        </div>
+      </div>
+      <div class="bn-buy-now-btn">
+        <ion-button (click)="buyNowOrder(i)" expand="block" size="small">
+          Buy Now
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</div>

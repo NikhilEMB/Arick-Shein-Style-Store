@@ -1,0 +1,4010 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center
+      *ngIf="editproductData === undefined">New Product</ion-title>
+    <ion-title text-center
+      *ngIf="editproductData !== undefined">Edit Product</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs no-shadow
+  no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button (click)='showFooter = true'>
+      <ion-label>Basic</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)='showFooter = true'>
+      <ion-label>Description</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)='showFooter = true'>
+      <ion-label>Categories and Brands</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)='showFooter = true'>
+      <ion-label>Images</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)='showFooter = false'>
+      <ion-label>Advanced (optional)</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+  <!-- new product -->
+  <super-tabs-container *ngIf="!editproductId">
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <div class="flex-space-between">
+                    <div>
+                      <ion-label>Product Name(please don't use "/" in name)
+                      </ion-label>
+                    </div>
+                    <div class="flex-label"
+                      *ngIf="userRole != 'vendor'">
+                      <ion-label>Show</ion-label>&nbsp;&nbsp;
+                      <ion-col size="2"
+                        class="ion-no-padding">
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input color="primary"
+                              type="checkbox"
+                              [checked]="product.status"
+                              (click)="updateNewProductStatus()">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                    </div>
+                  </div>
+                  <ion-input class="form-input"
+                    [(ngModel)]="product.prodName"></ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="!product.isPriceList; else showPriceList">
+              <ion-col class="flex"
+                size='2'>
+                <ion-label>Price</ion-label>
+              </ion-col>
+              <ion-col class="flex"
+                size='2'>
+
+                <ion-label>Single Price</ion-label>&nbsp;&nbsp;
+                <ion-col size="2"
+                  class="ion-no-padding">
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input color="primary"
+                        type="checkbox"
+                        (click)="priceToggle()"
+                        [checked]="product.isPriceList">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </ion-col>
+
+
+              </ion-col>
+              <ion-col class="flex"
+                size='4'>
+                <ion-label><strong>Show out of stock for 0 quantity</strong>
+                </ion-label>&nbsp;&nbsp;
+                <ion-col size="2"
+                  class="ion-no-padding">
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input color="primary"
+                        type="checkbox"
+                        (click)="stopOrderWhenNoQtyToggle()"
+                        [checked]="product.stopWhenNoQty">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </ion-col>
+              </ion-col>
+              <ion-col class="headings"
+                style="display: flex;align-items: center;"
+                size='4'>
+                <div>Gst Exclusive</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox"
+                      (click)="toggleGstExclusive()"
+                      [checked]="product.gstExclusive">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </ion-col>
+              <br>
+              <ion-col size="4">
+                <ion-label *ngIf="!product.gstExclusive">Price ( inclusive of
+                  all taxes) </ion-label>
+                <ion-label *ngIf="product.gstExclusive">Price ( exclusive of all
+                  taxes) </ion-label>
+                <ion-input type="number"
+                  class="form-input"
+                  [(ngModel)]="product.prodPrice"></ion-input>
+              </ion-col>
+
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label *ngIf="!product.gstExclusive">Discounted Price (
+                    inclusive of all taxes) </ion-label>
+                  <ion-label *ngIf="product.gstExclusive">Discounted Price (
+                    exclusive of all taxes) </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="product.discountedPrice"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label>Purchase Price </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="product.purchasePrice"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label>Quantity</ion-label>
+                <ion-input type="text"
+                  class="form-input"
+                  [(ngModel)]="product.productQty"></ion-input>
+              </ion-col>
+
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>Shipping Weight</ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="product.shippingWeight"></ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ng-template #showPriceList>
+              <ion-row>
+                <ion-col size="2"
+                  class="flex">
+                  <ion-label>Price List</ion-label>
+                </ion-col>
+                <ion-col size="2"
+                  class="flex">
+
+                  <ion-label>Variants</ion-label>&nbsp;&nbsp;
+                  <ion-col size="2"
+                    class="ion-no-padding">
+                    <div class="toggle-btn">
+                      <label class="switch">
+                        <input color="primary"
+                          type="checkbox"
+                          (click)="priceToggle()"
+                          [checked]="product.isPriceList">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </ion-col>
+
+
+
+                </ion-col>
+                <ion-col size="4"
+                  class="flex">
+                  <ion-label><strong>Show out of stock for 0 quantity</strong>
+                  </ion-label>&nbsp;&nbsp;
+                  <ion-col size="2"
+                    class="ion-no-padding">
+                    <div class="toggle-btn">
+                      <label class="switch">
+                        <input color="primary"
+                          type="checkbox"
+                          (click)="stopOrderWhenNoQtyToggle()"
+                          [checked]="product.stopWhenNoQty">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </ion-col>
+                </ion-col>
+                <ion-col class="headings"
+                  style="display: flex;align-items: center;"
+                  size='4'>
+                  <div>Gst Exclusive</div>&nbsp;&nbsp;
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input type="checkbox"
+                        (click)="toggleGstExclusive()"
+                        [checked]="product.gstExclusive">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="6"
+                  class="flex">
+                  <ion-label>Type:</ion-label>
+                  <ion-select class="variant-select"
+                    [(ngModel)]="product.variantType"
+                    *ngIf="!variantTypeLoader"
+                    [value]="product.variantType">
+                    <ion-select-option [value]="att.type"
+                      *ngFor="let att of variantsAttributes"
+                      style="text-transform: capitalize;">{{att.type}}
+                    </ion-select-option>
+                  </ion-select>
+                  <ion-spinner *ngIf="variantTypeLoader"></ion-spinner>
+                </ion-col>
+                <ion-col size="6"
+                  class="flex">
+                  <ion-button (click)="importTemplate()"
+                    fill="outline"
+                    size="small">
+                    Import Template
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-text color="danger"
+                  style="margin-left: 8px;">
+                  <p>Use pieces for wholesale. Specify number of pieces in
+                    pieces column and price / piece in price
+                    column.</p>
+                </ion-text>
+              </ion-row>
+              <br>
+              <!-- <ion-row>
+                <ion-col size="4">
+                  <ion-label>Weight/Pieces/Size</ion-label>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-label>Price (INR)</ion-label>
+                </ion-col>
+                <ion-col size="3" style="opacity: .6;">
+                  <ion-label>Discounted Price(INR)</ion-label>
+                </ion-col>
+                <ion-col size="2">
+                  <div>Delete</div>
+                </ion-col>
+              </ion-row> -->
+              <ion-row *ngFor="let element of product.priceList; let i = index;"
+                class="ion-justify-content-between ion-align-items-center">
+                <ion-col>
+                  <ion-label>Sku Code</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="product.priceList[i].sku">
+                  </ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Barcode No</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="product.priceList[i].barcodeNo">
+                  </ion-input>
+                </ion-col>
+                <ion-col *ngIf="product.variantType === 'pieces'">
+                  <ion-label>Name</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="product.priceList[i].name">
+                  </ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label
+                    *ngIf="product.variantType !== '' && product.variantType !== 'other'">
+                    <span *ngIf="product.variantType === 'pieces'">Number
+                      of&nbsp;</span>{{product.variantType}}
+                  </ion-label>
+                  <ion-label
+                    *ngIf="product.variantType === '' || product.variantType === 'other'">
+                    Variant</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="product.priceList[i].weight"></ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Price
+                    <span *ngIf="product.variantType === 'pieces'">/ pc</span>
+                  </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="product.priceList[i].price"></ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Discounted Price <span
+                      *ngIf="product.variantType === 'pieces'">/ pc</span>
+                  </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="product.priceList[i].discountedPrice">
+                  </ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Purchase Price <span
+                      *ngIf="product.variantType === 'pieces'">/ pc</span>
+                  </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="product.priceList[i].purchasePrice">
+                  </ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Quantity</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="product.priceList[i].totalQuantity">
+                  </ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Shipping Weight (Gms)</ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="product.priceList[i].shippingWeight">
+                  </ion-input>
+                </ion-col>
+                <ion-col (click)="removeElementFromPriceList(i)"
+                  size='1'>
+                  <ion-button color="danger"
+                    fill="outline"
+                    shape="round"
+                    class="btn-sml m-t-16">
+                    <ion-icon name="remove-circle"
+                      slot="start"></ion-icon>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col style="text-align: center;">
+                  <ion-button (click)="onClickAddMoreInPriceList()"
+                    fill="outline"
+                    shape="round"
+                    size="small"
+                    class="btn-2">
+                    <ion-icon name="add-circle"
+                      slot="start"></ion-icon>
+                    Add more +
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ng-template>
+
+            <ion-row>
+              <ion-col size="6">
+                <ion-label> Min Quantity</ion-label>
+                <ion-input type="number"
+                  class="form-input"
+                  [(ngModel)]="product.minQty"></ion-input>
+              </ion-col>
+
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>Max Quantity </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="product.maxQty"></ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+            <br />
+            <ion-row>
+              <ion-col size="10">
+                <div class="input-wrap">
+                  <ion-label>Keywords (Search)</ion-label>
+                  <ion-input class="form-input"
+                    [(ngModel)]="keyword"
+                    autocapitalize></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="2">
+                <ion-button class="btn-2 m-t-36"
+                  fill="outline"
+                  shape="round"
+                  (click)="addSearchKeywords()">
+                  Add </ion-button>
+              </ion-col>
+              <ion-col size="12"
+                *ngIf="product.searchKeywords">
+                <ion-chip outline
+                  color="dark"
+                  *ngFor="let x of product.searchKeywords; let i = index;">
+                  <ion-icon name="close-circle"
+                    (click)="removeKeyword(i)"></ion-icon>
+                  <ion-label>{{x}}</ion-label>
+                </ion-chip>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>SKU Code</ion-label>
+                  <ion-input class="form-input"
+                    [(ngModel)]="product.productCode"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>HSN Code</ion-label>
+                  <ion-input class="form-input"
+                    [(ngModel)]="product.hsnCode"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label> GST (%)</ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="product.gst"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>Barcode Number</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="product.barcodeNo"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label>Country Of Origin</ion-label>
+                <ion-input type="text"
+                  class="form-input"
+                  [(ngModel)]="product.additionalInfo.countryOfOrigin">
+                </ion-input>
+              </ion-col>
+
+              <ion-col size="6">
+                <ion-label>Insta Reel Url</ion-label>
+                <ion-input type="text"
+                  class="form-input"
+                  [(ngModel)]="product.instaReelUrl">
+                </ion-input>
+              </ion-col>
+
+              <ion-col size="12">
+                <div class="flex-space-between">
+                  <div>
+                    <ion-label>Insta Reel Cover Image</ion-label>
+                    <ion-text color="danger">
+                      <!-- <p style="margin-top: 5px">Image size for best view : 600x450 Px
+                      </p> -->
+                    </ion-text>
+                  </div>
+                  <div class="upload-btn-wrapper">
+                    <button class="upload-btn btn-1 i-start" (click)="uploadImage($event.target.files)"> <i
+                        class="flaticon-null-16"></i>upload</button>
+                    <!-- <input type="file" name="myfile" (change)="uploadImage($event.target.files,'catImg')" /> -->
+                  </div>
+                </div>
+              </ion-col>  
+
+              <div class="img-container">
+                {{product.instaCoverImage}}
+                <div class="no-img" *ngIf="!product.instaCoverImage">
+                  <p>No attached image</p>
+                </div>
+                <div *ngIf="product.instaCoverImage">
+                  <div class="img-wrap">
+                    <img class="category-img" src="{{product.instaCoverImage}}"
+                      (click)="imageZoom(product.instaCoverImage)" />
+                    <div class="overlay">
+                      <ion-button class="btn-2" shape="round" color="danger" fill="clear" (click)="removeReelCoverImage()">
+                        <ion-icon name="trash" slot="icon-only"></ion-icon>
+                      </ion-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-row>
+            <ion-col class="headings"
+            style="display: flex;align-items: center;"
+            size='4'>
+            <div>Show Product Subheading</div>&nbsp;&nbsp;
+            <div class="toggle-btn">
+              <label class="switch">
+                <input type="checkbox"
+                  (click)="toggleShowSubheading()"
+                  [checked]="product.showSubheading">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </ion-col>
+            <ion-col size="12">
+              <p style="font-weight: bold;">Product Description</p>
+              <br>
+              <ckeditor [(ngModel)]="product.prodDesc"
+                [config]="ckeConfig"></ckeditor>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12" style="margin-top:1rem;">
+              <p style="font-weight: bold;">Product Short Description</p>
+              <br>              
+              <ckeditor [config]="ckeConfig" [(ngModel)]="product.prodShortDesc"></ckeditor>
+            </ion-col>
+          </ion-row>
+          <br>
+          <ion-text color="danger"
+            style="display: flex;justify-content: center;">
+            <p style="font-weight: bold;font-size: large;">* Once product is
+              created, you can create sections for
+              product description</p>
+          </ion-text>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height"
+          style="display: flex;flex-wrap: nowrap;flex-direction: row;align-content: center;justify-content: space-around;align-items: flex-start;">
+          <div class="categories-container">
+            <div class="no-data"
+              *ngIf="showNoCategories"
+              text-center>
+              <img src="assets/img/no-category.png"
+                alt="">
+              <h6>No categories</h6>
+            </div>
+            <div class="product-search-wrap"
+              *ngIf="!showNoCategories">
+              <ion-searchbar [(ngModel)]="searchCategory"
+                mode="ios"></ion-searchbar>
+            </div>
+            <div class="categories-wrapper"
+              *ngIf="!showNoCategories">
+              <ion-list>
+                <ion-list-header>
+                  <ion-label class="np-list-header"
+                    style="font-size: 16px;font-weight: bold;">Categories
+                  </ion-label>
+                </ion-list-header>
+                <div
+                  *ngFor="let category of categories | filter: searchCategory">
+                  <div
+                    style="display: flex;justify-content: space-between;align-items: center;">
+                    <ion-item (click)="onClickCategoryCheckBox(category.id)"
+                      style="width: 100%;">
+                      <ion-label>{{category.name}}</ion-label>
+                      <ion-checkbox color="primary"
+                        slot="start"></ion-checkbox>
+                    </ion-item>
+                    <div (click)="getSubcategories(category.id)"
+                      slot="end"
+                      style="z-index: 9999;margin-right: 3%;opacity: .8;"
+                      *ngIf="category.isSubcategories">
+                      <i class="flaticon-null-13"
+                        *ngIf="(listOfSubcategoriesInView.hasOwnProperty(category.id) && !listOfSubcategoriesInView[category.id].active) || !listOfSubcategoriesInView.hasOwnProperty(category.id)"></i>
+                      <i class="flaticon-null-14"
+                        *ngIf="listOfSubcategoriesInView.hasOwnProperty(category.id) && listOfSubcategoriesInView[category.id].active"></i>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="(listOfSubcategories[category.id] && listOfSubcategories[category.id].length) && listOfSubcategoriesInView[category.id].active"
+                    style="margin-left: 10%;">
+                    <ng-container *ngFor="let subCat of listOfSubcategories[category.id]">
+                      <div style="display: flex;justify-content: space-between;align-items: center;">
+                        <ion-item (click)="onClickCategoryCheckBox(subCat.id)" style="width: 100%;">
+                          <ion-label>{{subCat.name}}</ion-label>
+                          <ion-checkbox color="primary" slot="start"></ion-checkbox>
+                        </ion-item>
+                        <!-- Sub-SubCategory Start -->
+                        <div (click)="getSubOfSubCategories(category.id, subCat.id)" slot="end"
+                          style="z-index: 9999;margin-right: 3%;opacity: .8;" *ngIf="subCat.isSubcategories">
+                          <i class="flaticon-null-13" *ngIf="!subOfSubCategoryToggle[subCat.id]?.active"></i>
+                          <i class="flaticon-null-14" *ngIf="subOfSubCategoryToggle[subCat.id]?.active"></i>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="subOfSubCategoryToggle[subCat.id]?.active && subOfSubCategories[subCat.id].length">
+                        <div style="margin-left: 10%;">
+                          <ng-container *ngFor="let subSubCat of subOfSubCategories[subCat.id]">
+                            <ion-item (click)="onClickCategoryCheckBox(subSubCat.id)">
+                              <ion-label>{{subSubCat.name}}</ion-label>
+                              <ion-checkbox color="primary" slot="start"></ion-checkbox>
+                            </ion-item>
+                          </ng-container>
+                        </div>
+                      </ng-container>
+                      <!-- Sub-SubCategory End -->
+                    </ng-container>
+                    
+                  </div>
+                </div>
+
+              </ion-list>
+            </div>
+
+
+          </div>
+          <div class="brands-container">
+            <div class="product-search-wrap"
+              *ngIf="!showNoBrands">
+              <ion-searchbar [(ngModel)]="searchBrand"
+                mode="ios"></ion-searchbar>
+            </div>
+            <ion-list *ngIf="!showNoBrands && brands.length">
+              <ion-list-header>
+                <ion-label class="np-list-header"
+                  style="font-size: 16px;font-weight: bold;">Brands</ion-label>
+              </ion-list-header>
+              <div *ngFor="let brand of brands | filter: searchBrand">
+                <ion-item (click)="onClickBrandCheckBox(brand.id)"
+                  style="width: 100%;">
+                  <ion-label>{{brand.name}}</ion-label>
+                  <ion-checkbox color="primary"
+                    slot="start"></ion-checkbox>
+                </ion-item>
+              </div>
+            </ion-list>
+          </div>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <!-- new images-->
+          <!-- <div class="dropzone" appDropzone (dropped)="onDrop($event)">
+            <h3>Drag and Drop a File</h3>
+
+            <div class="file">
+              <input class="file-input" multiple type="file" (change)="onDrop($event.target.files)">
+            </div>
+          </div> -->
+          <button class="upload-btn btn-1 i-start"
+            (click)="onDrop($event.target.files)">Upload Product
+            Image(s)</button>
+          <h3>Uploads</h3>
+          <!-- <div class="upload-img-wrapper">
+            <div *ngFor="let file of files" class="img-preview">
+              <app-upload-task [file]="file"></app-upload-task>
+            </div>
+          </div> -->
+
+          <!-- new images-->
+
+          <!-- old images-->
+          <div class="no-img"
+            *ngIf="listofbase64Image.length == 0">
+            No attached images
+          </div>
+
+          <div class="imgs-container"
+            *ngIf="listofbase64Image.length !== 0">
+            <div class="img-wrap"
+              *ngFor="let img of listofbase64Image; let i = index">
+              <img [src]="img.base64Img"
+                (click)="onClickEditImage(img.url)" />
+              <div class="overlay">
+                <ion-button class="remove"
+                  shape="round"
+                  color="danger"
+                  fill="clear"
+                  (click)="removeImage(i)">
+                  <ion-icon name="trash"
+                    slot="icon-only"></ion-icon>
+                </ion-button>
+                <ion-button *ngIf="img.cover == true"
+                  class="btn-2 cover"
+                  shape="round">
+                  Cover Pic
+                </ion-button>
+                <ion-button *ngIf="img.cover == false"
+                  (click)="newProductCoverPic(i)"
+                  class="btn-2 cover"
+                  shape="round">
+                  Make Cover
+                </ion-button>
+              </div>
+            </div>
+          </div>
+          <!-- old images-->
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content class="ion-no-padding">
+        <div class="main-container"
+          style="width: 100%">
+          <ion-grid>
+            <ion-row>
+              <ion-col size=2
+                id="scroll1">
+                <div class="statusList">
+                  <div [id]="item"
+                  *ngFor='let item of sideMenu; let i=index'
+                  (click)='changeComponent(item)'>
+                  <ng-container *ngIf="userRole !== 'vendor'">
+                    <p>{{item}}</p>
+                  </ng-container>
+                  <ng-container *ngIf="userRole == 'vendor' && item != 'Vendor' && item != 'Specific User Discount'">
+                    <p>{{item}}</p>
+                  </ng-container>
+
+                </div>
+                </div>
+              </ion-col>
+              <ion-col size=10
+                style="margin-top: 8px; border-left: 1px solid lightgray;">
+                <ion-col style="height: 5vh;">
+                  <ion-button (click)="addProduct()"
+                    color="success">
+                    <i class="flaticon-null-20 margin-icon"></i>&nbsp;
+                    Save
+                  </ion-button>
+                </ion-col>
+                <ion-col id="scroll2"
+                  [ngSwitch]="selectedId">
+                  <ion-grid style="margin-top: 10px;">
+                    <ion-row *ngSwitchCase="'Cash on Delivery'">
+                      <ion-col style="display: flex;align-items: center;">
+                        <div>Cash on delivery (COD) for product</div>
+                        &nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox"
+                              (click)="toggleCod()"
+                              [checked]="product.isCod">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <div *ngSwitchCase="'Price Slabs'">
+                      <div style="display: flex;align-items: center;">
+                        <div>Price slabs for product</div>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox"
+                              (click)="activePriceSlab()"
+                              [checked]="product.priceSlabs.active">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </div>
+                      <br>
+                      <div *ngIf='product.priceSlabs.active'>
+                        <div *ngIf="!product.isPriceList">
+                          <div style="display: flex;align-items: center;">
+                            <ion-button (click)="enterPriceSlabData('new','')">
+                              <p
+                                *ngIf="product.priceSlabs.singleSlabs && product.priceSlabs.singleSlabs.length == 0">
+                                Create Slab</p>
+                              <p
+                                *ngIf="product.priceSlabs.singleSlabs && product.priceSlabs.singleSlabs.length > 0">
+                                Add Slab</p>
+                            </ion-button>&nbsp;&nbsp;
+                            <ion-button (click)="removePriceSlabs('new','')">
+                              Remove All Slabs
+                            </ion-button>
+                          </div>
+                          <br>
+                          <ion-grid
+                            *ngIf="product.priceSlabs.singleSlabs && product.priceSlabs.singleSlabs.length > 0"
+                            class="ion-no-padding data-table ion-text-center"
+                            style="margin-top: 12px;width: 400px;margin-left: 0px;">
+                            <ion-row>
+                              <ion-col>Quantity</ion-col>
+                              <ion-col>Price per product</ion-col>
+                              <ion-col>Discount price per product</ion-col>
+                            </ion-row>
+                            <ion-row
+                              *ngFor="let slab of product.priceSlabs.singleSlabs; let i=index;"
+                              style="border-top: 1px solid lightgray;">
+                              <ion-col>
+                                <p>{{slab.qty[0]}} - {{slab.qty[1]}}</p>
+                              </ion-col>
+                              <ion-col>
+                                <p>{{slab.mrp}}</p>
+                              </ion-col>
+                              <ion-col>
+                                <p>{{slab.price}}</p>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </div>
+                        <div
+                          *ngIf="product.isPriceList && product.priceList && product.priceList.length > 0">
+                          <div *ngFor='let variant of product.priceList'>
+                            <div
+                              style="display: flex;align-items: center;margin: 12px;">
+                              <p *ngIf="product.variantType != 'other' ">
+                                {{product.variantType}} :&nbsp;&nbsp;</p>
+                              <p *ngIf="product.variantType == 'other' ">Variant
+                                :&nbsp;&nbsp;</p>
+                              <p>{{variant.weight}}</p>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <div style="display: flex;align-items: center;">
+                                <ion-button
+                                  (click)="enterPriceSlabData('new',variant.weight)">
+                                  <p
+                                    *ngIf="(!product.priceSlabs.variantSlabs[variant.weight]) || 
+                                (product.priceSlabs.variantSlabs[variant.weight] && product.priceSlabs.variantSlabs[variant.weight].length == 0)">
+                                    Create Slab</p>
+                                  <p
+                                    *ngIf="product.priceSlabs.variantSlabs[variant.weight] && product.priceSlabs.variantSlabs[variant.weight].length > 0">
+                                    Add Slab</p>
+                                </ion-button>&nbsp;&nbsp;
+                                <ion-button
+                                  (click)="removePriceSlabs('new',variant.weight)">
+                                  Remove All Slabs
+                                </ion-button>
+                              </div>
+                            </div>
+                            <ion-grid
+                              *ngIf="product.priceSlabs.variantSlabs[variant.weight] && product.priceSlabs.variantSlabs[variant.weight].length > 0"
+                              class="ion-no-padding data-table ion-text-center"
+                              style="margin-top: 12px;width: 400px;margin-left: 0px;">
+                              <ion-row>
+                                <ion-col>Quantity</ion-col>
+                                <ion-col>Price per product</ion-col>
+                                <ion-col>Discount price per product</ion-col>
+                              </ion-row>
+                              <ion-row
+                                *ngFor="let slab of product.priceSlabs.variantSlabs[variant.weight]; let i=index;"
+                                style="border-top: 1px solid lightgray;">
+                                <ion-col>
+                                  <p>{{slab.qty[0]}} - {{slab.qty[1]}}</p>
+                                </ion-col>
+                                <ion-col>
+                                  <p>{{slab.mrp}}</p>
+                                </ion-col>
+                                <ion-col>
+                                  <p>{{slab.price}}</p>
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+                            <br>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngSwitchCase="'Extra Charges'">
+                      <ion-row>
+                        <ion-col style="display: flex;align-items: center;">
+                          <ion-label>Extra Charges</ion-label>&nbsp;&nbsp;
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input type="checkbox"
+                                (click)="toggleExtraCharges()"
+                                [checked]="product.extraCharges.active">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row *ngIf='product.extraCharges.active'>
+                        <ion-col size="6"
+                          class="ion-no-padding">
+                          <ion-label>Charge Name / Label</ion-label>
+                          <ion-input type="text"
+                            class="form-input"
+                            [(ngModel)]="product.extraCharges.label">
+                          </ion-input>
+                        </ion-col>
+                        <br>
+                      </ion-row>
+                      <br *ngIf='product.extraCharges.active'>
+                      <ion-row *ngIf='product.extraCharges.active'>
+                        <ion-col size="6"
+                          class="ion-no-padding">
+                          <ion-label>Cost</ion-label>
+                          <ion-input type="number"
+                            class="form-input"
+                            [(ngModel)]="product.extraCharges.charge">
+                          </ion-input>
+                        </ion-col>
+                      </ion-row>
+                      <br *ngIf='product.extraCharges.active'>
+                      <ion-row *ngIf='product.extraCharges.active'>
+                        <ion-col style="display: flex;align-items: center;">
+                          <ion-label>Apply this charge for each product
+                            seperately when multiple purchased together
+                          </ion-label>&nbsp;&nbsp;
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input type="checkbox"
+                                (click)="toggleChargeQty()"
+                                [checked]="product.extraCharges.chargeAllQty">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                      <br *ngIf='product.extraCharges.active'>
+                    </div>
+                    <ion-row *ngSwitchCase="'Colors'">
+                      <ion-col class="headings">
+                        <ion-label>Color</ion-label>&nbsp;&nbsp;
+                        <ion-button (click)="selectVariantColor()"
+                          fill="outline"
+                          shape="round"
+                          *ngIf="!product.color?.hasOwnProperty('name')">
+                          Select Color
+                        </ion-button>
+                        <div *ngIf="product.color?.hasOwnProperty('name')"
+                          class="color-selected">
+                          <p class="product-color-name">{{product.color.name}}
+                          </p>
+                          <div
+                            [ngStyle]="{'background-color': product.color.code}"
+                            class="color-code"
+                            *ngIf="product.color.code && product.color.code !== ''">
+                          </div>
+                          <div
+                            *ngIf="product.color.image && product.color.image !== '' && product.color.code === ''">
+                            <img src="{{product.color.image}}"
+                              class="color-code">
+                          </div>
+                          <ion-button (click)="updateVariantColor()"
+                            expand="block"
+                            fill="outline"
+                            shape="round"
+                            size="small">
+                            update
+                          </ion-button>&nbsp;&nbsp;&nbsp;
+                          <ion-button (click)="removeVariantColor()"
+                            expand="block"
+                            color="dark"
+                            fill="outline"
+                            shape="round"
+                            size="small">
+                            remove
+                          </ion-button>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row *ngSwitchCase="'Vendor'">
+                      <ion-text color="danger">
+                        <p *ngIf="!multiVendor">This option is only available
+                          when MultiVendor is on</p>
+                      </ion-text>
+                      <ion-col size="6">
+                        <div *ngIf="multiVendor">
+                          <ion-row>
+                            <div class="headings">
+                              Add Vendor
+                            </div>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12">
+                              <ion-select [value]="product.vendorId"
+                                class="border i-s-p-10"
+                                (ionChange)="addVendor($event, 'new')"
+                                placeholder="Select Vendor">
+                                <ion-select-option [value]="vendor.id"
+                                  *ngFor="let vendor of vendors">{{vendor.name}}
+                                </ion-select-option>
+                              </ion-select>
+                            </ion-col>
+                          </ion-row>
+                          <br>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row *ngSwitchCase="'Filters'">
+                      <ion-col size="6">
+                        <div *ngIf="isFilterActive">
+                          <ion-row>
+                            <div class="headings">
+                              Add filter
+                            </div>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="6"
+                              class="border content-alignment f-s-14 filters-col"
+                              (click)="addFilters('new')">
+                              <ion-text>
+                                {{getAddedFiltersLength(product.filters)}}
+                                Filters added</ion-text>
+                              &nbsp;&nbsp;<i class="flaticon-null-5"></i>
+                            </ion-col>
+                          </ion-row>
+                          <br>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row *ngSwitchCase="'Subscription'">
+                      <ion-text color="danger">
+                        <p *ngIf="!subscriptionFeature">This option is only
+                          available when Subscription feature is on</p>
+                      </ion-text>
+                      <ion-col>
+                        <div *ngIf="subscriptionFeature">
+                          <ion-row
+                            class="ion-justify-content-between ion-align-items-center">
+                            <ion-col class="ion-no-padding"
+                              style="display: flex;">
+                              <ion-label>Allow Subscriptions</ion-label>
+                              &nbsp;&nbsp;
+                              <div class="toggle-btn">
+                                <label class="switch">
+                                  <input color="primary"
+                                    type="checkbox"
+                                    (click)="subIsAllowedToggle()"
+                                    [checked]="product.subscription.isAllowed">
+                                  <span class="slider round"></span>
+                                </label>
+                              </div>
+                            </ion-col>
+                          </ion-row>
+                          <br>
+                          <div *ngIf="product.subscription.isAllowed">
+                            <ion-row>
+                              <ion-col size="6"
+                                class="ion-no-padding">
+                                <ion-label>Daily Discount (%)</ion-label>
+                                <ion-input type="number"
+                                  class="form-input"
+                                  [(ngModel)]="product.subscription.dailyDiscount">
+                                </ion-input>
+                              </ion-col>
+                            </ion-row>
+                            <br>
+                            <ion-row>
+                              <ion-col size="6"
+                                class="ion-no-padding">
+                                <ion-label>Weekly Discount (%)</ion-label>
+                                <ion-input type="number"
+                                  class="form-input"
+                                  [(ngModel)]="product.subscription.weeklyDiscount">
+                                </ion-input>
+                              </ion-col>
+                            </ion-row>
+                            <br>
+                            <ion-row>
+                              <ion-col size="6"
+                                class="ion-no-padding">
+                                <ion-label>Monthly Discount (%)</ion-label>
+                                <ion-input type="number"
+                                  class="form-input"
+                                  [(ngModel)]="product.subscription.monthlyDiscount">
+                                </ion-input>
+                              </ion-col>
+                            </ion-row>
+                          </div>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row *ngSwitchCase="'Wholesale Price'">
+                      <ion-text color="danger">
+                        <p *ngIf="!priceForRetail">This option is only available
+                          when Retail feature is on</p>
+                      </ion-text>
+                      <ion-col size="6">
+                        <div *ngIf="priceForRetail">
+                          <ion-row>
+                            <ion-col size="4" class="flex-label">
+                              <div class="headings">
+                                Retail Price Discount ({{product.retailDiscountType !== 'percentage' ? currencyCode : '%'}})
+                              </div>
+                            </ion-col>
+                            <ion-col size="4" class="flex-label">
+                              <span>%</span>
+                              <div class="toggle-btn m-l-16">
+                                <label class="switch">
+                                  <input color="primary"
+                                    type="checkbox"
+                                    (click)="changeRetailDiscountType()"
+                                    [checked]="product.retailDiscountType !== 'percentage'">
+                                  <span class="slider round"></span>
+                                </label>
+                              </div>
+                              <span class="m-l-16">FLAT</span>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12">
+                              <ion-input type="number"
+                                class="form-input"
+                                [(ngModel)]="product.retailDiscount">
+                              </ion-input>
+                            </ion-col>
+                          </ion-row>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row *ngSwitchCase="'Limited Time Deal'">
+                      <ion-text color="danger">
+                        <p *ngIf="!limitedTimeDeal">This option is only
+                          available when Limited Time Deal feature is on</p>
+                      </ion-text>
+                      <ion-col>
+                        <div *ngIf="limitedTimeDeal">
+                          <ion-row>
+                            <ion-col class="ion-no-padding"
+                              style="display: flex;">
+                              <ion-label>Limited Time Offer</ion-label>
+                              &nbsp;&nbsp;
+                              <div class="toggle-btn">
+                                <label class="switch">
+                                  <input color="primary"
+                                    type="checkbox"
+                                    (click)="dealIsAllowedToggle()"
+                                    [checked]="product.deal.isAllowed">
+                                  <span class="slider round"></span>
+                                </label>
+                              </div>
+                            </ion-col>
+                          </ion-row>
+                          <br>
+                          <div class="headings">
+                            Start date time
+                          </div>
+                          <ion-row class="ion-align-items-center">
+                            <ion-col size="3">
+                              <ion-datetime class="input-border time-picker"
+                                [disabled]="!product.deal.isAllowed"
+                                placeholder="Date"
+                                displayFormat="DD MMM YYYY"
+                                [(ngModel)]="product.deal.start.date"
+                                [min]="minDate"></ion-datetime>
+                            </ion-col>
+                            <ion-col size="1"
+                              style="text-align: center;">
+                              -
+                            </ion-col>
+                            <ion-col size="3">
+                              <ion-datetime class="input-border time-picker"
+                                [disabled]="!product.deal.isAllowed"
+                                placeholder="Time"
+                                displayFormat="hh:mm A"
+                                pickerFormat="hh:mm A"
+                                [(ngModel)]="product.deal.start.time">
+                              </ion-datetime>
+                            </ion-col>
+                          </ion-row>
+                          <div class="headings">
+                            End date time
+                          </div>
+                          <ion-row class="ion-align-items-center">
+                            <ion-col size="3">
+                              <ion-datetime class="input-border time-picker"
+                                [disabled]="!product.deal.isAllowed"
+                                placeholder="Date"
+                                displayFormat="DD MMM YYYY"
+                                [(ngModel)]="product.deal.end.date"
+                                [min]="minDate"
+                                [max]="2030"></ion-datetime>
+                            </ion-col>
+                            <ion-col size="1"
+                              style="text-align: center;">
+                              -
+                            </ion-col>
+                            <ion-col size="3">
+                              <ion-datetime class="input-border time-picker"
+                                [disabled]="!product.deal.isAllowed"
+                                placeholder="Time"
+                                displayFormat="hh:mm A"
+                                pickerFormat="hh:mm A"
+                                [(ngModel)]="product.deal.end.time">
+                              </ion-datetime>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row class="ion-align-items-center">
+                            <ion-col size="6">
+                              <div class="headings">
+                                Deal discount
+                              </div>
+                              <ion-input type="number"
+                                class="form-input"
+                                [(ngModel)]="product.deal.discount">
+                              </ion-input>
+                            </ion-col>
+                          </ion-row>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <div *ngSwitchCase="'Specific User Discount'">
+                      <ion-text color="danger">
+                        <p *ngIf="!product.deal.isAllowed">This option is only
+                          available when limited time deal is on</p>
+                      </ion-text>
+                      <ion-row *ngIf="product.deal.isAllowed">
+                        <ion-col size="4">
+                          <div class="input-wrap">
+                            <div class="flex-label">
+                              <ion-label>Give user specific discount on this
+                                product</ion-label>
+                              <ion-toggle
+                                [(ngModel)]="product.deal.specificUsers.active">
+                              </ion-toggle>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="8">
+                          <ion-button class="btn-2 i-start"
+                            (click)="openUsersModal()"
+                            shape="round"
+                            fill="outline"
+                            *ngIf="product.deal.specificUsers.active">
+                            <i class="flaticon-null-5 margin-icon"></i>
+                            Add Users
+                          </ion-button>
+                        </ion-col>
+                      </ion-row>
+                      <ng-container
+                        *ngIf="product.deal.isAllowed && product.deal.specificUsers.active && product.deal.specificUsers.users.length>0">
+                        <h5 style="margin: 0px;">User List with Discount &nbsp;
+                          <i class="flaticon-null-27 cursor-p"
+                            *ngIf="moreUsers"
+                            (click)="moreUsers = !moreUsers"></i>
+                          <i class="flaticon-null-28 cursor-p"
+                            *ngIf="!moreUsers"
+                            (click)="moreUsers = !moreUsers"></i>
+                        </h5>
+                        <div class="ion-no-padding"
+                          *ngIf="moreUsers">
+                          <div class="list-header t-a-c">
+                            <ion-grid class="ion-no-padding">
+                              <ion-row class="headings">
+                                <ion-col size="3">
+                                  <p>Name</p>
+                                </ion-col>
+                                <ion-col size="3">
+                                  <p>Phone Number</p>
+                                </ion-col>
+                                <ion-col size="2">
+                                  <p>Discount(%)</p>
+                                </ion-col>
+                                <ion-col size="2">
+                                  <p>Delete</p>
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+                          </div>
+                          <div class="list-container">
+                            <ion-item
+                              *ngFor="let item of product.deal.specificUsers.users; let i = index">
+                              <ion-grid
+                                class="row-background ion-no-padding ion-align-items-center">
+                                <ion-row class="ion-align-items-center">
+                                  <ion-col size="3">
+                                    <p
+                                      class="ion-text-capitalize ion-text-center">
+                                      {{item.name}}</p>
+                                  </ion-col>
+                                  <ion-col size="3">
+                                    <p
+                                      class="ion-text-capitalize ion-text-center">
+                                      {{item.phoneNo}}</p>
+                                  </ion-col>
+                                  <ion-col size="2">
+                                    <ion-input type="number"
+                                      class="form-input padding-start-16"
+                                      [(ngModel)]="item.discount"></ion-input>
+                                  </ion-col>
+                                  <ion-col size="2"
+                                    class="ion-text-center">
+                                    <div class="ion-text-center">
+                                      <i class="flaticon-null-21 cursor-p"
+                                        (click)="removeUser(i)"></i>
+                                    </div>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                            </ion-item>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <ion-row>
+                      <div *ngSwitchCase="'Barcode / Qr Code'">
+                        <ion-col size="12"
+                          class="flex"
+                          *ngIf="!product.isPriceList">
+                          <ion-label>Barcode / QR code</ion-label>
+                          <div class="upload-btn-wrapper">
+                            <button class="upload-btn btn-1 i-start"> <i
+                                class="flaticon-null-16"></i>upload</button>
+                            <input type="file"
+                              name="myfile"
+                              (change)="uploadQR($event.target.files, 'new')" />
+                          </div>
+                          <div class="imgs-container"
+                            *ngIf="barcode !== ''">
+                            <div class="img-wrap">
+                              <img [src]="barcode"
+                                (click)="imageZoom(barcode)" />
+                              <div class="overlay">
+                                <ion-button class="remove"
+                                  shape="round"
+                                  color="danger"
+                                  fill="clear"
+                                  (click)="removeBarcodeImage()">
+                                  <ion-icon name="trash"
+                                    slot="icon-only"></ion-icon>
+                                </ion-button>
+                              </div>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ng-container *ngIf="product.isPriceList">
+                          <ng-container
+                            *ngIf="product.priceList.length && product.priceList[0].weight">
+                            <ion-col size="12"
+                              class="flex"
+                              *ngFor="let pl of product.priceList; let i = index;">
+                              <ion-label>Upload For {{pl.weight}}</ion-label>
+                              <div class="upload-btn-wrapper">
+                                <button class="upload-btn btn-1 i-start"> <i
+                                    class="flaticon-null-16"></i>upload</button>
+                                <input type="file"
+                                  name="myfile"
+                                  (change)="uploadPriceListQR($event.target.files, i, 'new')" />
+                              </div>
+                              <div class="imgs-container"
+                                *ngIf="pl.barcode">
+                                <div class="img-wrap">
+                                  <img [src]="pl.barcode"
+                                    (click)="imageZoom(pl.barcode)" />
+                                  <div class="overlay">
+                                    <ion-button class="remove"
+                                      shape="round"
+                                      color="danger"
+                                      fill="clear"
+                                      (click)="plRemoveBarcode(i, 'new')">
+                                      <ion-icon name="trash"
+                                        slot="icon-only"></ion-icon>
+                                    </ion-button>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- <ng-template #noDataForBarcodes>
+                                <ion-text color="danger" class="ion-text-center barcode-alert">*Add some data to price list for
+                                  uploading barcodes.</ion-text>
+                              </ng-template> -->
+                            </ion-col>
+                          </ng-container>
+                        </ng-container>
+                      </div>
+                    </ion-row>
+                  </ion-grid>
+                  <div *ngSwitchCase="'Variant Groups'">
+                    <ion-text color="danger"
+                      *ngIf="product.isPriceList == false">
+                      <p>This option is only available when variant is on</p>
+                    </ion-text>
+                    <div *ngIf="product.isPriceList == true">
+                      <div
+                        style="display: flex;align-items: center;margin-left: 12px;">
+                        <div>Variant groups for product</div>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox"
+                              (click)="activeVariantGroups()"
+                              [checked]="product.variantGroups.active">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </div>
+                      <br>
+                      <div *ngIf='product.variantGroups.active'>
+                        <div>
+                          <div>
+                            <div
+                              style="display: flex;align-items: center;margin: 12px;">
+                              <input class="groupInput"
+                                [(ngModel)]="groupName"
+                                placeholder="Enter name of group" />&nbsp;&nbsp;
+                              <ion-select class="groupSelect"
+                                [(ngModel)]="groupOptions"
+                                multiple="true"
+                                cancelText="Cancel"
+                                okText="Done"
+                                placeholder="Select Group"
+                                [interfaceOptions]="variantGrpSelectOptions">
+                                <ion-select-option
+                                  *ngFor="let item of product.priceList"
+                                  value="{{item.weight}}"
+                                  selected="true">{{item.weight}}
+                                </ion-select-option>
+                              </ion-select>&nbsp;&nbsp;
+                              <div style="display: flex;align-items: center;">
+                                <ion-button
+                                  (click)="enterVariantGroupsData('new')">
+                                  <p
+                                    *ngIf="(!product.variantGroups.groups) || (product.variantGroups.groups && product.variantGroups.groups.length == 0)">
+                                    Create Group</p>
+                                  <p
+                                    *ngIf="product.variantGroups.groups && product.variantGroups.groups.length > 0">
+                                    Add Group</p>
+                                </ion-button>
+                              </div>
+                            </div>
+                            <br>
+                            <div class="list-header variantGroups"
+                              *ngIf="product.variantGroups.groups && product.variantGroups.groups.length > 0">
+                              <ion-grid class="ion-no-padding">
+                                <ion-row class="headings">
+                                  <ion-col size="3">
+                                    <p>Name</p>
+                                  </ion-col>
+                                  <ion-col size="3"
+                                    style="margin-right: 16px;">
+                                    <p>Variants</p>
+                                  </ion-col>
+                                  <ion-col size="3"
+                                    style="margin-right: 16px;">
+                                    <p>Delete</p>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                            </div>
+                            <div class="list-container">
+                              <ion-item
+                                *ngFor="let item of product.variantGroups.groups; let i = index">
+                                <ion-grid
+                                  class="row-background ion-no-padding ion-align-items-center">
+                                  <ion-row class="ion-align-items-center">
+                                    <ion-col size="3">
+                                      <p
+                                        class="ion-text-capitalize ion-text-center">
+                                        {{item.name}}</p>
+                                    </ion-col>
+                                    <ion-col size="3">
+                                      <p
+                                        class="ion-text-capitalize ion-text-center">
+                                        {{item.variants}}</p>
+                                    </ion-col>
+                                    <ion-col size="3"
+                                      style="text-align: center;">
+                                      <i class="flaticon-null-19 remove-icon"
+                                        (click)="deleteVariantGroup('new',i)"></i>
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
+                              </ion-item>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <ion-grid *ngSwitchCase="'Seo for Website'">
+                    <ion-row>
+                      <ion-col size="12">
+                        <h3>Website SEO</h3>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <ion-label>Meta Title</ion-label>
+                          <ion-input class="form-input"
+                            [(ngModel)]="metaData.pageTitle"></ion-input>
+                        </div>
+                      </ion-col>
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <ion-label>Meta Description</ion-label>
+                          <ion-input class="form-input"
+                            [(ngModel)]="metaData.metaDescription"></ion-input>
+                        </div>
+                      </ion-col>
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <ion-label>Meta Keywords</ion-label>
+                          <ion-input class="form-input"
+                            [(ngModel)]="metaData.metaKeywords"></ion-input>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                  
+                  <ion-grid *ngSwitchCase="'Attributes'">
+                    <ion-row>
+                      <ion-col size='12'>
+                        <h3>Product Attributes</h3>
+                      </ion-col>
+
+                      <ion-col size='12' *ngFor="let item of attributesData | keyvalue; trackBy: customTrackBy; let i = index">
+                        <ng-container *ngIf="subValues[item.key]; else noSubValue">
+                          <div class="input-wrap">
+                            <ion-label>{{item.key}}</ion-label>
+                            <select [(ngModel)]="attributesData[item.key]">
+                              <option *ngFor="let subValue of subValues[item.key]">{{subValue}}</option>
+                            </select>
+                          </div>
+                        </ng-container>
+                        <ng-template #noSubValue>
+                          <div class="input-wrap">
+                            <ion-label>{{item.key}}</ion-label>
+                            <ion-input class="form-input" [(ngModel)]="attributesData[item.key]" type="text"></ion-input>
+                          </div>
+                        </ng-template>
+                      </ion-col>
+
+                    </ion-row>
+                  </ion-grid>
+                  
+                  <ion-grid *ngSwitchCase="'Variant Chart'">
+                    <ion-row>
+                      <ion-col style="display: flex;align-items: center;">
+                        <div>Active</div>
+                        &nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox" 
+                            (click)="toggleAdditionalInfo('sizeChart', 'new')" 
+                            [checked]="product.additionalInfo?.sizeChart.active">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                      <ng-container *ngIf="product.additionalInfo?.sizeChart.active">
+                        <!-- <ion-col size='12'>
+                          <div class="input-wrap">
+                            <ion-label>Enter Name for variant chart</ion-label>
+                            <ion-input class="form-input" [(ngModel)]="product.additionalInfo?.sizeChart.name" type="text"></ion-input>
+                          </div>
+                        </ion-col> -->
+                        <ion-col size="12" class="flex">
+                          <ion-label>Variant Chart image</ion-label>
+                          <div class="upload-btn-wrapper">
+                            <button class="upload-btn btn-1 i-start"> <i
+                                class="flaticon-null-16"></i>upload</button>
+                            <input type="file"
+                              name="myfile"
+                              (change)="uploadChart($event.target.files,'sizeChart', 'new')" />
+                          </div>
+                          <div class="imgs-container"
+                            *ngIf="product.additionalInfo?.sizeChart.img.url !== ''">
+                            <div class="img-wrap">
+                              <img [src]="product.additionalInfo?.sizeChart.img.url"
+                                (click)="imageZoom(product.additionalInfo?.sizeChart.img.url)" />
+                              <div class="overlay">
+                                <ion-button class="remove"
+                                  shape="round"
+                                  color="danger"
+                                  fill="clear"
+                                  (click)="removeAdditionalInfoImg('sizeChart','new')">
+                                  <ion-icon name="trash"
+                                    slot="icon-only"></ion-icon>
+                                </ion-button>
+                              </div>
+                            </div>
+                          </div>
+                        </ion-col>
+                      </ng-container>
+
+                    </ion-row>
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'Clone Product'">
+                    <ion-row>
+                      <ion-col>
+                        <ion-text color="danger">
+                          <p>Note: This feature is available when you edit this product. </p>
+                        </ion-text>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'Custom Action'">
+                    <ion-row>
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <div style="display:flex">
+                            <ion-label>Active</ion-label>
+                            <ion-toggle [(ngModel)]="product.additionalInfo.link.active"></ion-toggle>
+                          </div>
+                        </div>
+                      </ion-col>
+                      <ng-container *ngIf="product.additionalInfo?.link?.active">
+                        <!-- <ion-col size='12'>
+                          <div class="input-wrap">
+                            <ion-label>Show Price</ion-label>
+                            <ion-toggle [(ngModel)]="product.additionalInfo.showPrice"></ion-toggle>
+                          </div>
+                        </ion-col> -->
+                        <ion-col size='12'>
+                          <div class="input-wrap">
+                            <ion-label>Enter Name for Button</ion-label>
+                            <ion-input class="form-input" [(ngModel)]="product.additionalInfo.link.name" type="text"></ion-input>
+                          </div>
+                        </ion-col>
+                        <ion-col size="12">
+                          <div style="display: flex;">
+                            Link:&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div>
+                              <span style="margin-left: 8px;">
+                                <input type="radio" id="wa" value="form" [(ngModel)]="product.additionalInfo.link.type">&nbsp;&nbsp;
+                                <label for='wa'>Form</label>
+                              </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <span>
+                                <input type="radio" id='wb' value="link" [(ngModel)]="product.additionalInfo.link.type">&nbsp;&nbsp;
+                                <label for='wb'>External Link</label>
+                              </span>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="12" *ngIf="product.additionalInfo?.link?.type == 'form'">
+                          <ion-select placeholder="Select Form Template" class="border" [(ngModel)]="product.additionalInfo.link.value">
+                            <ion-select-option *ngFor="let form of forms" [value]="form.id"> {{form.formTitle}} </ion-select-option>
+                            </ion-select>
+                        </ion-col>
+                        <ion-col size="12" *ngIf="product.additionalInfo?.link?.type == 'link'">
+                          <div class="input-wrap">
+                            <ion-label>External Link</ion-label>
+                            <ion-input class="form-input" [(ngModel)]="product.additionalInfo.link.value" type="text"></ion-input>
+                          </div>
+                        </ion-col>
+                      </ng-container>
+                    </ion-row>
+                    <!-- <ion-row>
+                      <ion-col>
+                        <ion-text color="danger">
+                          <p>Note: This feature is Coming Soon. </p>
+                        </ion-text>
+                      </ion-col>
+                    </ion-row> -->
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'Stock Attributes'">
+                    <ion-row>
+                      <ion-col size="12">
+                        <h3>Stock Attributes</h3>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div class="input-wrap">
+                          <ion-label>Expiry Date</ion-label>
+                          <div class="flexJustifySpace">
+                          <ion-input type="date" class="form-input" min="{{currentDate | date: 'yyyy-MM-dd'}}"
+                           value="{{expiryDate | date: 'yyyy-MM-dd'}}"
+                           (ionChange)="getTimeStamp($event.target.value,'expiry')"></ion-input>
+                          </div>
+                        </div>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div class="input-wrap">
+                          <ion-label>Manufacturing Date</ion-label>
+                          <div class="flexJustifySpace">
+                          <ion-input type="date" class="form-input" max="{{currentDate | date: 'yyyy-MM-dd'}}"
+                           value="{{manufacturedDate | date: 'yyyy-MM-dd'}}"
+                           (ionChange)="getTimeStamp($event.target.value,'manufactured')"></ion-input>
+                          </div>
+                        </div>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div class="input-wrap">
+                          <ion-label>Shelf Life</ion-label>
+                          <div class="flexJustifySpace">
+                          <ion-input type="text" class="form-input" [(ngModel)]='product.stockAttributes.shelfLife'></ion-input>
+                          </div>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'Bundle Products'">
+                    <ion-col style="display: flex;align-items: center;">
+                      <div>Active</div>
+                      &nbsp;&nbsp;
+                      <div class="toggle-btn">
+                        <label class="switch">
+                          <input type="checkbox"
+                            (click)="toggleBundleProducts('new')"
+                            [checked]="product.bundleProducts.active">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </ion-col>
+                    <ng-container *ngIf="product.bundleProducts.active">
+                      <ion-col>
+                        <div class="input-wrap">
+                        <ion-label>Bundle Title</ion-label>
+                        <div style="display: flex;align-items: center;justify-content: space-between;">
+                         <ion-input type="text" class="form-input" [(ngModel)]='product.bundleProducts.title' style="width: 80%;"></ion-input>
+                        </div>
+                      </div>
+                      </ion-col>
+                      <ion-col>
+                        <div class="input-wrap">
+                        <ion-label>Max no. of products bundled by user</ion-label>
+                        <div style="display: flex;align-items: center;justify-content: space-between;">
+                         <ion-input type="number" class="form-input" [(ngModel)]='product.bundleProducts.maxProducts' style="width: 80%;"></ion-input>
+                        </div>
+                      </div>
+                      </ion-col>
+                      <ion-col>
+                         <ion-button (click)="presentProductsModal('new')">Add Bundled Products</ion-button>
+                         <ion-text color="danger">
+                           <p>Note: You cannot add variant products in bundle.</p>
+                         </ion-text>
+                      </ion-col>
+                        <ion-row *ngIf="product.bundleProducts.products.length">
+                          <ion-col>
+                            <div class="tableArea">
+                             <table>
+                               <thead>
+                                 <tr class="header">
+                                   <th>S.No</th>
+                                   <th>Product Name</th>
+                                   <th>Action</th>
+                                 </tr>
+                               </thead>
+                               <tbody>
+                                 <tr *ngFor="let prod of product.bundleProducts.products; let i = index">
+                                   <td>{{i+1}}</td>
+                                   <td>{{prod.name}}</td>
+                                   <td>
+                                    <ion-button fill="outline" shape="round" (click)="removeBundleProduct(i, 'new')">
+                                      Remove
+                                    </ion-button>
+                                   </td>
+                                   <!-- <td>
+                                    <i class="flaticon-null-21 cursor-p deleteIcon" (click)="deleteForm(form.id, i)"></i>
+                                   </td> -->
+                                 </tr>
+                               </tbody>
+                             </table>
+                            </div> 
+                          </ion-col>
+                        </ion-row>
+                    </ng-container>
+                    
+                  </ion-grid>
+
+                  <!-- Region New Product -->
+                  <ion-grid *ngSwitchCase="'Regions'">
+                    <ion-col size="12">
+                      <h3>Regions</h3>
+                    </ion-col>
+                    <ion-text *ngIf="!multiRegion" color="danger">
+                      <p>This option is only available when Multi Region is on</p>
+                    </ion-text>
+                    <div *ngIf="multiRegion">
+                      <ion-col size="12" style="display: flex;align-items: center;">
+                        <ion-label>Active</ion-label>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox" (click)="toggleCheckbox('allRegions')" [checked]="allRegions?.active">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                      <br>
+                      <ng-container *ngFor="let region of allRegions.regions,index as i">
+                        <div class="regionWrap">
+                          <div class="flex">
+                            <input type='checkbox' (click)="toggleRegion(i)" [checked]='region.active' />&nbsp;&nbsp;
+                            <p><strong>{{region.name | uppercase}}</strong></p>
+                          </div>
+                          <br>
+                          <ng-container *ngIf="!product.isPriceList">
+                            <ion-row>
+                              <ion-col class="input-wrap">
+                                <ion-label>Price</ion-label>
+                                <ion-input class="form-input" [(ngModel)]="region.price" type="number"></ion-input>
+                              </ion-col>
+                              <ion-col class="input-wrap">
+                                <ion-label>Discounted Price</ion-label>
+                                <ion-input class="form-input" [(ngModel)]="region.discountedPrice" type="number">
+                                </ion-input>
+                              </ion-col>
+                              <!-- <ion-col class="input-wrap">
+                                <ion-label>Quantity</ion-label>
+                                <ion-input class="form-input" [(ngModel)]="region.qty" type="number"></ion-input>
+                              </ion-col> -->
+                            </ion-row>
+                          </ng-container>
+
+                          <!-- Regions New variants -->
+                          <ng-container *ngIf="product.isPriceList">
+                            <ng-container *ngFor="let regionVariant of region.variants">
+                              <ion-row>
+                                <ion-col class="input-wrap">
+                                  <ion-label>Variant</ion-label>
+                                  <ion-input class="form-input" [(ngModel)]="regionVariant.weight" readonly="true" type="text"></ion-input>
+                                </ion-col>
+                                <ion-col class="input-wrap">
+                                  <ion-label>Price</ion-label>
+                                  <ion-input class="form-input" [(ngModel)]="regionVariant.price" type="number"></ion-input>
+                                </ion-col>
+                                <ion-col class="input-wrap">
+                                  <ion-label>Discounted Price</ion-label>
+                                  <ion-input class="form-input" [(ngModel)]="regionVariant.discountedPrice" type="number">
+                                  </ion-input>
+                                </ion-col>
+                                <!-- <ion-col class="input-wrap">
+                                  <ion-label>Quantity</ion-label>
+                                  <ion-input class="form-input" [(ngModel)]="regionVariant.qty" type="number"></ion-input>
+                                </ion-col> -->
+                              </ion-row>
+                            </ng-container>
+                          </ng-container>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'Add on'">
+                    <ion-col size="12">
+                      <h3>Add Ons</h3>
+                    </ion-col>
+                    <ion-col size="12">
+                      <label>Select Addon Templates:</label>&nbsp;<br>
+                      <select class="selectInput" (change)="changeTemplate($event.target.value)" [(ngModel)]='product.templateId'>
+                        <option value="" disabled selected hidden>Please choose</option>
+                        <option value="{{template.id}}" *ngFor="let template of templatesArray">
+                          {{template.name}}
+                        </option>
+                      </select>
+                    </ion-col>
+                  </ion-grid>
+                  
+                  <ion-grid *ngSwitchCase="'video'">
+                    <ion-col size="12">
+                      <h3>Video feature available after product is created!</h3>
+                    </ion-col>
+                  </ion-grid>
+                  
+                </ion-col>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+  </super-tabs-container>
+  <!-- /new product -->
+  <div class="spinner"
+    *ngIf="editproductId && showEditLoader;">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <!-- edit product -->
+  <super-tabs-container *ngIf="editproductId && editproductData">
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <div class="flex-space-between">
+                    <div>
+                      <ion-label>Product Name(please don't use "/" in name)
+                      </ion-label>
+                    </div>
+                    <div class="flex-label">
+                      <ion-label>Show</ion-label>&nbsp;&nbsp;
+                      <ion-col size="2"
+                        class="ion-no-padding">
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input color="primary"
+                              type="checkbox"
+                              [disabled]="editShowDisable()"
+                              [checked]="editproductData.status"
+                              (click)="updateEditProductStatus(editproductData.status)">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                    </div>
+                  </div>
+                  <ion-input class="form-input"
+                    [(ngModel)]="editproductData.prodName"></ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="productTypeArr.length">
+              <ion-col size="6">
+                <ion-row>
+                  <div class="headings">
+                    Select Product Type
+                  </div>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-select [value]="getSelectedValueOfProductType()"
+                      class="border i-s-p-10"
+                      (ionChange)="addProductType($event, 'edit')"
+                      placeholder="Select Product Type">
+                      <!-- <ion-select-option value="">No type</ion-select-option> -->
+                      <ion-select-option value="{{productType}}"
+                        *ngFor="let productType of productTypeArr">
+                        {{productType}}
+                      </ion-select-option>
+                      <!-- <ion-select-option [value]="vendor.id" *ngFor="let vendor of vendors">{{vendor.name}}
+                          </ion-select-option> -->
+                    </ion-select>
+                  </ion-col>
+                </ion-row>
+                <br>
+              </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="!editproductData.isPriceList; else showPriceList">
+              <ion-col size="2"
+                class="flex">
+                <ion-label>Price</ion-label>
+              </ion-col>
+              <ion-col size="2"
+                class="flex">
+
+                <ion-label>Single Price</ion-label>&nbsp;&nbsp;
+                <ion-col size="2"
+                  class="ion-no-padding">
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input color="primary"
+                        type="checkbox"
+                        (click)="editPriceToggle()"
+                        [checked]="editproductData.isPriceList">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </ion-col>
+
+
+              </ion-col>
+              <ion-col size="4"
+                class="flex">
+                <ion-label><strong>Show out of stock for 0 quantity</strong>
+                </ion-label>&nbsp;&nbsp;
+                <ion-col size="2"
+                  class="ion-no-padding">
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input color="primary"
+                        type="checkbox"
+                        (click)="editProductStopOrderWhenNoQtyToggle(editproductData.stopWhenNoQty)"
+                        [checked]="editproductData.stopWhenNoQty">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </ion-col>
+              </ion-col>
+              <ion-col class="headings"
+                style="display: flex;align-items: center;"
+                size='4'>
+                <div>Gst Exclusive</div>&nbsp;&nbsp;
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox"
+                      (click)="toggleGstExclusiveEdit()"
+                      [checked]="editproductData.gstExclusive">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </ion-col>
+              <br>
+              <ion-col size="4">
+                <ion-label *ngIf="!editproductData.gstExclusive">Price (
+                  inclusive of all taxes) </ion-label>
+                <ion-label *ngIf="editproductData.gstExclusive">Price (
+                  exclusive of all taxes) </ion-label>
+                <ion-input type="number"
+                  class="form-input"
+                  [(ngModel)]="editproductData.prodPrice"></ion-input>
+              </ion-col>
+
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label *ngIf="!editproductData.gstExclusive">Discounted
+                    Price ( inclusive of all taxes) </ion-label>
+                  <ion-label *ngIf="editproductData.gstExclusive">Discounted
+                    Price ( exclusive of all taxes) </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="editproductData.discountedPrice"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label>Purchase Price </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="editproductData.purchasePrice"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label>Quantity </ion-label>
+                <ion-input type="text"
+                  class="form-input"
+                  [(ngModel)]="editproductData.productQty"></ion-input>
+              </ion-col>
+
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>Shipping Weight</ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="editproductData.shippingWeight"></ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ng-template #showPriceList>
+              <ion-row>
+                <ion-col size="2"
+                  class="flex">
+                  <ion-label>Price List</ion-label>
+                </ion-col>
+                <ion-col size="2"
+                  class="flex">
+
+                  <ion-label>Variants</ion-label>&nbsp;&nbsp;
+                  <ion-col size="2"
+                    class="ion-no-padding">
+                    <div class="toggle-btn">
+                      <label class="switch">
+                        <input color="primary"
+                          type="checkbox"
+                          (click)="editPriceToggle()"
+                          [checked]="editproductData.isPriceList">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </ion-col>
+
+
+
+                </ion-col>
+                <ion-col size="4"
+                  class="flex">
+                  <ion-label><strong>Show out of stock for 0 quantity</strong>
+                  </ion-label>&nbsp;&nbsp;
+                  <ion-col size="2"
+                    class="ion-no-padding">
+                    <div class="toggle-btn">
+                      <label class="switch">
+                        <input color="primary"
+                          type="checkbox"
+                          (click)="editProductStopOrderWhenNoQtyToggle(editproductData.stopWhenNoQty)"
+                          [checked]="editproductData.stopWhenNoQty">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </ion-col>
+                </ion-col>
+                <ion-col class="headings"
+                  style="display: flex;align-items: center;"
+                  size='4'>
+                  <div>Gst Exclusive</div>&nbsp;&nbsp;
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input type="checkbox"
+                        (click)="toggleGstExclusiveEdit()"
+                        [checked]="editproductData.gstExclusive">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <br>
+              <ion-row>
+                <ion-col size="6"
+                  class="flex">
+                  <ion-label>Type:</ion-label>
+                  <ion-select class="variant-select"
+                    [(ngModel)]="editproductData.variantType"
+                    *ngIf="!variantTypeLoader"
+                    [value]="editproductData.variantType">
+                    <ion-select-option [value]="att.type"
+                      *ngFor="let att of variantsAttributes"
+                      style="text-transform: capitalize;">{{att.type}}
+                    </ion-select-option>
+                  </ion-select>
+                  <ion-spinner *ngIf="variantTypeLoader"></ion-spinner>
+                </ion-col>
+                <ion-col size="6"
+                  class="flex">
+                  <ion-button (click)="importTemplate()"
+                    fill="outline"
+                    size="small">
+                    Import Template
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-text color="danger"
+                  style="margin-left: 8px;">
+                  <p>Use pieces for wholesale. Specify number of pieces in
+                    pieces column and price / piece in price
+                    column.</p>
+                </ion-text>
+              </ion-row>
+              <br>
+              <!-- <ion-row>
+                <ion-col size="4">
+                  <ion-label>Weight/Pieces/Size</ion-label>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-label>Price (INR)</ion-label>
+                </ion-col>
+                <ion-col size="3" style="opacity: .6;">
+                  <ion-label>Discounted Price(INR)</ion-label>
+                </ion-col>
+                <ion-col size="2">
+                  <div>Delete</div>
+                </ion-col>
+              </ion-row> -->
+              <ion-row
+                *ngFor="let element of editproductData.priceList; let i = index;"
+                class="ion-justify-content-between ion-align-items-center">
+                <ion-col>
+                  <ion-label>Sku Code</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="editproductData.priceList[i].sku">
+                  </ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Barcode No</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="editproductData.priceList[i].barcodeNo">
+                  </ion-input>
+                </ion-col>
+                <ion-col *ngIf="editproductData.variantType === 'pieces'">
+                  <ion-label>Name</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="editproductData.priceList[i].name">
+                  </ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label
+                    *ngIf="editproductData.variantType !== '' && editproductData.variantType !== 'other'">
+                    <span
+                      *ngIf="editproductData.variantType === 'pieces'">Number
+                      of&nbsp;</span>{{editproductData.variantType}}
+                  </ion-label>
+                  <ion-label
+                    *ngIf="editproductData.variantType === '' || editproductData.variantType === 'other'">
+                    Variant</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="editproductData.priceList[i].weight">
+                  </ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Price
+                    <span *ngIf="editproductData.variantType === 'pieces'">/
+                      pc</span>
+                  </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="editproductData.priceList[i].price">
+                  </ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Discounted Price <span
+                      *ngIf="editproductData.variantType === 'pieces'">/
+                      pc</span>
+                  </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="editproductData.priceList[i].discountedPrice">
+                  </ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Purchase Price <span
+                      *ngIf="editproductData.variantType === 'pieces'">/
+                      pc</span>
+                  </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="editproductData.priceList[i].purchasePrice">
+                  </ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Quantity</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="editproductData.priceList[i].totalQuantity">
+                  </ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Shipping Weight (Gms)</ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="editproductData.priceList[i].shippingWeight">
+                  </ion-input>
+                </ion-col>
+                <ion-col (click)="removeElementFromEditProductPriceList(i)">
+                  <ion-button color="danger"
+                    fill="outline"
+                    shape="round"
+                    class="btn-sml m-t-16">
+                    <ion-icon name="remove-circle"
+                      slot="start"></ion-icon>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col style="text-align: center;">
+                  <ion-button (click)="onClickAddMoreInEditProductPriceList()"
+                    fill="outline"
+                    shape="round"
+                    size="small"
+                    class="btn-2">
+                    <ion-icon name="add-circle"
+                      slot="start"></ion-icon>
+                    Add more +
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ng-template>
+
+            <ion-row>
+              <ion-col size="6">
+                <ion-label> Min Quantity</ion-label>
+                <ion-input type="number"
+                  class="form-input"
+                  [(ngModel)]="editproductData.minQty"></ion-input>
+              </ion-col>
+
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>Max Quantity </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="editproductData.maxQty"></ion-input>
+                </div>
+              </ion-col>
+
+            </ion-row>
+            <br />
+
+            <ion-row>
+              <ion-col size="10">
+                <div class="input-wrap">
+                  <ion-label>Keywords (Search)</ion-label>
+                  <ion-input class="form-input"
+                    [(ngModel)]="keyword"
+                    autocapitalize></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="2">
+                <ion-button class="btn-2 m-t-36"
+                  fill="outline"
+                  shape="round"
+                  (click)="editProductAddSearchKeywords()">
+                  Add </ion-button>
+              </ion-col>
+              <ion-col size="12"
+                *ngIf="editproductData.searchKeywords">
+                <ion-chip outline
+                  color="dark"
+                  *ngFor="let x of editproductData.searchKeywords; let i = index;">
+                  <ion-icon name="close-circle"
+                    (click)="editProductRemoveKeyword(i)"></ion-icon>
+                  <ion-label>{{x}}</ion-label>
+                </ion-chip>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>SKU Code</ion-label>
+                  <ion-input class="form-input"
+                    [(ngModel)]="editproductData.productCode"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>HSN Code</ion-label>
+                  <ion-input class="form-input"
+                    [(ngModel)]="editproductData.hsnCode"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label> GST (%)</ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="editproductData.gst"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <div class="input-wrap">
+                  <ion-label>Barcode Number</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="editproductData.barcodeNo"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label>Country Of Origin</ion-label>
+                <ion-input type="text"
+                  class="form-input"
+                  [(ngModel)]="editproductData.additionalInfo.countryOfOrigin">
+                </ion-input>
+              </ion-col>
+
+              <ion-col size="6">
+                <ion-label>Insta Reel Url</ion-label>
+                <ion-input type="text"
+                  class="form-input"
+                  [(ngModel)]="editproductData.instaReelUrl">
+                </ion-input>
+              </ion-col>
+
+              <ion-col size="12">
+                <div class="flex-space-between">
+                  <div>
+                    <ion-label>Insta Reel Cover Image</ion-label>
+                    <ion-text color="danger">
+                      <p style="margin-top: 5px">Image size for best view : 600x450 Px
+                      </p>
+                    </ion-text>
+                  </div>
+                  <div class="upload-btn-wrapper">
+                    <button class="upload-btn btn-1 i-start" (click)="uploadImage($event.target.files)"> <i
+                        class="flaticon-null-16"></i>upload</button>
+                    <!-- <input type="file" name="myfile" (change)="uploadImage($event.target.files,'catImg')" /> -->
+                  </div>
+                </div>
+              </ion-col>
+
+              <div class="img-container">
+                <div class="no-img" *ngIf="!editproductData.instaCoverImage">
+                  <p>No attached image</p>
+                </div>
+                <div *ngIf="editproductData.instaCoverImage">
+                  <div class="img-wrap">
+                    <img class="category-img" src="{{editproductData.instaCoverImage}}"
+                      (click)="imageZoom(editproductData.instaCoverImage)" />
+                    <div class="overlay">
+                      <ion-button class="btn-2" shape="round" color="danger" fill="clear" (click)="removeReelCoverImage()">
+                        <ion-icon name="trash" slot="icon-only"></ion-icon>
+                      </ion-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-row>
+            <ion-col class="headings"
+            style="display: flex;align-items: center;"
+            size='4'>
+            <div>Show Product Subheading</div>&nbsp;&nbsp;
+            <div class="toggle-btn">
+              <label class="switch">
+                <input type="checkbox"
+                  (click)="toggleShowSubheadingEdit()"
+                  [checked]="editproductData.showSubheading">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </ion-col>
+            <ion-col size="12">
+              <p style="font-weight: bold;">Product Description</p>
+              <br>
+              <ckeditor [(ngModel)]="editproductData.prodDesc"
+                [config]="ckeConfig"></ckeditor>
+            </ion-col>
+            <ion-row>
+              <ion-col size="12" style="margin-top: 1rem;">
+                <p style="font-weight: bold;">Product Short Description</p>
+                <br>
+                <ckeditor [config]="ckeConfig" [(ngModel)]="editproductData.prodShortDesc"></ckeditor>
+              </ion-col>
+            </ion-row>
+            <ion-button shape="round"
+              class="btn-1 i-start"
+              color="primary"
+              (click)="addNewSection()"
+              style="margin-bottom: 15px; margin-top: 15px;">
+              <ion-icon name="add-circle"
+                slot="start"></ion-icon>
+              Add New Section
+            </ion-button>
+            <ion-reorder-group (ionItemReorder)="SectionReorder($event)"
+              disabled="false">
+              <ion-item *ngFor="let item of productSections; let i = index">
+                <div class="section">
+                  <div style="display: inline-flex">
+                    <ion-reorder slot="end"> <i class="flaticon-menu"></i>
+                    </ion-reorder>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <p style="margin-top: -12px;font-size: large">Section
+                      {{i+1}}</p>
+                  </div>
+                  <br><br>
+                  <div class="sectionBlock">
+                    <div style="display: block">
+                      <p *ngIf="item.sectionName"
+                        class="crop">Name: {{item.sectionName}}</p>
+                      <br *ngIf="item.sectionName">
+                      <p *ngIf="item.widgetType">Type: {{item.widgetType}}</p>
+                    </div>
+                    <div style="display: flex">
+                      <div>
+                        <ion-button
+                          (click)="openWidgetEdit(item.widgetType,item.widgetID,i)">
+                          <i class="flaticon-pencil-edit-button"
+                            slot="icon-only"
+                            slot="icon-only"></i>
+                          &nbsp;Edit
+                        </ion-button>
+                        &nbsp;&nbsp;
+                        <ion-button
+                          (click)="deleteSectionConfirm(item.widgetID,i, 'web')">
+                          <i class="flaticon-null-21"
+                            slot="icon-only"
+                            slot="icon-only"></i>
+                          &nbsp;Delete
+                        </ion-button>
+                      </div>
+                      <ion-list lines="none"
+                        style="display: flex;margin-top: -20px;margin-left: 10px">
+                        <ion-item>
+                          <ion-label>App</ion-label>
+                          <ion-toggle
+                            [checked]="item.location=='app' || item.location=='all'"
+                            (ionChange)="changeLocationStatus(i,'app')">
+                          </ion-toggle>
+                        </ion-item>
+
+                        <ion-item>
+                          <ion-label>Website</ion-label>
+                          <ion-toggle
+                            [checked]="item.location=='web' || item.location=='all'"
+                            (ionChange)="changeLocationStatus(i,'web')">
+                          </ion-toggle>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </div>
+                </div>
+              </ion-item>
+            </ion-reorder-group>
+          </ion-row>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height"
+          style="display: flex;flex-wrap: nowrap;flex-direction: row;align-content: center;justify-content: space-around;align-items: flex-start;">
+          <div class="categories-container">
+            <div class="no-data"
+              *ngIf="showNoCategories"
+              text-center>
+              <img src="assets/img/no-category.png"
+                alt="">
+              <h6>No categories</h6>
+            </div>
+            <div class="product-search-wrap"
+              *ngIf="!showNoCategories">
+              <ion-searchbar [(ngModel)]="searchCategory"
+                mode="ios"></ion-searchbar>
+            </div>
+            <div class="categories-wrapper"
+              *ngIf="!showNoCategories">
+              <ion-list>
+                <ion-list-header>
+                  <ion-label class="np-list-header"
+                    style="font-size: 16px;font-weight: bold;">Categories
+                  </ion-label>
+                </ion-list-header>
+                <div
+                  *ngFor="let category of categories | filter: searchCategory">
+                  <div
+                    style="display: flex;justify-content: space-between;align-items: center;">
+                    <ion-item (click)="onClickEditCategoryCheckBox(category.id)"
+                      style="width: 100%;">
+                      <ion-label>{{category.name}}</ion-label>
+                      <ion-checkbox color="primary"
+                        slot="start"
+                        [checked]="editCheckBoxValue(category.id)">
+                      </ion-checkbox>
+                    </ion-item>
+                    <div (click)="getSubcategories(category.id)"
+                      slot="end"
+                      style="z-index: 9999;margin-right: 3%;opacity: .8;"
+                      *ngIf="category.isSubcategories">
+                      <i class="flaticon-null-13"
+                        *ngIf="(listOfSubcategoriesInView.hasOwnProperty(category.id) && !listOfSubcategoriesInView[category.id].active) || !listOfSubcategoriesInView.hasOwnProperty(category.id)"></i>
+                      <i class="flaticon-null-14"
+                        *ngIf="listOfSubcategoriesInView.hasOwnProperty(category.id) && listOfSubcategoriesInView[category.id].active"></i>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="(listOfSubcategories[category.id] && listOfSubcategories[category.id].length) && listOfSubcategoriesInView[category.id].active"
+                    style="margin-left: 10%;">
+                    <ng-container *ngFor="let subCat of listOfSubcategories[category.id]">
+                      <div style="display: flex;justify-content: space-between;align-items: center;">
+                        <ion-item (click)="onClickEditCategoryCheckBox(subCat.id)" style="width: 100%;">
+                          <ion-label>{{subCat.name}}</ion-label>
+                          <ion-checkbox color="primary" slot="start"[checked]="editCheckBoxValue(subCat.id)"></ion-checkbox>
+                        </ion-item>
+                        <!-- Sub-SubCategory Start -->
+                        <div (click)="getSubOfSubCategories(category.id, subCat.id)" slot="end"
+                          style="z-index: 9999;margin-right: 3%;opacity: .8;" *ngIf="subCat.isSubcategories">
+                          <i class="flaticon-null-13" *ngIf="!subOfSubCategoryToggle[subCat.id]?.active"></i>
+                          <i class="flaticon-null-14" *ngIf="subOfSubCategoryToggle[subCat.id]?.active"></i>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="subOfSubCategoryToggle[subCat.id]?.active && subOfSubCategories[subCat.id].length">
+                        <div style="margin-left: 10%;">
+                          <ng-container *ngFor="let subSubCat of subOfSubCategories[subCat.id]">
+                            <ion-item (click)="onClickEditCategoryCheckBox(subSubCat.id)">
+                              <ion-label>{{subSubCat.name}}</ion-label>
+                              <ion-checkbox color="primary" slot="start" [checked]="editCheckBoxValue(subSubCat.id)"></ion-checkbox>
+                            </ion-item>
+                          </ng-container>
+                        </div>
+                      </ng-container>
+                      <!-- Sub-SubCategory End -->
+                    </ng-container>
+                  </div>
+                </div>
+
+              </ion-list>
+            </div>
+          </div>
+          <div class="brands-container">
+            <div class="product-search-wrap"
+              *ngIf="!showNoBrands">
+              <ion-searchbar [(ngModel)]="searchBrand"
+                mode="ios"></ion-searchbar>
+            </div>
+            <ion-list *ngIf="!showNoBrands && brands.length">
+              <ion-list-header>
+                <ion-label class="np-list-header"
+                  style="font-size: 16px;font-weight: bold;">Brands</ion-label>
+              </ion-list-header>
+              <div *ngFor="let brand of brands | filter: searchBrand">
+                <ion-item (click)="onClickEditBrandCheckBox(brand.id)"
+                  style="width: 100%;">
+                  <ion-label>{{brand.name}}</ion-label>
+                  <ion-checkbox color="primary"
+                    slot="start"
+                    [checked]="editBrandCheckBoxValue(brand.id)">
+                  </ion-checkbox>
+                </ion-item>
+              </div>
+            </ion-list>
+          </div>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <!-- new images-->
+          <!-- <div class="dropzone"
+            appDropzone
+            (dropped)="onDrop($event)">
+            <h3>Drag and Drop a File</h3>
+
+            <div class="file">
+              <input class="file-input"
+                multiple
+                type="file"
+                (change)="onDrop($event.target.files)">
+            </div>
+          </div> -->
+          <button class="upload-btn btn-1 i-start"
+            (click)="onDrop($event.target.files)">Upload Product
+            Image(s)</button>
+          <h3>Uploads</h3>
+          <!-- <div class="upload-img-wrapper">
+            <div *ngFor="let file of files" class="img-preview">
+              <app-upload-task [file]="file"></app-upload-task>
+            </div>
+          </div> -->
+
+          <!-- new images-->
+
+          <!-- old images-->
+          <div class="imgs-container">
+
+            <div class="img-wrap"
+              *ngFor="let img of listofbase64Image; let i = index">
+              <img [src]="img.base64Img"
+                (click)="onClickEditImage(img.url)" />
+              <div class="overlay">
+                <ion-button class="remove"
+                  shape="round"
+                  color="danger"
+                  fill="clear"
+                  (click)="removeEditImageInList(i)">
+                  <ion-icon name="trash"
+                    slot="icon-only"></ion-icon>
+                </ion-button>
+                <ion-button *ngIf="img.cover == true"
+                  class="btn-2 cover"
+                  shape="round">
+                  Cover
+                </ion-button>
+                <ion-button class="btn-2 cover"
+                  shape="round"
+                  *ngIf="img.cover == false"
+                  (click)="editProductCoverPicInList(i)">
+                  Make Cover
+                </ion-button>
+              </div>
+            </div>
+
+
+            <div class="list-header">
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-col class="reorder">
+                    <p>Reorder</p>
+                  </ion-col>
+                  <ion-col class="img">
+                    <p>Image</p>
+                  </ion-col>
+                  <ion-col class="action">
+                    <p>Action</p>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+            <div class="list-container">
+              <ion-reorder-group (ionItemReorder)="imagesReorder($event)"
+                disabled="false"
+                class="ion-no-padding">
+                <ion-item
+                  *ngFor="let img of editproductData.images; let i = index"
+                  lines="none">
+                  <ion-grid
+                    class="row-background ion-no-padding ion-align-items-center">
+                    <ion-row class="ion-align-items-center">
+                      <ion-col class="reorder">
+                        <ion-reorder>
+                          <div class="flat-sort">
+                            <i class="flaticon-menu"></i>
+                          </div>
+                        </ion-reorder>
+                      </ion-col>
+                      <ion-col class="img">
+                        <img [src]="img.url"
+                          (click)="onClickEditImage(img.url)"
+                          height="200px" />
+                      </ion-col>
+                      <ion-col class="action">
+                        <div class="overlay">
+                          <ion-button class="remove"
+                            shape="round"
+                            color="danger"
+                            fill="clear"
+                            large
+                            (click)="removeEditImageInData(i, img.url)">
+                            <ion-icon name="trash"
+                              slot="icon-only"
+                              style=" font-size: 16px;"></ion-icon>
+                          </ion-button>
+                          <ion-button
+                            *ngIf="editproductData.coverPic.imageId == img.imageId"
+                            class="btn-2 cover"
+                            shape="round"
+                            disabled>
+                            Cover
+                          </ion-button>
+                          <ion-button
+                            *ngIf="editproductData.coverPic.imageId != img.imageId "
+                            class="btn-2 cover"
+                            shape="round"
+                            (click)="editProductCoverPicInData(i)">
+                            Make Cover
+                          </ion-button>
+                          <div>
+                            <p style="margin-top: 5px;text-align: center;">
+                              Variants</p>
+                            <ion-select class="variantImageSelect"
+                              multiple="true"
+                              cancelText="Cancel"
+                              okText="Done"
+                              placeholder="Select Variants"
+                              [value]="getVariantImgsValues(i)"
+                              style="position: relative;"
+                              *ngIf="editproductData.isPriceList"
+                              [interfaceOptions]="variantGrpSelectOptions"
+                              (ionChange)="onChangeVariantImg($event,i);">
+                              <ion-select-option
+                                *ngFor="let item of editproductData.priceList; let j=index"
+                                value="{{item.weight}}">
+                                {{item.weight}}
+                              </ion-select-option>
+                            </ion-select>
+                          </div>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                  <br>
+                </ion-item>
+              </ion-reorder-group>
+            </div>
+          </div>
+          <!-- old images-->
+        </div>
+      </ion-content>
+    </super-tab>
+    <super-tab>
+      <ion-content class="ion-no-padding">
+        <div class="main-container"
+          style="width: 100%">
+          <ion-grid>
+            <ion-row>
+              <ion-col size=2
+                id="scroll1">
+                <div class="statusList">
+                  <div [id]="item"
+                  *ngFor='let item of sideMenu; let i=index'
+                  (click)='changeComponent(item)'>
+                  <ng-container *ngIf="userRole !== 'vendor'">
+                    <p>{{item}}</p>
+                  </ng-container>
+                  <ng-container *ngIf="userRole == 'vendor' && item != 'Vendor' && item != 'Specific User Discount'">
+                    <p>{{item}}</p>
+                  </ng-container>
+
+                </div>
+                </div>
+              </ion-col>
+              <ion-col size=10
+                style="margin-top: 8px; border-left: 1px solid lightgray;">
+                <ion-col style="height: 5vh;">
+                  <ion-button (click)="editProduct()"
+                    color="success">
+                    <i class="flaticon-null-20 margin-icon"></i>&nbsp;
+                    Save Settings
+                  </ion-button>&nbsp;&nbsp;
+                  <ion-button (click)="deleteAlertConfirm();"
+                    color="danger">
+                    <i class="flaticon-null-21"></i>&nbsp;
+                    Delete Product
+                  </ion-button>
+                </ion-col>
+                <ion-col id="scroll2"
+                  [ngSwitch]="selectedId">
+                  <ion-grid style="margin-top: 10px;">
+                    <ion-row *ngSwitchCase="'Cash on Delivery'">
+                      <ion-col style="display: flex;align-items: center;">
+                        <div>Cash on delivery (COD) for product</div>
+                        &nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox"
+                              (click)="toggleCodEdit()"
+                              [checked]="editproductData.isCod">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <div *ngSwitchCase="'Price Slabs'">
+                      <div style="display: flex;align-items: center;">
+                        <div>Price slabs for product</div>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox"
+                              (click)="activePriceSlabEdit()"
+                              [checked]="editproductData.priceSlabs.active">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </div>
+                      <br>
+                      <div
+                        *ngIf='editproductData.priceSlabs && editproductData.priceSlabs.active'>
+                        <div *ngIf="!editproductData.isPriceList">
+                          <div style="display: flex;align-items: center;">
+                            <ion-button (click)="enterPriceSlabData('edit','')">
+                              <p
+                                *ngIf="editproductData.priceSlabs.singleSlabs && editproductData.priceSlabs.singleSlabs.length == 0">
+                                Create Slab</p>
+                              <p
+                                *ngIf="editproductData.priceSlabs.singleSlabs && editproductData.priceSlabs.singleSlabs.length > 0">
+                                Add Slab</p>
+                            </ion-button>&nbsp;&nbsp;
+                            <ion-button (click)="removePriceSlabs('edit','')">
+                              Remove All Slabs
+                            </ion-button>
+                          </div>
+                          <br>
+                          <ion-grid
+                            *ngIf="editproductData.priceSlabs.singleSlabs && editproductData.priceSlabs.singleSlabs.length > 0"
+                            class="ion-no-padding data-table ion-text-center"
+                            style="margin-top: 12px;width: 400px;margin-left: 0px;">
+                            <ion-row>
+                              <ion-col>Quantity</ion-col>
+                              <ion-col>Price per product</ion-col>
+                              <ion-col>Discount price per product</ion-col>
+                              <ion-col>Edit</ion-col>
+                            </ion-row>
+                            <ion-row
+                              *ngFor="let slab of editproductData.priceSlabs.singleSlabs; let i=index;"
+                              style="border-top: 1px solid lightgray;">
+                              <ion-col>
+                                <p>{{slab.qty[0]}} - {{slab.qty[1]}}</p>
+                              </ion-col>
+                              <ion-col>
+                                <p>{{slab.mrp}}</p>
+                              </ion-col>
+                              <ion-col>
+                                <p>{{slab.price}}</p>
+                              </ion-col>
+                              <ion-col>
+                                <p class="cursor-p">
+                                  <i class="flaticon-pencil-edit-button"
+                                    (click)="editPriceSlabDataForSingleSlab(i, slab)"></i>
+                                </p>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </div>
+                        <div
+                          *ngIf="editproductData.isPriceList && editproductData.priceList && editproductData.priceList.length > 0">
+                          <div
+                            *ngFor='let variant of editproductData.priceList'>
+                            <div
+                              style="display: flex;align-items: center;margin: 12px;">
+                              <p
+                                *ngIf="editproductData.variantType != 'other' ">
+                                {{editproductData.variantType}} :&nbsp;&nbsp;
+                              </p>
+                              <p
+                                *ngIf="editproductData.variantType == 'other' ">
+                                Varient :&nbsp;&nbsp;</p>
+                              <p>{{variant.weight}}</p>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <div style="display: flex;align-items: center;">
+                                <ion-button
+                                  (click)="enterPriceSlabData('edit',variant.weight)">
+                                  <p
+                                    *ngIf="(!editproductData.priceSlabs.variantSlabs[variant.weight]) || 
+                                  (editproductData.priceSlabs.variantSlabs[variant.weight] && editproductData.priceSlabs.variantSlabs[variant.weight].length == 0)">
+                                    Create Slab</p>
+                                  <p
+                                    *ngIf="editproductData.priceSlabs.variantSlabs[variant.weight] && editproductData.priceSlabs.variantSlabs[variant.weight].length > 0">
+                                    Add Slab</p>
+                                </ion-button>&nbsp;&nbsp;
+                                <ion-button
+                                  (click)="removePriceSlabs('edit',variant.weight)">
+                                  Remove All Slabs
+                                </ion-button>
+                              </div>
+                            </div>
+                            <ion-grid
+                              *ngIf="editproductData.priceSlabs.variantSlabs[variant.weight] && editproductData.priceSlabs.variantSlabs[variant.weight].length > 0"
+                              class="ion-no-padding data-table ion-text-center"
+                              style="margin-top: 12px;width: 400px;margin-left: 0px;">
+                              <ion-row>
+                                <ion-col>Quantity</ion-col>
+                                <ion-col>Price per product</ion-col>
+                                <ion-col>Discount price per product</ion-col>
+                                <ion-col>Edit</ion-col>
+                              </ion-row>
+                              <ion-row
+                                *ngFor="let slab of editproductData.priceSlabs.variantSlabs[variant.weight]; let i=index;"
+                                style="border-top: 1px solid lightgray;">
+                                <ion-col>
+                                  <p>{{slab.qty[0]}} - {{slab.qty[1]}}</p>
+                                </ion-col>
+                                <ion-col>
+                                  <p>{{slab.mrp}}</p>
+                                </ion-col>
+                                <ion-col>
+                                  <p>{{slab.price}}</p>
+                                </ion-col>
+                                <ion-col>
+                                  <p class="cursor-p">
+                                    <i class="flaticon-pencil-edit-button"
+                                      (click)="editPriceSlabDataForVariantSlab(i, slab, variant.weight)"></i>
+                                  </p>
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+                            <br>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngSwitchCase="'Extra Charges'">
+                      <ion-row>
+                        <ion-col style="display: flex;align-items: center;">
+                          <ion-label>Extra Charges</ion-label>&nbsp;&nbsp;
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input type="checkbox"
+                                (click)="toggleExtraChargesEdit()"
+                                [checked]="editproductData.extraCharges.active">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                      <br>
+                      <ion-row *ngIf='editproductData.extraCharges.active'>
+                        <ion-col size="6"
+                          class="ion-no-padding">
+                          <ion-label>Charge Name / Label</ion-label>
+                          <ion-input type="text"
+                            class="form-input"
+                            [(ngModel)]="editproductData.extraCharges.label">
+                          </ion-input>
+                        </ion-col>
+                        <br>
+                      </ion-row>
+                      <br *ngIf='editproductData.extraCharges.active'>
+                      <ion-row *ngIf='editproductData.extraCharges.active'>
+                        <ion-col size="6"
+                          class="ion-no-padding">
+                          <ion-label>Cost</ion-label>
+                          <ion-input type="number"
+                            class="form-input"
+                            [(ngModel)]="editproductData.extraCharges.charge">
+                          </ion-input>
+                        </ion-col>
+                      </ion-row>
+                      <br *ngIf='editproductData.extraCharges.active'>
+                      <ion-row *ngIf='editproductData.extraCharges.active'>
+                        <ion-col style="display: flex;align-items: center;">
+                          <ion-label>Apply this charge for each product
+                            seperately when multiple purchased together
+                          </ion-label>&nbsp;&nbsp;
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input type="checkbox"
+                                (click)="toggleChargeQtyEdit()"
+                                [checked]="editproductData.extraCharges.chargeAllQty">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                      <br *ngIf='product.extraCharges.active'>
+                    </div>
+                    <ion-row *ngSwitchCase="'Colors'">
+                      <ion-col size="6">
+                        <ion-label>Color</ion-label>&nbsp;&nbsp;
+                        <ion-button (click)="selectVariantColor()"
+                          fill="outline"
+                          shape="round"
+                          *ngIf="!editproductData.color?.hasOwnProperty('name')">
+                          Select Color
+                        </ion-button>
+                        <div
+                          *ngIf="editproductData.color?.hasOwnProperty('name')"
+                          class="color-selected">
+                          <p class="product-color-name">
+                            {{editproductData.color.name}}</p>
+                          <div
+                            [ngStyle]="{'background-color': editproductData.color.code}"
+                            class="color-code"
+                            *ngIf="editproductData.color.code && editproductData.color.code !== ''">
+                          </div>
+                          <div
+                            *ngIf="editproductData.color.image && editproductData.color.image !== '' && editproductData.color.code === ''">
+                            <img src="{{editproductData.color.image}}"
+                              class="color-code">
+                          </div>
+                          <ion-button (click)="updateEditVariantColor()"
+                            expand="block"
+                            fill="outline"
+                            shape="round"
+                            size="small">
+                            update
+                          </ion-button>&nbsp;&nbsp;&nbsp;
+                          <ion-button (click)="removeEditVariantColor()"
+                            expand="block"
+                            color="dark"
+                            fill="outline"
+                            shape="round"
+                            size="small">
+                            remove
+                          </ion-button>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row *ngSwitchCase="'Vendor'">
+                      <ion-text color="danger">
+                        <p *ngIf="!multiVendor">This option is only available
+                          when MultiVendor is on</p>
+                      </ion-text>
+                      <ion-col size="6">
+                        <div *ngIf="multiVendor && vendors.length">
+                          <ion-row>
+                            <div class="headings">
+                              Add Vendor
+                            </div>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12">
+                              <ion-select [value]="editproductData.vendorId"
+                                class="border i-s-p-10"
+                                (ionChange)="addVendor($event, 'edit')"
+                                placeholder="Select Vendor">
+                                <ion-select-option value="">No Vendor
+                                </ion-select-option>
+                                <ion-select-option [value]="vendor.id"
+                                  *ngFor="let vendor of vendors">{{vendor.name}}
+                                </ion-select-option>
+                              </ion-select>
+                            </ion-col>
+                          </ion-row>
+                          <br>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row *ngSwitchCase="'Filters'">
+                      <ion-col size="6">
+                        <div *ngIf="isFilterActive">
+                          <ion-row>
+                            <div class="headings">
+                              Add filter
+                            </div>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="6"
+                              class="border content-alignment f-s-14 filters-col"
+                              (click)="addFilters('edit')">
+                              <ion-text>
+                                {{getAddedFiltersLength(editproductData.filters)}}
+                                Filters added</ion-text>
+                              &nbsp;&nbsp;<i class="flaticon-null-5"></i>
+                            </ion-col>
+                          </ion-row>
+                          <br>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <div *ngSwitchCase="'Subscription'">
+                      <ion-text color="danger">
+                        <p *ngIf="!subscriptionFeature">This option is only
+                          available when Subscription feature is on</p>
+                      </ion-text>
+                      <div *ngIf="subscriptionFeature">
+                        <ion-row>
+                          <ion-col class="ion-no-padding"
+                            style="display: flex;">
+                            <ion-label>Allow Subscriptions</ion-label>
+                            &nbsp;&nbsp;
+                            <div class="toggle-btn">
+                              <label class="switch">
+                                <input color="primary"
+                                  type="checkbox"
+                                  (click)="editSubIsAllowedToggle()"
+                                  [checked]="editproductData.subscription.isAllowed">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                        <br>
+                        <div *ngIf="editproductData.subscription.isAllowed">
+                          <ion-row>
+                            <ion-col class="ion-no-padding"
+                              size="6">
+                              <ion-label>Daily Discount (%)</ion-label>
+                              <ion-input type="number"
+                                class="form-input"
+                                [(ngModel)]="editproductData.subscription.dailyDiscount">
+                              </ion-input>
+                            </ion-col>
+                          </ion-row>
+                          <br>
+                          <ion-row>
+                            <ion-col class="ion-no-padding"
+                              size="6">
+                              <ion-label>Weekly Discount (%)</ion-label>
+                              <ion-input type="number"
+                                class="form-input"
+                                [(ngModel)]="editproductData.subscription.weeklyDiscount">
+                              </ion-input>
+                            </ion-col>
+                          </ion-row>
+                          <br>
+                          <ion-row>
+                            <ion-col class="ion-no-padding"
+                              size="6">
+                              <ion-label>Monthly Discount (%)</ion-label>
+                              <ion-input type="number"
+                                class="form-input"
+                                [(ngModel)]="editproductData.subscription.monthlyDiscount">
+                              </ion-input>
+                            </ion-col>
+                          </ion-row>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- retail price -->
+                    <div *ngSwitchCase="'Wholesale Price'">
+                      <ion-text color="danger">
+                        <p *ngIf="!priceForRetail">This option is only available
+                          when Retail feature is on</p>
+                      </ion-text>
+                      <ion-row *ngIf="priceForRetail">
+                        <ion-col class="ion-no-padding"
+                          size="6">
+                          <ion-row>
+                            <ion-col size="4" class="flex-label">
+                              <div class="headings">
+                                Retail Price Discount ({{editproductData.retailDiscountType !== 'percentage' ? currencyCode : '%'}})
+                              </div>
+                            </ion-col>
+                            <ion-col class="flex-label" size="4">
+                              <span>%</span>
+                              <div class="toggle-btn m-l-16">
+                                <label class="switch">
+                                  <input color="primary"
+                                    type="checkbox"
+                                    (click)="changeRetailDiscountType()"
+                                    [checked]="editproductData.retailDiscountType !== 'percentage'">
+                                  <span class="slider round"></span>
+                                </label>
+                              </div>
+                              <span class="m-l-16">FLAT</span>
+                            </ion-col>
+                          </ion-row>
+                          <ion-input type="number"
+                            class="form-input"
+                            [(ngModel)]="editproductData.retailDiscount">
+                          </ion-input>
+                        </ion-col>
+                      </ion-row>
+                    </div>
+                    <!-- retail price -->
+                    <!-- limited time deal -->
+                    <div *ngSwitchCase="'Limited Time Deal'">
+                      <ion-text color="danger">
+                        <p *ngIf="!limitedTimeDeal">This option is only
+                          available when Limited Time Deal feature is on</p>
+                      </ion-text>
+                      <div *ngIf="limitedTimeDeal">
+                        <ion-row>
+                          <ion-col class="ion-no-padding"
+                            style="display: flex;">
+                            <ion-label>Limited time offer</ion-label>
+                            &nbsp;&nbsp;
+                            <div class="toggle-btn">
+                              <label class="switch">
+                                <input type="checkbox"
+                                  (click)="editDealIsAllowedToggle()"
+                                  [checked]="editproductData.deal.isAllowed">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                        <br>
+                        <div class="headings">
+                          Start date time
+                        </div>
+                        <ion-row class="ion-align-items-center">
+                          <ion-col size="3">
+                            <ion-datetime class="input-border time-picker"
+                              [disabled]="!editproductData.deal.isAllowed"
+                              placeholder="Date"
+                              displayFormat="DD MMM YYYY"
+                              [(ngModel)]="editproductData.deal.start.date"
+                              [min]="minDate"></ion-datetime>
+                          </ion-col>
+                          <ion-col size="1"
+                            style="text-align: center;">
+                            -
+                          </ion-col>
+                          <ion-col size="3">
+                            <ion-datetime class="input-border time-picker"
+                              [disabled]="!editproductData.deal.isAllowed"
+                              placeholder="Time"
+                              displayFormat="hh:mm A"
+                              pickerFormat="hh:mm A"
+                              [(ngModel)]="editproductData.deal.start.time">
+                            </ion-datetime>
+                          </ion-col>
+                        </ion-row>
+                        <div class="headings">
+                          End date time
+                        </div>
+                        <ion-row class="ion-align-items-center">
+                          <ion-col size="3">
+                            <ion-datetime class="input-border time-picker"
+                              [disabled]="!editproductData.deal.isAllowed"
+                              placeholder="Date"
+                              displayFormat="DD MMM YYYY"
+                              [(ngModel)]="editproductData.deal.end.date"
+                              [min]="minDate"
+                              [max]="2030"></ion-datetime>
+                          </ion-col>
+                          <ion-col size="1"
+                            style="text-align: center;">
+                            -
+                          </ion-col>
+                          <ion-col size="3">
+                            <ion-datetime class="input-border time-picker"
+                              [disabled]="!editproductData.deal.isAllowed"
+                              placeholder="Time"
+                              displayFormat="hh:mm A"
+                              pickerFormat="hh:mm A"
+                              [(ngModel)]="editproductData.deal.end.time">
+                            </ion-datetime>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row class="ion-align-items-center">
+                          <ion-col size="6">
+                            <div class="headings">
+                              Deal discount
+                            </div>
+                            <ion-input type="number"
+                              class="form-input"
+                              [(ngModel)]="editproductData.deal.discount">
+                            </ion-input>
+                          </ion-col>
+                        </ion-row>
+                      </div>
+                    </div>
+                    <div *ngSwitchCase="'Specific User Discount'">
+                      <ion-text color="danger">
+                        <p *ngIf="!editproductData.deal.isAllowed">This option
+                          is only available when limited time deal is on</p>
+                      </ion-text>
+                      <ion-row *ngIf="editproductData.deal.isAllowed">
+                        <ion-col size="4">
+                          <div class="input-wrap">
+                            <div class="flex-label">
+                              <ion-label>Give user specific discount on this
+                                product</ion-label>
+                              <ion-toggle
+                                [(ngModel)]="editproductData.deal.specificUsers.active">
+                              </ion-toggle>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="8">
+                          <ion-button class="btn-2 i-start"
+                            (click)="openUsersModal()"
+                            shape="round"
+                            fill="outline"
+                            *ngIf="editproductData.deal.specificUsers.active">
+                            <i class="flaticon-null-5 margin-icon"></i>
+                            Add Users
+                          </ion-button>
+                        </ion-col>
+                      </ion-row>
+                      <ng-container
+                        *ngIf="editproductData.deal.isAllowed && editproductData.deal.specificUsers.active && editproductData.deal.specificUsers.users.length>0">
+                        <h5 style="margin: 0px;">User List with Discount &nbsp;
+                          <i class="flaticon-null-27 cursor-p"
+                            *ngIf="moreUsers"
+                            (click)="moreUsers = !moreUsers"></i>
+                          <i class="flaticon-null-28 cursor-p"
+                            *ngIf="!moreUsers"
+                            (click)="moreUsers = !moreUsers"></i>
+                        </h5>
+                        <div class="ion-no-padding"
+                          *ngIf="moreUsers">
+                          <div class="list-header t-a-c">
+                            <ion-grid class="ion-no-padding">
+                              <ion-row class="headings">
+                                <ion-col size="3">
+                                  <p>Name</p>
+                                </ion-col>
+                                <ion-col size="3">
+                                  <p>Phone Number</p>
+                                </ion-col>
+                                <ion-col size="2">
+                                  <p>Discount(%)</p>
+                                </ion-col>
+                                <ion-col size="2">
+                                  <p>Delete</p>
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+                          </div>
+                          <div class="list-container">
+                            <ion-item
+                              *ngFor="let item of editproductData.deal.specificUsers.users; let i = index">
+                              <ion-grid
+                                class="row-background ion-no-padding ion-align-items-center">
+                                <ion-row class="ion-align-items-center">
+                                  <ion-col size="3">
+                                    <p
+                                      class="ion-text-capitalize ion-text-center">
+                                      {{item.name}}</p>
+                                  </ion-col>
+                                  <ion-col size="3">
+                                    <p
+                                      class="ion-text-capitalize ion-text-center">
+                                      {{item.phoneNo}}</p>
+                                  </ion-col>
+                                  <ion-col size="2">
+                                    <ion-input type="number"
+                                      class="form-input padding-start-16"
+                                      [(ngModel)]="item.discount"></ion-input>
+                                  </ion-col>
+                                  <ion-col size="2"
+                                    class="ion-text-center">
+                                    <div class="ion-text-center">
+                                      <i class="flaticon-null-21 cursor-p"
+                                        (click)="removeUser(i)"></i>
+                                    </div>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                            </ion-item>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <ion-row>
+                      <div *ngSwitchCase="'Barcode / Qr Code'">
+                        <ion-col size="12"
+                          class="flex"
+                          *ngIf="!editproductData.isPriceList">
+                          <ion-label>Barcode / QR code</ion-label>
+                          <div class="upload-btn-wrapper">
+                            <button class="upload-btn btn-1 i-start"> <i
+                                class="flaticon-null-16"></i>upload</button>
+                            <input type="file"
+                              name="myfile"
+                              (change)="uploadQR($event.target.files, 'edit')" />
+                          </div>
+                          <div class="imgs-container"
+                            *ngIf="barcode !== ''">
+                            <div class="img-wrap">
+                              <img [src]="barcode"
+                                (click)="imageZoom(barcode)" />
+                              <div class="overlay">
+                                <ion-button class="remove"
+                                  shape="round"
+                                  color="danger"
+                                  fill="clear"
+                                  (click)="removeBarcodeImage()">
+                                  <ion-icon name="trash"
+                                    slot="icon-only"></ion-icon>
+                                </ion-button>
+                              </div>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ng-container *ngIf="editproductData.isPriceList">
+                          <ng-container
+                            *ngIf="editproductData.priceList.length && editproductData.priceList[0].weight">
+                            <ion-col size="12"
+                              class="flex"
+                              *ngFor="let pl of editproductData.priceList; let i = index;">
+                              <ion-label>Upload For {{pl.weight}}</ion-label>
+                              <div class="upload-btn-wrapper">
+                                <button class="upload-btn btn-1 i-start"> <i
+                                    class="flaticon-null-16"></i>upload</button>
+                                <input type="file"
+                                  name="myfile"
+                                  (change)="uploadPriceListQR($event.target.files,i, 'edit')" />
+                              </div>
+                              <div class="imgs-container"
+                                *ngIf="pl.barcode">
+                                <div class="img-wrap">
+                                  <img [src]="pl.barcode"
+                                    (click)="imageZoom(pl.barcode)" />
+                                  <div class="overlay">
+                                    <ion-button class="remove"
+                                      shape="round"
+                                      color="danger"
+                                      fill="clear"
+                                      (click)="plRemoveBarcode(i, 'edit')">
+                                      <ion-icon name="trash"
+                                        slot="icon-only"></ion-icon>
+                                    </ion-button>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!-- <ng-template #noDataForBarcodes>
+                              <ion-text color="danger" class="ion-text-center barcode-alert">*Add some data to price list for
+                                uploading barcodes.</ion-text>
+                            </ng-template> -->
+                            </ion-col>
+                          </ng-container>
+                        </ng-container>
+                      </div>
+                    </ion-row>
+                  </ion-grid>
+                  <div *ngSwitchCase="'Variant Groups'">
+                    <ion-text color="danger"
+                      *ngIf="editproductData.isPriceList == false">
+                      <p>This option is only available when variant is on</p>
+                    </ion-text>
+                    <div *ngIf="editproductData.isPriceList == true">
+                      <div
+                        style="display: flex;align-items: center;margin-left: 12px;">
+                        <div>Variant groups for product</div>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox"
+                              (click)="activeVariantGroupsEdit()"
+                              [checked]="editproductData.variantGroups.active">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </div>
+                      <br>
+                      <div *ngIf='editproductData.variantGroups.active'>
+                        <div>
+                          <div>
+                            <div
+                              style="display: flex;align-items: center;margin: 12px;">
+                              <input class="groupInput"
+                                [(ngModel)]="groupName"
+                                placeholder="Enter name of group" />&nbsp;&nbsp;
+                              <ion-select class="groupSelect"
+                                [(ngModel)]="groupOptions"
+                                multiple="true"
+                                cancelText="Cancel"
+                                okText="Done"
+                                placeholder="Select Group"
+                                [interfaceOptions]="variantGrpSelectOptions">
+                                <ion-select-option
+                                  *ngFor="let item of editproductData.priceList"
+                                  value="{{item.weight}}"
+                                  selected="true">{{item.weight}}
+                                </ion-select-option>
+                              </ion-select>&nbsp;&nbsp;
+                              <div style="display: flex;align-items: center;">
+                                <ion-button
+                                  (click)="enterVariantGroupsData('edit')">
+                                  <p
+                                    *ngIf="(!editproductData.variantGroups.groups) || (editproductData.variantGroups.groups && editproductData.variantGroups.groups.length == 0)">
+                                    Create Group</p>
+                                  <p
+                                    *ngIf="editproductData.variantGroups.groups && editproductData.variantGroups.groups.length > 0">
+                                    Add Group</p>
+                                </ion-button>
+                              </div>
+                            </div>
+                            <br>
+                            <div class="list-header variantGroups"
+                              *ngIf="editproductData.variantGroups.groups && editproductData.variantGroups.groups.length > 0">
+                              <ion-grid class="ion-no-padding">
+                                <ion-row class="headings">
+                                  <ion-col size="3">
+                                    <p>Name</p>
+                                  </ion-col>
+                                  <ion-col size="3"
+                                    style="margin-right: 16px;">
+                                    <p>Variants</p>
+                                  </ion-col>
+                                  <ion-col size="3"
+                                    style="margin-right: 16px;">
+                                    <p>Delete</p>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                            </div>
+                            <div class="list-container">
+                              <ion-item
+                                *ngFor="let item of editproductData.variantGroups.groups; let i = index">
+                                <ion-grid
+                                  class="row-background ion-no-padding ion-align-items-center">
+                                  <ion-row class="ion-align-items-center">
+                                    <ion-col size="3">
+                                      <p
+                                        class="ion-text-capitalize ion-text-center">
+                                        {{item.name}}</p>
+                                    </ion-col>
+                                    <ion-col size="3">
+                                      <p
+                                        class="ion-text-capitalize ion-text-center">
+                                        {{item.variants}}</p>
+                                    </ion-col>
+                                    <ion-col size="3"
+                                      style="text-align: center;">
+                                      <i class="flaticon-null-19 remove-icon"
+                                        (click)="deleteVariantGroup('edit',i)"></i>
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
+                              </ion-item>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <ion-grid *ngSwitchCase="'Seo for Website'">
+                    <ion-row>
+                      <ion-col size="12">
+                        <h3>Website SEO</h3>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <ion-label>Meta Title</ion-label>
+                          <ion-input class="form-input"
+                            [(ngModel)]="metaData.pageTitle"></ion-input>
+                        </div>
+                      </ion-col>
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <ion-label>Meta Description</ion-label>
+                          <ion-input class="form-input"
+                            [(ngModel)]="metaData.metaDescription"></ion-input>
+                        </div>
+                      </ion-col>
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <ion-label>Meta Keywords</ion-label>
+                          <ion-input class="form-input"
+                            [(ngModel)]="metaData.metaKeywords"></ion-input>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'Attributes'">
+                    <ion-row>
+                      <ion-col size='12'>
+                        <h3>Product Attributes</h3>
+                      </ion-col>
+
+                      <ion-col size='12' *ngFor="let item of attributesData | keyvalue; trackBy: customTrackBy; let i = index">
+                        <ng-container *ngIf="subValues[item.key]; else noSubValue">
+                          <div class="input-wrap">
+                            <ion-label>{{item.key}}</ion-label>
+                            <select class="select-wrap" [(ngModel)]="attributesData[item.key]">
+                              <option *ngFor="let subValue of subValues[item.key]">{{subValue}}</option>
+                            </select>
+                          </div>
+                        </ng-container>
+                        <ng-template #noSubValue>
+                          <div class="input-wrap">
+                            <ion-label>{{item.key}}</ion-label>
+                            <ion-input class="form-input" [(ngModel)]="attributesData[item.key]" type="text"></ion-input>
+                          </div>
+                        </ng-template>
+                      </ion-col>
+
+                    </ion-row>
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'Variant Chart'">
+                    <ion-row>
+                      <ion-col style="display: flex;align-items: center;">
+                        <div>Active</div>
+                        &nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox" 
+                            (click)="toggleAdditionalInfo('sizeChart', 'edit')" 
+                            [checked]="editproductData.additionalInfo.sizeChart.active">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                      <ng-container *ngIf="editproductData.additionalInfo?.sizeChart.active">
+                        <!-- <ion-col size='12'>
+                          <div class="input-wrap">
+                            <ion-label>Enter Name for variant chart</ion-label>
+                            <ion-input class="form-input" [(ngModel)]="editproductData.additionalInfo.sizeChart.name" type="text"></ion-input>
+                          </div>
+                        </ion-col> -->
+                        <ion-col size="12" class="flex">
+                          <ion-label>Variant Chart image</ion-label>
+                          <div class="upload-btn-wrapper">
+                            <button class="upload-btn btn-1 i-start"> <i
+                                class="flaticon-null-16"></i>upload</button>
+                            <input type="file"
+                              name="myfile"
+                              (change)="uploadChart($event.target.files,'sizeChart', 'edit')" />
+                          </div>
+                          <div class="imgs-container"
+                            *ngIf="editproductData.additionalInfo?.sizeChart.img.url !== ''">
+                            <div class="img-wrap">
+                              <img [src]="editproductData.additionalInfo.sizeChart.img.url"
+                                (click)="imageZoom(editproductData.additionalInfo.sizeChart.img.url)" />
+                              <div class="overlay">
+                                <ion-button class="remove"
+                                  shape="round"
+                                  color="danger"
+                                  fill="clear"
+                                  (click)="removeAdditionalInfoImg('sizeChart','edit')">
+                                  <ion-icon name="trash"
+                                    slot="icon-only"></ion-icon>
+                                </ion-button>
+                              </div>
+                            </div>
+                          </div>
+                        </ion-col>
+                      </ng-container>
+
+                    </ion-row>
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'Clone Product'">
+                    <ion-row>
+                      <ion-col>
+                        <ion-button color="primary" fill="outline" shape="round" size="small" (click)="cloneProduct()">Clone Product</ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'Custom Action'">
+                    <ion-row>
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <div style="display:flex">
+                            <ion-label>Active</ion-label>
+                            <ion-toggle [(ngModel)]="editproductData.additionalInfo.link.active"></ion-toggle>
+                          </div>
+                        </div>
+                      </ion-col>
+                      <ng-container *ngIf="editproductData.additionalInfo?.link?.active">
+                        <!-- <ion-col size='12'>
+                          <div class="input-wrap">
+                            <ion-label>Show Price</ion-label>
+                            <ion-toggle [(ngModel)]="editproductData.additionalInfo.showPrice"></ion-toggle>
+                          </div>
+                        </ion-col> -->
+                        <ion-col size='12'>
+                          <div class="input-wrap">
+                            <ion-label>Enter Name for Button</ion-label>
+                            <ion-input class="form-input" [(ngModel)]="editproductData.additionalInfo.link.name" type="text"></ion-input>
+                          </div>
+                        </ion-col>
+                        <ion-col size="12">
+                          <div style="display: flex;">
+                            Link:&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div>
+                              <span style="margin-left: 8px;">
+                                <input type="radio" id="wa" value="form" [(ngModel)]="editproductData.additionalInfo.link.type">&nbsp;&nbsp;
+                                <label for='wa'>Form</label>
+                              </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <span>
+                                <input type="radio" id='wb' value="link" [(ngModel)]="editproductData.additionalInfo.link.type">&nbsp;&nbsp;
+                                <label for='wb'>External Link</label>
+                              </span>
+                            </div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="12" *ngIf="editproductData.additionalInfo?.link?.type == 'form'">
+                          <ion-select placeholder="Select Form Template" class="border" [(ngModel)]="editproductData.additionalInfo.link.value">
+                            <ion-select-option *ngFor="let form of forms" [value]="form.id"> {{form.formTitle}} </ion-select-option>
+                            </ion-select>
+                        </ion-col>
+                        <ion-col size="12" *ngIf="editproductData.additionalInfo?.link?.type == 'link'">
+                          <div class="input-wrap">
+                            <ion-label>External Link</ion-label>
+                            <ion-input class="form-input" [(ngModel)]="editproductData.additionalInfo.link.value" type="text"></ion-input>
+                          </div>
+                        </ion-col>
+                      </ng-container>
+                    </ion-row>
+                    <!-- <ion-row>
+                      <ion-col>
+                        <ion-text color="danger">
+                          <p>Note: This feature is Coming Soon. </p>
+                        </ion-text>
+                      </ion-col>
+                    </ion-row> -->
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'Stock Attributes'">
+                    <ion-row>
+                      <ion-col size="12">
+                        <h3>Stock Attributes</h3>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div class="input-wrap">
+                          <ion-label>Expiry Date</ion-label>
+                          <div class="flexJustifySpace">
+                          <ion-input type="date" class="form-input" min="{{currentDate | date: 'yyyy-MM-dd'}}"
+                           value="{{expiryDate | date: 'yyyy-MM-dd'}}"
+                           (ionChange)="getTimeStamp($event.target.value,'expiry')"></ion-input>
+                          </div>
+                        </div>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div class="input-wrap">
+                          <ion-label>Manufacturing Date</ion-label>
+                          <div class="flexJustifySpace">
+                          <ion-input type="date" class="form-input" max="{{currentDate | date: 'yyyy-MM-dd'}}"
+                           value="{{manufacturedDate | date: 'yyyy-MM-dd'}}"
+                           (ionChange)="getTimeStamp($event.target.value,'manufactured')"></ion-input>
+                          </div>
+                        </div>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div class="input-wrap">
+                          <ion-label>Shelf Life</ion-label>
+                          <div class="flexJustifySpace">
+                          <ion-input type="text" class="form-input" [(ngModel)]='editproductData.stockAttributes.shelfLife'></ion-input>
+                          </div>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'Bundle Products'">
+                    <ion-col style="display: flex;align-items: center;">
+                      <div>Active</div>
+                      &nbsp;&nbsp;
+                      <div class="toggle-btn">
+                        <label class="switch">
+                          <input type="checkbox"
+                            (click)="toggleBundleProducts('edit')"
+                            [checked]="editproductData.bundleProducts.active">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </ion-col>
+                    <ng-container *ngIf="editproductData.bundleProducts.active">
+                      <ion-col>
+                        <div class="input-wrap">
+                        <ion-label>Bundle Title</ion-label>
+                        <div style="display: flex;align-items: center;justify-content: space-between;">
+                         <ion-input type="text" class="form-input" [(ngModel)]='editproductData.bundleProducts.title' style="width: 80%;"></ion-input>
+                        </div>
+                      </div>
+                      </ion-col>
+                      <ion-col>
+                        <div class="input-wrap">
+                        <ion-label>Max no. of products bundled by user</ion-label>
+                        <div style="display: flex;align-items: center;justify-content: space-between;">
+                         <ion-input type="number" class="form-input" [(ngModel)]='editproductData.bundleProducts.maxProducts' style="width: 80%;"></ion-input>
+                        </div>
+                      </div>
+                      </ion-col>
+                      <ion-col>
+                         <ion-button (click)="presentProductsModal('edit')">Add Bundled Products</ion-button>
+                         <ion-text color="danger">
+                           <p>Note: You cannot add variant products in bundle.</p>
+                         </ion-text>
+                      </ion-col>
+                        <ion-row *ngIf="editproductData.bundleProducts.products.length">
+                          <ion-col>
+                            <div class="tableArea">
+                             <table>
+                               <thead>
+                                 <tr class="header">
+                                   <th>S.No</th>
+                                   <th>Product Name</th>
+                                   <th>Action</th>
+                                 </tr>
+                               </thead>
+                               <tbody>
+                                 <tr *ngFor="let prod of editproductData.bundleProducts.products; let i = index">
+                                   <td>{{i+1}}</td>
+                                   <td>{{prod.name}}</td>
+                                   <td>
+                                    <ion-button fill="outline" shape="round" (click)="removeBundleProduct(i, 'edit')">
+                                      Remove
+                                    </ion-button>
+                                   </td>
+                                   <!-- <td>
+                                    <i class="flaticon-null-21 cursor-p deleteIcon" (click)="deleteForm(form.id, i)"></i>
+                                   </td> -->
+                                 </tr>
+                               </tbody>
+                             </table>
+                            </div> 
+                          </ion-col>
+                        </ion-row>
+                    </ng-container>
+                    
+                  </ion-grid>
+
+                  <!-- Edit Product Regions -->
+                  <ion-grid *ngSwitchCase="'Regions'">
+                    <ion-col size="12">
+                      <h3>Regions</h3>
+                    </ion-col>
+                    <ion-text *ngIf="!multiRegion" color="danger">
+                      <p>This option is only available when Multi Region is on</p>
+                    </ion-text>
+                    <div *ngIf="multiRegion">
+                      <ion-col size="12" style="display: flex;align-items: center;">
+                        <ion-label>Active</ion-label>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox" (click)="toggleCheckbox('allRegions')" [checked]="allRegions?.active">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                      <br>
+                      <ng-container *ngFor="let region of allRegions.regions,index as i">
+                        <div class="regionWrap">
+                          <div class="flex">
+                            <input type='checkbox' (click)="toggleRegion(i)" [checked]='region.active' />&nbsp;&nbsp;
+                            <p><strong>{{region.name | uppercase}}</strong></p>
+                          </div>
+                          <br>
+                          <ng-container *ngIf="!editproductData.isPriceList">
+                            <ion-row>
+                              <ion-col class="input-wrap">
+                                <ion-label>Price</ion-label>
+                                <ion-input class="form-input" [(ngModel)]="region.price" type="number"></ion-input>
+                              </ion-col>
+                              <ion-col class="input-wrap">
+                                <ion-label>Discounted Price</ion-label>
+                                <ion-input class="form-input" [(ngModel)]="region.discountedPrice" type="number">
+                                </ion-input>
+                              </ion-col>
+                              <!-- <ion-col class="input-wrap">
+                                <ion-label>Quantity</ion-label>
+                                <ion-input class="form-input" [(ngModel)]="region.qty" type="number"></ion-input>
+                              </ion-col> -->
+                            </ion-row>
+                          </ng-container>
+                          
+                          <!-- Regions Edit variants -->
+                          <ng-container *ngIf="editproductData.isPriceList">
+                            <ng-container *ngFor="let regionVariant of region.variants">
+                              <ion-row>
+                                <ion-col class="input-wrap">
+                                  <ion-label>Variant</ion-label>
+                                  <ion-input class="form-input" [(ngModel)]="regionVariant.weight" readonly="true" type="text"></ion-input>
+                                </ion-col>
+                                <ion-col class="input-wrap">
+                                  <ion-label>Price</ion-label>
+                                  <ion-input class="form-input" [(ngModel)]="regionVariant.price" type="number"></ion-input>
+                                </ion-col>
+                                <ion-col class="input-wrap">
+                                  <ion-label>Discounted Price</ion-label>
+                                  <ion-input class="form-input" [(ngModel)]="regionVariant.discountedPrice" type="number">
+                                  </ion-input>
+                                </ion-col>
+                                <!-- <ion-col class="input-wrap">
+                                  <ion-label>Quantity</ion-label>
+                                  <ion-input class="form-input" [(ngModel)]="regionVariant.qty" type="number"></ion-input>
+                                </ion-col> -->
+                              </ion-row>
+                            </ng-container>
+                          </ng-container>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'Add on'">
+                    <ion-col size="12">
+                      <h3>Add Ons</h3>
+                    </ion-col>
+                    <ion-col size="12">
+                      <label>Select Addon Templates:</label>&nbsp;<br>
+                      <select class="selectInput" (change)="changeTemplate($event.target.value)" [(ngModel)]='product.templateId'>
+                        <option value="" disabled selected hidden>Please choose</option>
+                        <option value="">None</option>
+                        <option value="{{template.id}}" *ngFor="let template of templatesArray">
+                          {{template.name}}
+                        </option>
+                      </select>
+                    </ion-col>
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'Slug'">
+                    <ng-container *ngIf="isUniversal else noUniversal">
+                      <ion-col>
+                        <div class="input-wrap">
+                        <ion-label>Slug Name <ion-text color="danger">(<b class="cursor-p" 
+                          (click)="sharedService.presentSlugAlert()">CLICK HERE</b> for Slug Instructions)</ion-text>
+                        </ion-label>
+                        <div style="display: flex;align-items: center;justify-content: space-between;">
+                         <ion-input type="text" class="form-input" [(ngModel)]='editproductData.slug.name' style="width: 80%;"></ion-input>
+                        </div>
+                      </div>
+                      </ion-col>
+                    </ng-container>
+                    <ng-template #noUniversal>
+                      <p>Coming Soon!</p>
+                    </ng-template>
+                  </ion-grid>
+
+                  <ion-grid *ngSwitchCase="'video'">
+                    <ion-col style="display: flex;align-items: center;">
+                      <div>Active</div>
+                      &nbsp;&nbsp;
+                      <div class="toggle-btn">
+                        <label class="switch">
+                          <input type="checkbox" (click)="toggleVideoFeature()" [checked]="video.active">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                    </ion-col>
+                    <ng-container *ngIf="video.active">
+                      <ion-row>
+                        <ion-col size="12" class="flexCenter">
+                          <ion-button (click)="addVideo()">Add video</ion-button>
+                        </ion-col>
+                        <ion-col size="12">
+                          <div class="upload-btn-wrapper" style="display: block;margin-top: 12px;">
+                            <button class="upload-btn i-start"> <i class="flaticon-null-16"></i>upload video</button>
+                            <input type="file" (change)="uploadDocument($event, 'video')" accept="video/*" />
+                          </div>
+                          <ng-container *ngIf="video.link">
+                            <iframe [src]="video.link | safeItem: 'resourceUrl'"></iframe>
+                          </ng-container>
+                        </ion-col>
+                    
+                        <ion-col size="12">
+                          <div class="upload-btn-wrapper" style="display: block;margin-top: 12px;">
+                            <button class="upload-btn i-start"> <i class="flaticon-null-16"></i>upload Thumb</button>
+                            <input type="file" (change)="uploadDocument($event, 'image')" accept="image/*" />
+                          </div>
+                          <ng-container *ngIf="video.thumbnail">
+                            <img [src]="video.thumbnail">
+                          </ng-container>
+                        </ion-col>
+                    
+                      </ion-row>
+                    </ng-container>
+                    <ng-template *ngIf="!video.active">
+                      <p>Feature is off!</p>
+                    </ng-template>
+                  </ion-grid>
+
+                </ion-col>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+  </super-tabs-container>
+  <!-- /edit product -->
+
+</super-tabs>
+
+
+
+<ion-footer *ngIf="!editproductId && showFooter"
+  no-border
+  class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="addProduct()"
+      shape="round"
+      class="btn-1 i-start"
+      color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>
+
+<ion-footer *ngIf="editproductData && !showEditLoader && showFooter"
+  no-border
+  class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="deleteAlertConfirm();"
+      shape="round"
+      class="btn-1 i-start"
+      color="danger">
+      <i class="flaticon-null-21"></i>
+      Delete
+    </ion-button>
+    <ion-button (click)="editProduct()"
+      shape="round"
+      class="btn-1 i-start"
+      color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

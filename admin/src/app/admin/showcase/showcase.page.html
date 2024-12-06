@@ -1,0 +1,256 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <div class="search-bx">
+      <ion-searchbar mode="ios" placeholder="Search Showcase" [(ngModel)]="searchProduct"
+        (ngModelChange)="fireSearchQuery()"></ion-searchbar>
+    </div>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="goToAddNew()" size='small'>
+      <ion-icon name="add-circle" slot="start"></ion-icon>
+      Add new Showcase
+    </ion-button>
+    <!-- <ion-button fill="outline" shape="round" class="add-btn" (click)="exportConfirm()" size='small'
+      *ngIf="userRole != 'vendor'">
+      Export Showcase
+    </ion-button>
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="importProducts()" size='small'
+      *ngIf="userRole != 'vendor'">
+      Import Showcase
+    </ion-button> -->
+  </div>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+  <div class="main-container" style="width: 100%;">
+    <ion-grid>
+      <ion-row>
+        <ion-col size=2 id="scroll1" *ngIf="userRole != 'vendor'">
+          <div class="statusList">
+            <p id="status1" (click)="showAllProducts()">All Showcase</p>
+            <p id="status2" (click)="getCategories()" [ngClass]="dataType == 'categories' ? 'flexDisplay' : ''">
+              Categories
+              <span>
+                &nbsp;&nbsp;<strong>{{dataType == 'categories' ? '▲' : '▼'}}</strong>
+              </span>
+            </p>
+            <div class="statusList" *ngIf="dataType == 'categories'">
+              <div *ngFor="let item of dataList,let i = index">
+                <p (click)='showSubList(i)' style="display: flex;justify-content: space-between;" [id]="'category' + i">
+                  {{item.name}}
+                  <span
+                    *ngIf='item.sublist && item.sublist.length > 0 && !item.active'>&nbsp;&nbsp;<strong>▼</strong></span>
+                  <span
+                    *ngIf='item.sublist && item.sublist.length > 0 && item.active'>&nbsp;&nbsp;<strong>▲</strong></span>
+                </p>
+                <div *ngIf='item.active'>
+                  <ng-container *ngFor='let subItem of item.sublist,let j = index'>
+
+                    <p (click)="showSubOfSubList(i,j)" style="display: flex;justify-content: space-between;"
+                      [id]="'subCategory' + j">
+                      <span>{{(subItem.active && subItem.subOfSubCatList?.length > 0) ? '▼' :
+                        'ᐅ'}}&nbsp;&nbsp;</span>{{subItem.name}}
+                    </p>
+                    <ng-container *ngIf="subItem.active && subItem.subOfSubCatList">
+                      <p *ngFor="let subOfSubCat of subItem.subOfSubCatList,index as k"
+                        (click)='selectSubOfSubCat(i,j,k)' [id]="'subOfSubCategory' + k"
+                        style="display: flex;justify-content: space-between;">
+                        {{subOfSubCat.name}}
+                      </p>
+                    </ng-container>
+
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <p id="status3" (click)="getBrands()" [ngClass]="dataType == 'brands' ? 'flexDisplay' : ''">Brands
+              <span *ngIf="dataType == 'brands'">&nbsp;&nbsp;<strong>▼</strong></span>
+            </p>
+            <div class="statusList" *ngIf="dataType ==  'brands'">
+              <div *ngFor="let item of dataList,let i = index">
+                <p (click)='selectListItem(i)' [id]="'brand' + i">{{item.name}}</p>
+              </div>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size=10 id="scroll2">
+          <div class="no-data" *ngIf="showNoProducts" text-center>
+            <img src="assets/img/no-product.png" alt="">
+            <h6>No Showcase</h6>
+          </div>
+          <div *ngIf="showSearchLoader" class="spinner">
+            <ion-spinner color="primary"></ion-spinner>
+          </div>
+
+          <!-- heading -->
+
+          <div class="list-header"
+            *ngIf="productsData && productsData.length !== 0 && !showNoProducts && !showSearchLoader"
+            style="margin-left: 12px;">
+            <ion-grid class="ion-no-padding">
+              <ion-row class="ion-align-items-center ion-justify-content-center" class="total-products"
+                *ngIf="dataType == ''">
+                <!-- <ion-col size="6" style="text-align: left;font-size: larger;text-decoration: underline;"
+                  *ngIf="!totalProductsLoader && userRole != 'vendor'">
+                  Total Products: {{totalProducts}}
+                </ion-col> -->
+                <!-- <ion-col size="6" style="text-align: end;" *ngIf="totalProductsLoader && userRole != 'vendor'">
+                  <ion-spinner name="dots" style="width: 20px;"></ion-spinner>
+                </ion-col> -->
+                <!-- Vendor Login -->
+                <ion-col size="12" *ngIf="userRole == 'vendor'">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <ion-label>Make All Approved showcase Inactive</ion-label>
+                      <ion-toggle [(ngModel)]="productsInactive"></ion-toggle>
+                    </div>
+                    <ion-button class="m-l-16" (click)="setAllProductsInactive()" fill="outline" shape="round"
+                      size="small">
+                      Save
+                    </ion-button>
+                  </div>
+                </ion-col>
+                <!-- Vendor Login end -->
+              </ion-row>
+              <ion-row>
+                <ion-col class="img">
+                  <p>Image</p>
+                </ion-col>
+                <ion-col class="name">
+                  <p>Name</p>
+                </ion-col>
+                <ion-col class="price">
+                  <p>Price</p>
+                </ion-col>
+                <ion-col class="price">
+                  <p>Discount Price</p>
+                </ion-col>
+                <!-- <ion-col class="price">
+                  <p>QTY</p>
+                </ion-col> -->
+                <!-- <ion-col class="price">
+                  <p>Purchase Price</p>
+                </ion-col> -->
+                <ion-col class="action">
+                  <p>Action</p>
+                </ion-col>
+                <!-- <ion-col class="action">
+                  <p>Colors</p>
+                </ion-col> -->
+
+              </ion-row>
+            </ion-grid>
+          </div>
+          <!-- heading -->
+          <!-- product  list -->
+          <div class="no-data" *ngIf="productsData && productsData.length == 0" text-center>
+            <img src="assets/img/no-product.png" alt="">
+            <h6>No Showcase</h6>
+          </div>
+
+          <div class="list-container"
+            *ngIf="productsData && productsData.length !== 0 && !showNoProducts && !showSearchLoader">
+            <ion-list class="categories-list">
+              <ion-item class="ion-no-padding" no-lines no-border *ngFor="let item of productsData; let i = index">
+                <div class="detail-wrapper">
+                  <div class="product-wrapper">
+                    <ion-grid class="ion-no-padding ion-align-items-center">
+
+                      <ion-row class="row-background ion-align-items-center">
+                        <ion-col class="img">
+                          <ion-thumbnail style="margin-left: 5%;" class="product-img-wrapper">
+                            <img class="loading"
+                              *ngIf="item.data.coverPic && !item.data.coverPic.thumb && item.data.coverPic.url"
+                              src="{{item.data.coverPic.url}}">
+                            <img class="loading" *ngIf="item.data.coverPic && item.data.coverPic.thumb"
+                              src="{{item.data.coverPic.thumb}}">
+                            <img *ngIf="!item.data.coverPic" src="assets/img/placeholder-img.jpg">
+                          </ion-thumbnail>
+                          <div class="out-of-stock" *ngIf="checkPdtOutOfDelivery(item)">
+                            Out of stock
+                          </div>
+                        </ion-col>
+                        <ion-col (click)="editProduct(item)" class="name">
+                          <div [ngClass]="{'product-active': item.data.status, 'product-inactive': !item.data.status}">
+                          </div>
+                          <p text-capitalize text-center>{{item.data.prodName}}&nbsp;&nbsp;
+                            <span style="color: red;"
+                              *ngIf="item.data.productType && item.data.productType == 'appointment' ">
+                              (Appointment)
+                            </span>
+                          </p>
+                        </ion-col>
+
+
+                        <ion-col class="price">
+                          <!-- *ngIf="!item.data.isPriceList" -->
+                          <span>
+                            <ion-input type="number" min="0" class="form-input" [(ngModel)]="item.data.prodPrice">
+                            </ion-input>
+                          </span>
+                        </ion-col>
+                        <ion-col class="price">
+                          <!-- *ngIf="!item.data.isPriceList" -->
+                          <span>
+                            <ion-input type="number" min="0" class="form-input" [(ngModel)]="item.data.discountedPrice">
+                            </ion-input>
+                          </span>
+                        </ion-col>
+                        <!-- <ion-col class="price">
+                          <span>
+                            <ion-input type="text" min="0"
+                              [ngClass]="{'form-input':true,'out-of-stock-input':item.data.productQty == '0'}"
+                              [(ngModel)]="item.data.productQty"></ion-input>
+                          </span>
+                        </ion-col> -->
+                        <ion-col class="action">
+                          <ion-button (click)="saveProduct(item.data, item.id)" color="success" fill="outline"
+                            shape="round" size="small">
+                            Save
+                          </ion-button>&nbsp;
+                          <ion-button (click)="deleteAlertConfirm(item.id, i)" color="danger" fill="outline"
+                            shape="round" size="small">
+                            Delete
+                          </ion-button>&nbsp;
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </div>
+                </div>
+              </ion-item>
+            </ion-list>
+
+            <ion-grid
+              *ngIf="productsData && productsData.length !== 0 && !showNoProducts && !showSearchLoader && !searchProduct">
+              <ion-row *ngIf="dataType == ''">
+                <ion-col style="text-align: start;">
+                  <ion-button (click)="loadPreviousProducts()" size="small" shape="round"
+                    [disabled]="noPreviousProducts">
+                    <span><i class="flaticon-null-8"></i></span>Previous
+                  </ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button (click)="loadMoreProducts()" size="small" shape="round" [disabled]="noMoreProducts">
+                    Next <span><i class="flaticon-null-7"></i></span>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+              <ion-row *ngIf="dataType == 'categories' && selectedSubcatId">
+                <ion-col class="t-a-c">
+                  <ion-button (click)="loadMoreCategoryProducts()" size="small" shape="round"
+                    [disabled]="noMoreCategoryProducts">
+                    Load More
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

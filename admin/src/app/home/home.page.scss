@@ -1,0 +1,186 @@
+ion-content {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+.captchaBox {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  // transform: translateX(-16px);
+}
+
+.loginBody {
+  //   background-color: #fff;
+  background-image: url(../../assets/img/login-assests/login-vector.png);
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: 52%;
+  //   position: relative;
+}
+
+.brandImg {
+  max-width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1.5rem;
+}
+
+.formArea {
+  width: 80%;
+  margin-right: auto;
+  margin-left: auto;
+  //   position: relative;
+
+  .formCard {
+    max-width: 28rem;
+    width: 100%;
+    padding: 1rem;
+    // border: 1px solid #ccc;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    .formTitle {
+      margin-bottom: 1rem;
+
+      span {
+        color: #6d6d6d;
+        font-size: 12px;
+        text-transform: capitalize;
+      }
+
+      p {
+        color: #323232;
+        font-size: 16px;
+        font-weight: 600;
+        //   text-transform: capitalize;
+      }
+    }
+
+    .countryCode,
+    .editNumber {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: flex-end;
+      align-content: center;
+      gap: 8px;
+      margin-left: 12px;
+      font-size: 16px;
+
+      img {
+        width: 16px;
+        cursor: pointer;
+      }
+    }
+
+    .editNumber {
+      right: 0;
+      margin-left: unset;
+      margin-right: 12px;
+      cursor: pointer;
+      z-index: 2;
+
+      img {
+        width: 20px;
+      }
+    }
+
+    .phoneInput,
+    .otpInput {
+      border: 1px solid #ececec;
+      // --background: #ffffff;
+      margin-bottom: 1rem;
+      // --padding-start: 5rem;  // Only when country flag enabled 
+      --padding-start: 3rem;
+      --padding-end: 4rem;
+      font-size: 15px;
+      color: #939393;
+      // border-radius: var(--ion-border-radius);
+      border-radius: 6px;
+
+      &:hover,
+      &:focus,
+      &:active {
+        border-color: black !important;
+      }
+    }
+
+    .otpInput {
+      --padding-start: 12px;
+      margin-bottom: 0.4rem;
+
+      color: #989898;
+
+      &::placeholder {
+        --padding-start: 4px;
+        // --placeholder-color: #000;
+      }
+    }
+
+    .sendOtp,
+    .otpTimer {
+      background-color: transparent;
+      color: #fc393e;
+      text-decoration: underline;
+      margin-bottom: 1rem;
+      margin-top: 0.5rem;
+      cursor: pointer;
+
+      &:disabled {
+        color: #ccc;
+        cursor: no-drop;
+      }
+
+      &:focus {
+        outline: none;
+        border: none;
+      }
+    }
+
+    .otpTimer {
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      cursor: initial;
+    }
+
+    // ion-input[readonly]
+    .readonlyCss {
+      // background-color: transparent;
+      --background: #ececec91 !important;
+
+      &:hover {
+        border-color: transparent !important;
+      }
+
+      &::placeholder {
+        --placeholder-color: #000;
+      }
+    }
+
+    ion-button {
+      text-transform: uppercase;
+      margin-top: 1.5rem !important;
+      --padding-bottom: 1.5rem;
+      --padding-top: 1.5rem;
+    }
+  }
+}
+
+.custom-modal.login-modal {
+  --border-radius: 0;
+}
+
+@media (min-width: 768px) {
+  .custom-modal {
+    --border-radius: 0;
+  }
+}

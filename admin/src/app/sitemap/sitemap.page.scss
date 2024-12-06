@@ -1,0 +1,32 @@
+.add-points-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tableArea {
+  margin-top: 1rem;
+  // border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+
+    td,
+    th {
+      border: 1px solid #dddddd;
+      text-align: center;
+      padding: 8px;
+    }
+    tr:hover {
+      background-color: #efefef;
+    }
+  }
+  .header {
+    background: lightgray;
+  }
+  .deleteIcon {
+    font-size: 18px;
+  }
+}

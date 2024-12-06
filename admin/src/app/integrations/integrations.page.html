@@ -1,0 +1,330 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start"
+      class="menu-btn">
+      <ion-icon slot="icon-only"
+        name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Integrations</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size=2
+          id="scroll1">
+          <div class="statusList">
+            <p *ngFor='let item of sidemenu; let i=index' (click)='changeComponent(item)'
+            [ngClass]="component === item ? 'tile-bg-active' : 'tile-bg-inactive'">{{item}}</p>
+          </div>
+        </ion-col>
+        <ion-col size=10
+          id="scroll2">
+          <!-- <ion-col>
+            <ion-button class="margin-bottom: 1rem;" (click)="onClickSavePaymentSettings()"
+              color="success">
+              <i class="flaticon-null-20 margin-icon"></i>
+              Save
+            </ion-button>
+          </ion-col> -->
+              <ion-grid [ngSwitch]="component">
+                <ion-row *ngSwitchCase="'p.o.s'">
+                  <!-- <ion-col size="4" >
+                    <div class="img-container"
+                      (click)="openSettings('pos','marg')">
+                      <p>Marg</p>
+                    </div>
+                  </ion-col> -->
+                  Coming soon!
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'delivery'">
+                  <ion-col size="4">
+                    <ion-item class="m-b-20">
+                      <ion-label>Select Default Delivery</ion-label>
+                      <ion-select mode="ios" [(ngModel)]="delivery.default">
+                        <ion-select-option value="">No Default</ion-select-option>
+                        <ion-select-option value="shiprocket">shiprocket</ion-select-option>
+                        <!-- <ion-select-option value="dunzo">dunzo</ion-select-option>
+                        <ion-select-option value="nimbuspost">nimbuspost</ion-select-option>
+                        <ion-select-option value="pickrr">pickrr</ion-select-option>
+                        <ion-select-option value="delhivery">delhivery</ion-select-option>
+                        <ion-select-option value="fastbeetle">fastbeetle</ion-select-option>
+                        <ion-select-option value="porter">porter</ion-select-option> -->
+                        <!-- <ion-select-option value="shyplite">shyplite</ion-select-option> -->
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="8">
+                    <ion-button (click)="saveChoiceSettings('delivery')" color="success" >
+                      Save
+                    </ion-button>
+                  </ion-col>
+                  <ion-col size="4" >
+                    <div class="img-container"
+                      (click)="openSettings('delivery','shiprocket')">
+                      <p>Shiprocket</p>
+                    </div>
+                  </ion-col>
+                  <!-- <ion-col size="4" >
+                    <div class="img-container"
+                      (click)="openSettings('delivery','shyplite')">
+                      <p>Shyplite</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="4" >
+                    <div class="img-container"
+                      (click)="openSettings('delivery','dunzo')">
+                      <p>Dunzo</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="4" >
+                    <div class="img-container"
+                      (click)="openSettings('delivery','nimbuspost')">
+                      <p>Nimbuspost</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="4" >
+                    <div class="img-container"
+                      (click)="openSettings('delivery','delhivery')">
+                      <p>Delhivery</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="4" >
+                    <div class="img-container"
+                      (click)="openSettings('delivery','pickrr')">
+                      <p>Pickrr</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="4" >
+                    <div class="img-container"
+                      (click)="openSettings('delivery','fastbeetle')">
+                      <p>FastBeetle</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="4" >
+                    <div class="img-container"
+                      (click)="openSettings('delivery','porter')">
+                      <p>Porter</p>
+                    </div>
+                  </ion-col> -->
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'email'">
+                  <ion-col size="4">
+                    <ion-item class="m-b-20">
+                      <ion-label>Select Default Email</ion-label>
+                      <ion-select mode="ios" [(ngModel)]="email.default">
+                        <ion-select-option value="">No Default</ion-select-option>
+                        <ion-select-option value="sendgrid">sendgrid</ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="8">
+                    <ion-button (click)="saveChoiceSettings('email')" color="success" >
+                      Save
+                    </ion-button>
+                  </ion-col>
+                  <ion-col size="4" >
+                    <div class="img-container"
+                      (click)="openSettings('email','sendgrid')">
+                      <p>Sendgrid</p>
+                    </div>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'sms'">
+                  <ion-col size="4">
+                    <ion-item class="m-b-20">
+                      <ion-label>Select Default SMS</ion-label>
+                      <ion-select mode="ios" [(ngModel)]="sms.default">
+                        <ion-select-option value="">No Default</ion-select-option>
+                        <ion-select-option value="twilio">Twilio</ion-select-option>
+                        <ion-select-option value="msg91">Msg91</ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="8">
+                    <ion-button (click)="saveChoiceSettings('sms')" color="success" >
+                      Save
+                    </ion-button>
+                  </ion-col>
+                  <ion-col size="4" >
+                    <div class="img-container"
+                      (click)="openSettings('sms','twilio')">
+                      <p>Twilio</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="4" >
+                    <div class="img-container"
+                      (click)="openSettings('sms','msg91')">
+                      <p>Msg91</p>
+                    </div>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'whatsapp'">
+                  <ion-col size="10">
+                    <ion-item class="m-b-20">
+                      <ion-label>Select Default Whatsapp Promotion Integration</ion-label>
+                      <ion-select interface="popover" mode="ios" [(ngModel)]="whatsapp_promotion.default">
+                        <ion-select-option value="">No Default</ion-select-option>
+                        <ion-select-option value="twilio">Twilio</ion-select-option>
+                        <ion-select-option value="aisensy">AiSensy</ion-select-option>
+                        <ion-select-option value="interakt">Interakt</ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="2">
+                    <ion-button (click)="saveChoiceSettings('whatsapp_promotion')" color="success" >
+                      Save
+                    </ion-button>
+                  </ion-col>
+                  <ion-col size="12">
+                    <div class="img-container"
+                      (click)="openSettings('whatsapp_promotion','twilio_promotion')">
+                      <p>Twilio</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="12">
+                    <div class="img-container"
+                      (click)="openSettings('whatsapp_promotion','aisensy_promotion')">
+                      <p>AiSensy</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="12">
+                    <div class="img-container"
+                      (click)="openSettings('whatsapp_promotion','interakt_promotion')">
+                      <p>Interakt</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="10">
+                    <ion-item class="m-b-20">
+                      <ion-label>Select Default Whatsapp Order Notification Integration</ion-label>
+                      <ion-select interface="popover" mode="ios" [(ngModel)]="whatsapp_order_notification.default">
+                        <ion-select-option value="">No Default</ion-select-option>
+                        <ion-select-option value="twilio">Twilio</ion-select-option>
+                        <ion-select-option value="aisensy">AiSensy</ion-select-option>
+                        <ion-select-option value="interakt">Interakt</ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="2">
+                    <ion-button (click)="saveChoiceSettings('whatsapp_order_notification')" color="success" >
+                      Save
+                    </ion-button>
+                  </ion-col>
+                  <ion-col size="12">
+                    <div class="img-container"
+                      (click)="openSettings('whatsapp_order_notification','twilio_order_notification')">
+                      <p>Twilio</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="12">
+                    <div class="img-container"
+                      (click)="openSettings('whatsapp_order_notification','aisensy_order_notification')">
+                      <p>AiSensy</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="12">
+                    <div class="img-container"
+                      (click)="openSettings('whatsapp_order_notification','interakt_order_notification')">
+                      <p>Interakt</p>
+                    </div>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'crm'">
+                  <ion-col size="5">
+                    <ion-item class="m-b-20">
+                      <ion-label>Select Default CRM</ion-label>
+                      <ion-select interface="popover" mode="ios" [(ngModel)]="crm.default">
+                        <ion-select-option value="">No Default</ion-select-option>
+                        <ion-select-option value="zoho">Zoho CRM</ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-button (click)="saveChoiceSettings('crm')" color="success" >
+                      Save
+                    </ion-button>
+                  </ion-col>
+                  <ion-col size="4" >
+                    <div class="img-container"
+                      (click)="openSettings('crm','zoho')">
+                      <p>ZOHO CRM</p>
+                    </div>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'inventory management'">
+                  <ion-col size="6" >
+                    <div class="img-container"
+                      (click)="openSettings('inventoryManagement','omsguru')">
+                      <p>OMSGuru</p>
+                    </div>
+                  </ion-col>
+                  <ion-col size="6" >
+                    <div class="img-container"
+                      (click)="openSettings('inventoryManagement','zohoInventory')">
+                      <p>Zoho Inventory</p>
+                    </div>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'website analytics'">
+                  Coming soon!
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'app analytics'">
+                  Coming soon!
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'app stores'">
+                  Coming soon!
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'ads'">
+                  Coming soon!
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'marketplace'">
+                  Coming soon!
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'shopify'">
+                  <ion-col size="6" >
+                    <div class="img-container"
+                      (click)="openSettings('shopify','Shopify Orders Sync')">
+                      <p>Orders Sync</p>
+                    </div>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'shopify'">
+                  <ion-col size="6" >
+                    <div class="img-container"
+                      (click)="openSettings('shopify','Shopify Products Sync')">
+                      <p>Products Sync</p>
+                    </div>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'wordpress'">
+                  Coming soon!
+                </ion-row>
+
+                <ion-row *ngSwitchCase="'live chat'">
+                  Coming soon!
+                </ion-row>
+                
+              </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

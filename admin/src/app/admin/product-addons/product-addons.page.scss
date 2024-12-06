@@ -1,0 +1,122 @@
+.main-container {
+  width: 100%;
+}
+
+#scroll1 {
+  overflow: hidden;
+  height: 74vh;
+  margin-top: 1rem;
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+#scroll2 {
+  overflow: hidden;
+  height: 82vh;
+  margin-top: 8px;
+  border-left: 1px solid lightgray;
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+.btn-1 {
+  margin-bottom: 1re;
+}
+
+.flex {
+  display: flex;
+  gap: 8px;
+}
+
+.flexJustify {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sectionBox {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  width: 100%;
+  margin-bottom: 1rem;
+  &:hover {
+    box-shadow: 0 2px 5px #ccc;
+  }
+}
+
+.optionsList {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  .inputWrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 80%;
+  }
+  .slotInput {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    // margin: 0 8px 8px 0;
+    margin-right: 8px;
+    &:hover {
+      border: 1px solid #000;
+    }
+  }
+}
+.slotBtn {
+  color: #000;
+  i {
+    color: #4a4a4a;
+    font-size: 22px;
+    &:hover {
+      color: #000;
+    }
+  }
+}
+.groupWrapper {
+  // border: 1px solid #000;
+  .groupItem {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    &:hover {
+      box-shadow: 0 2px 5px #ccc;
+      background: var(--ion-color-light);
+    }
+    .groupName {
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+    .groupSize {
+      font-size: 14px;
+    }
+  }
+}
+.addTempBtn {
+  margin-bottom: 1rem;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and(min-height: 1200px) {
+  #scroll1,
+  #scroll2,
+  .tableScroll {
+    height: 92vh;
+  }
+}

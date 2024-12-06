@@ -1,0 +1,334 @@
+.main{
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 30px;
+    background: white;
+    text-align: center;
+    width: 60vw;
+    margin: 0% auto
+}
+
+.sub-settings-input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-width: 25%;
+}
+
+.sub-settings-content {
+    font-size: 14px;
+    --padding-top: 25px;
+}
+
+.sub-settings-fields {
+    margin-bottom: 25px;
+}
+
+.sub-list-content {
+    --background: #F2F2F2;
+}
+
+ion-list {
+    border-radius: 5px;
+}
+
+.ps-sub-by {
+    font-size: 13px;
+    opacity: .9;
+    span {
+        color: var(--ion-color-primary);
+        text-decoration: underline;
+        margin-left: 2px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+}
+
+
+
+.ps-products-container {
+    margin: 10px 10px 10px 10px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    position: relative;
+    ion-item {
+        --padding-start: 10px;
+    }
+}
+
+.ps-product-image {
+    background: transparent url('src/assets/img/img-preloader.png') center no-repeat;
+    width: 85px;
+    height: 85px;
+    position: relative;
+    border: 1px solid #f0f0f0;
+}
+
+.ps-no-product-image {
+    background: url('src/assets/img/img-preloader.png') center no-repeat;
+    background-size: contain;
+    width: 85px;
+    height: 85px;
+    position: relative;
+    border: 1px solid #e8e8e8;
+}
+
+.ps-more {
+    background: linear-gradient(0deg, rgba(0, 0, 0, .5), transparent);
+    bottom: 0;
+    height: 20px;
+    position: absolute;
+    width: 84px;
+    z-index: 2;
+    color: white;
+    font-size: 12px;
+    text-align: center;
+    padding: 5px;
+}
+
+.ps-product-name {
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.ps-product-price {
+    color: var(--ion-color-primary);
+    font-size: 18px;
+}
+
+.ps-placed-on {
+    font-size: 11px;
+    text-align: center;
+    opacity: .6;
+}
+
+.ps-action-btn {
+    text-align: center;
+    margin-top: 10px;
+    span {
+        display: flex;
+        align-items: center;
+    }
+    ion-icon {
+        margin-left: 5px;
+    }
+
+    .flaticon-refresh::before {
+        margin-left: 5px;
+    } 
+
+}
+
+.ps-completed {
+    .flaticon-null-20::before {
+        color: var(--ion-color-success);
+        margin-left: 2px;
+    }
+}
+
+ion-button .flaticon-null-7::before {
+    font-size: 10px;
+    margin-left: 3px;
+}
+
+.ps-active-wrapper {
+    padding-left: 10px;
+    padding-top: 14px;
+    padding-right: 10px;
+    &-txt {
+        font-size: 14px;
+    }
+}
+
+.ps-remove-btn {
+    text-align: center;
+}
+
+.ps-next-order {
+    border: 1px solid rgb(226, 226, 226);
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 13px;
+    opacity: .9;
+    margin-top: 10px;
+    &-bold {
+        font-weight: bold;
+        font-size: 14px;
+    }
+}
+
+.content-alignment{
+    display: flex;
+    text-align: center;
+    align-items: center
+}
+
+.page-footer{
+    text-align: center;
+}
+
+
+.rowHeading{
+    font-size: medium;
+    font-weight: bold;
+}
+
+
+.statusList{
+    text-align: center;
+    p{
+      font-size: medium;
+      border: 1px solid lightgray;
+      padding: 10px;
+      margin: 8px;
+      cursor: pointer;
+    }
+}
+
+#scroll1{
+    overflow: hidden;
+    height: 79vh
+}
+  
+#scroll1:hover{
+    overflow-y: auto
+}
+  
+#scroll2{
+    overflow: hidden;
+    height: 73vh;
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+}
+  
+#scroll2:hover{
+    overflow-y: auto
+}
+  
+  
+#scroll3{
+    overflow: hidden;
+    height: 75vh
+}
+  
+#scroll3:hover{
+    overflow-y: auto
+}
+
+.orderGrid{
+    cursor: pointer;
+    border-bottom: 1px solid lightgray;
+    strong {
+      font-size: 16px;
+    }
+}
+  
+.orderGrid:hover{
+    background: var(--ion-color-categories-background);
+}
+
+.status-progress-container {
+    position: relative;
+    overflow: hidden;
+  
+    .status-progress {
+        position: relative;
+        list-style: none;
+    }
+    
+    .status-progress-item {
+        position: relative;
+        min-height: 75px;
+        counter-increment: list;
+        padding-left: 0.5rem;
+    
+        &:before {
+            content: "";
+            position: absolute;
+            left: -27px;
+            top: 26px;
+            height: 49px;
+            width: 2px;
+            border-left: 2px solid var(--ion-color-success);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+        &:after {
+            content: "\2713";
+            position: absolute;
+            top: 0;
+            left: -40px;
+            width: 26px;
+            height: 26px;
+            border-radius: 5px;
+            background: var(--ion-color-success);
+            color: #fff;
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 1.5rem;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+        //Hide border for Last Step
+        &:last-child, &.last-status {
+            &:before {
+                border-left: none !important;
+            }
+        }
+    
+        //incomplete status
+        &.status-missing {
+            opacity: .5;
+            &:before {
+                border-left: 2px solid #ccc;
+            }
+        
+            &:after {
+                background: #ccc;
+                opacity: .6;
+                color: #fff;
+            }
+        }
+    
+        //cancelled or rejected status
+        &.status-cancelled {
+            &:before {
+                border-left: 2px solid var(--ion-color-danger);
+                height: 30px;
+            }
+        
+            &:after {
+                content: "\d7";
+                background: var(--ion-color-danger);
+                color: #fff;
+                font-size: 20px;
+            }
+        }
+    
+        &.hide-status {
+            display: none;
+        }
+    }
+    
+    .status-progress-title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+        text-transform: capitalize;
+    }
+    
+    .status-progress-info {
+        font-size: 13px;
+        margin-block-start: 5px;
+        margin-block-end: 5px;
+    }
+  }

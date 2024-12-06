@@ -1,0 +1,701 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Appointment</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs no-shadow
+  no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button (click)='showFooter = true'>
+      <ion-label>Basic</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)='showFooter = true'>
+      <ion-label>Description</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)='showFooter = true'>
+      <ion-label>Categories and Brands</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)='showFooter = true'>
+      <ion-label>Images</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)='showFooter = false'>
+      <ion-label>Advanced (optional)</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+  <!-- new product -->
+  <super-tabs-container>
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-grid>
+            <ion-button (click)='switchNormal()'>Switch to normal product
+            </ion-button>
+            <br><br>
+            <ion-row>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <div class="flex-space-between">
+                    <div>
+                      <ion-label>Appointment Title (please don't use "/" in
+                        name)</ion-label>
+                    </div>
+                    <div class="flex-label"
+                      *ngIf="userRole != 'vendor'">
+                      <ion-label>Show</ion-label>&nbsp;&nbsp;
+                      <ion-col size="2"
+                        class="ion-no-padding">
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input color="primary"
+                              type="checkbox"
+                              [checked]="product.status"
+                              (click)="updateNewProductStatus()">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                    </div>
+                  </div>
+                  <ion-input class="form-input"
+                    [(ngModel)]="product.prodName"></ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="!product.isPriceList; else showPriceList">
+              <ion-col class="flex"
+                size='12'>
+                <ion-label>Single Price</ion-label>&nbsp;&nbsp;
+                <ion-col size="1"
+                  class="ion-no-padding">
+                  <div class="toggle-btn">
+                    <label class="switch">
+                      <input color="primary"
+                        type="checkbox"
+                        (click)="priceToggle()"
+                        [checked]="product.isPriceList">
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </ion-col>
+                <ion-button size='small'
+                  fill="outline"
+                  shape="round"
+                  color="success"
+                  (click)="openScheduleComponent()">
+                  Manage Schedule
+                </ion-button>
+              </ion-col>
+              <br>
+              <ion-col size="4">
+                <ion-label *ngIf="!product.gstExclusive">Price ( inclusive of
+                  all taxes) </ion-label>
+                <ion-label *ngIf="product.gstExclusive">Price ( exclusive of all
+                  taxes) </ion-label>
+                <ion-input type="number"
+                  class="form-input"
+                  [(ngModel)]="product.prodPrice"></ion-input>
+              </ion-col>
+
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label *ngIf="!product.gstExclusive">Discounted Price (
+                    inclusive of all taxes) </ion-label>
+                  <ion-label *ngIf="product.gstExclusive">Discounted Price (
+                    exclusive of all taxes) </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="product.discountedPrice"></ion-input>
+                </div>
+              </ion-col>
+
+              <ion-col size="4">
+                <div class="input-wrap">
+                  <ion-label> GST (%)</ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="product.gst"></ion-input>
+                </div>
+              </ion-col>
+
+            </ion-row>
+            <ng-template #showPriceList>
+              <ion-row>
+                <ion-col size="12"
+                  class="flex">
+                  <ion-label>Variants</ion-label>&nbsp;&nbsp;
+                  <ion-col size="2"
+                    class="ion-no-padding">
+                    <div class="toggle-btn">
+                      <label class="switch">
+                        <input color="primary"
+                          type="checkbox"
+                          (click)="priceToggle()"
+                          [checked]="product.isPriceList">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </ion-col>
+                </ion-col>
+              </ion-row>
+              <br>
+              <ion-row *ngFor="let element of product.priceList; let i = index;"
+                style="align-items: center;">
+                <ion-col>
+                  <ion-label>Name</ion-label>
+                  <ion-input type="text"
+                    class="form-input"
+                    [(ngModel)]="product.priceList[i].weight"></ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Price
+                    <span *ngIf="product.variantType === 'pieces'">/ pc</span>
+                  </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="product.priceList[i].price"></ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Discounted Price <span
+                      *ngIf="product.variantType === 'pieces'">/ pc</span>
+                  </ion-label>
+                  <ion-input type="number"
+                    class="form-input"
+                    [(ngModel)]="product.priceList[i].discountedPrice">
+                  </ion-input>
+                </ion-col>
+                <ion-col style="margin-top: 28px;">
+                  <ion-button size='small'
+                    fill="outline"
+                    shape="round"
+                    color="success"
+                    (click)="openVariantScheduleComponent(i)">
+                    Manage Schedule
+                  </ion-button>
+                </ion-col>
+                <ion-col (click)="removeElementFromPriceList(i)"
+                  size='1'>
+                  <ion-button color="danger"
+                    fill="outline"
+                    shape="round"
+                    class="btn-sml m-t-16">
+                    <ion-icon name="remove-circle"
+                      slot="start"></ion-icon>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+              <br>
+              <ion-row>
+                <ion-col style="text-align: center;">
+                  <ion-button (click)="onClickAddMoreInPriceList()"
+                    fill="outline"
+                    shape="round"
+                    size="small"
+                    class="btn-2">
+                    <ion-icon name="add-circle"
+                      slot="start"></ion-icon>
+                    Add more +
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ng-template>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-row>
+            <ion-col size="12">
+              <p style="font-weight: bold;">Product Description</p>
+              <br>
+              <ckeditor [(ngModel)]="product.prodDesc"
+                [config]="ckeConfig"></ckeditor>
+            </ion-col>
+          </ion-row>
+          <br>
+          <ion-text color="danger"
+            style="display: flex;justify-content: center;">
+            <p style="font-weight: bold;font-size: large;">* Once product is
+              created, you can create sections for
+              product description</p>
+          </ion-text>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height"
+          style="display: flex;flex-wrap: nowrap;flex-direction: row;align-content: center;justify-content: space-around;align-items: flex-start;">
+          <div class="categories-container">
+            <div class="no-data"
+              *ngIf="showNoCategories"
+              text-center>
+              <img src="assets/img/no-category.png"
+                alt="">
+              <h6>No categories</h6>
+            </div>
+            <div class="product-search-wrap"
+              *ngIf="!showNoCategories">
+              <ion-searchbar [(ngModel)]="searchCategory"
+                mode="ios"></ion-searchbar>
+            </div>
+            <div class="categories-wrapper"
+              *ngIf="!showNoCategories">
+              <ion-list>
+                <ion-list-header>
+                  <ion-label class="np-list-header"
+                    style="font-size: 16px;font-weight: bold;">Categories
+                  </ion-label>
+                </ion-list-header>
+                <div
+                  *ngFor="let category of categories | filter: searchCategory">
+                  <div
+                    style="display: flex;justify-content: space-between;align-items: center;">
+                    <ion-item (click)="onClickCategoryCheckBox(category.id)"
+                      style="width: 100%;">
+                      <ion-label>{{category.name}}</ion-label>
+                      <ion-checkbox color="primary"
+                        slot="start"
+                        [checked]="checkBoxValue(category.id)"></ion-checkbox>
+                    </ion-item>
+                    <div (click)="getSubcategories(category.id)"
+                      slot="end"
+                      style="z-index: 9999;margin-right: 3%;opacity: .8;"
+                      *ngIf="category.isSubcategories">
+                      <i class="flaticon-null-13"
+                        *ngIf="(listOfSubcategoriesInView.hasOwnProperty(category.id) && !listOfSubcategoriesInView[category.id].active) || !listOfSubcategoriesInView.hasOwnProperty(category.id)"></i>
+                      <i class="flaticon-null-14"
+                        *ngIf="listOfSubcategoriesInView.hasOwnProperty(category.id) && listOfSubcategoriesInView[category.id].active"></i>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="(listOfSubcategories[category.id] && listOfSubcategories[category.id].length) && listOfSubcategoriesInView[category.id].active"
+                    style="margin-left: 10%;">
+                    <ion-item
+                      *ngFor="let subcat of listOfSubcategories[category.id]"
+                      (click)="onClickCategoryCheckBox(subcat.id)">
+                      <ion-label>{{subcat.name}}</ion-label>
+                      <ion-checkbox color="primary"
+                        slot="start"
+                        [checked]="checkBoxValue(subcat.id)"></ion-checkbox>
+                    </ion-item>
+                  </div>
+                </div>
+
+              </ion-list>
+            </div>
+
+
+          </div>
+          <div class="brands-container">
+            <div class="product-search-wrap"
+              *ngIf="!showNoBrands">
+              <ion-searchbar [(ngModel)]="searchBrand"
+                mode="ios"></ion-searchbar>
+            </div>
+            <ion-list *ngIf="!showNoBrands && brands.length">
+              <ion-list-header>
+                <ion-label class="np-list-header"
+                  style="font-size: 16px;font-weight: bold;">Brands</ion-label>
+              </ion-list-header>
+              <div *ngFor="let brand of brands | filter: searchBrand">
+                <ion-item (click)="onClickBrandCheckBox(brand.id)"
+                  style="width: 100%;">
+                  <ion-label>{{brand.name}}</ion-label>
+                  <ion-checkbox color="primary"
+                    slot="start"
+                    [checked]="brandCheckBoxValue(brand.id)"></ion-checkbox>
+                </ion-item>
+              </div>
+            </ion-list>
+          </div>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <!-- new images-->
+          <!-- <div class="dropzone" appDropzone (dropped)="onDrop($event)">
+            <h3>Drag and Drop a File</h3>
+
+            <div class="file">
+              <input class="file-input" multiple type="file" (change)="onDrop($event.target.files)">
+            </div>
+          </div> -->
+          <button class="upload-btn btn-1 i-start"
+            (click)="onDrop($event.target.files)">Upload Product
+            Image(s)</button>
+          <h3>Uploads</h3>
+          <!-- <div class="upload-img-wrapper">
+            <div *ngFor="let file of files" class="img-preview">
+              <app-upload-task [file]="file"></app-upload-task>
+            </div>
+          </div> -->
+
+          <!-- new images-->
+
+          <!-- old images-->
+          <div class="no-img"
+            *ngIf="listofbase64Image.length == 0">
+            No attached images
+          </div>
+
+          <div class="imgs-container"
+            *ngIf="listofbase64Image.length !== 0">
+            <div class="img-wrap"
+              *ngFor="let img of listofbase64Image; let i = index">
+              <img [src]="img.base64Img"
+                (click)="onClickEditImage(img.url)" />
+              <div class="overlay">
+                <ion-button class="remove"
+                  shape="round"
+                  color="danger"
+                  fill="clear"
+                  (click)="removeImage(i)">
+                  <ion-icon name="trash"
+                    slot="icon-only"></ion-icon>
+                </ion-button>
+                <ion-button *ngIf="img.cover == true"
+                  class="btn-2 cover"
+                  shape="round">
+                  Cover Pic
+                </ion-button>
+                <ion-button *ngIf="img.cover == false"
+                  (click)="newProductCoverPic(i)"
+                  class="btn-2 cover"
+                  shape="round">
+                  Make Cover
+                </ion-button>
+              </div>
+            </div>
+          </div>
+
+          <div class="list-header">
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col class="reorder">
+                  <p>Reorder</p>
+                </ion-col>
+                <ion-col class="img">
+                  <p>Image</p>
+                </ion-col>
+                <ion-col class="action">
+                  <p>Action</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div class="list-container">
+            <ion-reorder-group (ionItemReorder)="imagesReorder($event)"
+              disabled="false"
+              class="ion-no-padding">
+              <ion-item
+                *ngFor="let img of product.images; let i = index"
+                lines="none">
+                <ion-grid
+                  class="row-background ion-no-padding ion-align-items-center">
+                  <ion-row class="ion-align-items-center">
+                    <ion-col class="reorder">
+                      <ion-reorder>
+                        <div class="flat-sort">
+                          <i class="flaticon-menu"></i>
+                        </div>
+                      </ion-reorder>
+                    </ion-col>
+                    <ion-col class="img">
+                      <img [src]="img.url"
+                        (click)="onClickImage(img.url)"
+                        height="200px" />
+                    </ion-col>
+                    <ion-col class="action">
+                      <div class="overlay">
+                        <ion-button class="remove"
+                          shape="round"
+                          color="danger"
+                          fill="clear"
+                          large
+                          (click)="removeImageInData(i, img.url)">
+                          <ion-icon name="trash"
+                            slot="icon-only"
+                            style=" font-size: 16px;"></ion-icon>
+                        </ion-button>
+                        <ion-button
+                          *ngIf="product['coverPic'].imageId == img.imageId"
+                          class="btn-2 cover"
+                          shape="round"
+                          disabled>
+                          Cover
+                        </ion-button>
+                        <ion-button
+                          *ngIf="product['coverPic'].imageId != img.imageId "
+                          class="btn-2 cover"
+                          shape="round"
+                          (click)="editProductCoverPicInData(i)">
+                          Make Cover
+                        </ion-button>
+                        <div>
+                          <p style="margin-top: 5px;text-align: center;">Variants</p>
+                          <ion-select class="variantImageSelect" multiple="true" cancelText="Cancel" okText="Done"
+                            placeholder="Select Variants" [value]="currentVariants[i]" style="position: relative;"
+                            *ngIf="product.isPriceList" (click)="saveVariantImage(img)"
+                            [interfaceOptions]="variantGrpSelectOptions" (ionChange)="onChangeVariantImage($event,i);">
+                            <ion-select-option *ngFor="let item of product.priceList; let i=index"
+                              value="{{item.weight}}">
+                              {{item.weight}}
+                            </ion-select-option>
+                          </ion-select>
+                        </div>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+                <br>
+              </ion-item>
+            </ion-reorder-group>
+          </div>
+          <!-- old images-->
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content class="ion-no-padding">
+        <div class="main-container"
+          style="width: 100%">
+          <ion-grid>
+            <ion-row>
+              <ion-col size=2
+                id="scroll1">
+                <div class="statusList">
+                  <p [id]="i"
+                    *ngFor='let item of sidemenu; let i=index'
+                    (click)='changeComponent(i)'>{{item}}</p>
+                </div>
+              </ion-col>
+              <ion-col size=10
+                style="margin-top: 8px; border-left: 1px solid lightgray;">
+                <ion-col style="height: 5vh;">
+                  <ion-button (click)="addProduct()"
+                    color="success">
+                    <i class="flaticon-null-20 margin-icon"></i>&nbsp;
+                    Save
+                  </ion-button>
+                </ion-col>
+                <ion-col id="scroll2"
+                  [ngSwitch]="selectedId">
+                  <ion-grid style="margin-top: 10px;">
+                    <ion-row *ngSwitchCase="0">
+                      <ion-text color="danger">
+                        <p *ngIf="!multiVendor">This option is only available
+                          when MultiVendor is on</p>
+                      </ion-text>
+                      <ion-col size="6">
+                        <div *ngIf="multiVendor">
+                          <ion-row>
+                            <div class="headings">
+                              Add Vendor
+                            </div>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12">
+                              <ion-select [value]="product.vendorId"
+                                class="border i-s-p-10"
+                                (ionChange)="addVendor($event, 'new')"
+                                placeholder="Select Vendor">
+                                <ion-select-option [value]="vendor.id"
+                                  *ngFor="let vendor of vendors">{{vendor.name}}
+                                </ion-select-option>
+                              </ion-select>
+                            </ion-col>
+                          </ion-row>
+                          <br>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row *ngSwitchCase="1">
+                      <ion-col size="6">
+                        <div *ngIf="isFilterActive">
+                          <ion-row>
+                            <div class="headings">
+                              Add filter
+                            </div>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="6"
+                              class="border content-alignment f-s-14 filters-col"
+                              (click)="addFilters('new')">
+                              <ion-text>
+                                {{getAddedFiltersLength(product.filters)}}
+                                Filters added</ion-text>
+                              &nbsp;&nbsp;<i class="flaticon-null-5"></i>
+                            </ion-col>
+                          </ion-row>
+                          <br>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                  <ion-grid *ngSwitchCase="2">
+                    <ion-text color="danger" *ngIf = "product.isPriceList == false">
+                      <p>This option is only available when variant is on</p>
+                    </ion-text>
+                    <div *ngIf = "product.isPriceList == true">
+                      <div style="display: flex;align-items: center;margin-left: 12px;">
+                        <div>Variant groups for product</div>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox"
+                              (click)="activeVariantGroups()"
+                              [checked]="product.variantGroups.active">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </div>
+                      <br>
+                      <div *ngIf='product.variantGroups && product.variantGroups.active'>
+                        <div>
+                          <div>
+                            <div style="display: flex;align-items: center;margin: 12px;">
+                              <input class="groupInput" [(ngModel)]="groupName" placeholder="Enter name of group"/>&nbsp;&nbsp;
+                              <ion-select class="groupSelect" [(ngModel)]="groupOptions" multiple="true" cancelText="Cancel" okText="Done" placeholder="Select Group">
+                                <ion-select-option *ngFor = "let item of product.priceList" value="{{item.weight}}" selected="true">{{item.weight}}</ion-select-option>
+                              </ion-select>&nbsp;&nbsp;
+                              <div style="display: flex;align-items: center;">
+                                <ion-button
+                                  (click)="enterVariantGroupsData()">
+                                  <p
+                                    *ngIf="(!product.variantGroups.groups) || (product.variantGroups.groups && product.variantGroups.groups.length == 0)">
+                                    Create Group</p>
+                                  <p
+                                    *ngIf="product.variantGroups.groups && product.variantGroups.groups.length > 0">
+                                    Add Group</p>
+                                </ion-button>
+                              </div>
+                            </div>
+                            <br>
+                            <div class="list-header variantGroups" *ngIf = "product.variantGroups.groups && product.variantGroups.groups.length > 0">
+                              <ion-grid class="ion-no-padding">
+                                <ion-row class="headings">
+                                  <ion-col size="3">
+                                    <p>Name</p>
+                                  </ion-col>
+                                  <ion-col size="3" style="margin-right: 16px;">
+                                    <p>Variants</p>
+                                  </ion-col>
+                                  <ion-col size="3" style="margin-right: 16px;">
+                                    <p>Delete</p>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                            </div>
+                            <div class="list-container">
+                              <ion-item *ngFor="let item of product.variantGroups.groups; let i = index">
+                                <ion-grid
+                                  class="row-background ion-no-padding ion-align-items-center">
+                                  <ion-row class="ion-align-items-center">
+                                    <ion-col size="3">
+                                      <p class="ion-text-capitalize ion-text-center">{{item.name}}</p>
+                                    </ion-col>
+                                    <ion-col size="3">
+                                      <p class="ion-text-capitalize ion-text-center">{{item.variants}}</p>
+                                    </ion-col>
+                                    <ion-col size="3" style="text-align: center;">
+                                      <i class="flaticon-null-19 remove-icon" (click)="deleteVariantGroup(i)"></i>
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
+                              </ion-item>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ion-grid>
+                  <ion-grid *ngSwitchCase="3">
+                    <ion-row>
+                      <ion-col size="12">
+                        <h3>Website SEO</h3>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <ion-label>Meta Title</ion-label>
+                          <ion-input class="form-input"
+                            [(ngModel)]="metaData.pageTitle"></ion-input>
+                        </div>
+                      </ion-col>
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <ion-label>Meta Description</ion-label>
+                          <ion-input class="form-input"
+                            [(ngModel)]="metaData.metaDescription"></ion-input>
+                        </div>
+                      </ion-col>
+                      <ion-col size="12">
+                        <div class="input-wrap">
+                          <ion-label>Meta Keywords</ion-label>
+                          <ion-input class="form-input"
+                            [(ngModel)]="metaData.metaKeywords"></ion-input>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-col>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+  </super-tabs-container>
+
+</super-tabs>
+
+
+<ion-footer *ngIf="!productId && showFooter"
+  no-border
+  class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="addProduct()"
+      shape="round"
+      class="btn-1 i-start"
+      color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>
+
+<ion-footer *ngIf="productId && showFooter"
+  no-border
+  class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="deleteAlertConfirm();"
+      shape="round"
+      class="btn-1 i-start"
+      color="danger">
+      <i class="flaticon-null-21"></i>
+      Delete
+    </ion-button>
+    <ion-button (click)="addProduct()"
+      shape="round"
+      class="btn-1 i-start"
+      color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

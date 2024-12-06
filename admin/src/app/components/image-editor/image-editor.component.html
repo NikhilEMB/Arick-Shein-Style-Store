@@ -1,0 +1,405 @@
+<div class="parentComp">
+  <div class="sidenav">
+    <p href="#"
+      rel="noopener noreferrer"
+      (click)="localConfig()">Local</p>
+    <p href="#"
+      rel="noopener noreferrer"
+      (click)="pexelsConfig()">Pexels</p>
+    <p href="#"
+      rel="noopener noreferrer"
+      (click)="pixabayConfig()">Pixabay</p>
+    <p href="#"
+      rel="noopener noreferrer"
+      (click)="flickrConfig()">Flickr</p>
+    <p href="#"
+      rel="noopener noreferrer"
+      (click)="unsplashConfig()">Unsplash</p>
+    <!-- <a href="http://"
+      target="_blank"
+      rel="noopener noreferrer">Unsplash</a> -->
+  </div>
+  <div class="supplement">
+    <div class="configurator"
+      *ngIf="currentSelection === 'Local';">
+      <h2>Image Editor</h2>
+      <div>
+
+        <!-- image selector -->
+        <div class="parentFlexSelection">
+          <div>
+            <h4>Choose an Image</h4>
+          </div>
+          <!-- TODO - Custom Crop Area -->
+          <div class="flex-label">
+            <p>Standard Size</p>&nbsp;&nbsp;
+            <div class="toggle-btn">
+              <label class="switch">
+                <input color="primary"
+                  type="checkbox"
+                  (click)="cropAreaToggle($event)"
+                  [checked]="toggleState == 'true'">
+                <span class="slider round"></span>
+              </label>
+            </div>&nbsp;&nbsp;
+            <p>Custom Size</p>&nbsp;&nbsp;
+          </div>
+        </div>
+
+        <div class="customInput">
+          <button class="selectBtn"
+            *ngIf="format != 'product'"
+            onclick="document.getElementById('getFile').click()">
+            Select Image
+          </button>
+          <button class="selectBtn"
+            *ngIf="format == 'product'"
+            onclick="document.getElementById('getFileProduct').click()">
+            Select Images Max {{prodUploadLimit}}
+          </button>
+          <input type="file"
+            id="getFile"
+            (change)="fileChangeEvent($event)"
+            style="display: none;" accept="image/*"/>
+          <input type="file"
+            id="getFileProduct"
+            (change)="fileChangeEvent($event)"
+            style="display: none;"
+            multiple accept="image/*"/>
+          <p style="font-size: medium; display: inline;">Or</p>
+
+          <input class="urlInput"
+            type="text"
+            placeholder="Image URL"
+            [(ngModel)]="customImageURL">
+        </div>
+        <button
+          *ngIf="renderedName && format != 'product' && (currentSelection != '')"
+          style="display: inline; width: 142px; height: 40px; margin-right: 20px; margin-top: 0.5rem; background-color: limegreen; color: white;"
+          (click)="imageFinalize('normal')">Done</button>
+        <label class="fileLabel"
+          *ngIf="renderedName && format != 'product' && (currentSelection != '')">{{fileName
+          || renderedName}}</label>
+        <div class="imageviewerdismiss">
+          <button class="imageviewerdismissbutton"
+            (click)="modalClose()"><i class="flaticon-null-19"></i></button>
+        </div>
+        <div class="imagewindow"
+          *ngIf="renderedName && format != 'product' && (currentSelection != '')">
+          <img [src]="base64"
+            alt=""
+            class="img"
+            [ngClass]="aspectRatioWidthVal == 3.42 ? 'imgTest' : 'img'">
+          <!-- <label *ngIf="fileName"
+            class="description spacer">Name : {{renderedName}}</label>
+          <label *ngIf="fileName"
+            class="description">Size : {{renderedSize}}</label>
+          <label *ngIf="fileName"
+            class="description">Type : {{renderedMimeType}}</label> -->
+        </div>
+
+        <!-- TODO - TYPE PRODUCT -->
+        <div *ngIf="format == 'product' && (currentSelection == 'Local')"
+          class="prodwindow">
+          <div class="currentprod">
+            <p class="prodHead">Selected Images : {{prodImgLength}}/{{prodUploadLimit}}
+            </p>
+            <button *ngIf="productImages[0]"
+              style="display: inline; width: 170px; height: 40px; margin-right: 20px; margin-top: 20px; background-color: limegreen; color: white;"
+              (click)="imageFinalize('selected')">Upload selected
+              Images</button>
+            <ul id="list"
+              style="list-style-type: none; padding-left: 0;">
+              <li *ngFor="let item of productImages; let i of index">
+                <img [src]='item'
+                  class="imageList"
+                  alt="No Image"
+                  width="50%">
+                <button (click)="prodImgSelector(i)"
+                  style="margin-left: 20px; padding: 2px 8px;">Edit</button>
+                <button (click)="prodImgSelectorDel(i)"
+                  style="margin-left: 20px; padding: 2px 8px;">Delete</button>
+              </li>
+            </ul>
+          </div>
+          <div class="editedprod">
+            <p class="prodHead"
+              style="margin-left: 20px;">Edited Images :
+              {{base64Prod.length}}/{{prodUploadLimit}}</p>
+            <button *ngIf="base64Prod[0]"
+              style="display: inline; width: 170px; height: 40px; margin: 20px 20px 0 20px; background-color: limegreen; color: white;"
+              (click)="imageFinalize('edited')">Upload edited Images</button>
+            <ul style="list-style-type: none; padding: 0 0 0 20px;">
+              <li *ngFor="let item of base64Prod; index as i">
+                <img [src]="item"
+                  class="imageList"
+                  alt="No Image"
+                  width="50%">
+                <button (click)="prodImgDeletor(i)"
+                  style="margin-left: 20px; padding: 2px 8px;">Delete</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- <div *ngIf="fileName"
+          class="imagefinalize">
+          <button
+            style="display: inline; width: 170px; height: 30px; margin-top: 20px;"
+            (click)="imageFinalize()">Done</button>
+        </div> -->
+        <!-- <div class="imageviewerdismiss">
+          <button class="imageviewerdismissbutton"
+            (click)="modalClose()"><i class="flaticon-null-19"></i></button>
+        </div> -->
+        <!-- <div>
+          <hr>
+          <h4>Custom Formatting :</h4>
+        </div> -->
+        <!-- aspect ratio -->
+        <!-- <div style="margin-bottom: 10px;">
+          <p style="display: inline; margin-right: 10px;">Aspect Ratio</p>
+          <input class="inputCustom"
+            type="text"
+            placeholder="16"
+            [(ngModel)]="aspectRatioWidthVal"> /
+          <input class="inputCustom"
+            type="text"
+            placeholder="9"
+            [(ngModel)]="aspectRatioHeightVal">
+          <button
+            style="display: inline; width: 170px; height: 30px; margin-left: 20px;"
+            (click)="customAspectRatio()">Set
+            Aspect Ratio</button>
+        </div> -->
+
+        <!-- view mode -->
+        <!-- <div style="margin-bottom: 10px;">
+          <p style="display: inline; margin-right: 10px;">View Mode</p>
+          <input class="inputCustom"
+            type="text"
+            placeholder="0 to 3"
+            [(ngModel)]="viewModeVal">
+          <button
+            style="display: inline; width: 170px; height: 30px; margin-left: 20px;"
+            (click)="customViewMode()">Set
+            View Mode</button>
+        </div> -->
+
+        <!-- custom width -->
+        <!-- <div style="margin-bottom: 10px;">
+          <p style="display: inline; margin-right: 10px;">Custom Width</p>
+          <input class="inputCustom"
+            type="text"
+            placeholder="???"
+            [(ngModel)]="customWidthVal">
+          <button
+            style="display: inline; width: 170px; height: 30px; margin-left: 20px;"
+            (click)="customWidth()">Set
+            Custom Width</button>
+        </div> -->
+
+        <!-- Image Quality -->
+        <!-- <div style="margin-bottom: 10px;">
+          <p style="display: inline; margin-right: 10px;">Custom Quality</p>
+          <input class="inputCustom"
+            type="text"
+            placeholder="92"
+            [(ngModel)]="customImageQualityVal">
+          <button
+            style="display: inline; width: 170px; height: 30px; margin-left: 20px;"
+            (click)="customImageQuality()">Set
+            Quality</button>
+        </div> -->
+        <hr>
+      </div>
+    </div>
+    <!-- Pexels Image Explorer -->
+    <div class="configurator"
+      *ngIf="currentSelection === 'Pexels'">
+      <h2>Image Editor</h2>
+      <hr>
+      <h4>Search images via Pexels :</h4>
+      <input
+        style="border: 2px solid #555555; border-radius: 8px; width: 290px;"
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Image Category">
+      <button
+        style="display: inline; width: 170px; height: 30px; margin-left: 10px;"
+        (click)="pexelsSearch()">Search</button>
+      <hr>
+      <div *ngIf="photos"
+        style="display: flex; flex-wrap: wrap; ">
+        <div *ngFor="let i of photos.photos"
+          class="pexelsdiv">
+          <a id="imgtag">
+            <img class="pexelsviewer"
+              [src]="i.src.large"
+              alt=""></a>
+          <div class="downloaddiv">
+            <button (click)="customURLPassing(i.src.large)">Edit</button>
+          </div>
+          <!-- <div class="desc">
+            <p class="descpara">Id : {{i.id}}</p>
+            <P class="descpara">Photographer : {{i.photographer}}</P>
+          </div> -->
+        </div>
+      </div>
+      <div class="imageviewerdismiss">
+        <button class="imageviewerdismissbutton"
+          (click)="modalClose()"><i class="flaticon-null-19"></i></button>
+      </div>
+    </div>
+    <!-- Pixabay Image Explorer -->
+    <div class="configurator"
+      *ngIf="currentSelection === 'Pixabay'">
+      <h2>Image Editor</h2>
+      <hr>
+      <h4>Search images via Pixabay :</h4>
+      <input
+        style="border: 2px solid #555555; border-radius: 8px; width: 290px;"
+        type="text"
+        [(ngModel)]="searchQueryPixabay"
+        placeholder="Image Category">
+      <button
+        style="display: inline; width: 170px; height: 30px; margin-left: 10px;"
+        (click)="pixabaySearch()">Search</button>
+      <hr>
+      <div *ngIf="photosPixabay"
+        style="display: flex; flex-wrap: wrap; ">
+        <div *ngFor="let i of photosPixabay.hits"
+          class="pexelsdiv">
+          <a id="imgtag">
+            <img class="pexelsviewer"
+              [src]="i.largeImageURL"
+              alt=""></a>
+          <div class="downloaddiv">
+            <button (click)="customURLPassing(i.largeImageURL)">Edit</button>
+          </div>
+          <!-- <div class="desc">
+            <p class="descpara">Id : {{i.id}}</p>
+            <P class="descpara">User : {{i.user}}</P>
+          </div> -->
+        </div>
+      </div>
+      <div class="imageviewerdismiss">
+        <button class="imageviewerdismissbutton"
+          (click)="modalClose()"><i class="flaticon-null-19"></i></button>
+      </div>
+    </div>
+    <!-- Flickr Image Explorer -->
+    <div class="configurator"
+      *ngIf="currentSelection === 'Flickr'">
+      <h2>Image Editor</h2>
+      <hr>
+      <h4>Search images via Flickr :</h4>
+      <input
+        style="border: 2px solid #555555; border-radius: 8px; width: 290px;"
+        type="text"
+        [(ngModel)]="searchQueryFlickr"
+        placeholder="Image Category">
+      <button
+        style="display: inline; width: 170px; height: 30px; margin-left: 10px;"
+        (click)="flickrSearch()">Search</button>
+      <hr>
+      <div *ngIf="photosFlickr"
+        style="display: flex; flex-wrap: wrap; ">
+        <div *ngFor="let i of photosFlickr"
+          class="pexelsdiv">
+          <a id="imgtag">
+            <img class="pexelsviewer"
+              id="flickrImg"
+              src="https://farm{{i.farm}}.staticflickr.com/{{i.server}}/{{i.id}}_{{i.secret}}.jpg"
+              alt=""></a>
+          <div class="downloaddiv">
+            <button (click)="customURLPassingFlickr(i)">Edit</button>
+          </div>
+          <!-- <div class="desc">
+            <p class="descpara">Id : {{i.id}}</p>
+            <P class="descpara">Title : {{i.title}}</P>
+          </div> -->
+        </div>
+      </div>
+      <div class="imageviewerdismiss">
+        <button class="imageviewerdismissbutton"
+          (click)="modalClose()"><i class="flaticon-null-19"></i></button>
+      </div>
+    </div>
+    <!-- Unsplash -->
+    <div class="configurator"
+      *ngIf="currentSelection === 'Unsplash'">
+      <h2>Image Editor</h2>
+      <hr>
+      <h4>Search images via Unsplash :</h4>
+      <input
+        style="border: 2px solid #555555; border-radius: 8px; width: 290px;"
+        type="text"
+        [(ngModel)]="searchQueryUnsplash"
+        placeholder="Image Category">
+      <button
+        style="display: inline; width: 170px; height: 30px; margin-left: 10px;"
+        (click)="unsplashSearch()">Search</button>
+      <hr>
+      <div *ngIf="photosUnsplash"
+        style="display: flex; flex-wrap: wrap; ">
+        <div *ngFor="let i of photosUnsplash"
+          class="pexelsdiv">
+          <a id="imgtag">
+            <img class="pexelsviewer"
+              [src]="i.urls.regular"
+              alt=""></a>
+          <div class="downloaddiv">
+            <button (click)="customURLPassing(i.urls.regular)">Edit</button>
+          </div>
+          <!-- <div class="desc">
+            <p class="descpara">Id : {{i.id}}</p>
+            <P class="descpara">Title : {{i.user.name}}</P>
+          </div> -->
+        </div>
+      </div>
+      <div class="imageviewerdismiss">
+        <button class="imageviewerdismissbutton"
+          (click)="modalClose()"><i class="flaticon-null-19"></i></button>
+      </div>
+    </div>
+    <!-- <div class="imageviewer">
+      <div class="imageviewerdismiss">
+        <button class="imageviewerdismissbutton"
+          (click)="modalClose()"><i class="flaticon-null-19"></i></button>
+      </div>
+      <div class="imagewindow">
+        <label>{{fileName}}</label>
+        <img [src]="base64"
+          alt=""
+          class="img"
+          [ngClass]="{img: imgSpace}">
+        <label *ngIf="fileName"
+          class="description spacer">Name : {{renderedName}}</label>
+        <label *ngIf="fileName"
+          class="description">Size : {{renderedSize}}</label>
+        <label *ngIf="fileName"
+          class="description">Type : {{renderedMimeType}}</label>
+      </div>
+      <div *ngIf="fileName"
+        class="imagefinalize">
+        <button
+          style="display: inline; width: 170px; height: 30px; margin-top: 20px;"
+          (click)="imageFinalize()">Done</button>
+      </div>
+    </div> -->
+  </div>
+</div>
+
+<!-- onclick="document.getElementById('imgtag').click()"  -->
+
+<!-- [resizeToHeight] will be ignored if [resizeToWidth] is set !!! -->
+<ngx-photo-editor [imageChanedEvent]="imageChangedEvent"
+  (imageCropped)="imageCropped($event)"
+  (loadImageFailed)="loadImageFailed()"
+  [aspectRatio]="aspectRatioWidthVal/aspectRatioHeightVal"
+  [viewMode]="viewModeVal"
+  [resizeToWidth]="customWidthVal"
+  [modalSize]="'lg'"
+  [imageUrl]="customImageURL"
+  [imageBase64]="tempProdImg"
+  [imageQuality]="customImageQualityVal"></ngx-photo-editor>

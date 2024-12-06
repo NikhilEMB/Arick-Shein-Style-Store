@@ -1,0 +1,104 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="admin-orders" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Archived Order</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <div class="main-container">
+    <div *ngIf="showPendingLoader && !noPendingOrders" class="spinner">
+      <ion-spinner color="primary"></ion-spinner>
+    </div>
+    <div class="no-data" *ngIf="noPendingOrders && showPendingLoader; else showPendingOrders"
+      text-center>
+      <img src="assets/img/no-orders.png" alt="">
+      <h6>No archived orders</h6>
+    </div>
+    <ng-template #showPendingOrders>
+      <!-- heading -->
+      <div class="list-header">
+        <ion-grid class="ion-no-padding">
+          <ion-row>
+            <ion-col class="name">
+              <p>Customer</p>
+            </ion-col>
+            <ion-col class="name">
+              <p>Products</p>
+            </ion-col>
+            <ion-col class="name">
+              <p>Amount</p>
+            </ion-col>
+            <ion-col class="name">
+              <p>Payment</p>
+            </ion-col>
+            <ion-col class="id">
+              <p>Order ID</p>
+            </ion-col>
+            <ion-col class="date">
+              <p>Date</p>
+            </ion-col>
+            <ion-col class="status">
+              <p>Status</p>
+            </ion-col>
+            <ion-col class="action">
+              <p>Remove</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+      <!-- heading -->
+      <!-- Order  list -->
+      <div class="list-container">
+        <ion-grid>
+          <ng-container *ngFor="let order of pendingOrders; let i=index">
+          <ion-row class="order-row" *ngIf="order.subStatus && order.subStatus.isArchive == true">
+            <ion-col class="name">
+              <p *ngIf="order.userName">{{order.userName}}</p>
+            </ion-col>
+            <ion-col class="name">
+              <p *ngIf="order.products[0]">{{order.products[0].name}} <span *ngIf="order.products.length > 1">+
+                  {{order.products.length - 1}} more</span></p>
+            </ion-col>
+            <ion-col class="name">
+              {{order.totalAmountToPaid}}
+            </ion-col>
+            <ion-col class="name">
+              <p *ngIf="order.orderType && (order.orderType == 'subscription'); else notSubscription">Subscription</p>
+              <ng-template #notSubscription>
+                <p *ngIf="order.payment && (order.payment.completed == true)">Paid</p>
+                <p *ngIf="order.payment && (order.payment.completed == false) && (order.payment.mode != 'cash')">Unpaid
+                </p>
+                <p *ngIf="order.payment && (order.payment.completed == false) && (order.payment.mode == 'cash')">Unpaid
+                  (Cash)</p>
+              </ng-template>
+            </ion-col>
+            <ion-col class="id">
+              <p>{{order.orderId}}</p>
+            </ion-col>
+            <ion-col class="date">
+              <p>{{getDateTimeFormat(order.createdAt.toDate())}}</p>
+            </ion-col>
+            <ion-col class="status">
+              <p>{{order.status}}</p>
+            </ion-col>
+            <ion-col class="action f-d-c ">
+              <ion-button (click)="remove(order.orderId, order, i)" class="btn-sml i-start" fill="outline"
+              shape="round">
+              Remove
+            </ion-button>
+            </ion-col>
+
+          </ion-row>
+        </ng-container>
+        </ion-grid>
+      </div>
+      <!-- Order  list -->
+
+    </ng-template>
+  </div>
+</ion-content>

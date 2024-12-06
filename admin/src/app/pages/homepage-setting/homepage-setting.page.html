@@ -1,0 +1,120 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Page Edit</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="goToSample()">
+      <strong>View Sample Design</strong>
+    </ion-button>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-row *ngIf="pageId != 'about' && pageId != 'homepage'">
+      <ion-col size="6">
+        <div class="input-wrap">
+        <ion-label>Name of page</ion-label>
+         <ion-input type="text" class="form-input" [(ngModel)]='pageName'></ion-input>
+      </div>
+      </ion-col>
+      <ion-col size="6" *ngIf="isUniversal">
+        <div class="input-wrap">
+        <ion-label>Slug Name <ion-text color="danger">(<b class="cursor-p" 
+          (click)="sharedService.presentSlugAlert()">CLICK HERE</b> for Slug Instructions)</ion-text>
+        </ion-label>
+         <ion-input type="text" class="form-input" [(ngModel)]='slug.name'></ion-input>
+      </div>
+      </ion-col>
+      <ion-col size="12" class="t-a-c">
+        <ion-button (click)="changeName()" class="btn-sml i-start m-s-btn" fill="outline" shape="round">
+          Save</ion-button>
+      </ion-col>
+    </ion-row>
+    <!-- <div style="text-align: center; display: flex; width: 400px;" *ngIf="pageId != 'about' && pageId != 'homepage'">
+      <input [(ngModel)]='pageName' placeholder="Enter name of page" style="padding: 5px; margin-right: 10px" />
+      <ion-row *ngIf="isUniversal">
+        <ion-col>
+          <div class="input-wrap">
+          <ion-label>Slug Name <ion-text color="danger">(<b class="cursor-p" 
+            (click)="sharedService.presentSlugAlert()">CLICK HERE</b> for Slug Instructions)</ion-text>
+          </ion-label>
+           <ion-input type="text" class="form-input" [(ngModel)]='slug.name'></ion-input>
+        </div>
+        </ion-col>
+      </ion-row>
+      <ion-button (click)="changeName()" class="btn-sml i-start m-s-btn" fill="outline" shape="round">
+        Save</ion-button>
+    </div> -->
+    <ion-reorder-group (ionItemReorder)="webSectionReorder($event)" disabled="false">
+      <ion-item *ngFor="let item of pageData; let i = index">
+        <div class="section">
+          <div style="display: inline-flex">
+            <ion-reorder slot="end"> <i class="flaticon-menu"></i></ion-reorder>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <p style="margin-top: -12px;font-size: large">Section {{i+1}}</p>
+          </div>
+          <br><br>
+          <div class="sectionBlock">
+            <div style="display: block">
+              <p *ngIf="item.sectionName" class="crop">Name: {{item.sectionName}}</p>
+              <br *ngIf="item.sectionName">
+              <p *ngIf="item.widgetType">Type: {{item.widgetType}}</p>
+              <br *ngIf="multiRegion && regions.length">
+              <div *ngIf="multiRegion && regions.length" style="display: flex;align-items: center">
+                <ion-label>Region:</ion-label>&nbsp;&nbsp;
+                <ion-select multiple="true" [value]="item.regionId" (ionChange)="addRegion($event,i)"
+                  placeholder="Select Region"
+                  style="border: 1px solid gray; border: 1px solid gray; width: 300px;position: relative;">
+                  <ion-select-option [value]="region.id" *ngFor="let region of regions">{{region.name}}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+            </div>
+            <div style="display: flex">
+              <div>
+                <ion-button (click)="openWidgetEdit(item.widgetType,item.widgetID,i)">
+                  <i class="flaticon-pencil-edit-button" slot="icon-only" slot="icon-only"></i>
+                  &nbsp;Edit
+                </ion-button>
+                &nbsp;&nbsp;
+                <ion-button (click)="deleteSectionConfirm(item.widgetID,i, 'web')">
+                  <i class="flaticon-null-21" slot="icon-only" slot="icon-only"></i>
+                  &nbsp;Delete
+                </ion-button>
+              </div>
+              <ion-list lines="none">
+                <ion-item>
+                  <ion-label>App</ion-label>
+                  <ion-toggle [checked]="item.location=='app' || item.location=='all'"
+                    (ionChange)="changeLocationStatus(i,'app')"></ion-toggle>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Website</ion-label>
+                  <ion-toggle [checked]="item.location=='web' || item.location=='all'"
+                    (ionChange)="changeLocationStatus(i,'web')"></ion-toggle>
+                </ion-item>
+              </ion-list>
+            </div>
+          </div>
+        </div>
+      </ion-item>
+    </ion-reorder-group>
+    <br>
+  </div>
+</ion-content>
+
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button shape="round" class="btn-1 i-start" color="primary" (click)="addNewSection()">
+      <ion-icon name="add-circle" slot="start"></ion-icon>
+      Add New Section
+    </ion-button>
+  </div>
+</ion-footer>

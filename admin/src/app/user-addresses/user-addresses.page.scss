@@ -1,0 +1,38 @@
+.add-address-toolbar p{
+    font-size: 15px;
+    padding-left: 3%;
+    color: var(--ion-color-primary);
+}
+.address-card{
+    background: white;
+    padding: 10px;
+    margin: 6px 12px 12px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+ion-content{
+    --background: #F2F2F2;
+}
+.user-name{
+    font-size: 15px;
+}
+.address{
+    font-size: 13px;
+}
+.phone-no{
+    font-size: 13px;
+    margin-bottom: -5px;
+}
+ion-grid ion-row{
+    justify-content: flex-end;;
+}
+.address-count{
+    font-size: small;
+    opacity: .5;
+    margin-top: 5%;
+    text-align: center;
+}
+.spinner{
+    text-align: center;
+    margin-top: 50%;
+}

@@ -1,0 +1,66 @@
+<ion-header no-border>
+  <div class="bs-modal-header">
+    <div class="bs-search">
+      <ion-input type="text" placeholder="Search for products..." [(ngModel)]="searchProduct"
+      (ngModelChange)="fireSearchQuery()" autocapitalize></ion-input>
+    </div>
+    <div>
+      <i class="flaticon-null-19" (click)="closeModal()"></i>
+    </div>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="no-data" *ngIf="showNoProducts; else showProducts" text-center>
+    <img src="assets/img/no-orders.png" alt="">
+    <h6>No products</h6>
+  </div>
+  <div *ngIf="showSearchLoader" class="spinner">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <ng-template #showProducts>
+    <ion-list class="ion-no-padding list" *ngIf="productsData.length && !showSearchLoader" lines="none">
+      <ion-item class="ion-no-padding" *ngFor="let item of productsData; let i = index">
+        <ion-grid class="ion-no-padding">
+          <ion-row class="ion-align-items-center">
+            <ion-col size="2">
+              <ion-thumbnail  class="thumbnail">
+                <img class="loading" *ngIf="item.data.coverPic && !item.data.coverPic.thumb && item.data.coverPic.url"
+                  src="{{item.data.coverPic.url}}">
+                <img class="loading" *ngIf="item.data.coverPic && item.data.coverPic.thumb"
+                  src="{{item.data.coverPic.thumb}}">
+                <img *ngIf="!item.data.coverPic" src="assets/img/placeholder-img.jpg">
+              </ion-thumbnail>
+            </ion-col>
+            <ion-col size="7">
+              <p class="ion-text-capitalize">{{item.data.prodName}}</p>
+            </ion-col>
+            <ion-col size="3">
+              <ion-button class="btn-sml" shape="round" fill="outline" (click)="addProductAsBestSeller(item, i)" *ngIf="!item.isAdded">Add</ion-button>
+              <p class="ion-text-center ion-text-uppercase" class="bs-product-added" *ngIf="item.isAdded"><i class="flaticon-null-20"></i></p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+  </ng-template>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="searchMoreProducts($event)" *ngIf="searchProduct">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more products...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+<ion-footer *ngIf="firstTimeProductsLength && firstTimeProductsLength >= 10">
+  <ion-grid *ngIf="productsData && productsData.length !== 0 && !showNoProducts && !showSearchLoader && !searchProduct">
+    <ion-row>
+      <ion-col style="text-align: start;">
+        <ion-button (click)="loadPreviousProducts()" size="small" shape="round" [disabled]="noPreviousProducts">
+          <span style="margin-right: 3px;"><i class="flaticon-null-8"></i></span>Previous
+        </ion-button>
+      </ion-col>
+      <ion-col style="text-align: end;">
+        <ion-button (click)="loadMoreProducts()" size="small" shape="round" [disabled]="noMoreProducts">
+          Next <span style="margin-left: 3px;"><i class="flaticon-null-7"></i></span>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

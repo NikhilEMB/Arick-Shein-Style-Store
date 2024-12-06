@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Sample Designs</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <super-tabs no-shadow no-border>
+    <super-tabs-toolbar slot="top">
+      <super-tab-button>
+        <ion-label>Grocery</ion-label>
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>Fashion</ion-label>
+      </super-tab-button>
+    </super-tabs-toolbar>
+
+    <super-tabs-container>
+      <super-tab>
+        <ion-content class="sub-list-content">
+            <div class="main-container" style="text-align: center">
+                <p>Website</p>
+                <video class="videoPlayerWeb" controls>
+                  <source src="https://firebasestorage.googleapis.com/v0/b/bwi-catalog.appspot.com/o/videos%2Fdemo%2Fgrocery%2Fgrocery-web-demo.mp4?alt=media&token=a0ad6db5-527a-468c-aaa8-071f87643624" type="video/mp4">
+                </video>  
+                <br><br>
+                <p>App</p>
+                <video class="videoPlayerApp" controls>
+                  <source src="https://firebasestorage.googleapis.com/v0/b/bwi-catalog.appspot.com/o/videos%2Fdemo%2Fgrocery%2Fgrocery-app-demo.mp4?alt=media&token=cd84a474-041d-4ce2-9135-6fc1d6c81278" type="video/mp4">
+                </video>                  
+            </div>
+        </ion-content>
+      </super-tab>
+      <super-tab>
+        <ion-content class="sub-list-content">
+            <div class="main-container" style="text-align: center">
+                <p>Website</p>
+                <video class="videoPlayerWeb" controls>
+                  <source src="https://firebasestorage.googleapis.com/v0/b/bwi-catalog.appspot.com/o/videos%2Fdemo%2Ffashion%2Ffashion-web-demo.mp4?alt=media&token=a4c20401-a25c-4372-85db-2c2385bb1641" type="video/mp4">
+                </video>  
+                <br><br>
+                <p>App</p>
+                <video class="videoPlayerApp" controls>
+                  <source src="https://firebasestorage.googleapis.com/v0/b/bwi-catalog.appspot.com/o/videos%2Fdemo%2Ffashion%2Ffashion-app-demo.mp4?alt=media&token=4ec024bb-28d2-4360-beed-5e0f54886eaa" type="video/mp4">
+                </video>                  
+            </div>
+        </ion-content>
+      </super-tab>
+    </super-tabs-container>
+  </super-tabs>
+</ion-content>

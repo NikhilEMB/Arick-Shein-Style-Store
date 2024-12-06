@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button" defaultHref="admin-home"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="requestData">
+  <div class="main-container">
+  <app-service-details [request]="requestData"></app-service-details>
+</div>
+</ion-content>

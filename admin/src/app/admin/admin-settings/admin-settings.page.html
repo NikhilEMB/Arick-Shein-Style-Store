@@ -1,0 +1,913 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start"
+      class="menu-btn">
+      <ion-icon slot="icon-only"
+        name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Setting</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="solid"
+      color="secondary">
+      <span class="icon"
+        slot="start">
+        <i class="flaticon-null"
+          slot="start"></i>
+        <span class="count">5</span>
+      </span>
+    </ion-button>
+    <ion-button fill="solid"
+      color="secondary">
+      <span class="icon"
+        slot="start">
+        <i class="flaticon-shopping-bag"
+          slot="start"></i>
+        <span class="count">2</span>
+      </span>
+    </ion-button>
+  </div>
+</ion-header>
+
+<super-tabs>
+
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Basic</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Order</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Notifications</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Invoice</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Social</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container>
+    <div class="spinner"
+      *ngIf="showLoader; else showSettingsData">
+      <ion-spinner color="primary"></ion-spinner>
+    </div>
+    <ng-template #showSettingsData>
+      <super-tab>
+        <ion-content>
+          <div class="main-container fix-height">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4">
+                  <div class="input-wrap">
+                    <ion-label>Store Name</ion-label>
+                    <ion-input class="form-input"
+                      [(ngModel)]="storeName"
+                      autocapitalize></ion-input>
+                  </div>
+                </ion-col>
+
+                <ion-col size="4">
+                  <div class="input-wrap">
+                    <ion-label>Phone number</ion-label>
+                    <ion-input class="form-input"
+                      type="tel"
+                      [(ngModel)]="storePhone"></ion-input>
+                  </div>
+                </ion-col>
+
+                <!-- <ion-col size="12">
+                  <div class="input-wrap">
+                    <ion-label>Notification message on home screen</ion-label>
+                    <ion-input class="form-input" type="text" [(ngModel)]="notificationMessage"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="6">
+                  <div class="input-wrap">
+                    <ion-label>Store address</ion-label>
+                    <ion-textarea type="text" row="3" class="form-input"  [(ngModel)]="storeAddress.address"></ion-textarea>
+                  </div>
+                </ion-col> -->
+                <ion-col size="4">
+                  <div>
+                    <p>Pincode</p>
+                    <ion-input type="number"
+                      class="form-input"
+                      [(ngModel)]="storeAddress.pincode"></ion-input>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <ion-label>Store Email Id</ion-label>
+                    <ion-input class="form-input"
+                      type="tel"
+                      [(ngModel)]="storeEmail"></ion-input>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <ion-label>Store address</ion-label>
+                    <ion-textarea type="text"
+                      row="3"
+                      class="form-input"
+                      [(ngModel)]="storeAddress.address"></ion-textarea>
+                  </div>
+                </ion-col>
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <ion-label>Notification message on home screen</ion-label>
+                    <ion-input class="form-input"
+                      type="text"
+                      [(ngModel)]="notificationMessage"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="6">
+                  <div>
+                    <p>City</p>
+                    <ion-input type="text"
+                      class="form-input"
+                      [(ngModel)]="storeAddress.city"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="6">
+                  <div>
+                    <p>State</p>
+                    <div class="form-input state-wrapper"
+                      (click)="openStateModal()">
+                      <div *ngIf="storeAddress.state">{{storeAddress.state}}
+                      </div>
+                      <div *ngIf="!storeAddress.state">Select State</div>
+                      <div>
+                        <i class="flaticon-null-13"></i>
+                      </div>
+                    </div>
+                  </div>
+                </ion-col>
+                <ion-col size="6">
+                  <div>
+                    <p>Latitude</p>
+                    <ion-input type="number"
+                      class="form-input"
+                      [(ngModel)]="storeAddress.lat"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="6">
+                  <div>
+                    <p>Longitude</p>
+                    <ion-input type="number"
+                      class="form-input"
+                      [(ngModel)]="storeAddress.lng"></ion-input>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <ion-label>Welcome Message</ion-label>
+                    <ion-textarea rows="4"
+                      type="text"
+                      class="form-input"
+                      [(ngModel)]="welcomeMsg"></ion-textarea>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12"
+                  *ngIf="allowStoreInfo">
+                  <div class="input-wrap">
+                    <div class="flex-space-between">
+                      <div>
+                        <ion-label>Store Information</ion-label>
+                      </div>
+                      <div class="flex-label">
+                        <ion-label>allow Store Information</ion-label>
+                        <ion-toggle (ionChange)="allowStoreInfoToggleChange()"
+                          [checked]="allowStoreInfo"></ion-toggle>
+                      </div>
+                    </div>
+                    <ckeditor [(ngModel)]="storeInfo"
+                      [config]="ckeConfig"></ckeditor>
+                  </div>
+                </ion-col>
+                <ion-col size="12"
+                  *ngIf="!allowStoreInfo">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <ion-label>allow Store Information</ion-label>
+                      <ion-toggle (ionChange)="allowStoreInfoToggleChange()"
+                        [checked]="allowStoreInfo"></ion-toggle>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <ion-label>Shop Inactive</ion-label>
+                      <ion-toggle [(ngModel)]="shopInactive"
+                        [checked]="shopInactive"></ion-toggle>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12"
+                  *ngIf="shopInactive">
+                  <div class="input-wrap">
+                    <ion-label>Shop Inactive Message</ion-label>
+                    <ion-textarea rows="4"
+                      type="text"
+                      class="form-input"
+                      [(ngModel)]="inactiveMsg"></ion-textarea>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <h3>Login Popup Settings</h3>
+                </ion-col>
+
+                <ion-col size="3">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <ion-label>Name</ion-label>
+                      <ion-toggle [(ngModel)]="loginPopup.name"></ion-toggle>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="3">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <ion-label>Email</ion-label>
+                      <ion-toggle [(ngModel)]="loginPopup.email"></ion-toggle>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="3">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <ion-label>Date Of Birth</ion-label>
+                      <ion-toggle [(ngModel)]="loginPopup.dob"></ion-toggle>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="3">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <ion-label>{{taxType}}</ion-label>
+                      <ion-toggle [(ngModel)]="loginPopup.gst"></ion-toggle>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <ion-label>Custom Field</ion-label>
+                      <ion-toggle [(ngModel)]="loginPopup.custom.active">
+                      </ion-toggle>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12"
+                  *ngIf="loginPopup.custom.active">
+                  <div class="input-wrap">
+                    <ion-label>Custom Field Name</ion-label>
+                    <ion-input class="form-input"
+                      [(ngModel)]="loginPopup.custom.name"
+                      autocapitalize></ion-input>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <div class="flex-space-between">
+                      <div>
+                        <h3>Splash Screen Settings</h3>
+                      </div>
+                    </div>
+                    <br />
+                    <div class="flex-label">
+                      <ion-label>Active</ion-label>
+                      <ion-toggle [(ngModel)]="splashScreen.active">
+                      </ion-toggle>
+                    </div>
+                    <div  *ngIf="splashScreen.active"> 
+                      <div class="extra-charges">
+                        <div class="flex-space-between">
+                          <div>
+                            <ion-label style="margin-right: 20px;">Background Color
+                            </ion-label>
+                          </div>
+                          <input class="colorPicker"
+                            [(ngModel)]="splashScreen.bgColor"
+                            type="color">                         
+                        </div>
+  
+                        <div class="flex-space-between" style="margin-left: 10px;">
+                          <div>
+                            <ion-label style="margin-right: 20px;">Timeout</ion-label>
+                          </div>
+                          <ion-input class="form-input"
+                            [(ngModel)]="splashScreen.timeout"
+                            type="number"
+                            style="max-width: 10rem; margin-right: 20px;">
+                          </ion-input><p>seconds</p>
+                        </div>  
+                      </div>
+
+                      <div class="flex-label">
+                        <div class="flex-space-between">
+                          <div>
+                            <ion-label>Splash Logo Image</ion-label>
+                            <br>
+                          </div>
+                          <div class="upload-btn-wrapper" style="margin-top: 8px;">
+                          <button
+                            class="upload-btn btn-1 i-start" style="margin-right: 0px;"> <i
+                              class="flaticon-null-16"></i>Upload</button>
+                          <input
+                            type="file"
+                            name="myfile"
+                            (change)="uploadImage($event.target.files,'splashLogo')"
+                            accept="image/*" />
+                            <!-- <input
+                              [disabled]="imageResponse.length !== 0 || (categoryData && categoryData.image && categoryData.image.url)"
+                              type="file"
+                              name="myfile"
+                              (change)="uploadImage($event.target.files,'catImg')" /> -->
+                          </div>
+                        </div>
+                        <div class="img-container" *ngIf="splashScreen.active">
+                          <div class="no-img"
+                            *ngIf="(!splashScreen.logo)">
+                            <p>No attached image</p>
+                          </div>
+                          <div *ngIf="splashScreen">
+                            <div class="img-wrap" style="margin-top: 8px;"
+                              *ngIf="splashScreen.logo">
+                              <img class="category-img"
+                                [src]="splashScreen.logo"
+                                (click)="imgZoom(splashScreen.logo)" />
+                              <div class="overlay">
+                                <ion-button class="btn-2 remove"
+                                  shape="round"
+                                  fill="clear"
+                                  color="danger"
+                                  (click)="removeImg('splashLogo')">
+                                  <ion-icon name="trash"
+                                    slot="icon-only"></ion-icon>
+                                </ion-button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  
+                  
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-content>
+      </super-tab>
+
+      <!-- Order -->
+      <super-tab>
+        <ion-content>
+          <div class="main-container fix-height">
+            <ion-grid>
+              <ion-row>
+
+                <!-- <ion-col size="12">
+                  <div class="input-wrap">
+                    <div class="flex-space-between">
+                      <div>
+                        <ion-label>Extra Charges</ion-label>
+                      </div>
+                    </div>
+                    <br />
+                    <div class="flex-label">
+                      <p>Flat</p>&nbsp;&nbsp;
+                      <div class="toggle-btn">
+                        <label class="switch">
+                          <input color="primary"
+                            type="checkbox"
+                            (click)="extraChargesType($event)"
+                            [checked]="extraChargeType != 'flat'">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>&nbsp;&nbsp;
+                      <p>Percentage ( % )</p>&nbsp;&nbsp;
+                    </div>
+                    <div class="extra-charges">
+
+                      <div class="flex-space-between">
+                        <div>
+                          <ion-label style="margin-right: 20px;">Charge Name
+                          </ion-label>
+                        </div>
+                        <ion-input class="form-input"
+                          [(ngModel)]="chargeName"
+                          type="text"
+                          style="max-width: 10rem; margin-right: 20px;">
+                        </ion-input>
+                      </div>
+
+                      <div class="flex-space-between">
+                        <div>
+                          <ion-label style="margin-right: 20px;">Charges
+                            {{char}}</ion-label>
+                        </div>
+                        <ion-input class="form-input"
+                          [(ngModel)]="extraCharges"
+                          type="number"
+                          style="max-width: 10rem; margin-right: 20px;">
+                        </ion-input>
+                      </div>
+
+                      <div *ngIf="toggleState == 'perc'">
+                        <div class="flex-space-between">
+                          <div>
+                            <ion-label style="margin-right: 20px;">Max Amount
+                            </ion-label>
+                          </div>
+                          <ion-input class="form-input"
+                            [(ngModel)]="maxCharge"
+                            type="number"
+                            style="max-width: 10rem; margin-right: 20px;">
+                          </ion-input>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <div class="flex-label">
+                        <p>Make Verification with Delivery OTP Mandatory</p>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input color="primary"
+                              type="checkbox"
+                              (click)="verifyOtpToggle()"
+                              [checked]="verifyDeliveryOtp">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>&nbsp;&nbsp;
+                      </div>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <div class="flex-label">
+                        <p>Allow user to do online payment in COD</p>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input color="primary"
+                              type="checkbox"
+                              (click)="doPaymentInCodToggle()"
+                              [checked]="doPaymentInCod">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>&nbsp;&nbsp;
+                      </div>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <div class="flex-label">
+                        <p>Notify delivery agents and allow them to accept or reject nearby orders</p>&nbsp;&nbsp;
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input color="primary"
+                              type="checkbox"
+                              (click)="deliveryAcceptanceToggle()"
+                              [checked]="deliveryAcceptanceModel.active">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>&nbsp;&nbsp;
+                      </div>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12" *ngIf="deliveryAcceptanceModel.active">
+                  <div class="input-wrap">
+                    <ion-label>Radius(in Km)</ion-label>
+                    <ion-input type="number" class="form-input" [(ngModel)]="deliveryAcceptanceModel.radius"></ion-input>
+                  </div>
+                </ion-col> -->
+
+                <ion-col size="12"
+                  *ngIf="allowComment">
+                  <div class="input-wrap">
+                    <div class="flex-space-between">
+                      <div>
+                        <ion-label>Message for comment</ion-label>
+                      </div>
+                      <div class="flex-label">
+                        <ion-label>allow comment with order</ion-label>
+                        <ion-toggle (ionChange)="allowCommentToggleChange()"
+                          [checked]="allowComment"></ion-toggle>
+                      </div>
+                    </div>
+                    <ion-textarea rows="3"
+                      type="text"
+                      class="form-input"
+                      [(ngModel)]="commentMsg"></ion-textarea>
+                  </div>
+                </ion-col>
+                <ion-col size="12"
+                  *ngIf="!allowComment">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <ion-label>allow comment with order</ion-label>
+                      <ion-toggle (ionChange)="allowCommentToggleChange()"
+                        [checked]="allowComment"></ion-toggle>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <!-- <ion-col size="12">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <ion-label>Allow image upload with order</ion-label>
+                      <ion-toggle [(ngModel)]="allowImageUpload.isActive">
+                      </ion-toggle>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12"
+                  *ngIf="allowImageUpload.isActive">
+                  <div class="input-wrap">
+                    <div class="flex-space-between">
+                      <div>
+                        <ion-label>Name under which image to be uploaded
+                        </ion-label>
+                      </div>
+                      <div class="flex-label">
+                        <ion-label>Make Image upload mandatory</ion-label>
+                        <ion-toggle [(ngModel)]="allowImageUpload.isMandatory">
+                        </ion-toggle>
+                      </div>
+                    </div>
+                    <ion-input type="text"
+                      class="form-input"
+                      [(ngModel)]="allowImageUpload.name"></ion-input>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div style="display: flex;">
+                    <div class="input-wrap">
+                      <ion-label>Time limit for user to cancel order</ion-label>
+                      &nbsp;
+                      <input placeholder="Enter Time Limit"
+                        [(ngModel)]="cancelTimeForUser"
+                        (click)="enterEstimatedTime()"
+                        readonly
+                        style="padding:5px;border-radius:10px">
+                    </div>&nbsp;&nbsp;
+                    <ion-button (click)="removeLimit()"
+                      color="danger"
+                      size="small">
+                      <p>Remove</p>
+                    </ion-button>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <ion-label>Offer Message</ion-label>
+                    <ckeditor [(ngModel)]="offerMsg"
+                      [config]="ckeConfig"></ckeditor>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <div class="flex-label">
+                      <ion-label>Custom Field</ion-label>
+                      <ion-toggle [(ngModel)]="customOrder.active">
+                      </ion-toggle>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12"
+                  *ngIf="customOrder.active">
+                  <div class="input-wrap">
+                    <ion-label>Custom Field Name</ion-label>
+                    <ion-input class="form-input"
+                      [(ngModel)]="customOrder.name"
+                      autocapitalize></ion-input>
+                  </div>
+                </ion-col> -->
+
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-content>
+      </super-tab>
+
+      <!-- Notifications -->
+      <super-tab>
+        <ion-content>
+          <div class="main-container fix-height">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <ion-label>Enter number below which you want notification for products going Out of Stock</ion-label>
+                    <ion-input class="form-input" type="number"
+                      [(ngModel)]="notificationSettings.outOfStockProducts"></ion-input>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-content>
+      </super-tab>
+
+      <!-- Invoice -->
+      <super-tab>
+        <ion-content>
+          <div class="main-container fix-height">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <div class="flex-space-between">
+                      <div>
+                        <ion-label>GST Firm Name ( Billing Name )</ion-label>
+                      </div>
+                    </div>
+                    <ion-input class="form-input"
+                      [(ngModel)]="gstFirmName"></ion-input>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="flex-label">
+                    <p>Ask Custom Invoice No. during Invoice Regeneration</p>&nbsp;&nbsp;
+                    <div class="toggle-btn">
+                      <label class="switch">
+                        <input color="primary"
+                          type="checkbox"
+                          [checked]="isCustomInvoiceNo"
+                          (click)="allowCustomInvoiceNo()">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="flex-label">
+                    <p>Allow user for to enter GST</p>&nbsp;&nbsp;
+                    <div class="toggle-btn">
+                      <label class="switch">
+                        <input color="primary"
+                          type="checkbox"
+                          [checked]="isUserGstAvailable"
+                          (click)="toggleCheckbox('userGst')">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+                </ion-col>
+
+                <ion-col size="12">
+                  <div class="justify-content">
+                    <p>Store Logo (for Invoice) (Max Size: 200px by 200px)
+                      <ion-text color="danger">
+                        <p>Only image files are allowed</p>
+                      </ion-text>
+                    </p>
+                    <div class="upload-btn-wrapper">
+                      <button *ngIf="!storeLogo"
+                        class="upload-btn btn-1 i-start"> <i
+                          class="flaticon-null-16"></i>Upload</button>
+                      <input *ngIf="!storeLogo"
+                        type="file"
+                        name="myfile"
+                        (change)="uploadImage($event.target.files,'logo')"
+                        accept="image/*" />
+                    </div>
+                    <!-- <ion-button (click)="openImageActionSheet('logo')" fill="outline" shape="round" size="small" *ngIf="!storeLogo">
+                      Upload
+                    </ion-button> -->
+                    <ion-button (click)="removeImg('logo')"
+                      fill="outline"
+                      color="dark"
+                      shape="round"
+                      size="small"
+                      *ngIf="storeLogo">
+                      Remove
+                    </ion-button>
+                  </div>
+                  <div *ngIf="storeLogo"
+                    class="ion-text-center">
+                    <img src="{{storeLogo}}"
+                      class="sign-img">
+                  </div>
+                </ion-col>
+
+                <ion-col>
+                  <div class="justify-content">
+                    <p>Authorized Signatory (for Invoice) (Max Size: 200px by
+                      200px)<ion-text color="danger">
+                        <p>Only image files are allowed</p>
+                      </ion-text>
+                    </p>
+                    <div class="upload-btn-wrapper">
+                      <button *ngIf="!signature"
+                        class="upload-btn btn-1 i-start"> <i
+                          class="flaticon-null-16"></i>Upload</button>
+                      <input *ngIf="!signature"
+                        type="file"
+                        name="myfile"
+                        (change)="uploadImage($event.target.files,'sign')"
+                        accept="image/*" />
+                    </div>
+                    <!-- <ion-button (click)="openImageActionSheet('sign')" fill="outline" shape="round" size="small" *ngIf="!signature">
+                      Upload
+                    </ion-button> -->
+                    <ion-button (click)="removeImg('sign')"
+                      fill="outline"
+                      color="dark"
+                      shape="round"
+                      size="small"
+                      *ngIf="signature">
+                      Remove
+                    </ion-button>
+                  </div>
+                  <div *ngIf="signature"
+                    class="ion-text-center">
+                    <img src="{{signature}}"
+                      class="sign-img">
+                  </div>
+                </ion-col>
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <ion-label>Custom Message In Invoice</ion-label>
+                    <ion-textarea rows="4"
+                      type="text"
+                      class="form-input"
+                      [(ngModel)]="customMessage"></ion-textarea>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-content>
+      </super-tab>
+      <super-tab>
+        <ion-content>
+          <div class="main-container fix-height">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12">
+                  <div>
+                    <p><strong>App Links (Fill this enable sharing option on
+                        website and app)</strong></p>
+                    <br />
+                    <div>
+                      <p>Play Store</p>
+                      <ion-input type="text"
+                        class="form-input"
+                        [(ngModel)]="playstoreUrl"></ion-input>
+                      <br />
+                    </div>
+                    <div>
+                      <p>App Store</p>
+                      <ion-input type="text"
+                        class="form-input"
+                        [(ngModel)]="appStoreUrl"></ion-input>
+                      <br />
+                    </div>
+                  </div>
+                  <br>
+                  <div>
+                    <p><strong>Social Platforms Links ( For website, will be
+                        displayed at bottom)</strong></p>
+                    <br />
+                    <div>
+                      <p>Facebook</p>
+                      <ion-input type="text"
+                        class="form-input"
+                        [(ngModel)]="facebookUrl"></ion-input>
+                      <br />
+                    </div>
+                    <div>
+                      <p>Twitter</p>
+                      <ion-input type="text"
+                        class="form-input"
+                        [(ngModel)]="twitterUrl"></ion-input>
+                      <br />
+                    </div>
+
+                    <div>
+                      <p>Pinterest</p>
+                      <ion-input type="text"
+                        class="form-input"
+                        [(ngModel)]="pinterestUrl"></ion-input>
+                      <br />
+                    </div>
+                    <div>
+                      <p>Gmail</p>
+                      <ion-input type="text"
+                        class="form-input"
+                        [(ngModel)]="gmailUrl"></ion-input>
+                      <br />
+                    </div>
+                    <div>
+                      <p>LinkedIn</p>
+                      <ion-input type="text"
+                        class="form-input"
+                        [(ngModel)]="linkedinUrl"></ion-input>
+                      <br />
+                    </div>
+                    <div>
+                      <p>Instagram</p>
+                      <ion-input type="text"
+                        class="form-input"
+                        [(ngModel)]="instagramUrl"></ion-input>
+                      <br />
+                    </div>
+                    <div>
+                      <p>Youtube</p>
+                      <ion-input type="text"
+                        class="form-input"
+                        [(ngModel)]="youtubeUrl"></ion-input>
+                      <br />
+                    </div>
+                    <div>
+                      <p>Whatsapp (Number)</p>
+                      <ion-input type="text"
+                        class="form-input"
+                        [(ngModel)]="whatsappNumber"></ion-input>
+                      <br />
+                    </div>
+                  </div>
+                </ion-col>
+                <ion-col size="12">
+                  <p><strong>Contact on external paltform</strong></p>
+                  <br>
+                  <div>
+                    <p>Platform name</p>
+                    <ion-input type="text"
+                      class="form-input"
+                      [(ngModel)]="externalContact.name"
+                      placeholder="Name"></ion-input>
+                  </div>
+                  <br>
+                  <div>
+                    <p>Platform link</p>
+                    <ion-input type="text"
+                      class="form-input"
+                      [(ngModel)]="externalContact.link"></ion-input>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-content>
+      </super-tab>
+    </ng-template>
+  </super-tabs-container>
+
+</super-tabs>
+
+<ion-footer *ngIf="!showLoader"
+  no-border
+  class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="onClickSaveSettings()"
+      shape="round"
+      class="btn-1 i-start"
+      color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

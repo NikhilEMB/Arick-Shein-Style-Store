@@ -1,0 +1,92 @@
+ion-input {
+    --padding-start: 15px;
+    --padding-end: 5px;
+    --padding-top: 15px;
+    --padding-bottom: 15px;
+    font-size: 15px;
+    border-bottom: 1px solid #ccc;
+    text-transform: capitalize;
+    outline: none;
+  }
+  
+  p {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 13px;
+  }
+  ion-content{
+    --background: #fff;
+  }
+  ion-item {
+    --padding-end: 0px;
+    --inner-padding-end: 0px;
+  }
+  
+  ion-thumbnail {
+    --size: 50px;
+    border: 1px solid #ddd;
+    padding: 1px;
+    border-radius: 5px;
+  }
+  
+  .margin-icon {
+    margin-left: 5px;
+  }
+  
+  .loading {
+    background: transparent url('https://s5.gifyu.com/images/377-2.gif') center no-repeat;
+  }
+  
+  .no-data {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    left: 50%;
+    margin-left: -45px;
+  }
+  
+  .no-data img {
+    width: 90px;
+  }
+  
+  .no-data h6 {
+    opacity: .6;
+  }
+  
+  .spinner {
+    margin-top: 5%;
+    text-align: center;
+  }
+  
+  .list {
+    overflow-y: auto;
+  }
+  
+  .add-spinner{
+    text-align: center;
+  }
+  
+  .add-spinner ion-spinner{
+    width: 15px;
+  }
+  .cc-modal-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2%;
+  }
+  .flaticon-null-19::before {
+    font-size: 20px;
+    opacity: .6;
+    margin-right: 10px;
+  }
+  .cc-search{
+    width: 100%;
+  }
+  // ion-footer {
+  //   height: 55px;
+  //   background: none;
+  //   box-shadow: none;
+  // }

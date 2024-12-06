@@ -1,0 +1,191 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="user-cart" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center>Order Summary</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="showLoader; else contentLoaded">
+  <div class="spinner">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+</ion-content>
+
+<ng-template #contentLoaded>
+  <ion-content *ngIf="products.length && address">
+
+    <div class="address-card">
+      <p class="user-name">{{address.name}}</p>
+      <p class="address">{{address.address}}</p>
+      <p class="phone-no">{{address.phoneNo}}</p>
+      <div class="change-address-btn">
+        <ion-button (click)="onClickChangeOrAddAddress()" expand="block">
+          Change Or Add Address
+        </ion-button>
+      </div>
+    </div>
+    <div class="products-container" *ngFor="let product of products; let i=index">
+      <ion-list class="ion-no-padding" lines="none">
+        <ion-item class="ion-no-padding">
+          <div slot="start"
+            [ngStyle]="{'background': 'url(' + product.img.mob + ') no-repeat center', 'background-size': 'contain'}"
+            class="product-image"></div>
+          <ion-label>
+            <h2 class="product-price ion-text-wrap">{{product.price * product.quantity | currency: 'INR':true}}</h2>
+            <h3 class="product-name ion-text-wrap">{{product.name}}</h3>
+            <h6 class="product-description">{{product.description}}</h6>
+            <ion-grid>
+              <ion-row>
+                <h3 class="product-quantity">QTY: {{product.quantity}}</h3>
+              </ion-row>
+            </ion-grid>
+          </ion-label>
+        </ion-item>
+        <div class="comment-box" *ngIf="showCommentBoxAndImage">
+          <ion-textarea row="2" [placeholder]="placeholderMsgInCommentBox" [(ngModel)]="product.commentMsg" autocapitalize>
+          </ion-textarea>
+        </div>
+        <!-- <div *ngIf="showCommentBoxAndImage">
+          <ion-grid class="ion-no-padding">
+            <ion-row class="ion-justify-content-start">
+              <ion-button (click)="imageActionSheet(i)" expand="block" fill="clear">
+                Attach Images
+              </ion-button>
+            </ion-row>
+            <ion-row class="ion-justify-content-start" style="margin-left: 3%;">
+              <ion-col size="2" class="comment-img-conatiner"
+                *ngFor="let img of product.commentImgs; let imgIndex = index">
+                <div
+                  [ngStyle]="{'background': 'url(' + img.imgData + ') no-repeat center', 'background-size': 'contain'}"
+                  class="comment-img"></div>
+                <div class="remove-btn" (click)="removeCommentImage(i, imgIndex, img.imgData)">
+                  <i class="flaticon-null-17"></i>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div> -->
+      </ion-list>
+    </div>
+
+    <div class="delivery-schedule-section"
+      *ngIf="isDeliverySchedule && scheduledDates.length > 0">
+      <p class="price-details">Delivery Schedule</p>
+      <hr class="line">
+      <ion-list lines="none" class="ion-no-padding">
+        <ion-item class="delivery-date-time">
+          <ion-label>Delivery on:</ion-label>
+          <ion-select interface="popover" (ionChange)="selectDate($event)">
+            <ion-select-option [value]="date" *ngFor="let date of scheduledDates">{{date | date}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="delivery-date-time">
+          <ion-label>Time:</ion-label>
+          <ion-select interface="popover" (ionChange)="selectTime($event)" [disabled]="!this.selectedDate">
+            <ion-select-option [value]="time" *ngFor="let time of timeSchedules" [disabled]="disableTime(time)">{{time.start}} - {{time.end}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div class="coupon-code-section">
+      <div class="inline-alignment">
+        <div class="coupon-code-input">
+          <ion-input type="text" placeholder="Enter coupon code" [(ngModel)]="couponCode" [readonly]="couponApplied" (ionChange)="textUppercase(couponCode)">
+          </ion-input>
+        </div>
+        <div>
+          <ion-button (click)="applyCouponCode()" expand="block" shape="round" size="small" [disabled]="couponCode === ''"
+            *ngIf="!couponApplied">
+            Apply
+          </ion-button>
+          <ion-button (click)="removeCouponCode()" color="dark" expand="block" shape="round" size="small"
+            *ngIf="couponApplied">
+            Remove
+          </ion-button>
+        </div>
+      </div>
+      <div class="code-applied" *ngIf="couponApplied">
+        Coupon Applied!
+      </div>
+    </div>
+    <div class="price-card">
+      <p class="price-details">Price Details</p>
+      <hr class="line">
+      <ion-grid class="ion-no-padding">
+        <ion-row class="ion-justify-content-between ion-no-padding ion-align-items-center">
+          <ion-col class="ion-no-padding">
+            <p class="total-items">Price ({{getTotalItems()}} items)</p>
+          </ion-col>
+          <ion-col class="ion-no-padding price-total">
+            <p>{{productsPrice | currency: 'INR':true}}</p>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-between ion-no-padding ion-align-items-center" *ngIf="couponDiscount !== 0">
+          <ion-col class="ion-no-padding">
+            <p class="total-items">Coupon Discount</p>
+          </ion-col>
+          <ion-col class="ion-no-padding price-total">
+            <p style="color: var(--ion-color-success);">{{couponDiscount | currency: 'INR':true}}</p>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-between ion-no-padding ion-align-items-center">
+          <ion-col class="ion-no-padding">
+            <p class="total-items">Delivery Fee</p>
+          </ion-col>
+          <ion-col class="ion-no-padding price-total">
+            <p *ngIf="productsPrice < freeDeliveryAmt; else freeDelivery">{{defaultDeliveryAmt | currency: 'INR':true}}
+            </p>
+            <ng-template #freeDelivery>
+              <p style="color: var(--ion-color-success);">Free</p>
+            </ng-template>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-between ion-no-padding ion-align-items-center" *ngIf="defaultGst !== 0">
+          <ion-col class="ion-no-padding">
+            <p class="total-items">GST ({{defaultGst}}%)</p>
+          </ion-col>
+          <ion-col class="ion-no-padding price-total">
+            <p>{{gstAmount | currency: 'INR':true:'0.0'}}</p>
+          </ion-col>
+        </ion-row>
+
+        <hr class="line">
+        <ion-row class="ion-no-padding">
+          <ion-col class="ion-no-padding">
+            <p class="total-estimated">Total Amount</p>
+          </ion-col>
+          <ion-col class="ion-no-padding estimated-price">
+            <p>{{totalAmountToPaid | currency: 'INR':true}}</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ion-content>
+</ng-template>
+
+<ion-footer *ngIf="!showLoader">
+  <ion-toolbar>
+    <ion-grid class="ion-no-padding">
+      <ion-row class="ion-no-padding ion-align-items-center">
+        <ion-col class="ion-no-padding">
+          <div (click)="scrollToBottom()">
+            <h6>{{totalAmountToPaid | currency: 'INR':true}}</h6>
+            <p class="view-price-details">View Price Details</p>
+          </div>
+        </ion-col>
+        <ion-col class="ion-no-padding">
+          <ion-button expand="block" (click)="onClickPlaceOrder()">
+            Place Order
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

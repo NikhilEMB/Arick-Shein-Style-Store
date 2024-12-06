@@ -1,0 +1,568 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="{{this.userRole === 'admin' ? 'admin-orders' : 'vendor-orders'}}" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Create Order</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs no-shadow no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label class="step-count" *ngIf="statusIndex <= 1; else step1Completed;">1</ion-label>
+      <ng-template #step1Completed>
+        <ion-label>
+          <ion-icon class="check-icon" name="checkmark-circle"></ion-icon>
+        </ion-label>
+      </ng-template>
+      <ion-label>Select User</ion-label>
+    </super-tab-button>
+
+    <super-tab-button>
+      <ion-label class="step-count" *ngIf="statusIndex <= 2; else step3Completed;">2</ion-label>
+      <ng-template #step2Completed>
+        <ion-label>
+          <ion-icon class="check-icon" name="checkmark-circle"></ion-icon>
+        </ion-label>
+      </ng-template>
+      <ion-label>User Details</ion-label>
+    </super-tab-button>
+
+    <super-tab-button>
+      <ion-label class="step-count" *ngIf="statusIndex <= 3; else step3Completed;">3</ion-label>
+      <ng-template #step3Completed>
+        <ion-label>
+          <ion-icon class="check-icon" name="checkmark-circle"></ion-icon>
+        </ion-label>
+      </ng-template>
+      <ion-label>Select Products</ion-label>
+    </super-tab-button>
+
+    <super-tab-button>
+      <ion-label class="step-count" *ngIf="statusIndex <= 4; else step4Completed;">4</ion-label>
+      <ng-template #step4Completed>
+        <ion-label>
+          <ion-icon class="check-icon" name="checkmark-circle"></ion-icon>
+        </ion-label>
+      </ng-template>
+      <ion-label>Order Summary</ion-label>
+    </super-tab-button>
+
+  </super-tabs-toolbar>
+
+  <super-tabs-container swipeEnabled="false">
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="8">
+                <div class="searchArea">
+                  <input class="searchInput" [(ngModel)]="searchValue" placeholder="Search by name, phone number">
+                  &nbsp;
+                  <ion-button (click)='typeSenseSearchQuery()' size="small">Search</ion-button>&nbsp;
+                  <!-- <ion-button (click)='clearSearch()' size="small">Show All</ion-button> -->
+                </div>
+                <!-- <div class="input-wrap">
+                  <ion-col size="6" style="display: flex;align-items: center;">
+                    <input placeholder="Enter name" [(ngModel)]="searchUser" style="background: white;border: 1px solid;padding: 5px;" (click)='clearPhone()'(keyup.enter)='fireSearchQuery()'>&nbsp;
+                    <input placeholder="Enter number" [maxlength]='phoneLimit' [(ngModel)]="searchUserPhone" style="background: white;border: 1px solid;padding: 5px;" (click)='clearName()' (keyup.enter)='fireSearchQuery()'>&nbsp;
+                    <ion-button (click)='fireSearchQuery()' size="small">Search</ion-button>&nbsp;
+                  </ion-col>
+                </div> -->
+                <ion-list class="ion-no-padding list" lines="none">
+                  <ion-item class="ion-no-padding" *ngFor="let user of userList; let i = index">
+                    <ion-grid class="ion-no-padding">
+                      <ion-row class="ion-align-items-center">
+                        <ion-col size="2">
+                          <ion-thumbnail class="thumbnail">
+                            <img src="{{user.dP}}">
+                          </ion-thumbnail>
+                        </ion-col>
+                        <ion-col size="7">
+                          <p class="ion-text-capitalize">{{user.name}}</p>
+                          <p>{{user.phoneNo}}</p>
+                        </ion-col>
+                        <ion-col size="3">
+                          <p class="ion-text-center ion-text-uppercase" class="bs-product-added" *ngIf="user.selected">
+                            <i class="flaticon-null-20 green"></i></p>
+                          <ion-button class="btn-sml" shape="round" fill="outline" *ngIf="!user.selected"
+                            (click)="selectUser(user.name, user.phoneNo, user.id, i, user.subRole)">Select</ion-button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                </ion-list>
+              </ion-col>
+
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ng-container *ngIf="statusIndex < 2; else step2Allowed;">
+            <p>Please select user at step 1 before proceeding further.</p>
+          </ng-container>
+          <ng-template #step2Allowed>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <ion-label>User Shipping Address</ion-label>
+                    <ion-textarea type="text" row="3" class="form-input" [(ngModel)]="userAddress.address"
+                      >
+                    </ion-textarea>
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                  <div>
+                    <p>City</p>
+                    <ion-input type="text" class="form-input" [(ngModel)]="userAddress.city"
+                      ></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                  <div>
+                    <p>Pincode</p>
+                    <ion-input type="string" class="form-input" [(ngModel)]="userAddress.pincode"
+                      ></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                  <div>
+                    <p>State</p>
+                    <div class="form-input state-wrapper" (click)="openStateModal('shipping')">
+                      <div *ngIf="userAddress.state">{{userAddress.state}}</div>
+                      <div *ngIf="!userAddress.state">Select State</div>
+                      <div>
+                        <i class="flaticon-null-13"></i>
+                      </div>
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12">
+                  <div>
+                    <div class="flex-label">
+                      <ion-label>Billing Address same as Shipping Address</ion-label>
+                      <ion-toggle [(ngModel)]="shippingSameAsBilling"></ion-toggle>
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row *ngIf="!shippingSameAsBilling">
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <ion-label>User Billing Address</ion-label>
+                    <ion-textarea type="text" row="3" class="form-input" [(ngModel)]="billingAddress.address"
+                      >
+                    </ion-textarea>
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                  <div>
+                    <p>City</p>
+                    <ion-input type="text" class="form-input" [(ngModel)]="billingAddress.city"
+                      ></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                  <div>
+                    <p>Pincode</p>
+                    <ion-input type="string" class="form-input" [(ngModel)]="billingAddress.pincode"
+                      ></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                  <div>
+                    <p>State</p>
+                    <div class="form-input state-wrapper" (click)="openStateModal('billing')">
+                      <div *ngIf="billingAddress.state">{{billingAddress.state}}</div>
+                      <div *ngIf="!billingAddress.state">Select State</div>
+                      <div>
+                        <i class="flaticon-null-13"></i>
+                      </div>
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row class="m-t-16">
+                <ion-col size="6">
+                  <div>
+                    <p>Customer {{taxType}} Number</p>
+                    <ion-input type="text" class="form-input" [(ngModel)]="customerGstNo"
+                      ></ion-input>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-footer no-border class="page-footer">
+              <div class="main-container footer-no-border">
+                <ion-button (click)="saveAddress()" shape="round" class="btn-1 i-start"
+                  color="success">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+              </div>
+            </ion-footer>
+          </ng-template>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+
+          <ng-container *ngIf="statusIndex < 3; else step3Allowed;">
+            <p>Please select user at step 1 before selecting products.</p>
+          </ng-container>
+
+          <ng-template #step3Allowed>
+            <ng-container *ngIf="statusIndex >= 3">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="8">
+                    <div class="input-wrap">
+                      <ion-label>Enter product name</ion-label>
+                      <ion-input class="form-input" type="text" placeholder="Search for products..."
+                        [(ngModel)]="searchProduct" (ngModelChange)="fireSearchQueryForProduct()" autocapitalize>
+                      </ion-input>
+                    </div>
+                    <ion-list class="ion-no-padding list" lines="none">
+                      <ion-item class="ion-no-padding" *ngFor="let item of productList; let i = index">
+                        <ion-grid class="ion-no-padding">
+                          <ion-row class="ion-align-items-center">
+                            <ion-col size="3">
+                              <ion-thumbnail style="margin-left: 5%;" class="thumbnail">
+                                <img class="loading" *ngIf="item.coverPic && !item.coverPic.thumb && item.coverPic.url"
+                                  src="{{item.coverPic.url}}">
+                                <img class="loading" *ngIf="item.coverPic && item.coverPic.thumb"
+                                  src="{{item.coverPic.thumb}}">
+                                <img *ngIf="!item.coverPic" src="assets/img/placeholder-img.jpg">
+                              </ion-thumbnail>
+                            </ion-col>
+                            <ion-col size="6">
+                              <p class="ion-text-capitalize ion-text-center">{{item.prodName}}</p>
+                              <p class="ion-text-capitalize ion-text-center">Price:
+                                {{item.discountedPrice | currency: currencyCode:true}}</p>
+                            </ion-col>
+                            <ion-col *ngIf="item.status && item.productQty > 0;else noStatus" size="3">
+                              <ion-button class="btn-sml" shape="round" fill="outline" (click)="addProduct(item, i)" *ngIf="!item.added && !item.isPriceList">Add</ion-button>
+                                <p class="green ion-text-uppercase" style="display: inline;" *ngIf="item.added && !item.isPriceList">Added</p> 
+                                <ion-button class="btn-sml" shape="round" fill="outline" (click)="addProduct(item, i)" *ngIf="item.isPriceList">Select</ion-button>
+                                <ion-button class="btn-sml" style="margin-left:10px" shape="round" fill="outline" (click)="subscribeProduct(item)" *ngIf=" item.subscription && item.subscription.isAllowed && subscriptionFeature && !item.isPriceList">Subscribe</ion-button>
+                            </ion-col>
+                            <ng-template #noStatus>
+                              <ion-col size="3">
+                                <ion-button class="btn-sml" shape="round" fill="outline" (click)="addProduct(item, i)" *ngIf="item.isPriceList">Select</ion-button>
+                                <ion-text *ngIf="!item.status && !item.isPriceList" color="danger">InActive</ion-text>
+                                <ion-text *ngIf="0 >= item.productQty && item.status && !item.isPriceList" color="danger">Out Of Stock</ion-text>
+                              </ion-col>
+                            </ng-template>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-item>
+                    </ion-list>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ng-container>
+          </ng-template>
+          <ion-infinite-scroll threshold="100px" (ionInfinite)="searchMoreProducts($event)" *ngIf="searchProduct">
+            <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more products...">
+            </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        </div>
+      </ion-content>
+
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+
+          <ng-container *ngIf="statusIndex < 4; else step4Allowed;">
+            <p>Please select product before accessing this step.</p>
+          </ng-container>
+          <ng-template #step4Allowed>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12" size-md="4">
+                  <div class="address-wrap">
+                    <h3 class="delivery-heading">Shipping Address</h3>
+                    <p> <strong>{{selectedUser.name}}</strong><br>
+                      {{userAddress.address}}<br>
+                      {{userAddress.city}}<br>
+                      {{userAddress.state}}<br>
+                      {{userAddress.pincode}}
+                    </p>
+                    <p><strong>Phone Number</strong> - {{selectedUser.phoneNo}}</p>
+                  </div>
+                </ion-col>
+                <ion-col size="12" size-md="4">
+                  <div class="address-wrap">
+                    <h3 class="delivery-heading">Billing Address</h3>
+                    <p> <strong>{{selectedUser.name}}</strong><br>
+                      {{billingAddress.address}}<br>
+                      {{billingAddress.city}}<br>
+                      {{billingAddress.state}}<br>
+                      {{billingAddress.pincode}}
+                    </p>
+                    <p><strong>Phone Number</strong> - {{selectedUser.phoneNo}}</p>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <!-- *ngIf="isRFQ" -->
+            <ng-container>
+              <div class="divider"></div>
+            
+              <div class="flex-label">
+                <ion-label>Quotation Order</ion-label>
+                <ion-toggle [(ngModel)]="isQuotationOrder"></ion-toggle>
+              </div>
+            </ng-container>
+            <div class="divider"></div>
+            <div class="order-items-detail-wrapper">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="12" size-xl="8">
+                    <ion-text color="danger" *ngIf="userRole == 'manager'">
+                      <span>*Discounted price is disabled for manager.</span>
+                    </ion-text>
+                    <div *ngFor="let product of productsAdded; let i=index">
+                      <ion-item class="ion-no-padding">
+                        <ion-row style="width: 100%;">
+                          <ion-col size="2" class="vertical-center">
+                            <div *ngIf="product.img?.mob"
+                              [ngStyle]="{'background': 'url(' + product.img.mob + ') no-repeat center', 'background-size': 'contain'}"
+                              class="product-image"></div>
+                            <div *ngIf="!product.img.mob"
+                              [ngStyle]="{'background': 'url(' + product.img.url + ') no-repeat center', 'background-size': 'contain'}"
+                              class="product-image"></div>
+                          </ion-col>
+                          <ion-col size="4">
+                            <div>
+                              <h3 class="product-name ion-text-wrap"><strong>{{product.name}} 
+                                <span *ngIf="product.description.length>0">({{product.description}})</span>
+                              </strong></h3>
+                              <div *ngIf="(product.hasOwnProperty('orderType') && product.orderType === 'subscription')">
+                                
+                            <h3 class="product-name ion-text-wrap"><strong>Subscription</strong></h3>
+                            <h3 class="ion-text-wrap product-name"><strong> Quantity per day:
+                              {{product.subData.qtyPerDay}}</strong></h3>
+                          <h3 class="ion-text-wrap product-name" *ngIf="product.subData.deliveryDays.length > 0">
+                            <strong>Total selected days:
+                              {{product.subData.deliveryDays.length}}</strong>
+                          </h3>
+                          <h3 class="ion-text-wrap product-name" *ngIf="product.subData.deliveryDates.length > 0">
+                            <strong>
+                              Total selected dates:
+                              {{product.subData.deliveryDates.length}}</strong>
+                          </h3>
+                          <h3 class="ion-text-wrap product-name" *ngIf="product.subData.type === 'weekly'">
+                            <strong>
+                              Total weeks: {{product.subData.totalWeeks}}</strong>
+                          </h3>
+                          <h3 class="ion-text-wrap product-name" *ngIf="product.subData.type === 'monthly'">
+                            <strong>
+                              Total months: {{product.subData.totalMonths}}</strong>
+                          </h3>
+                          <h3 class="ion-text-wrap product-name">
+                            <strong>
+                              Total deliveries:
+                                {{product.subData.totalDeliveries}}</strong>
+                            </h3>
+                              </div>
+                              <div *ngIf="!(product.hasOwnProperty('orderType') && product.orderType === 'subscription')">
+                                <h3 class="product-quantity product-name">QTY: {{product.quantity}}</h3>
+                                <div class="qty-container">
+                                  <ion-button class="btn-sml" shape="round" fill="outline" (click)="decrement(i)">-
+                                  </ion-button>
+                                  <ion-button class="btn-sml qty-btn" shape="round" fill="outline" (click)="onClickQty(i)">{{product.quantity}}
+                                  </ion-button>
+                                  <ion-button class="btn-sml" shape="round" fill="outline" (click)="increment(i)">+
+                                  </ion-button>
+                                </div>
+                              </div>
+                              </div>
+                          </ion-col>
+                          <ion-col size="3">
+                            <div *ngIf="!(product.hasOwnProperty('orderType') && product.orderType === 'subscription')">
+                              <h3 class="product-name"><strong>Price(per qty)</strong></h3>
+                              <h3 class="product-quantity product-name">{{product.mrpPrice | currency: currencyCode:true}}</h3>
+                            </div>
+                            <div *ngIf="(product.hasOwnProperty('orderType') && product.orderType === 'subscription')">
+                              <h3><strong>
+                                {{product.price * product.quantity | currency: currencyCode:true:'0.0'}}</strong></h3>
+                            </div>
+                          </ion-col>
+                          <ion-col size="3">
+                            <div>
+                              <div *ngIf="!(product.hasOwnProperty('orderType') && product.orderType === 'subscription')">
+                                <h3 class="product-name"><strong>Discounted Price(per qty)</strong></h3>
+                                <ion-input class="form-input discount-price-input" type="number" [disabled]="orderBy.role == 'manager'"
+                                  [(ngModel)]="product.price" (ionChange)="onChangeDiscountedPrice()"></ion-input>
+                              </div>
+                            </div>
+                            <div *ngIf="(product.hasOwnProperty('orderType') && product.orderType === 'subscription')">
+                              <ion-button fill="clear" color="danger" (click)="removeSubscribedProduct(i)" class="remove-btn">
+                                <ion-icon name="trash" class="remove-icon" slot="icon-only"></ion-icon>
+                              </ion-button>
+                            </div>
+                          </ion-col>
+                          
+                          <ion-col size="12" *ngIf="showCommentBoxAndImage">
+                            <ion-textarea class="form-input" row="2" placeholder="add comment" [(ngModel)]="product.commentMsg" autocapitalize>
+                            </ion-textarea>
+                          </ion-col>
+                          <ion-col size="12">
+                            <div class="comment-imgs-wrapper"
+                              *ngIf="showCommentBoxAndImage && (!product.hasOwnProperty('orderType') || (product.hasOwnProperty('orderType') && product.orderType !== 'membership'))">
+                              <div class="add-imgs-btn">
+                                <label [for]="'upload-comment' + i">Attach Images</label>
+                                <input [id]="'upload-comment' + i" type="file" [name]="'myfile' + i"
+                                  (change)="uploadCommentImgs($event.target.files, product.productId)" multiple />
+                              </div>
+                          
+                              <div class="comment-imgs">
+                                <div class="img" *ngFor="let img of listOfCommentImages[product.productId]; let imgIndex = index">
+                                  <ion-img [src]="img" (click)="imgZoom(img)"></ion-img>
+                                  <div class="remove-btn" (click)="removeCommentImage(imgIndex, product.productId)">
+                                    <ion-icon name="remove-circle" color="primary"></ion-icon>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </ion-col>
+
+                        </ion-row>
+                      </ion-item>
+                    </div>
+                  </ion-col> 
+                  <ion-col size="12" size-xl="4">
+                    <div class="order-summery-wrapper">
+                      <h3>Order Summary</h3>
+                      <div class="coupon-wrapper">
+                        <div class="coupon-wrap">
+                          <ion-input
+                            class="form-input coupon-input"
+                            placeholder="{{'Apply Coupon'}}"
+                            [(ngModel)]="couponCode"
+                            readonly
+                            (ionChange)="textUppercase()"
+                            (click)="openCouponsModal()"
+                          ></ion-input>
+    
+                          <div class="btn-wrap">
+                            <ion-button
+                              class="btn-sml"
+                              (click)="openCouponsModal()"
+                              *ngIf="!couponApplied"
+                              fill="clear"
+                            >
+                              <i class="flaticon-next"></i>
+                            </ion-button>
+    
+                            <ion-button
+                              class="btn-sml"
+                              color="gray"
+                              fill="outline"
+                              (click)="removeCouponCode()"
+                              *ngIf="couponApplied"
+                            >
+                              {{'Remove'}}
+                            </ion-button>
+                          </div>
+                        </div>
+                        <span class="coupon-status success" *ngIf="couponApplied"
+                          >{{'Coupon Applied'}}</span
+                        >
+                      </div>
+                      <table>
+                        <tr>
+                          <td>Number of Items</td>
+                          <td>{{productsAdded.length}} items</td>
+                        </tr>
+                        <tr>
+                          <td>Price</td>
+                          <td>{{calcOrderSummaryPrice() | currency: currencyCode:true}}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>{{taxType}}</td>
+                          <td>{{calcOrderSummaryGst() | currency: currencyCode:true:'0.0'}}</td>
+                        </tr>
+
+                        <tr *ngIf="couponDiscount !== 0">
+                          <td>Coupon Discount</td>
+                          <td class="color-success">
+                            -{{couponDiscount | currency:
+                            currencyCode:true:'.2-2'}}
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td>Delivery Charges</td>
+                          <td>
+                            <ion-input class="form-input" type="number" [(ngModel)]="delivery"></ion-input>
+                          </td>
+                        </tr>
+                        <tr *ngIf="orderBy.role != 'manager'">
+                          <td>Additional Discount</td>
+                          <td>
+                            <ion-input class="form-input" type="number" [(ngModel)]="additionalDiscount">
+                            </ion-input>
+                          </td>
+                        </tr>
+                      </table>
+                      <div class="sub-total-wrap">
+                        <table>
+                          <tr>
+                            <td>
+                              <h3>Total Amount</h3>
+                              <p>(Incl of all taxes)</p>
+                            </td>
+                            <td>
+                              <!-- <h3 *ngIf="!couponApplied">{{calcOrderSummaryTotalAmtToPaid() | currency: currencyCode:true}}</h3>
+                              <h3 *ngIf="couponApplied">{{totalAmountToPaid | currency: currencyCode:true}}</h3> -->
+                              <h3>{{calcOrderSummaryTotalAmtToPaid() | currency: currencyCode:true}}</h3>
+
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                      <div class="white-sep"></div>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </ng-template>
+          <ion-footer *ngIf="statusIndex == 4" class="page-footer" no-border>
+            <div class="main-container footer-no-border">
+              <ion-button [disabled]="calcOrderSummaryTotalAmtToPaid() < 0" (click)="saveOrder()" shape="round" class="btn-1 i-start" color="success">
+                <i class="flaticon-null-20"></i>
+                Save Order
+              </ion-button>
+            </div>
+          </ion-footer>
+        </div>
+      </ion-content>
+
+    </super-tab>
+
+
+
+
+
+  </super-tabs-container>
+</super-tabs>

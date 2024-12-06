@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Vendor Registration</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container fixed-height">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <div class="flex-label">
+              <ion-label>Auto Approve Vendors</ion-label>
+              <ion-toggle [(ngModel)]="registrationFields.autoApprove"></ion-toggle>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Form Title</ion-label>
+            <ion-input class="form-input" [(ngModel)]="registrationFields.title"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Form Description</ion-label>
+            <ion-textarea rows="4" type="text" class="form-input" [(ngModel)]="registrationFields.description">
+            </ion-textarea>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div style="display: flex;justify-content: center">
+            <ion-button (click)="saveSettings()" [disabled]="disableSave()" shape="round" class="btn-1 i-start" color="success">
+              Save Form Settings
+            </ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="vendorRequests.length">
+        <ion-col>
+          <h4>Requests</h4>
+        </ion-col>
+        <ion-col size="12">
+          <div class="m-t-10">
+            <ion-grid class="ion-no-padding data-table ion-text-center">
+              <ion-row class="ion-text-capitalize">
+                <ion-col>Vendor Name</ion-col>
+                <ion-col>Requests</ion-col>
+                <ion-col>Status</ion-col>
+              </ion-row>
+              <ion-row *ngFor="let vendor of vendorRequests; let i=index;">
+                <ion-col>
+                  {{vendor.name}}
+                </ion-col>
+                <ion-col>
+                  <ion-button (click)="viewRequest(i)" fill="outline" shape="round" size="small">
+                    View Request
+                  </ion-button>
+                </ion-col>
+                <ion-col>
+                  <ng-container *ngIf="vendor.approved"><b class="green">Approved</b></ng-container>
+                  <ng-container *ngIf="!vendor.approved">
+                    <ion-button (click)="approve(vendor.id)" fill="outline" shape="round" size="small">
+                      Approve
+                    </ion-button>
+                  </ng-container>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start">
+      <img src="../../../assets/img/shop-logo.png" />
+    </div>
+    <ion-title>Branches</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <div class="" text-center>
+      <ion-button (click)="editBranch()">ADD Branch</ion-button>
+    </div>
+    <ng-container *ngIf="branches.length; else noBranches">
+      <ion-searchbar [(ngModel)]="searchInput" mode="ios" animated showCancelButton="focus"
+        placeholder="Search vendor"></ion-searchbar>
+      <div class="tableArea">
+        <table>
+          <thead>
+            <tr class="header">
+              <th>SN No</th>
+              <th>Branch Name</th>
+              <th>Branch Email</th>
+              <th>Branch phone</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of branches | filter: searchInput; index as i">
+              <td>{{i + 1}}</td>
+              <td>{{item.name}}</td>
+              <td>{{item.email}}</td>
+              <td>{{item.phoneNo}}</td>
+              <td>
+                <ion-button size="small" color="primary" fill="outline" (click)="editBranch(item)">Edit</ion-button>
+                &nbsp;
+                <ion-button size="small" color="danger" fill="outline"
+                  (click)="askDeleteBranch(item)">Delete</ion-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+    <ng-template #noBranches>
+      <h1 text-center>No Branch found!</h1>
+    </ng-template>
+  </div>
+
+</ion-content>

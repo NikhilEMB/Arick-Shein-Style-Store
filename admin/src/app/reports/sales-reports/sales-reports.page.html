@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Sales Report</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content> <div class="main-container">
+  <div class="verticle-tab-container">
+    <div class="tabs-buttons">
+    <ion-button expand="full" class="btn-1 tab-btn">Sales</ion-button>
+    <ion-button expand="full" fill="outline" class="btn-1 tab-btn" (click)="goToPage('category-report')">Category</ion-button>
+    <ion-button expand="full" fill="outline" class="btn-1 tab-btn">Brands</ion-button>
+    <ion-button expand="full" fill="outline" class="btn-1 tab-btn">Products</ion-button>
+    <ion-button expand="full" fill="outline" class="btn-1 tab-btn">Services</ion-button>
+    <ion-button expand="full" fill="outline" class="btn-1 tab-btn">Brands</ion-button>
+    <ion-button expand="full" fill="outline" class="btn-1 tab-btn">Tax</ion-button>
+    </div>
+    <div class="tabs-content">
+      <ion-grid >
+        <ion-row>
+          <ion-col size="6"><ion-item>
+            <ion-label>Start Date</ion-label>
+            <ion-datetime displayFormat="MM DD YYYY" placeholder="Select Date"></ion-datetime>
+          </ion-item></ion-col>
+          <ion-col size="6"><ion-item>
+            <ion-label>End Date</ion-label>
+            <ion-datetime displayFormat="MM DD YYYY" placeholder="Select Date"></ion-datetime>
+          </ion-item></ion-col>
+        </ion-row>
+      </ion-grid>
+      <div class="details">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="4" class="ion-text-center">
+              <h3>Total no of Orders</h3>
+              <p>567</p>
+            </ion-col>
+            <ion-col size="4" class="ion-text-center">
+              <h3>Total Sales</h3>
+              <p>Rs 10,265</p>
+            </ion-col>
+            <ion-col size="4" class="ion-text-center">
+              <h3>Total Profit</h3>
+              <p>Rs 1,265</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+      <div class="chart-bx">
+        <canvas #orderChart></canvas>
+      </div>
+
+      <div class="chart-bx">
+        <canvas #salesChart></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+</ion-content>

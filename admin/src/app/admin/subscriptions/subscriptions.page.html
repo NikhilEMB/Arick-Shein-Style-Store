@@ -1,0 +1,210 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Subscriptions</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <super-tabs no-shadow no-border>
+    <super-tabs-toolbar slot="top">
+      <super-tab-button>
+        <ion-label>List</ion-label>
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>Settings</ion-label>
+      </super-tab-button>
+    </super-tabs-toolbar>
+
+    <super-tabs-container>
+      <super-tab>
+        <ion-content class="sub-list-content">
+            <div class="main-container">
+          <div *ngIf="showLoader; else subsLoaded;" class="spinner">
+            <ion-spinner color="primary"></ion-spinner>
+          </div>
+          <ng-template #subsLoaded>
+            <div class="no-data" *ngIf="!subscriptions.length; else showSubscriptions" text-center>
+              <img src="assets/img/no-orders.png" alt="">
+              <h6>No subscriptions</h6>
+            </div>
+            <ng-template #showSubscriptions>
+              <div *ngFor="let sub of subscriptions; let i=index">
+                <div class="ps-products-container">
+                  <div class="ps-placed-on">
+                    Subscribed on {{sub.createdAt.toDate() | date: 'short'}}
+                  </div>
+                  <hr class="line">
+
+                  <ion-item lines="none">
+                    <div *ngIf="sub.product.coverPic.mob" slot="start"
+                      [ngStyle]="{'background': 'url(' + sub.product.coverPic.mob + ') no-repeat center', 'background-size': 'contain'}"
+                      class="ps-product-image">
+                    </div>
+                    <div *ngIf="!sub.product.coverPic.mob && sub.product.coverPic.url" slot="start"
+                      [ngStyle]="{'background': 'url(' + sub.product.coverPic.url + ') no-repeat center', 'background-size': 'contain'}"
+                      class="ps-product-image">
+                    </div>
+                    <div *ngIf="!sub.product.coverPic.mob && !sub.product.coverPic.url" slot="start"
+                      class="ps-no-product-image">
+                    </div>
+                    <ion-label>
+                      <div class="price-arrow">
+                        <h2 class="ps-product-price ion-text-wrap" *ngIf="sub.amountPayable">
+                          {{sub.amountPayable | currency: currencyCode:true}}</h2>
+                        <i (click)="openSubscriptionCalendar(sub)" class="flaticon-null-12"></i>
+                      </div>
+                      <h3 (click)="openSubscriptionCalendar(sub)" class="ps-product-name ion-text-wrap">{{sub.product.prodName}}</h3>
+                      <h3 class="ps-sub-by ion-text-wrap" *ngIf="sub.userName">
+                        Subscribed by
+                        <span (click)="messageUser(sub.userId)">{{sub.userName}}</span>
+                      </h3>
+                      <h3 class="ps-completed ion-text-wrap" *ngIf="sub.hasOwnProperty('orderCreated') && sub.orderCreated === sub.totalDeliveries">
+                        Completed <i class="flaticon-null-20"></i>
+                      </h3>
+                    </ion-label>
+                  </ion-item>
+
+                  <div class="ps-next-order" *ngIf="!sub.hasOwnProperty('orderCreated') || (sub.hasOwnProperty('orderCreated') && sub.orderCreated < sub.totalDeliveries)">
+					<div *ngIf="hasSubscriptionCompleted(sub); else ongoingSubscription">
+                        Completed <i class="flaticon-null-20"></i>
+					</div>
+
+					<ng-template #ongoingSubscription>
+						<span>Next order on <span class="ps-next-order-bold">{{getNextDate(sub) | date}}</span></span>
+						<span *ngIf="sub.deliverySlot && sub.deliverySlot.hasOwnProperty('start')">
+						  at <span class="ps-next-order-bold">{{sub.deliverySlot.start}} - {{sub.deliverySlot.end}}</span>
+						</span>
+					</ng-template>
+                  </div>
+
+                  <!-- <div class="delivery-dates" *ngIf="sub?.ordersAt?.length > 0">
+                    <ion-text color="primary" (click)="sub.viewDates = !sub.viewDates">
+                      <span>
+                        Check Dates
+                      </span>
+                      <span *ngIf="!sub.viewDates">
+                          <i class="flaticon-down-arrow"></i>
+                      </span>
+                      <span *ngIf="sub.viewDates">
+                          <i class="flaticon-upload"></i>
+                      </span>
+                    </ion-text>
+
+                    <ng-container *ngIf="sub.viewDates">
+                      <div class="f-s-14 m-t-16 m-b-16">
+                        <ul>
+                          <li *ngFor="let date of sub.ordersAt">
+                            {{date | date}}
+                          </li>
+                        </ul>
+                      </div>
+                    </ng-container>
+                  </div> -->
+
+                  <div class="ps-action-btn" *ngIf="!sub.hasOwnProperty('orderCreated') || (sub.hasOwnProperty('orderCreated') && sub.orderCreated < sub.totalDeliveries)">
+                    <ion-grid class="ion-no-padding">
+                      <ion-row class="ion-no-padding">
+                        <ion-col size="6" class="ion-no-padding">
+                          <ion-button (click)="removeSubConfirm(i)" size="small" color="dark" shape="round">
+                            Remove <ion-icon name="trash"></ion-icon>
+                          </ion-button>
+                        </ion-col>
+                        <ion-col size="6" class="ion-no-padding">
+                          <ion-button (click)="toggleActive(i)" size="small" shape="round">
+                            <span *ngIf="sub.active">Pause <ion-icon name="pause"></ion-icon></span>
+                            <span *ngIf="!sub.active">Resume <i class="flaticon-refresh"></i></span>
+                          </ion-button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ng-template>
+            </div>
+        </ion-content>
+      </super-tab>
+      <super-tab>
+        <ion-content class="ion-padding">
+            <div class="main-container">
+          <div class="content-alignment sub-settings-fields">
+            <div>Active</div>
+            <div class="toggle-btn">
+              <label class="switch">
+                <input type="checkbox" (click)="activeToggle()" [checked]="isActive">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="content-alignment sub-settings-fields">
+            <div>Cash Payment</div>
+            <div class="toggle-btn">
+              <label class="switch">
+                <input type="checkbox" (click)="cashAllowedToggle()" [checked]="isCashAllowed">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+          <hr class="line">
+
+          <div class="sub-settings-fields">
+            <h6>Daily: </h6>
+
+            <div class="content-alignment sub-settings-fields">
+              <div>Minimum Deliveries</div>
+              <ion-input class="sub-settings-input" type="number" [(ngModel)]="dailyDeliveries.min"></ion-input>
+            </div>
+
+            <div class="content-alignment sub-settings-fields">
+              <div>Maximum Deliveries</div>
+              <ion-input class="sub-settings-input" type="number" [(ngModel)]="dailyDeliveries.max"></ion-input>
+            </div>
+          </div>
+          <hr class="line">
+
+          <div class="sub-settings-fields">
+            <h6>Weekly: </h6>
+
+            <div class="content-alignment sub-settings-fields">
+              <div>Minimum Deliveries</div>
+              <ion-input class="sub-settings-input" type="number" [(ngModel)]="weeklyDeliveries.min"></ion-input>
+            </div>
+
+            <div class="content-alignment sub-settings-fields">
+              <div>Maximum Deliveries</div>
+              <ion-input class="sub-settings-input" type="number" [(ngModel)]="weeklyDeliveries.max"></ion-input>
+            </div>
+          </div>
+          <hr class="line">
+
+          <div class="sub-settings-fields">
+            <h6>Monthly: </h6>
+
+            <div class="content-alignment sub-settings-fields">
+              <div>Minimum Deliveries</div>
+              <ion-input class="sub-settings-input" type="number" [(ngModel)]="monthlyDeliveries.min"></ion-input>
+            </div>
+
+            <div class="content-alignment sub-settings-fields">
+              <div>Maximum Deliveries</div>
+              <ion-input class="sub-settings-input" type="number" [(ngModel)]="monthlyDeliveries.max"></ion-input>
+            </div>
+          </div>
+          <div class="page-footer">
+              <ion-button (click)="saveSettings()" shape="round" class="btn-1 i-start" color="success">
+                <i class="flaticon-null-20 margin-icon"></i>
+                Save
+              </ion-button>
+          </div>
+          </div>
+        </ion-content>
+      </super-tab>
+    </super-tabs-container>
+  </super-tabs>
+</ion-content>

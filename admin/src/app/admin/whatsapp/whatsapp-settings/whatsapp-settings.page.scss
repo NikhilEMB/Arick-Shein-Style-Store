@@ -1,0 +1,32 @@
+ion-card-subtitle {
+    font-size: large;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  ion-input {
+    margin-bottom: 16px;
+  }
+  .red{
+    color: var(--ion-color-danger);
+  }
+  
+  // Management
+  #scroll1{
+    overflow: hidden;
+    height: 82vh
+   }
+  
+   #scroll1:hover{
+    overflow-y: auto
+   }
+  
+   #scroll2{
+    overflow: hidden;
+    height: 82vh;
+   }
+  
+   #scroll2:hover{
+    overflow-y: auto
+   }

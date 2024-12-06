@@ -1,0 +1,125 @@
+.main-container {
+    width: 100%;
+  }
+  
+  #scroll1 {
+    overflow: hidden;
+    height: 74vh;
+    margin-top: 1rem;
+    &:hover {
+      overflow-y: auto;
+    }
+  }
+  
+  #scroll2 {
+    overflow: hidden;
+    height: 82vh;
+    margin-top: 8px;
+    border-left: 1px solid lightgray;
+    // &:hover {
+    //   overflow-y: auto;
+    // }
+  }
+  
+  .groupWrapper {
+    // border: 1px solid #000;
+    .groupItem {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      &:hover {
+        box-shadow: 0 2px 5px #ccc;
+        background: var(--ion-color-light);
+      }
+      .groupName {
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: capitalize;
+      }
+      .groupSize {
+        font-size: 14px;
+      }
+    }
+  }
+  
+  .groupDate {
+    color: #606060;
+    font-size: 12px;
+  }
+  
+  .displayTitle {
+    text-align: center;
+    font-weight: 600;
+    margin-top: 0;
+  }
+  
+  .groupDetail {
+    padding: 8px;
+    height: 100%;
+  }
+  
+  .searchInput {
+    height: 38px;
+    width: 50%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .itemFlex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .groupItemActive {
+    background-color: var(--ion-color-categories-background);
+  }
+  
+  .tableScroll {
+    overflow: hidden;
+    height: 66vh;
+    margin-top: 1rem;
+    // background-color: violet;
+    &:hover {
+      overflow-y: auto;
+    }
+  }
+  .userTable {
+    margin-top: 1rem;
+    width: 100%;
+    border-collapse: collapse;
+  
+    th,
+    td {
+      text-align: left;
+      padding: 8px;
+      &:last-child {
+        text-align: right;
+      }
+    }
+    tr:hover {
+      background-color: #efefef;
+    }
+  }
+
+  .groupDetails-container{
+    overflow-y: scroll;
+    height: 90vh;
+  }
+
+  .spinner{
+    position: absolute;
+  }
+  
+  @media screen and(min-height: 1200px) {
+    #scroll1,
+    #scroll2,
+    .tableScroll {
+      height: 92vh;
+    }
+  }
+  

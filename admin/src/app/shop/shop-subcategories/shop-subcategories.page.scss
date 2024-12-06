@@ -1,0 +1,97 @@
+.grid-border {
+    border: 1px solid #eeeded;
+    margin: 0 -1px -1px 0;
+}
+
+.spinner {
+    margin-top: 50%;
+    text-align: center;
+}
+
+p {
+    margin-block-start: 5%;
+    margin-block-end: 5%;
+}
+
+.product-name {
+    color: #2f2f2f;
+    font-weight: 600;
+    position: relative;
+    margin-left: 5%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+ion-thumbnail {
+    --size: 170px;
+    width: 100%;
+}
+
+.loading {
+    background: transparent url('https://s5.gifyu.com/images/loaderbb19efcc2749e115.gif') center no-repeat;
+}
+
+.no-data {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    left: 50%;
+    margin-left: -65px;
+}
+
+.no-data img {
+    width: 130px;
+}
+
+ion-thumbnail img {
+    padding: 5px;
+}
+
+//MEDIA QUERIES
+@media screen and(max-width: 375px) {
+
+    ion-thumbnail {
+        --size: 150px;
+    }
+
+    .product-name {
+        font-size: 13px;
+    }
+
+
+}
+
+@media screen and(max-width: 360px) {}
+
+@media screen and(max-width: 320px) {
+
+    ion-thumbnail {
+        --size: 124px;
+    }
+
+    .product-name {
+        font-size: 12px;
+    }
+
+
+
+}
+
+@media screen and(min-width:768px) {
+
+    ion-thumbnail {
+        --size: 220px;
+    }
+
+    .product-name {
+        font-size: 20px;
+    }
+
+
+}
+
+@media screen and(min-width:1024px) {}

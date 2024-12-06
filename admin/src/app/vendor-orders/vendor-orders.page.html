@@ -1,0 +1,152 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start"
+      class="menu-btn">
+      <ion-icon slot="icon-only"
+        name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Orders</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="createOrder()">
+      Create Order
+    </ion-button>
+  </div>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="showLoader; else loaded;">
+    <div class="main-container">
+      <div class="spinner">
+        <ion-spinner color="primary"></ion-spinner>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #loaded>
+    <ng-container *ngIf="!orders.length; else showOrders">
+      <div class="main-container fixed-height">
+        <div class="no-data"
+          text-center>
+          <img src="assets/img/no-orders.png"
+            alt="">
+          <h6>No Orders</h6>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #showOrders>
+      <div class="main-container">
+        <ion-button (click)='checkProductToDeliver()'>
+          Check products to deliver
+        </ion-button>
+        <div *ngFor="let order of orders; let i=index">
+          <div class="vo-order-id">
+            Order ID: {{orderIdPrefix}}{{order.orderId}}
+          </div>
+          <div class="vo-products-container">
+            <div class="vo-placed-on">
+              Placed On: {{order.createdAt.toDate() | date: 'dd/MM/yyyy'}}
+            </div>
+            <hr class="line">
+
+            <ion-list class="ion-no-padding"
+              lines="none"
+              *ngIf="order?.products[0]">
+              <ion-item class="ion-no-padding">
+                <div *ngIf="order.products[0].img.mob"
+                  slot="start"
+                  [ngStyle]="{'background': 'url(' + order.products[0].img.mob + ') no-repeat center', 'background-size': 'contain'}"
+                  class="vo-product-image">
+                  <div class="vo-more"
+                    *ngIf="order.products.length > 1">+ {{order.products.length
+                    - 1}}
+                    more</div>
+                </div>
+                <div
+                  *ngIf="!order.products[0].img.mob && order.products[0].img.url"
+                  slot="start"
+                  [ngStyle]="{'background': 'url(' + order.products[0].img.url + ') no-repeat center', 'background-size': 'contain'}"
+                  class="vo-product-image">
+                  <div class="vo-more"
+                    *ngIf="order.products.length > 1">+ {{order.products.length
+                    - 1}}
+                    more</div>
+                </div>
+                <div
+                  *ngIf="!order.products[0].img.mob && !order.products[0].img.url"
+                  slot="start"
+                  class="vo-no-product-image">
+                  <div class="vo-more"
+                    *ngIf="order.products.length > 1">+ {{order.products.length
+                    - 1}}
+                    more</div>
+                </div>
+                <ion-label>
+                  <h2 class="vo-product-price ion-text-wrap"
+                    *ngIf="order.totalAmountToPaid">
+                    {{order.totalAmountToPaid | currency: currencyCode:true}}
+                  </h2>
+                  <h3 class="vo-product-name ion-text-wrap">
+                    {{order.products[0].name}} <span
+                      *ngIf="order.products.length > 1">+
+                      {{order.products.length - 1}}
+                      more</span>
+                  </h3>
+                  <h5 *ngIf="order.status === 'Pending'">Pending</h5>
+                  <h5 *ngIf="order.status === 'Rejected'">Rejected<span><i
+                        class="flaticon-null-19"></i></span></h5>
+                  <h5 *ngIf="order.status === 'Confirmed'">Confirmed<span><i
+                        class="flaticon-null-20"></i></span></h5>
+                  <h5 *ngIf="order.status === 'Cancelled'">Cancelled<span><i
+                        class="flaticon-null-19"></i></span></h5>
+                  <h5 *ngIf="order.status === 'Dispatched'">Dispatched<span><i
+                        class="flaticon-null-20"></i></span></h5>
+                  <h5 *ngIf="order.status === 'Delivered'">Delivered<span><i
+                        class="flaticon-null-20"></i></span></h5>
+                  <h5 *ngIf="order.status === 'Returned'">Returned<span><i
+                        class="flaticon-null-20"></i></span></h5>
+                  <h5
+                    *ngIf="order.payment.hasOwnProperty('status') && order.payment.status === 'failed'">
+                    Payment Failed<span><i class="flaticon-null-19"></i></span>
+                  </h5>
+                </ion-label>
+              </ion-item>
+              <div class="vo-view-details-btn">
+                <ion-button (click)="downloadInvoice(order)" *ngIf="multipleVendorInvoices" style="margin: 10px;"
+                  size="small"
+                  fill="outline">
+                  Download Invoice
+                </ion-button>
+
+                <ion-button (click)="onClickViewDetails(order)"
+                  size="small"
+                  fill="outline">
+                  View Order
+                </ion-button>
+
+                <ion-button (click)="goToManageShipment(order.orderId, order)"
+                  size="small"
+                  fill="outline"
+                  *ngIf="!isSubOrMembershipOrder(order) && (order.status == 'Pending' || order.status == 'Confirmed' )">
+                  Manage Shipment
+                </ion-button>
+              </div>
+            </ion-list>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+
+  <ion-infinite-scroll threshold="100px"
+    (ionInfinite)="loadMoreOrders($event)"
+    *ngIf="orders.length">
+    <ion-infinite-scroll-content loadingSpinner="bubbles"
+      loadingText="Load More Orders">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>

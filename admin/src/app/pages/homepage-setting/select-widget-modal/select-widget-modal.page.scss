@@ -1,0 +1,8 @@
+.select-widget-list{
+    ion-item{
+        cursor: pointer;
+        &.active{
+            ion-label{color: var(--ion-color-success);}
+        }
+    }
+}

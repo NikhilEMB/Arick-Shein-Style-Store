@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{deliveryPartnerChoice.charAt(0).toUpperCase() + deliveryPartnerChoice.slice(1)}} Settings</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <!-- Wefast Details -->
+    <ion-row *ngIf="deliveryPartnerChoice === 'wefast'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Wefast Active</ion-label>
+            <ion-toggle [(ngModel)]="wefastDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap" *ngIf="wefastDetails.active">
+          <ion-label>Token</ion-label>
+          <ion-input class="form-input" [(ngModel)]="wefastDetails.token"></ion-input>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <!-- Lalamove Details -->
+    <ion-row *ngIf="deliveryPartnerChoice === 'lalamove'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Lalamove Active</ion-label>
+            <ion-toggle [(ngModel)]="lalamoveDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap" *ngIf="lalamoveDetails.active">
+          <ion-label>API Key</ion-label>
+          <ion-input class="form-input" [(ngModel)]="lalamoveDetails.apiKey"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap" *ngIf="lalamoveDetails.active">
+          <ion-label>Secret</ion-label>
+          <ion-input type="text" class="form-input" [(ngModel)]="lalamoveDetails.secret"></ion-input>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <!-- Dunzo Details -->
+    <ion-row *ngIf="deliveryPartnerChoice === 'dunzo'">
+      <ion-col size="12">
+        <div class="input-wrap">
+          <div class="flex-label">
+            <ion-label>Dunzo Active</ion-label>
+            <ion-toggle [(ngModel)]="dunzoDetails.active"></ion-toggle>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap" *ngIf="dunzoDetails.active">
+          <ion-label>Client ID</ion-label>
+          <ion-input class="form-input" [(ngModel)]="dunzoDetails.clientId"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap" *ngIf="dunzoDetails.active">
+          <ion-label>Secret</ion-label>
+          <ion-input type="text" class="form-input" [(ngModel)]="dunzoDetails.secret"></ion-input>
+        </div>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveSettings()" [disabled]="disableSave()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

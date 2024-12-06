@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="templates-header-title">Detailed Review</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+        <ion-list class="ion-no-padding list" lines="none">
+          <ion-item class="ion-no-padding">
+            <ion-grid class="ion-no-padding">
+              <ion-row class="ion-align-items-center">
+                <!-- <ion-col size="12">
+                  <p class="ion-text-capitalize"><b>Name:</b> {{vendorDetails.name}}</p>
+                  <p class="ion-text-capitalize"><b>Phone Number:</b> {{vendorDetails.phoneNo}}</p>
+                  <p class="ion-text-capitalize"><b>Email:</b> {{vendorDetails.email}}</p>
+                  <p class="ion-text-capitalize"><b>Address:</b> {{vendorDetails.address.address}},{{vendorDetails.address.city}}, {{vendorDetails.address.state}}, Pincode:{{vendorDetails.address.pincode}}</p>
+                  <p class="ion-text-capitalize" *ngIf="vendorDetails.gstNo"><b>GST:</b> {{vendorDetails.gstNo}}</p>
+                  <p class="ion-text-capitalize" *ngIf="vendorDetails.details"><b>Other Info:</b> {{vendorDetails.details}}</p>
+                </ion-col> -->
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+
+</ion-content>
+<!-- <ion-footer class="page-footer" no-border *ngIf="!vendorDetails.approved">
+  <div class="main-container">
+    <ion-button (click)="close()" shape="round" class="btn-1 i-start" color="danger">
+      <i class="flaticon-null-19"></i>
+      Reject
+    </ion-button>
+    <ion-button (click)="approve()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20"></i>
+      Approve
+    </ion-button>
+  </div>
+</ion-footer> -->

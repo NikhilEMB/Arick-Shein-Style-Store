@@ -1,0 +1,122 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start">
+      <img src="../../../../assets/img/shop-logo.png">
+    </div>
+    <ion-title>Whatsapp Broadcast</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="3">
+          <ion-button expand='block' (click)="addTemplate()">Add New Template</ion-button>
+
+          <input class="searchInput" placeholder="Search Template..." *ngIf="templates?.length" [(ngModel)]="searchTemplate" type="text">
+
+          <div id="scroll1">
+            <div class="groupWrapper">
+              <div class="groupItem" 
+                  [ngClass]="activeTile === i ? 'tile-bg-active' : 'tile-bg-inactive'" 
+                  *ngFor="let template of templates | filter: searchTemplate; index as i" 
+                  (click)="getTemplateDetails(i)">
+                <div class="itemFlex">
+                  <p class="groupName">{{template.name}}</p>
+                </div>
+                <b><span class="groupDate">Status: <span [ngClass]="{green: template.status == 'approved', red: template.status == 'rejected'}">{{template.status || 'Pending' | uppercase }}</span></span></b>
+              </div>
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col size="6" id="scroll2" *ngIf="selectedTemplate?.id">
+          <div class="groupDetails-container">
+            <h4 class="displayTitle">{{selectedTemplate.name | titlecase}}</h4>
+            <!-- <p class="groupDate t-a-c">Created On: {{selectedTemplate.createdAt.toDate() | date}}</p> -->
+            <div class="groupDetail">
+  
+              <div *ngIf="showLoader; else showUsers" class="spinner">
+                <ion-spinner color="primary"></ion-spinner>
+              </div>
+              <ng-template #showUsers>
+                <div class="section-content">
+                  <div>
+                    <ion-list lines="none" class="option-list">
+                      <ion-radio-group [value]="userType" (ionChange)="changeUserType($event)">
+                      <ion-item>
+                        <ion-label>Groups</ion-label>
+                        <ion-radio value="groups" slot="start"></ion-radio>
+                      </ion-item>
+                      <ion-item>
+                        <ion-label>All Users</ion-label>
+                        <ion-radio value="allUsers" slot="start"></ion-radio>
+                      </ion-item>
+                    </ion-radio-group>
+                    </ion-list>
+                  </div>
+                  <div class="account-type-input" *ngIf="userType == 'groups'">
+                    <p>Select Groups</p>
+                    <div class="itemFlex">
+                      <ion-select [(ngModel)]="selectedGroups" multiple placeholder="Select Groups" class="select-box">
+                        <ng-container *ngFor="let group of groups">
+                          <ion-select-option [value]="group.id">{{group.name}}</ion-select-option>
+                        </ng-container>
+                      </ion-select>
+                    </div>
+                  </div>
+                  <br>
+                  <ion-button (click)="broadcast()">Broadcast</ion-button>
+                  <br>
+                  <ion-text color="danger">
+                    <p>Note: Unverified businesses are limited to Total {{accountDetails?.insights?.broadcastLimit || 50}} business-initiated conversations(Template) in a rolling 24 hour period.</p>
+                  </ion-text>
+                </div>
+                
+                <ion-col size="12">
+                  <h4>Template Details - </h4>
+                  <p><b>Template Body : </b>{{selectedTemplate?.components[0].type.toLowerCase() == 'body' ? selectedTemplate?.components[0].text : selectedTemplate?.components[1].text}}</p>
+                  <br>
+                  <p *ngIf="selectedTemplate.reason && selectedTemplate.status == 'rejected'"><b>Rejected Reason -</b> {{selectedTemplate.reason}}</p>
+                </ion-col>
+                
+                <!-- <ion-col size="12">
+                  <h3>Template History</h3>
+                  <p></p>
+                </ion-col> -->
+              </ng-template>
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col size="3" id="scroll2">
+          <div class="groupDetails-container">
+            <p style="text-align:center; font-size: medium; font-weight: bold;">
+              Recent Logs
+            </p>
+            <ng-container *ngIf="logs">
+              <div>
+                <ion-card mode *ngFor="let log of logs; let i = index" class="customCard">
+                  <ion-card-header>
+                    <!-- <ion-card-subtitle style="text-transform: capitalize;">{{log.title}}</ion-card-subtitle> -->
+                    <ion-card-title><b>Broadcast Time -</b> {{log.createdAt.toDate() | date: 'medium'}}</ion-card-title>
+                    <ion-card-title><b>Broadcasted To -</b> {{log.deliveredTo || '0'}}/{{log.totalUsers}}</ion-card-title>
+                    <ion-card-title *ngIf="log.status?.msg"><b>Msg -</b> {{log.status?.msg}}</ion-card-title>
+                    <ion-card-title *ngIf="log.status?.link"><b>Report Link -</b> <a href="{{log.status?.link}}" target="_blank">Report</a></ion-card-title>
+                  </ion-card-header>
+                </ion-card>
+              </div>
+            </ng-container> 
+            <ng-container *ngIf="!logs || !logs.length">
+              <p style="text-align:center; font-size: medium; margin-top: 20px;">No Logs available yet!</p>
+            </ng-container>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

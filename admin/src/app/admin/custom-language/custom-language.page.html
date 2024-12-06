@@ -1,0 +1,156 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start">
+      <img src="../../../assets/img/shop-logo.png" />
+    </div>
+    <ion-title>Custom Language</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs no-shadow no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Add new message</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Saved messages</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+
+  <super-tabs-container>
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <div class="parentFlex">
+            <div class="Fields">
+              <h2>Add New Message</h2>
+
+              <form [formGroup]="languageForm" (ngSubmit)="onSubmit()">
+                <div class="dFlex">
+                  <div class="inputField">
+                    <label for="platform">Choose a Platform:</label>
+                    <select formControlName="platform" id="platform">
+                      <option value="" disabled selected hidden>Please choose</option>
+                      <option value="webLang">Website</option>
+                      <option value="appLang">App</option>
+                    </select>
+                  </div>
+                  <div class="inputField">
+                    <label for="langCode">Language Code</label>
+                    <select formControlName="languageCode" id="langCode">
+                      <option value="" disabled selected hidden>Please choose</option>
+                      <option value="{{languageCode}}" *ngFor="let languageCode of languageCodeData">
+                        {{languageCode}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="dFlex">
+                  <div class="inputField">
+                    <label for="parentName">Parent Key Name</label>
+                    <input formControlName="parentKeyName" id="parentName" placeholder="Enter parent key here"
+                      type="text" />
+                  </div>
+                  <div class="inputField">
+                    <label for="childName">Child Key Name</label>
+                    <input formControlName="childKeyName" id="childName" placeholder="Enter Child key here"
+                      type="text" />
+                  </div>
+                </div>
+
+                <div class="inputField">
+                  <label for="message">Message</label>
+                  <textarea formControlName="message" id="message" placeholder="Enter message here" type="text"
+                    cols="30" rows="5"></textarea>
+                </div>
+
+                <ion-button expand="block" type="submit" [disabled]="!languageForm.valid">Save</ion-button>
+                <p class="impText">
+                  Please contact support team after updating this, it will not work in real time !
+                </p>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <div class="parentFlex">
+            <div class="fetchArea">
+              <h2>Select Location</h2>
+              <form [formGroup]="getLanguageData" (ngSubmit)="onGet()">
+                <div class="dFlex">
+                  <div class="inputField">
+                    <label for="platform">Choose a Platform:</label>
+                    <select formControlName="getPlatform" id="platform">
+                      <option value="" disabled selected hidden>Please choose</option>
+                      <option value="webLang">Website</option>
+                      <option value="appLang">App</option>
+                    </select>
+                  </div>
+                  <div class="inputField">
+                    <label for="langCode">Language Code</label>
+                    <select formControlName="getLanguageCode" id="langCode">
+                      <option value="" disabled selected hidden>Please choose</option>
+                      <option value="{{languageCode}}" *ngFor="let languageCode of languageCodeData">
+                        {{languageCode}}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="inputField">
+                    <label for="parentName">Parent Key Name</label>
+                    <input formControlName="getParentKeyName" id="parentName" placeholder="Enter parent key here"
+                      type="text" />
+                  </div>
+                </div>
+                <ion-button expand="block" type="submit" [disabled]="!getLanguageData.valid">Get Results</ion-button>
+              </form>
+
+
+              <div *ngIf="checkObjLength()">
+                <h4>Your custom messages</h4>
+                <!-- <div class="dFlex">
+                  <h4>Your custom messages</h4> <ion-button (click)="updateResults()">Save Changes</ion-button>
+                </div> -->
+                <div class="resultArea">
+                  <table>
+                    <thead>
+                      <th>#</th>
+                      <th>Message Key</th>
+                      <th>Message</th>
+                      <th>Remove</th>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of languageResult | keyvalue , index as i">
+                        <td>{{i+1}}</td>
+                        <td>{{item.key}}</td>
+                        <td>{{item.value}}</td>
+                        <td>
+                          <ion-button (click)="deleteField(item.key)">
+                            <i class="flaticon-null-21"></i>
+                          </ion-button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div *ngIf="!checkObjLength()">
+                <p class="impText">Please select location to show results</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-content>
+    </super-tab>
+  </super-tabs-container>
+</super-tabs>

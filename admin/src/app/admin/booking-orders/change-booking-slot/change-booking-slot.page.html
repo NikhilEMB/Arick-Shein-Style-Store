@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>change booking slot</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ng-container *ngIf="isScheduleData && scheduleSlots.length; else noSlots;">
+          <p class="choose-txt">Choose slot</p>
+          <div class="scrolling-wrapper">
+            <div *ngFor="let slot of scheduleSlots; let i = index;" class="slot-date"
+              [ngClass]="{'slot-active': slot.active}" (click)="selectDate(i)">
+              <div class="f-w-b">{{slot.day}}</div>
+              <div>{{getDate(slot.date)}}</div>
+              <div class="arrow-up" *ngIf="slot.active"></div>
+            </div>
+          </div>
+
+          <div class="time-schedules">
+            <ion-list>
+              <ion-radio-group (ionChange)="setTimeSlot($event)">
+                <ion-item *ngFor="let timeSlot of getActiveTimeSchedules()" lines="none">
+                  <ion-label>
+                    <ion-text>
+                      {{convert24to12(timeSlot.start)}} to {{convert24to12(timeSlot.end)}}
+                    </ion-text>
+                    <ion-text *ngIf="!timeSlot.slotLimit">
+                      Slot full
+                    </ion-text>
+                  </ion-label>
+                  <ion-radio slot="start" [value]="timeSlot" [disabled]="!timeSlot.slotLimit"></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </div>
+        </ng-container>
+        <ng-template #noSlots>
+          <h3 class="text-center">
+            No Schedule Slots available.
+          </h3>
+        </ng-template>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveSlot()" [disabled]="isSaveBtnDisabled()" shape="round" class="btn-1 i-start"
+      color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

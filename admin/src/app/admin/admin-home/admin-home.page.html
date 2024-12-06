@@ -1,0 +1,882 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Messages</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="goToBroadcastMsg()">
+      Broadcast Message 
+    </ion-button>
+  </div>
+</ion-header>
+
+
+
+<ion-content class="ion-no-padding">
+  <div class="main-container" style="width: 100%">
+    <ion-grid>
+      <ion-row>
+        <ion-col size=4 >
+          <div *ngIf="showLoader" class="spinner">
+            <ion-spinner color="primary"></ion-spinner>
+          </div>
+          <div style="height: 3vh;text-align: center;width: 100%;font-weight: bold;font-size: medium;display: flex;align-items: center;">
+            <ion-input placeholder="Enter name" (click)='clearPhone()' [(ngModel)]="searchUser" style="height: 3vh;padding-top: 0px;padding-bottom: 0px;border: 1px solid lightgray;"></ion-input>&nbsp;
+            <ion-input placeholder="Enter number" [maxlength]='phoneLimit' (click)='clearName()' [(ngModel)]="searchUserPhone" style="height: 3vh;padding-top: 0px;padding-bottom: 0px;border: 1px solid lightgray"></ion-input>&nbsp;
+            <ion-button (click)='fireSearchQuery()' size="small">Search</ion-button>&nbsp;
+            <ion-button (click)='showAllMsgs()' size="small">Show All</ion-button>
+          </div>
+          <div>
+            <!-- <div style="display: flex;align-items: center;">
+              <p>Select Groups</p>
+            </div> -->
+            <br>
+            <p>Select Groups</p>
+            <ion-list *ngIf="groups">
+              <ion-item lines="none" class="search-message">
+                <ion-label>Groups</ion-label>
+                <ion-select multiple placeholder="Select Groups" (ionChange)="getGroupUsers($event)">
+                  <ng-container *ngFor="let group of groups">
+                    <ion-select-option [value]="group.id">{{group.name}}
+                    </ion-select-option>
+                  </ng-container>
+                </ion-select>
+              </ion-item>
+            </ion-list>
+            <ion-text color="danger t-a-l">
+              <p>Note: You can select upto 10 Groups.</p>
+            </ion-text>
+          </div>
+          <div *ngIf="!showLoader" style="margin-top: 1.5vh;width: 100%;" id='scroll1'>
+            <div class="messages-wrapper">
+                <div class="message-wrap" *ngFor="let msg of lastMsgs; let i = index" (click)="onClickLastMsg(msg.id,i)" 
+                [id]="'message'+i">
+                  <div class="b-time">
+                    <p><i class="flaticon-null-2"></i>
+                      {{msg.lastMessageAt.toDate().toISOString() | dateAgo}}</p>
+                  </div>
+                  <p class="user-name" *ngIf="msg.name !== 'user'">{{msg.name}}<span class="badge"
+                    *ngIf="msg.unreadMsgs > 0">{{msg.unreadMsgs}}</span></p>
+            
+                <p class="user-name" *ngIf="msg.name === 'user' && msg.userPhoneNo">{{msg.userPhoneNo}}<span class="badge"
+                    *ngIf="msg.unreadMsgs > 0">{{msg.unreadMsgs}}</span></p>
+                <p class="user-name" *ngIf="msg.name === 'user' && !msg.userPhoneNo">{{msg.name}}<span class="badge"
+                    *ngIf="msg.unreadMsgs > 0">{{msg.unreadMsgs}}</span></p>
+                    <p class="last-msg">
+                      {{msg.lastMessage}}
+                    </p>
+                </div>
+            </div>
+          </div>
+          <div style="height: 5vh;display: flex;justify-content: center;align-items: flex-end;">
+            <ion-button (click)="loadMoreMessagesForAdminHome($event)" shape="round" fill='solid' *ngIf='!noMoreMsgs'>
+              Load More
+            </ion-button>
+            <ion-button shape="round" fill='solid' *ngIf='noMoreMsgs' disabled>
+              No More Messages
+            </ion-button>
+          </div>
+        </ion-col>
+        <ion-col size=5 style="border-left: 1px solid lightgray;">
+          <div style="text-align: center;z-index: 999;width: 100%;background: white;font-weight: bold;font-size: medium;height: 3vh;">
+            <p *ngIf='userDetails' style="font-size: 16px;">{{userDetails.name}} ({{userDetails.phoneNo}})</p>
+          </div>
+          <div text-center *ngIf="showNoMsgs">
+            <p class="no-msgs">No More Messages</p>
+          </div>
+          <ion-grid class="ion-no-padding" *ngIf="userDetails && !showLoader" id='scroll2'>
+            <br>
+            <div [id]="'chatMessage' + ind" *ngFor="let msgs of allMsgs | filter: searchMsg; let ind = index">
+              
+              <!-- Admin message -->
+              <ion-row class="ion-justify-content-end"
+                *ngIf="msgs.msgData && msgs.msgData.author == 'admin' && msgs.msgData.type == 'txt'">
+
+                <div class="whatsapp-container" *ngIf="msgs.msgData.source?.name == 'whatsapp'">
+                  <i class="flaticon-info error-icon red cursor-p" *ngIf="msgs.msgData.source?.data?.status == 'failed'" (click)="showErrMsg()"></i>
+                  <img src="../../../assets/img/whatsapp.png" alt="" *ngIf="msgs.msgData.source?.data?.status != 'failed'">
+                </div>
+       
+                <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-right': '5px'}" class="message-admin" style="text-align: left;">
+                  <span class="msg-content" [innerHtml]="messageModifications(msgs.msgData.message)"></span>
+                  <h6 class="time">
+                   <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                   <span *ngIf="isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toISOString() | dateAgo}}</span>
+                   <span *ngIf="!msgs.msgData.published"><i class="flaticon-clock"></i></span>
+                   <span *ngIf="msgs.msgData.published"><i class="flaticon-check"></i></span></h6>
+                </div>
+       
+                <div style="margin-right: 10px;">
+                  <ion-avatar class="avatar-img">
+                    <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+                  </ion-avatar>
+                </div>
+              </ion-row>
+              <!-- /Admin message -->
+       
+              <!-- Admin order -->
+              <ion-row class="ion-justify-content-end"
+                *ngIf="msgs.msgData && msgs.msgData.author == 'admin' && msgs.msgData.type == 'order'">
+       
+                <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-right': '5px', 'padding': '13px 13px 0px 13px'}" class="message-admin" *ngIf="msgs.msgData.status=='Rejected'" style="text-align: left;">
+                 <span>Your order is rejected</span>
+                 <p>Order Id: ORD{{msgs.msgData.orderId}}</p>
+                 <div style="text-align: center;margin-top: -10px;">
+                   <ion-button (click)="onClickViewOrder(msgs.msgData.orderId)" fill="outline" style="color: black;margin-top: 12px;margin-bottom: 12px;">
+                     View Order
+                   </ion-button>
+                 </div>
+                 <h6 class="time" style="margin-top: -3px;margin-bottom: 10px;">
+                   <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                   <span *ngIf="!msgs.msgData.published"><i class="flaticon-clock"></i></span>
+                   <span *ngIf="msgs.msgData.published"><i class="flaticon-check"></i></span></h6>
+                </div>
+       
+                <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-right': '5px', 'padding': '13px 13px 0px 13px'}" class="message-admin" *ngIf="msgs.msgData.status=='Confirmed'" style="text-align: left;">
+                 <span>Your order is confirmed. Please do the payment</span>
+                 <p>Order Id: ORD{{msgs.msgData.orderId}}</p>
+                 <div style="text-align: center;margin-top: -10px;">
+                   <ion-button (click)="onClickViewOrder(msgs.msgData.orderId)" fill="outline" style="color: black;margin-top: 12px;margin-bottom: 12px;">
+                     View Order
+                   </ion-button>
+                 </div>
+                 <h6 class="time" style="margin-top: -3px;margin-bottom: 10px;">
+                   <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                   <span *ngIf="!msgs.msgData.published"><i class="flaticon-clock"></i></span>
+                   <span *ngIf="msgs.msgData.published"><i class="flaticon-check"></i></span></h6>
+                </div>
+       
+                <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-right': '5px', 'padding': '13px 13px 0px 13px'}" class="message-admin" *ngIf="msgs.msgData.status=='PaymentRequest'" style="text-align: left;">
+                 <span>Please do the payment of your order</span>
+                 <p>Order Id: ORD{{msgs.msgData.orderId}}</p>
+                 <div style="text-align: center;margin-top: -10px;">
+                   <ion-button (click)="onClickViewOrder(msgs.msgData.orderId)" fill="outline" style="color: black;margin-top: 12px;margin-bottom: 12px;">
+                     View Order
+                   </ion-button>
+                 </div>
+                 <h6 class="time" style="margin-top: -3px;margin-bottom: 10px;">
+                   <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                   <span *ngIf="!msgs.msgData.published"><i class="flaticon-clock"></i></span>
+                   <span *ngIf="msgs.msgData.published"><i class="flaticon-check"></i></span></h6>
+                </div>
+       
+                <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-right': '5px', 'padding': '13px 13px 0px 13px'}" class="message-admin" *ngIf="msgs.msgData.status=='Cancelled'" style="text-align: left;">
+                 <span>Your order is cancelled</span>
+                 <p>Order Id: ORD{{msgs.msgData.orderId}}</p>
+                 <div style="text-align: center;margin-top: -10px;">
+                   <ion-button (click)="onClickViewOrder(msgs.msgData.orderId)" fill="outline" style="color: black;margin-top: 12px;margin-bottom: 12px;">
+                     View Order
+                   </ion-button>
+                 </div>
+                 <h6 class="time" style="margin-top: -3px;margin-bottom: 10px;">
+                   <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                   <span *ngIf="!msgs.msgData.published"><i class="flaticon-clock"></i></span>
+                   <span *ngIf="msgs.msgData.published"><i class="flaticon-check"></i></span></h6>
+                </div>
+                <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-right': '5px', 'padding': '13px 13px 0px 13px'}" class="message-admin" *ngIf="msgs.msgData.status=='Dispatched'" style="text-align: left;">
+                 <span>Your order is dispatched</span>
+                 <p>Order Id: ORD{{msgs.msgData.orderId}}</p>
+                 <div style="text-align: center;margin-top: -10px;" >
+                   <ion-button (click)="onClickViewOrder(msgs.msgData.orderId)" fill="outline" style="color: black;margin-top: 12px;margin-bottom: 12px;">
+                     View Order
+                   </ion-button>
+                 </div>
+                 <h6 class="time" style="margin-top: -3px;margin-bottom: 10px;">
+                   <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                   <span *ngIf="!msgs.msgData.published"><i class="flaticon-clock"></i></span>
+                   <span *ngIf="msgs.msgData.published"><i class="flaticon-check"></i></span></h6>
+                </div>
+                <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-right': '5px', 'padding': '13px 13px 0px 13px'}" class="message-admin" *ngIf="msgs.msgData.status=='Delivered'" style="text-align: left;">
+                 <span>Your order is delivered</span>
+                 <p>Order Id: ORD{{msgs.msgData.orderId}}</p>
+                 <div style="text-align: center;margin-top: -10px;">
+                   <ion-button (click)="onClickViewOrder(msgs.msgData.orderId)" fill="outline" style="color: black;margin-top: 12px;margin-bottom: 12px;">
+                     View Order
+                   </ion-button>
+                 </div>
+                 <h6 class="time" style="margin-top: -3px;margin-bottom: 10px;">
+                   <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                   <span *ngIf="!msgs.msgData.published"><i class="flaticon-clock"></i></span>
+                   <span *ngIf="msgs.msgData.published"><i class="flaticon-check"></i></span></h6>
+                </div>
+                <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-right': '5px', 'padding': '13px 13px 0px 13px'}" class="message-admin" *ngIf="msgs.msgData.status=='Returned'" style="text-align: left;">
+                 <span>Your order is returned</span>
+                 <p>Order Id: ORD{{msgs.msgData.orderId}}</p>
+                 <div style="text-align: center;margin-top: -10px;">
+                   <ion-button (click)="onClickViewOrder(msgs.msgData.orderId)" fill="outline" style="color: black;margin-top: 12px;margin-bottom: 12px;">
+                     View Order
+                   </ion-button>
+                 </div>
+                 <h6 class="time" style="margin-top: -3px;margin-bottom: 10px;">
+                   <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                   <span *ngIf="!msgs.msgData.published"><i class="flaticon-clock"></i></span>
+                   <span *ngIf="msgs.msgData.published"><i class="flaticon-check"></i></span></h6>
+                </div>
+       
+                <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-left': '5px', 'padding': '13px 13px 0px 13px'}" class="message-admin" *ngIf="msgs.msgData.status=='deliveryStarted'" style="text-align: left;">
+                 <span>Delivery has started for this order.</span>
+                 <p>Order Id: ORD{{msgs.msgData.orderId}}</p>
+                 <div style="margin-top: -10px;">
+                   <ion-grid class="ion-no-padding">
+                     <ion-row class="ion-no-padding">
+                       <ion-col size="6" class="ion-no-padding">
+                         <ion-button (click)="onClickViewOrder(msgs.msgData.orderId)" fill="outline" style="margin-left: -15px; color: black;margin-top: 12px;margin-bottom: 12px;">
+                           View Order
+                         </ion-button>
+                       </ion-col>
+                       <ion-col size="6" class="ion-no-padding">
+                         <ion-button (click)="onClickTrackOrder(msgs.msgData.agentId, msgs.msgData.deliveryLatLng)" fill="outline" style="margin-left: -15px; color: black;margin-top: 12px;margin-bottom: 12px;">
+                           Track Order
+                         </ion-button>
+                       </ion-col>
+                     </ion-row>
+                   </ion-grid>
+                 </div>
+                 <h6 class="time" style="margin-top: -3px;margin-bottom: 10px;">
+                   <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                   <span *ngIf="!msgs.msgData.published"><i class="flaticon-clock"></i></span>
+                   <span *ngIf="msgs.msgData.published"><i class="flaticon-check"></i></span></h6>
+               </div>
+       
+                <div style="margin-right: 10px;">
+                  <ion-avatar class="avatar-img">
+                    <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+                  </ion-avatar>
+                </div>
+              </ion-row>
+              <!-- /Admin order -->
+       
+              <!-- Admin Image -->
+              <div
+                *ngIf="msgs.msgData && msgs.msgData.author == 'admin' && msgs.msgData.type == 'image' && msgs.msgData.published === true">
+                <div *ngIf="msgs.msgData.images && msgs.msgData.images.length === 1">
+                  <ion-row class="ion-justify-content-end" *ngFor="let img of msgs.msgData.images">
+                    <div class="whatsapp-container" *ngIf="msgs.msgData.source?.name == 'whatsapp'">
+                      <img src="../../../assets/img/whatsapp.png" alt="">
+                    </div>
+                    <div class="ion-no-padding" style="margin-right: 5px;position: relative;">
+                      <div>
+                        <img class="loading" *ngIf="useThumb" src="{{img.thumb}}" (click)="imageZoom(img)">
+                        <img class="loading" *ngIf="!useThumb" src="{{img.mob}}" (click)="imageZoom(img)">
+                      </div>
+                      <div class="img-publish">
+                       <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                       <span *ngIf="isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toISOString() | dateAgo}}</span>
+           <i class="flaticon-clock clock-icon-image" *ngIf="!msgs.msgData.published"></i>
+           <i class="flaticon-check clock-icon-image" *ngIf="msgs.msgData.published"></i>
+                       </div>
+                    </div>
+                    <div style="margin-right: 10px;">
+                      <ion-avatar class="avatar-img">
+                        <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+                      </ion-avatar>
+                    </div>
+                  </ion-row>
+                </div>
+                <div *ngIf="msgs.msgData.images && msgs.msgData.images.length > 1 && msgs.msgData.images.length <= 4">
+                  <ion-row class="ion-justify-content-end">
+                    <div class="ion-no-padding" style="margin-right: 5px;">
+                      <ion-grid class="ion-no-padding">
+                        <ion-row class="img-grid" [ngStyle]="{'width': imgGridWidth + 'px'}">
+                          <ion-col class="col-padding" size="6" *ngFor="let img of msgs.msgData.images; let imgIndex = index">
+                            <div style="position: relative;">
+                              <div style="box-shadow: none;">
+                                <img class="loading" *ngIf="useThumb" src="{{img.thumb}}" (click)="imageZoom(img)">
+                                <img class="loading" *ngIf="!useThumb" src="{{img.mob}}" (click)="imageZoom(img)">
+                              </div>
+                              <div class="img-publish">
+                               <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                               <span *ngIf="isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toISOString() | dateAgo}}</span>
+                   <i class="flaticon-clock clock-icon-image" *ngIf="!msgs.msgData.published"></i>
+                   <i class="flaticon-check clock-icon-image" *ngIf="msgs.msgData.published"></i>
+                               </div>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <div style="margin-right: 10px;">
+                      <ion-avatar class="avatar-img">
+                        <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+                      </ion-avatar>
+                    </div>
+                  </ion-row>
+                </div>
+                <div *ngIf="msgs.msgData.images && msgs.msgData.images.length > 4">
+                  <ion-row class="ion-justify-content-end">
+                    <div class="ion-no-padding" style="margin-right: 5px;">
+                      <ion-grid class="ion-no-padding">
+                        <ion-row class="img-grid" [ngStyle]="{'width': imgGridWidth + 'px'}">
+                          <ion-col class="col-padding" size="6"
+                            *ngFor="let img of [msgs.msgData.images[0], msgs.msgData.images[1], msgs.msgData.images[2],msgs.msgData.images[3]]; let imgIndex = index">
+                            <div style="position: relative;">
+                              <div style="box-shadow: none;"
+                                *ngIf="imgIndex === 0 || imgIndex === 1 || imgIndex === 2">
+                                <img class="loading" *ngIf="useThumb" src="{{img.thumb}}" (click)="imageZoom(img)">
+                                <img class="loading" *ngIf="!useThumb" src="{{img.mob}}" (click)="imageZoom(img)">
+                              </div>
+       
+                              <div style="background-color: #000;box-shadow: none;" *ngIf="imgIndex === 3"
+                                (click)="gridImageZoom(msgs.msgData.images)">
+       
+                                <img class="loading img-opacity" *ngIf="useThumb" src="{{img.thumb}}" (click)="imageZoom(img)">
+                                <img class="loading img-opacity" *ngIf="!useThumb" src="{{img.mob}}" (click)="imageZoom(img)">
+                                <div class="ion-no-padding" class="img-count">
+                                  + {{msgs.msgData.images.length - 4}}
+                                </div>
+                              </div>
+                              <div class="img-publish">
+                               <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                               <span *ngIf="isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toISOString() | dateAgo}}</span>
+                   <i class="flaticon-clock clock-icon-image" *ngIf="!msgs.msgData.published"></i>
+                   <i class="flaticon-check clock-icon-image" *ngIf="msgs.msgData.published"></i>
+                               </div>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <div style="margin-right: 10px;">
+                      <ion-avatar class="avatar-img">
+                        <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+                        
+                      </ion-avatar>
+                    </div>
+                  </ion-row>
+                </div>
+              </div>
+       
+       
+              <div
+                *ngIf="msgs.msgData && msgs.msgData.author == 'admin' && msgs.msgData.type == 'image' && msgs.msgData.published === false">
+                <div *ngIf="unsavedImages[msgs.id] && unsavedImages[msgs.id].length === 1">
+                  <ion-row class="ion-justify-content-end" *ngFor="let img of unsavedImages[msgs.id]">
+                    <div class="ion-no-padding" style="margin-right: 5px;position: relative;">
+                      <div>
+                        <img class="loading" *ngIf="img.url" src="{{img.url}}">
+                      </div>
+                      <div class="img-publish">
+                       <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                       <span *ngIf="isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toISOString() | dateAgo}}</span>
+           <i class="flaticon-clock clock-icon-image" *ngIf="!msgs.msgData.published"></i>
+           <i class="flaticon-check clock-icon-image" *ngIf="msgs.msgData.published"></i>
+                       </div>
+                    </div>
+                    <div style="margin-right: 10px;">
+                      <ion-avatar class="avatar-img">
+                        <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+                        
+                      </ion-avatar>
+                    </div>
+                  </ion-row>
+                </div>
+                <div *ngIf="unsavedImages[msgs.id] && unsavedImages[msgs.id].length > 1 && unsavedImages[msgs.id].length <= 4">
+                  <ion-row class="ion-justify-content-end">
+                    <div class="ion-no-padding" style="margin-right: 5px;">
+                      <ion-grid class="ion-no-padding">
+                        <ion-row class="img-grid" [ngStyle]="{'width': imgGridWidth + 'px'}">
+                          <ion-col class="col-padding" size="6"
+                            *ngFor="let img of unsavedImages[msgs.id]; let imgIndex = index">
+                            <div style="position: relative;">
+                              <div style="box-shadow: none;">
+                                <img class="loading" *ngIf="img.url" src="{{img.url}}">
+                              </div>
+                              <div class="img-publish">
+                               <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                               <span *ngIf="isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toISOString() | dateAgo}}</span>
+                   <i class="flaticon-clock clock-icon-image" *ngIf="!msgs.msgData.published"></i>
+                   <i class="flaticon-check clock-icon-image" *ngIf="msgs.msgData.published"></i>
+                               </div>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <div style="margin-right: 10px;">
+                      <ion-avatar class="avatar-img">
+                        <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+                       
+                      </ion-avatar>
+                    </div>
+                  </ion-row>
+                </div>
+                <div *ngIf="unsavedImages[msgs.id] && unsavedImages[msgs.id].length > 4">
+                  <ion-row class="ion-justify-content-end">
+                    <div class="ion-no-padding" style="margin-right: 5px;">
+                      <ion-grid class="ion-no-padding">
+                        <ion-row class="img-grid" [ngStyle]="{'width': imgGridWidth + 'px'}">
+                          <ion-col class="col-padding" size="6"
+                            *ngFor="let img of [unsavedImages[msgs.id][0], unsavedImages[msgs.id][1], unsavedImages[msgs.id][2],unsavedImages[msgs.id][3]]; let imgIndex = index">
+                            <div style="position: relative;">
+                              <div style="box-shadow: none;"
+                                *ngIf="imgIndex === 0 || imgIndex === 1 || imgIndex === 2">
+                                <img class="loading" *ngIf="img.url" src="{{img.url}}">
+                              </div>
+                              <div style="background-color: #000;box-shadow: none;" *ngIf="imgIndex === 3">
+                                <img class="loading img-opacity" *ngIf="img.url" src="{{img.url}}">
+                                <div class="ion-no-padding" class="img-count">
+                                  + {{unsavedImages[msgs.id].length - 4}}
+                                </div>
+                              </div>
+                              <div class="img-publish">
+                               <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                               <span *ngIf="isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toISOString() | dateAgo}}</span>
+                   <i class="flaticon-clock clock-icon-image" *ngIf="!msgs.msgData.published"></i>
+                   <i class="flaticon-check clock-icon-image" *ngIf="msgs.msgData.published"></i>
+                               </div>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <div style="margin-right: 10px;">
+                      <ion-avatar class="avatar-img">
+                        <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+                        
+                      </ion-avatar>
+                    </div>
+                  </ion-row>
+                </div>
+              </div>
+              <!-- /Admin Image -->
+       
+              <!-- Admin broadcast -->
+              <div *ngIf="msgs.msgData && msgs.msgData.author == 'admin' && msgs.msgData.type == 'broadcast'">
+                <ion-row *ngIf="msgs.msgData.message" class="ion-justify-content-end">
+       
+                  <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-right': '5px'}" class="message-admin" style="text-align: left;">
+                    <span [innerHtml]="messageModifications(msgs.msgData.message)"></span>
+                    <h6 class="time">
+                     <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                     <span *ngIf="isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toISOString() | dateAgo}}</span>
+                     <span *ngIf="!msgs.msgData.published"><i class="flaticon-clock"></i></span>
+                     <span *ngIf="msgs.msgData.published"><i class="flaticon-check"></i></span></h6>
+                  </div>
+       
+                  <div style="margin-right: 10px;">
+                    <ion-avatar class="avatar-img">
+                      <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+                      
+                    </ion-avatar>
+                  </div>
+                </ion-row>
+                <div *ngIf="msgs.msgData.images && msgs.msgData.images.length === 1"
+                  [ngClass]="{'img-broadcast b': msgs.msgData.message}">
+                  <ion-row class="ion-justify-content-end" *ngFor="let img of msgs.msgData.images">
+                    <div class="ion-no-padding" style="position: relative;">
+                      <div [ngClass]="{'img-only-broadcast': !msgs.msgData.message}">
+                        <img class="loading" src="{{img.url}}" (click)="imageZoom(img)">
+                      </div>
+                      <div class="img-publish">
+                        <i class="flaticon-clock clock-icon-image" *ngIf="!msgs.msgData.published"></i><i
+                          class="flaticon-check clock-icon-image" *ngIf="msgs.msgData.published"></i>
+                      </div>
+                    </div>
+                    <div *ngIf="!msgs.msgData.message" style="margin-right: 10px;">
+                      <ion-avatar class="avatar-img">
+                        <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+                        
+                      </ion-avatar>
+                    </div>
+                  </ion-row>
+                </div>
+                <div class="wrapper-container" *ngIf="msgs.msgData.images && msgs.msgData.images.length > 1 && msgs.msgData.images.length <= 4">
+                 
+                    <div class="ion-no-padding" [ngClass]="{'img-broadcast half': msgs.msgData.message, 'img-only-broadcast': !msgs.msgData.message}">
+                      <ion-grid class="ion-no-padding">
+                        <ion-row class="img-grid">
+                          <ion-col class="col-padding" size="6" *ngFor="let img of msgs.msgData.images; let imgIndex = index">
+                            <div style="position: relative;">
+                             
+                                <img class="loading" src="{{img.url}}" (click)="imageZoom(img)">
+                              
+                              <div class="img-publish">
+                                <i class="flaticon-clock clock-icon-image" *ngIf="!msgs.msgData.published"></i><i
+                                  class="flaticon-check clock-icon-image" *ngIf="msgs.msgData.published"></i>
+                              </div>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <div *ngIf="!msgs.msgData.message" style="margin-right: 10px;">
+                      <ion-avatar class="avatar-img">
+                        <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+                        
+                      </ion-avatar>
+                    </div>
+                 
+                </div>
+                <div *ngIf="msgs.msgData.images && msgs.msgData.images.length > 4">
+                  <ion-row class="ion-justify-content-end">
+                    <div class="ion-no-padding"
+                      [ngClass]="{'img-broadcast a': msgs.msgData.message, 'img-only-broadcast': !msgs.msgData.message}">
+                      <ion-grid class="ion-no-padding">
+                        <ion-row class="img-grid" [ngStyle]="{'width': imgGridWidth + 'px'}">
+                          <ion-col class="col-padding" size="6"
+                            *ngFor="let img of [msgs.msgData.images[0], msgs.msgData.images[1], msgs.msgData.images[2],msgs.msgData.images[3]]; let imgIndex = index">
+                            <div style="position: relative;">
+                              <div style="box-shadow: none;"
+                                *ngIf="imgIndex === 0 || imgIndex === 1 || imgIndex === 2">
+                                <img class="loading" src="{{img.url}}" (click)="imageZoom(img)">
+                              </div>
+       
+                              <div style="background-color: #000;box-shadow: none;" *ngIf="imgIndex === 3"
+                                (click)="gridImageZoom(msgs.msgData.images)">
+                                <img class="loading img-opacity" src="{{img.url}}">
+                                <div class="ion-no-padding" class="img-count">
+                                  + {{msgs.msgData.images.length - 4}}
+                                </div>
+                              </div>
+                              <div class="img-publish">
+                                <i class="flaticon-clock clock-icon-image" *ngIf="!msgs.msgData.published"></i><i
+                                  class="flaticon-check clock-icon-image" *ngIf="msgs.msgData.published"></i>
+                              </div>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <div *ngIf="!msgs.msgData.message" style="margin-right: 10px;">
+                      <ion-avatar class="avatar-img">
+                        <ion-img src="assets/img/admin-pic.png" alt=""></ion-img>
+                       
+                      </ion-avatar>
+                    </div>
+                  </ion-row>
+                </div>
+              </div>
+              <!-- /Admin broadcast -->
+       
+              <!-- User message -->
+              <ion-row class="ion-justify-content-start"
+                *ngIf="msgs.msgData && msgs.msgData.author == 'user' && msgs.msgData.type == 'txt'">
+                <div style="margin-left: 5px;">
+                  <ion-avatar class="avatar-img">
+                    <ion-img src="{{userDetails.dP}}" alt=""></ion-img>
+                  </ion-avatar>
+                </div>
+       
+                <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-left': '5px'}" class="message-user">
+                  <ng-container
+                    *ngIf="msgs.msgData.source?.name == 'whatsapp' && msgs.msgData.source?.data?.mediaUrl; else noWAMediaUrl">
+                    <span (click)="openDoc(msgs.msgData.source.data.mediaUrl)" class="cursor-p">
+                      <i class="flaticon-null-18 m-r-5"></i>
+                      <span [innerHtml]="messageModifications(msgs.msgData.message)" class="link"></span>
+                    </span>
+                  </ng-container>
+                  <ng-template #noWAMediaUrl>
+                    <span [innerHtml]="messageModifications(msgs.msgData.message)"></span>
+                  </ng-template>
+                  <h6 class="time">
+                   <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                   </h6>
+                </div>
+                <div class="whatsapp-container" *ngIf="msgs.msgData.source?.name == 'whatsapp'">
+                  <img src="../../../assets/img/whatsapp.png" alt="">
+                </div>
+              </ion-row>
+              <!-- /User message -->
+       
+       
+              <!-- User image -->
+              <div *ngIf="msgs.msgData && msgs.msgData.author == 'user' && msgs.msgData.type == 'image'" style="text-align: left;">
+                <div *ngIf="msgs.msgData.images && msgs.msgData.images.length === 1">
+                  <ion-row class="ion-justify-content-start" *ngFor="let img of msgs.msgData.images">
+                    <div style="margin-left: 5px;">
+                      <ion-avatar class="avatar-img">
+                        <ion-img src="{{userDetails.dP}}" alt=""></ion-img>
+                        
+                      </ion-avatar>
+                    </div>
+                    <div class="ion-no-padding" class="m-left" style="position: relative;">
+                      <div>
+                        <img class="loading" *ngIf="useThumb" src="{{img.thumb}}" (click)="imageZoom(img)">
+                        <img class="loading" *ngIf="!useThumb" src="{{img.mob}}" (click)="imageZoom(img)">
+                      </div>
+                      <div class="img-publish">
+                       <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                       </div>
+                    </div>
+                  </ion-row>
+                </div>
+       
+                <div *ngIf="msgs.msgData.images && msgs.msgData.images.length > 1 && msgs.msgData.images.length <= 4">
+                  <ion-row class="ion-justify-content-start">
+                    <div style="margin-left: 5px;">
+                      <ion-avatar class="avatar-img">
+                        <ion-img src="{{userDetails.dP}}" alt=""></ion-img>
+                        
+                      </ion-avatar>
+                    </div>
+                    <div class="ion-no-padding" style="position: relative;">
+                      <ion-grid class="ion-no-padding" style="padding-left: 0px;">
+                        <ion-row class="img-grid-user" [ngStyle]="{'width': imgGridWidth + 'px'}">
+                          <ion-col class="col-padding" size="6" *ngFor="let img of msgs.msgData.images; let imgIndex = index">
+                            <div style="position: relative;">
+                             <div style="box-shadow: none;">
+                               <img class="loading" *ngIf="useThumb" src="{{img.thumb}}" (click)="imageZoom(img)">
+                               <img class="loading" *ngIf="!useThumb" src="{{img.mob}}" (click)="imageZoom(img)">
+                             </div>
+                             <div class="img-publish">
+                               <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                               </div>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                      <h6 class="time" style="margin-left: 5px;">
+                       <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                       </h6>
+                    </div>
+                  </ion-row>
+                </div>
+       
+                <div *ngIf="msgs.msgData.images && msgs.msgData.images.length > 4">
+                  <ion-row class="ion-justify-content-start">
+                    <div style="margin-left: 5px;">
+                      <ion-avatar class="avatar-img">
+                        <ion-img src="{{userDetails.dP}}" alt=""></ion-img>
+                        
+                      </ion-avatar>
+                    </div>
+                    <div class="ion-no-padding">
+                      <ion-grid class="ion-no-padding" style="padding-left: 0px;">
+                        <ion-row class="img-grid-user" [ngStyle]="{'width': imgGridWidth + 'px'}">
+                          <ion-col class="col-padding" size="6"
+                            *ngFor="let img of [msgs.msgData.images[0], msgs.msgData.images[1], msgs.msgData.images[2],msgs.msgData.images[3]]; let imgIndex = index">
+                            <div style="position: relative;">
+                             <div style="box-shadow: none;"
+                             *ngIf="imgIndex === 0 || imgIndex === 1 || imgIndex === 2">
+                             <img class="loading" *ngIf="useThumb" src="{{img.thumb}}" (click)="imageZoom(img)">
+                             <img class="loading" *ngIf="!useThumb" src="{{img.mob}}" (click)="imageZoom(img)">
+                           </div>
+                           <div style="background-color: #000;box-shadow: none;" *ngIf="imgIndex === 3"
+                             (click)="gridImageZoom(msgs.msgData.images)">
+                             <img class="loading img-opacity" *ngIf="useThumb" src="{{img.thumb}}" (click)="imageZoom(img)">
+                             <img class="loading img-opacity" *ngIf="!useThumb" src="{{img.mob}}" (click)="imageZoom(img)">
+                             <div class="ion-no-padding" class="img-count">
+                               + {{msgs.msgData.images.length - 4}}
+                             </div>
+                           </div>
+                           <div class="img-publish">
+                             <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                             </div>
+                            </div>
+                            
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                      <h6 class="time" style="margin-left: 5px;">
+                       <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                       </h6>
+                    </div>
+                  </ion-row>
+                </div>
+              </div>
+              <!-- /User image -->
+       
+              <!-- User order -->
+              <ion-row
+                *ngIf="msgs.msgData && msgs.msgData.author == 'user' && msgs.msgData.type == 'order'">
+                <div style="margin-left: 5px;">
+                 <ion-avatar class="avatar-img">
+                   <ion-img src="{{userDetails.dP}}" alt=""></ion-img>
+                   
+                 </ion-avatar>
+               </div>
+       
+               <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-left': '5px', 'padding': '13px 13px 0px 13px'}" class="message-user" *ngIf="msgs.msgData.status=='Pending'" style="text-align: left;">
+                 <span>New Order Placed</span>
+                   <p>Order Id: ORD{{msgs.msgData.orderId}}</p>
+                   <div style="text-align: center;margin-top: -10px;">
+                     <ion-button (click)="onClickViewOrder(msgs.msgData.orderId)" fill="outline" style="color: black;margin-top: 12px;margin-bottom: 12px;">
+                       View Order
+                     </ion-button>
+                   </div>
+                   <h6 class="time" style="margin-top: -3px;margin-bottom: 10px;">
+                     <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                     </h6>
+               </div>
+               <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-left': '5px', 'padding': '13px 13px 0px 13px'}" class="message-user" *ngIf="msgs.msgData.status=='Cancelled'" style="text-align: left;">
+                 <span>Order is Cancelled</span>
+                   <p>Order Id: ORD{{msgs.msgData.orderId}}</p>
+                   <div style="text-align: center;margin-top: -10px;">
+                     <ion-button (click)="onClickViewOrder(msgs.msgData.orderId)" fill="outline" style="color: black;margin-top: 12px;margin-bottom: 12px;">
+                       View Order
+                     </ion-button>
+                   </div>
+                   <h6 class="time" style="margin-top: -3px;margin-bottom: 10px;">
+                     <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                     </h6>
+               </div>
+               <div [ngStyle]="{'max-width': maxMessageWidth + 'px', 'margin-left': '5px', 'padding': '13px 13px 0px 13px'}" class="message-user" *ngIf="msgs.msgData.status=='PaymentMsg'" style="text-align: left;">
+                 <span>Payment is successful</span>
+                   <p>Order Id: ORD{{msgs.msgData.orderId}}</p>
+                   <div style="text-align: center;margin-top: -10px;">
+                     <ion-button (click)="onClickViewOrder(msgs.msgData.orderId)" fill="outline" style="color: black;margin-top: 12px;margin-bottom: 12px;">
+                       View Order
+                     </ion-button>
+                   </div>
+                   <h6 class="time" style="margin-top: -3px;margin-bottom: 10px;">
+                     <span *ngIf="!isDate(msgs.msgData.createdAt)">{{msgs.msgData.createdAt.toDate().toISOString() | dateAgo}}</span>
+                     </h6>
+               </div>
+              </ion-row>
+              <!-- /User order -->
+              </div>
+          </ion-grid>
+          <ion-grid style="height: 30vh;">
+            <ion-row align-items-center class="ion-no-padding" style="height: 25vh;flex-wrap: wrap;align-content: flex-end;">
+              <ion-col>
+                <div class="textarea-div ion-no-padding">
+                  <textarea class="textareaElement" #myInput rows="1" (keyup.enter)="sendMessage()" [(ngModel)]="adminMsgText"
+                    placeholder="Type a message..." (ngModelChange)="changeInMsgInput();"></textarea>
+                </div>&nbsp;
+                <div style="display:flex;justify-content: space-between">
+                <div class="upload-btn-wrapper">
+                  <ion-button class="btn-2 i-start" style="margin-right: 0px;"> <i class="flaticon-null-16"></i>&nbsp;Image</ion-button>
+                  <input type="file" name="myfile" (change)="uploadImage($event.target.files)" accept="image/*" />
+                </div>&nbsp;
+                <div class="upload-btn-wrapper">
+                  <ion-button class="btn-2 i-start" (mousedown)="preventFocusChange($event)" (click)="sendMessage()">
+                    <i class="flaticon-null-1"></i> Send Message 
+                      <span *ngIf="sendToWhatsapp"> &nbsp;+ 
+                        <img src="../../../assets/img/whatsapp.png" style="width: 20px; height: 20px"></span> 
+                   </ion-button>
+                </div>
+              </div>
+              <div class="wa-text-container">
+                <ion-text color="danger" *ngIf="whatsapp">
+                  <p>According to WhatsApp policy you need to send Template if your session of 24hr expires with the user. <b (click)="sendWATemplate()" class="cursor-p">CLICK HERE </b>to send the template.</p>
+                </ion-text>
+              </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+        <ion-col style="border-left: 1px solid lightgray;" id='scroll3'>
+          <div>
+            <p style="font-weight: bold;text-align: center;font-size: medium">Details</p>
+            <div class="inline-align" *ngIf="registeredDate">
+              <h6>
+                Registered On:
+              </h6>&nbsp;&nbsp;
+              <h6>
+                {{getDateTimeFormat(registeredDate.toDate())}}
+              </h6>
+            </div>
+            <div class="inline-align" *ngIf="lastActiveDate">
+              <h6>
+                Last Active On:
+              </h6>&nbsp;&nbsp;
+              <h6>
+                {{getDateTimeFormat(lastActiveDate.toDate())}}
+              </h6>
+            </div>
+          </div>
+          <div *ngIf="!transactions.length" text-center>
+            <h6>No wallet transactions</h6>
+          </div>
+          <div *ngIf="transactions.length">
+            <div class="inline-align">
+              <h6>
+                Wallet Balance:
+              </h6>&nbsp;&nbsp;
+              <h6>
+                {{balance | currency:currencyCode:true}}
+              </h6>
+            </div>
+            <div class="inline-align">
+              <h6>
+                Cashback Balance:
+              </h6>&nbsp;&nbsp;
+              <h6>
+                {{cashbackBalance | currency:currencyCode:true}}
+              </h6>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="spinner" *ngIf="ordersLoader; else ordersLoaded;">
+            <ion-spinner color="primary"></ion-spinner>
+          </div>  
+          <ng-template #ordersLoaded>
+            <p style="font-weight: bold;text-align: center;font-size: medium;">Orders&nbsp;<span *ngIf="orders && orders.length > 0">({{orders.length}})</span></p>
+            <div *ngIf="!orders.length; else ordersHasLength;" text-center>
+              <h6>No orders yet</h6>
+            </div>
+            <ng-template #ordersHasLength>
+              <div *ngFor="let order of orders; let i=index">
+                <div class="aud-order-id">
+                  Order Id: ORD{{order.orderId}}
+                </div>
+                <div class="aud-products-container">
+                  <div class="aud-placed-on" *ngIf="order.createdAt">
+                    Placed On {{order.createdAt.toDate() | date}} by <span>{{order.userName}}</span>
+                  </div>
+                  <ion-list class="ion-no-padding" lines="none" *ngIf="order?.products[0]">
+                    <ion-item class="ion-no-padding">
+                      <div slot="start" *ngIf='order.products[0].img'
+                        [ngStyle]="{'background': 'url(' + order.products[0].img.mob + ') no-repeat center', 'background-size': 'contain'}"
+                        class="aud-product-image">
+                        <div class="aud-more" *ngIf="order.products.length > 1">+ {{order.products.length - 1}} more</div>
+                      </div>
+                      <div slot="start" *ngIf='!order.products[0].img'
+                        [ngStyle]="{'background': 'url(' + '../../../assets/img/no-product.png' + ') no-repeat center', 'background-size': 'contain'}"
+                        class="aud-product-image">
+                        <div class="aud-more" *ngIf="order.products.length > 1">+ {{order.products.length - 1}} more</div>
+                      </div>
+                      <ion-label>
+                        <h2 class="aud-product-price ion-text-wrap">
+                          {{order.totalAmountToPaid | currency: currencyCode:true:'0.0'}}
+                        </h2>
+                        <h2 class="aud-product-name ion-text-wrap">{{order.products[0].name}} <span
+                            *ngIf="order.products.length > 1">+ {{order.products.length - 1}} more</span>
+                        </h2>
+                        <h3>{{order.status}}<span><i class="flaticon-null-20"></i></span></h3>
+                      </ion-label>
+                    </ion-item>
+                    <div class="aud-action-btn"
+                      *ngIf="order.deliveryStatus === 'inProgress' && (order.status === 'Confirmed' || order.status === 'Dispatched'); else showOnlyViewOrder">
+                      <ion-grid>
+                        <ion-row class="ion-justify-content-center" style="opacity: .6;font-size: small;">
+                          <ion-col size="12">
+                            Delivery agent has started delivery
+                          </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col size="6">
+                            <ion-button (click)="onClickViewDetails(order.orderId)" size="small" shape="round">
+                              View Order
+                            </ion-button>
+                          </ion-col>
+                          <ion-col size="6">
+                            <ion-button (click)="onClickTrackOrder(order.deliveryAgentId, order.deliveryLatLng)"
+                              size="small" shape="round">
+                              Track Order
+                            </ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <ng-template #showOnlyViewOrder>
+                      <div class="aud-view-details-btn">
+                        <ion-button (click)="onClickViewDetails(order.orderId)" size="small" shape="round">
+                          View Order
+                        </ion-button>
+                      </div>
+                    </ng-template>
+                  </ion-list>
+                </div>
+              </div>
+            </ng-template>
+          </ng-template>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+</div>
+</ion-content>
+

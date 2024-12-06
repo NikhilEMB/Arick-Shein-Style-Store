@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="templates-header-title">Users</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+        <ion-list class="ion-no-padding list" lines="none">
+          <ion-item class="ion-no-padding" *ngFor="let user of users" (click)="goToUser(user.userId)">
+            <span class="user-detail">{{user.name}} ({{user.phoneNo}})</span>
+          </ion-item>
+        </ion-list>
+
+</ion-content>

@@ -1,0 +1,52 @@
+<ion-header class="templates-header">
+  <ion-toolbar>
+    <ion-title class="templates-header-title">templates</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="showTemplatesLoader; else templatesLoaded;" class="temp-spinner">
+    <ion-spinner name="dots"></ion-spinner>
+  </div>
+  <ng-template #templatesLoaded>
+    <div *ngIf="!templates.length; else hasTemplates;" class="no-temp">
+      <p>No templates available.</p>
+    </div>
+    <ng-template #hasTemplates>
+      <ion-list *ngIf="showTemplates">
+        <ion-label class="select-temp">Select Template</ion-label>
+        <ion-item button detail lines="none" class="template-name" *ngFor="let item of templates" (click)="onClickTemplate(item)">
+          <ion-label>{{item.id}}</ion-label>
+        </ion-item>
+      </ion-list>
+      <ion-list *ngIf="showTypes" lines="none">
+        <div class="selects-wrapper">
+          <ion-item style="--padding-start: 0px" (click)="backTotemplates()">
+            <ion-icon name="arrow-back" ></ion-icon>
+            <ion-label class="select-type">Select {{type}}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label class="select-type">Select All</ion-label>
+            <ion-checkbox color="primary" (click)="onClickSelectAll()"></ion-checkbox>
+          </ion-item>
+        </div>
+        
+        <ion-item button class="template-name" *ngFor="let value of values; let i = index;">
+          <ion-label>{{value}}</ion-label>
+          <ion-checkbox color="primary" (click)="selectValues(value)" [checked]="selectAllValues" mode="ios"></ion-checkbox>
+        </ion-item>
+      </ion-list>
+    </ng-template>
+  </ng-template>
+</ion-content>
+
+<ion-footer *ngIf="showTypes" class="bottom-add-btn">
+  <ion-button (click)="onClickAdd()" expand="block">
+    Add
+  </ion-button>
+</ion-footer>

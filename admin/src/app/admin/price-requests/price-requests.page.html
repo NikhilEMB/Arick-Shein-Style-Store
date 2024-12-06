@@ -1,0 +1,70 @@
+<ion-header no-border no-shadow>
+  <ion-toolbar class="toolbar" mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Price Requests</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="showSearch = !showSearch">
+        <i class="flaticon-null-23"></i>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <div class="bottom-border" [hidden]="!showSearch">
+    <ion-grid class="search-product margining">
+      <div class="message-box">
+        <ion-row class="ion-align-items-center">
+          <div>
+            <i class="flaticon-null-22"></i>
+          </div>
+          <div class="search-input">
+            <ion-input type="text" placeholder="Search" [(ngModel)]="searchRequest" clearInput></ion-input>
+          </div>
+        </ion-row>
+      </div>
+    </ion-grid>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+  <div *ngIf="showLoader;else requestsLoaded;" class="spinner">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+
+  <ng-template #requestsLoaded>
+    <div class="no-data" *ngIf="!allRequests.length" text-center>
+      <img src="assets/img/no-user.png" alt="">
+      <h6>No price requests</h6>
+    </div>
+    <ion-grid *ngIf="allRequests.length > 0" class="grid-wrapper">
+      <ion-row *ngFor="let req of allRequests | filter: searchRequest; let i = index;" class="ion-align-items-center req-row">
+        <ion-col size="3">
+          <ion-avatar class="pic-avatar">
+            <img img-preloader="{{req.profilePic}}">
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="6">
+          <p>
+            {{req.name}}
+          </p>
+          <p>
+            ({{req.phoneNo}})
+          </p>
+        </ion-col>
+        <ion-col size="3">
+          <div class="toggle-btn">
+            <label class="switch" style="top: 0px">
+              <input type="checkbox" (click)="changePriceReqActive(req.active, req.id)"
+                [checked]="req.active">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
+
+</div>
+</ion-content>

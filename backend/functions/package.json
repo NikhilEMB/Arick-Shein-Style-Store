@@ -1,0 +1,55 @@
+{
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "14"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.19.0",
+    "@google-cloud/translate": "^6.2.1",
+    "@sendgrid/mail": "^7.4.0",
+    "algoliasearch": "^4.3.0",
+    "axios": "^0.19.2",
+    "child-process-promise": "^2.2.0",
+    "crypto-js": "^4.1.1",
+    "currency-symbol-map": "^4.0.4",
+    "express": "^4.17.1",
+    "file-system": "^2.2.2",
+    "firebase-admin": "^12.5.0",
+    "firebase-functions": "^5.0.1",
+    "fs-extra": "^8.1.0",
+    "handlebars": "^4.7.6",
+    "indian-number-format": "^1.0.4",
+    "json-2-csv": "^3.18.0",
+    "mkdirp": "^0.5.1",
+    "mkdirp-promise": "^4.0.0",
+    "moment": "^2.26.0",
+    "moment-timezone": "^0.5.32",
+    "node-ccavenue": "^1.0.5",
+    "nodemailer": "^6.4.17",
+    "path": "^0.12.7",
+    "pdfmake": "^0.1.65",
+    "qrcode": "^1.5.0",
+    "razorpay": "^2.8.0",
+    "request": "^2.88.2",
+    "save-file": "^2.3.1",
+    "shopify-api-node": "^3.12.2",
+    "stripe": "^8.165.0",
+    "tinify": "^1.6.1",
+    "twilio": "^3.59.0",
+    "typesense": "^1.4.0",
+    "unzipper": "^0.10.11",
+    "xmlbuilder": "^13.0.2"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.2.0"
+  },
+  "private": true
+}

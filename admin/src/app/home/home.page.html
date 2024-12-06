@@ -1,0 +1,61 @@
+<ion-content class="ionBody">
+   <div class="captchaBox">
+      <div class="recaptcha-container" [hidden]="mode == 'otp'">
+         <div id="recaptcha-container"></div>
+      </div>
+   </div>
+
+   <div class="loginBody">
+      <div class="brandImg">
+         <img src="../../../assets/img/shop-logo-color.png" />
+      </div>
+      <div class="formArea">
+         <div class="formCard">
+            <div class="formTitle">
+               <span>welcome back</span>
+               <p>Login to your Account</p>
+            </div>
+            <div style="position: relative;">
+               <div class="countryCode">
+                  <!-- <img src="../../assets/img/login-assests/india-icon-svg.svg" alt=""> -->
+                  <span class="">{{countryCode}}</span>
+               </div>
+               <ion-input id="inputId" name="inputName" class="phoneInput" type="tel" [(ngModel)]="phoneNo"
+                  [ngClass]="{'readonlyCss': readonlyInput}" [readonly]="readonlyInput"
+                  (keyup.enter)="verifyLoginCode()">
+               </ion-input>
+               <div class="editNumber" *ngIf="confirmationResult" (click)="phoneEdit()">
+                  <img src="../../assets/img/login-assests/pencil-icon-svg.svg" alt="">
+               </div>
+            </div>
+            <div class="" *ngIf="confirmationResult">
+               <ion-input class="otpInput" [(ngModel)]="verificationCode" placeholder="Enter OTP"
+                  (keyup.enter)="signIn()" type='tel'>
+               </ion-input>
+               <div style="text-align: center;">
+                  <button class="sendOtp" (click)="verifyLoginCode()" [disabled]="!showResendBtn"
+                     *ngIf="!showTimer">Resend OTP</button>
+                  <!-- <p>{{showResendBtn}}</p> -->
+                  <div class="otpTimer" *ngIf="showTimer">
+                     <span class="">
+                        00:<span *ngIf="timer >= 10; else appendZeroToTimer">{{timer}}</span>
+                        <ng-template #appendZeroToTimer>
+                           <span>0{{timer}}</span>
+                        </ng-template>
+                     </span>
+                  </div>
+
+               </div>
+            </div>
+            <ion-button expand="block" (click)="verifyLoginCode()" [hidden]="mode != 'mobile'"
+               [disabled]="isBtnDisabled || (phoneNo == null) || (phoneNo.toString() == '')">
+               <p *ngIf="!isBtnDisabled">Continue</p>
+               <p *ngIf="isBtnDisabled">Sending OTP...</p>
+            </ion-button>
+            <ion-button expand="block" (click)="signIn()" [hidden]="mode != 'otp'">
+               Login
+            </ion-button>
+         </div>
+      </div>
+   </div>
+</ion-content>

@@ -1,0 +1,17 @@
+.state-wrapper {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #centerMarker{
+    position: absolute;
+    width: 50px;
+    left: 50%;
+    top: 50%;
+    //margin-left: -8px;
+    z-index: 999;
+  }

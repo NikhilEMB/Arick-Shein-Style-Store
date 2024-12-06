@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ng-container *ngIf="userMembership?.active">
+      <ion-menu-button slot="start" class="menu-btn">
+        <ion-icon slot="icon-only" name="menu"></ion-icon>
+      </ion-menu-button>
+    </ng-container>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Membership</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+
+    <!-- Vendor Membership -->
+    <ng-container *ngIf="userMembership && userMembership.active; else notMember;">
+      <div class="userMembership">
+        <h3>Your Membership</h3>
+        <p><strong>Purchased Plan: </strong>{{userMembership.name}}</p>
+        <p>
+          <strong>Plan Duration : </strong>
+          {{userMembership.months}} plan
+        </p>
+        <ng-container *ngIf="userMembership?.validTill">
+          <p><strong>Total Days Left : </strong>{{totalDaysLeft()}} Days</p>
+          <p><strong>Valid Till : </strong>{{userMembership.validTill | date: 'dd/MM/yyyy'}}</p>
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <!-- No Membership Active -->
+    <ng-template #notMember>
+      <ng-container *ngIf="!membershipSettings.active; else showPlans;">
+        <div class="noData">
+          <img src="assets/img/no-product.png">
+          <h6>No Plans Available</h6>
+        </div>
+      </ng-container>
+
+      <!-- Membership Settings & Plans -->
+      <ng-template #showPlans>
+        <h2>{{membershipSettings.name}}</h2>
+
+        <ng-container *ngIf="membershipSettings.description">
+          <p [innerHtml]="membershipSettings.description"></p>
+        </ng-container>
+
+        <!-- <p><strong>Membership Name:</strong> {{membershipSettings.name}}</p>
+
+        <ng-container *ngIf="membershipSettings.description">
+          <p class="m-t-16"><strong>Membership Description:</strong></p>
+          <div [innerHtml]="membershipSettings.description"></div>
+        </ng-container> -->
+
+        <div class="plans-wrapper">
+          <ion-grid>
+            <ion-row>
+              <ng-container *ngFor="let plan of membershipSettings.plans; index as i">
+                <ion-col size="12" size-md="4">
+                  <div class="plan-wrapper">
+                    <ion-card class="membership-card">
+                      <ion-card-header>
+                        <ion-card-title>{{getMonths(plan.months)}}</ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+                        <ion-label class="price">
+                          {{plan.discountedPrice | currency: currencyCode: true: '.2-2'}}
+                          <del class="price" *ngIf="plan.discountedPrice < plan.price">
+                            {{plan.price | currency:currencyCode: true: '.2-2'}}
+                          </del>
+                        </ion-label>
+                        <br>
+                        <ion-label class="discount">
+                          Save {{getDiscount(plan.price,plan.discountedPrice)}}%
+                        </ion-label>
+                      </ion-card-content>
+                      <ion-button class="btn-1" (click)="buyPlan(i)" expand="full" color="success">
+                        Buy Plan
+                      </ion-button>
+                    </ion-card>
+                  </div>
+                </ion-col>
+              </ng-container>
+            </ion-row>
+          </ion-grid>
+
+        </div>
+      </ng-template>
+    </ng-template>
+
+  </div>
+
+</ion-content>

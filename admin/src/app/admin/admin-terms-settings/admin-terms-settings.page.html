@@ -1,0 +1,112 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Terms and Policy</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="solid" color="secondary" >
+      <span class="icon" slot="start">
+        <i class="flaticon-null" slot="start"></i>
+        <span class="count">5</span>
+      </span>
+    </ion-button>
+    <ion-button fill="solid" color="secondary" >
+      <span class="icon" slot="start">
+        <i class="flaticon-shopping-bag" slot="start"></i>
+        <span class="count">2</span>
+      </span>
+    </ion-button>
+  </div>
+</ion-header>
+
+
+
+<super-tabs no-shadow no-border>
+    <super-tabs-toolbar slot="top">
+      <super-tab-button>
+        <ion-label>Terms & Conditions</ion-label>    
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>Privacy Policy</ion-label>    
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>Cancellation Policy</ion-label>    
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>Refund Policy</ion-label>    
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>Shipping</ion-label>    
+      </super-tab-button>
+    </super-tabs-toolbar>
+
+    <super-tabs-container>
+      <super-tab>
+        <ion-content>
+          <div class="main-container fix-height">
+            <div class="flex-label"><ion-label>Enable</ion-label>
+              <ion-toggle 
+              [checked]="termsActiveStatus" [(ngModel)]="termsActiveStatus"></ion-toggle>
+            </div>
+          <ckeditor [(ngModel)]="termsContent" [config]="ckeConfig"></ckeditor>
+        </div>
+        </ion-content>
+      </super-tab>
+      <super-tab>
+        <ion-content>
+          <div class="main-container fix-height">
+            <div class="flex-label"><ion-label>Enable</ion-label>
+              <ion-toggle 
+              [checked]="privacyActiveStatus" [(ngModel)]="privacyActiveStatus"></ion-toggle>
+            </div>
+          <ckeditor [(ngModel)]="privacyContent" [config]="ckeConfig"></ckeditor>
+          </div>
+        </ion-content>
+      </super-tab>
+      <super-tab>
+        <ion-content>
+          <div class="main-container fix-height">
+            <div class="flex-label"><ion-label>Enable</ion-label>
+              <ion-toggle 
+              [checked]="cancelActiveStatus" [(ngModel)]="cancelActiveStatus"></ion-toggle>
+            </div>
+          <ckeditor [(ngModel)]="cancelContent" [config]="ckeConfig"></ckeditor>
+          </div>
+        </ion-content>
+      </super-tab>
+      <super-tab>
+        <ion-content>
+          <div class="main-container fix-height">
+            <div class="flex-label"><ion-label>Enable</ion-label>
+              <ion-toggle 
+              [checked]="refundActiveStatus" [(ngModel)]="refundActiveStatus"></ion-toggle>
+            </div>
+          <ckeditor [(ngModel)]="refundContent" [config]="ckeConfig"></ckeditor>
+          </div>
+        </ion-content>
+      </super-tab>
+      <super-tab>
+        <ion-content>
+          <div class="main-container fix-height">
+            <div class="flex-label"><ion-label>Enable</ion-label>
+              <ion-toggle 
+              [checked]="shippingActiveStatus" [(ngModel)]="shippingActiveStatus"></ion-toggle>
+            </div>
+          <ckeditor [(ngModel)]="shippingContent" [config]="ckeConfig"></ckeditor>
+          </div>
+        </ion-content>
+      </super-tab>
+    </super-tabs-container>
+  </super-tabs>
+
+<ion-footer  no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="onClickSaveTermsSettings()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

@@ -1,0 +1,890 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      let role = get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+      return role == "admin" || role == "manager";
+    }
+    function isDeliveryAgent() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "deliveryAgent";
+    }
+    function isUserDeliveryAgent(userId){
+       return get(/databases/$(database)/documents/users/$(userId)).data.role == "deliveryAgent";
+    }
+    function isVendor() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "vendor";
+    }
+    function isCustomUser() {
+      return role == "user"
+    }
+
+    function isInfluencer() {
+    	return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "influencer";
+    }
+
+    function isVendorManager() {
+    	return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "vendorManager";
+    }
+
+    match /block/{userId} {
+      allow read:  if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null;
+    }
+    match /broadcast/{broadcastId} {
+      allow read:  if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+    match /categories/{categoryId} {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+
+      match /subcategories/{subCategoryId} {
+         allow read;
+         allow write: if request.auth.uid != null && isAdmin();
+
+         match /subcategories/{subSubCategoryId} {
+          allow read;
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+       }
+    }
+    match /chats/{userId} {
+       allow read: if request.auth.uid == userId || isAdmin() || isDeliveryAgent() || isVendorManager();
+       allow write: if request.auth.uid == userId || isAdmin() || isDeliveryAgent() || isVendorManager();
+
+       match /messages/{messageId} {
+          allow read: if request.auth.uid == userId || isAdmin() || isDeliveryAgent() || isVendorManager();
+          allow write: if request.auth.uid == userId || isAdmin() || isDeliveryAgent() || isVendorManager();
+       }
+    }
+    match /features/banners {
+    	allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+
+      match /images/{imageId} {
+         allow read;
+         allow write: if request.auth.uid != null && isAdmin();
+      }
+    }
+
+  match /features/{featureId} {
+      allow read;
+      allow write: if request.auth.uid != null && (isAdmin() || isInfluencer());
+    }
+
+    match /features/bulkImagesUpload {
+      allow read;
+      allow write: if request.auth.uid != null;
+      match /products/{productId} {
+        allow read;
+        allow write: if request.auth.uid != null;
+        match /variants/{variantId} {
+          allow read;
+          allow write: if request.auth.uid != null;
+        }
+      }
+    }
+
+    match /features/bestsellers {
+    	allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+
+      match /products/{productId} {
+         allow read;
+         allow write: if request.auth.uid != null && isAdmin();
+      }
+    }
+    match /features/coupons {
+      allow read;
+      allow write: if request.auth.uid != null && (isAdmin() || isInfluencer());
+
+      match /codes/{codeId} {
+         allow read;
+         allow write: if request.auth.uid != null && (isAdmin() || isInfluencer());
+       }
+    }
+    match /features/delivery {
+    	allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+      match /manageSlots/{date} {
+        allow read;
+        allow write: if request.auth.uid != null && isAdmin();
+      }
+      match /custom/{customId} {
+        allow read;
+        allow write: if request.auth.uid != null && isAdmin();
+      }
+    }
+    match /features/services {
+    	allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+    match /features/multiRegion {
+    	allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+      match /regions/{regionId} {
+        allow read;
+        allow write: if request.auth.uid != null && isAdmin();
+      }
+    }
+    match /features/multiVendor {
+    	allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+      match /vendors/{vendorId} {
+        allow read;
+        allow write: if request.auth.uid != null && isAdmin() || isVendor();
+        match /orders/{orderId} {
+          allow read: if request.auth.uid != null;
+          allow write: if request.auth.uid != null && (isAdmin() || isVendor());
+        }
+        match /appointments/{appointmentId} {
+          allow read: if request.auth.uid != null;
+          allow write: if request.auth.uid != null && (isAdmin() || isVendor());
+        }
+      }
+      match /requests/{requestId} {
+        allow read;
+        allow write;
+      }
+      match /membership/{settings} {
+        allow read;
+        allow write;
+      }
+    }
+
+    match /features/appointment {
+        allow read: if request.auth.uid != null && isAdmin();
+        allow write: if request.auth.uid != null && isAdmin();
+    }
+
+    match /features/filters {
+    	allow read: if request.auth.uid != null;
+      allow write: if request.auth.uid != null && isAdmin();
+      match /list/{filterId} {
+        allow read: if request.auth.uid != null;
+        allow write: if request.auth.uid != null && isAdmin();
+      }
+    }
+    match /features/membership {
+    	allow read: if request.auth.uid != null;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+    match /features/managers {
+    	allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+      match /managersList/{managersListId} {
+        allow read;
+        allow write: if request.auth.uid != null && isAdmin();
+      }
+    }
+    match /features/pickDrop {
+    	allow read: if request.auth.uid != null;
+      allow write: if request.auth.uid != null && isAdmin();
+      match /orders/{orderId} {
+        allow read: if request.auth.uid != null;
+        allow write: if request.auth.uid != null;
+        match /logs/{id} {
+          allow read: if request.auth.uid != null;
+          allow write: if request.auth.uid != null;
+        }
+      }
+    }
+    match /features/multiCountries {
+    	allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+
+    match /features/sellByUser {
+    	allow read;
+      allow write;
+      match /items/{itemId} {
+        allow read;
+        allow write;
+      }
+      match /requests/{requestId} {
+        allow read;
+        allow write;
+      }
+      match /bankTransferRequest/{requestId} {
+        allow read: if request.auth.uid != null;
+        allow write: if request.auth.uid != null
+      }
+    }
+
+    match /help/{helpId} {
+      allow read;
+      allow write: if false;
+    }
+    match /media/{mediaId} {
+      allow read: if request.auth.uid != null;
+      allow write: if request.auth.uid != null;
+
+      match /categories/{catId} {
+         allow read: if request.auth.uid != null;
+         allow write: if request.auth.uid != null;
+      }
+      match /category/{catId} {
+         allow read: if request.auth.uid != null;
+         allow write: if request.auth.uid != null;
+      }
+      match /chats/{chatId} {
+         allow read: if request.auth.uid != null;
+         allow write: if request.auth.uid != null;
+      }
+      match /ordersCommentImgs/{orderCommentId} {
+         allow read: if request.auth.uid != null;
+         allow write: if request.auth.uid != null;
+      }
+      match /products/{productId} {
+         allow read: if request.auth.uid != null;
+         allow write: if request.auth.uid != null;
+      }
+      match /productOptions/{productId} {
+         allow read: if request.auth.uid != null;
+         allow write: if request.auth.uid != null;
+      }
+    }
+    match /orders/{orderId} {
+      allow read;
+      allow write;
+        match /logs/{id} {
+        allow read;
+        allow write;
+      }
+      match /messages/{id} {
+        allow read;
+        allow write;
+      }
+    }
+    match /ordersMetaData/{metadataId} {
+      allow read: if request.auth.uid != null;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+    match /payment/history {
+       allow read: if false;
+       allow write: if request.auth.uid != null && isAdmin();
+
+       match /payments/{paymentId} {
+         allow read: if request.auth.uid == resource.data.userId || isAdmin();
+         allow write: if request.auth.uid == request.resource.data.userId;
+       }
+    }
+    match /payment/paytm {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+     }
+    match /payment/razorpay {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+    match /payment/info {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+    match /payment/{paymentDoc} {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+
+       match /users/{userId} {
+         allow read;
+         allow write;
+       }
+    }
+    match /delivery/{deliveryDoc} {
+      allow read: if request.auth.uid != null;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+    match /products/{productId} {
+      allow read;
+      allow write: if request.auth.uid != null && (isAdmin() || isVendor());
+      match /options/{optionsId} {
+          allow read;
+          allow write: if request.auth.uid != null && isAdmin();
+            match /notifications/{userId} {
+              allow read;
+              allow write: if request.auth.uid != null;
+            }
+         }
+      match /ratings/{userId} {
+          allow read;
+          allow write: if request.auth.uid != null;
+        }
+      match /notifications/{userId} {
+          allow read;
+          allow write: if request.auth.uid != null;
+        }
+      match /sections/{id} {
+          allow read;
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+      match /analytics/{id} {
+          allow read;
+          allow write;
+      }
+    }
+    match /settings/{settingType} {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+      match /cashbacks/{cashbackId} {
+        allow read: if request.auth.uid != null;
+        allow write: if request.auth.uid != null;
+      }
+      match /transactions/{transactionId} {
+        allow read: if request.auth.uid != null && isAdmin();
+        allow write: if request.auth.uid != null && isAdmin();
+      }
+      match /limits/{limitId} {
+        allow read: if request.auth.uid != null;
+        allow write: if request.auth.uid != null && isAdmin();
+        match /usage/{id} {
+          allow read: if request.auth.uid != null;
+          allow write: if request.auth.uid != null;
+        }
+      }
+    }
+    match /users/{userId} {
+      allow read;
+      allow write;
+      match /addresses/{addressId} {
+         allow read;
+         allow write;
+      }
+      match /cart/{cartId} {
+         allow read;
+         allow write;
+      }
+      match /walletTransactions/{transactionId} {
+         allow read: if request.auth.uid == userId || isAdmin();
+         allow write: if request.auth.uid == userId || isAdmin();
+      }
+      match /wishlist/{wishlistId} {
+         allow read: if request.auth.uid == userId || isAdmin();
+         allow write: if request.auth.uid == userId || isAdmin();
+      }
+      match /analytics/{id} {
+         allow read: if request.auth.uid == userId || isAdmin();
+         allow write: if request.auth.uid == userId || isAdmin();
+
+         match /data/{id} {
+          allow read: if request.auth.uid == userId || isAdmin();
+          allow write: if request.auth.uid == userId || isAdmin();
+         }
+      }
+      match /bulkNavigations/{bulkNavigationId} {
+         allow read: if request.auth.uid == userId;
+         allow write: if request.auth.uid == userId;
+      }
+      match /nearbyOrders/{orderId} {
+         allow read: if request.auth.uid == userId;
+         allow write: if request.auth.uid == userId;
+      }
+
+      match /pets/{petId} {
+         allow read;
+         allow write: if request.auth.uid == userId || isAdmin();
+      }
+    }
+    match /variants/types {
+    	allow read: if request.auth.uid != null && (isAdmin() || isVendor());
+      allow write: if request.auth.uid != null && (isAdmin() || isVendor());
+    }
+    match /variants/colors {
+    	allow read: if request.auth.uid != null && (isAdmin() || isVendor());
+      allow write: if request.auth.uid != null && (isAdmin() || isVendor());
+        match /options/{optionsId} {
+          allow read: if request.auth.uid != null && (isAdmin() || isVendor());
+          allow write: if request.auth.uid != null && (isAdmin() || isVendor());
+        }
+    }
+    match /variants/templates {
+    	allow read:if request.auth.uid != null && (isAdmin() || isVendor());
+      allow write:if request.auth.uid != null && (isAdmin() || isVendor());
+        match /options/{optionsId} {
+          allow read:if request.auth.uid != null && (isAdmin() || isVendor());
+          allow write:if request.auth.uid != null && (isAdmin() || isVendor());
+        }
+    }
+    match /priceRequests/{requestsId} {
+       allow read: if request.auth.uid == requestsId || isAdmin();
+       allow write: if request.auth.uid != null && isAdmin();
+  }
+  match /offers/{offerId} {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+  match /feedbacks/{feedbackId} {
+      allow read: if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null;
+    }
+  match /brands/{brandId} {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+  match /widgets/{widgetId} {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin() || isVendor();
+      match /products/{productId} {
+          allow read;
+          allow write:if request.auth.uid != null && isAdmin() || isVendor();
+        }
+       match /slides/{slideId} {
+          allow read;
+          allow write:if request.auth.uid != null && isAdmin() || isVendor();
+        }
+         match /webSlides/{slideId} {
+          allow read;
+          allow write:if request.auth.uid != null && isAdmin() || isVendor();
+        }
+    }
+  match /services/{serviceId} {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+  match /serviceRequests/{serviceRequestId} {
+      allow read: if request.auth.uid != null;
+      allow write: if request.auth.uid != null;
+    }
+  match /languages/{languageId} {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+  match /subscriptions/{subscriptionId} {
+      allow read: if request.auth.uid != null;
+      allow write: if request.auth.uid != null;
+    }
+  match /features/webbanners {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+      match /images/{imageId} {
+          allow read;
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+      }
+
+  match /pages/{pageId} {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+  match /popups/{popupId} {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+  match /videos/{videoId} {
+    allow read;
+    allow write: if request.auth.uid != null && isAdmin();
+  }
+
+    match /analytics/products {
+    	allow read: if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null && isAdmin();
+      match /data/{dataId} {
+        allow read: if request.auth.uid != null && isAdmin();
+        allow write: if request.auth.uid != null && isAdmin();
+        match /list/{listId} {
+          allow read: if request.auth.uid != null && isAdmin();
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+      }
+    }
+    match /analytics/users {
+    	allow read: if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null && isAdmin();
+      match /data/{dataId} {
+        allow read: if request.auth.uid != null && isAdmin();
+        allow write: if request.auth.uid != null && isAdmin();
+        match /list/{listId} {
+          allow read: if request.auth.uid != null && isAdmin();
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+      }
+    }
+    match /analytics/sales {
+    	allow read: if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null && isAdmin();
+      match /data/{dataId} {
+        allow read: if request.auth.uid != null && isAdmin();
+        allow write: if request.auth.uid != null && isAdmin();
+      }
+    }
+    match /analytics/services {
+    	allow read: if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null && isAdmin();
+      match /data/{dataId} {
+        allow read: if request.auth.uid != null && isAdmin();
+        allow write: if request.auth.uid != null && isAdmin();
+        match /list/{listId} {
+          allow read: if request.auth.uid != null && isAdmin();
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+      }
+    }
+    match /analytics/brands {
+    	allow read: if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null && isAdmin();
+      match /data/{dataId} {
+        allow read: if request.auth.uid != null && isAdmin();
+        allow write: if request.auth.uid != null && isAdmin();
+        match /list/{listId} {
+          allow read: if request.auth.uid != null && isAdmin();
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+      }
+    }
+    match /analytics/category {
+    	allow read: if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null && isAdmin();
+      match /data/{dataId} {
+        allow read: if request.auth.uid != null && isAdmin();
+        allow write: if request.auth.uid != null && isAdmin();
+        match /list/{listId} {
+          allow read: if request.auth.uid != null && isAdmin();
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+      }
+    }
+    match /analytics/area {
+    	allow read: if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null && isAdmin();
+      match /data/{dataId} {
+        allow read: if request.auth.uid != null && isAdmin();
+        allow write: if request.auth.uid != null && isAdmin();
+        match /list/{listId} {
+          allow read: if request.auth.uid != null && isAdmin();
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+      }
+    }
+    match /analytics/vendors {
+    	allow read: if request.auth.uid != null && isAdmin() || isVendor();
+      allow write: if request.auth.uid != null && isAdmin();
+      match /data/{dataId} {
+        allow read: if request.auth.uid != null && isAdmin() || isVendor();
+        allow write: if request.auth.uid != null && isAdmin();
+        match /list/{listId} {
+          allow read: if request.auth.uid != null && isAdmin() || isVendor();
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+      }
+    }
+    match /analytics/coupons {
+    	allow read: if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null && isAdmin();
+      match /data/{dataId} {
+        allow read: if request.auth.uid != null && isAdmin();
+        allow write: if request.auth.uid != null && isAdmin();
+        match /list/{listId} {
+          allow read: if request.auth.uid != null && isAdmin();
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+      }
+    }
+    match /analytics/referral {
+    	allow read: if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null && isAdmin();
+      match /data/{dataId} {
+        allow read: if request.auth.uid != null && isAdmin();
+        allow write: if request.auth.uid != null && isAdmin();
+        match /list/{listId} {
+          allow read: if request.auth.uid != null && isAdmin();
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+      }
+    }
+    match /analytics/{id} {
+    	allow read: if request.auth.uid != null && isAdmin() || isVendor();
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+    match /contactUs/{id} {
+    	allow read: if request.auth.uid != null && isAdmin();
+      allow write;
+    }
+    match /studio/{id} {
+      allow read;
+      allow write: if request.auth.uid != null;
+      match /sections/{sectionsId} {
+          allow read;
+          allow write: if request.auth.uid != null;
+      }
+    }
+    match /shiprocket/{orderId} {
+      allow read: if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+
+    match /forms/{formId} {
+      allow read: if (request.auth.uid != null && (request.auth.uid == resource.data.userId)) || isAdmin();
+      allow write: if request.auth.uid != null;
+    }
+
+    match /userMetaData/{userId} {
+      allow read: if request.auth.uid != null;
+      allow write: if request.auth.uid != null;
+    }
+
+    match /appointments/{appointmnetId} {
+      allow read: if request.auth.uid != null;
+      allow write: if request.auth.uid != null;
+    }
+
+    match /advanced/{id} {
+      allow read: if request.auth.uid != null;
+      allow write: if request.auth.uid != null;
+        match /{langCode}/{id} {
+        allow read: if request.auth.uid != null;
+        allow write: if request.auth.uid != null;
+      }
+    }
+
+    match /attributes/{id} {
+      allow read: if request.auth.uid != null;
+      allow write: if request.auth.uid != null;
+    }
+
+    match /support/{type} {
+      allow read: if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null && isAdmin();
+      match /list/{id} {
+        allow read: if request.auth.uid != null && isAdmin();
+        allow write: if request.auth.uid != null && isAdmin();
+        match /comments/{id} {
+          allow read: if request.auth.uid != null && isAdmin();
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+      }
+    }
+
+    match /integrations/{type} {
+      allow read: if request.auth.uid != null && (isAdmin() || isVendor());
+      allow write: if request.auth.uid != null && (isAdmin() || isVendor());
+      match /list/{integrationCode} {
+        allow read: if request.auth.uid != null && (isAdmin() || isVendor());
+        allow write: if request.auth.uid != null && (isAdmin() || isVendor());
+        match /orders/{orderId} {
+          allow read: if request.auth.uid != null && (isAdmin() || isVendor());
+          allow write: if request.auth.uid != null && (isAdmin() || isVendor());
+        }
+        match /logs/{logsId} {
+          allow read: if request.auth.uid != null && isAdmin();
+          allow write: if request.auth.uid != null && isAdmin();
+        }
+        match /templates/{templatesId} {
+          allow read: if request.auth.uid != null && isAdmin() || isVendor();
+          allow write: if request.auth.uid != null && isAdmin() || isVendor();
+        }
+      }
+      match /whatsapp_logs/{logsId} {
+        allow read: if request.auth.uid != null && isAdmin();
+        allow write: if request.auth.uid != null && isAdmin();
+      }
+    }
+
+    match /userGroups/{id} {
+      allow read: if request.auth.uid != null && isAdmin();
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+
+    match /bookings/{id} {
+      // allow read: if request.auth.uid != null;
+      // allow write: if request.auth.uid != null;
+      allow read;
+      allow write;
+    }
+
+    match /templates/{id} {
+      allow read;
+      allow write: if request.auth.uid != null && isAdmin();
+    }
+
+    match /vendorProducts/{id} {
+      allow read: if request.auth.uid != null || isAdmin() || isDeliveryAgent();
+      allow write: if request.auth.uid != null || isAdmin() || isDeliveryAgent();
+      match /deliveryAgents/{id} {
+        allow read: if request.auth.uid != null || isAdmin() || isDeliveryAgent();
+        allow write: if request.auth.uid != null || isAdmin() || isDeliveryAgent();
+        match /products/{id} {
+          allow read: if request.auth.uid != null || isAdmin() || isDeliveryAgent();
+          allow write: if request.auth.uid != null || isAdmin() || isDeliveryAgent();
+        }
+      }
+    }
+
+    match /whatsapp/{id} {
+      allow read;
+      allow write;
+      match /menu-items/{id} {
+        allow read;
+        allow write;
+      }
+      match /list/{id} {
+          allow read;
+          allow write;
+      }
+      match /history/{id} {
+          allow read;
+          allow write;
+      }
+    }
+
+    match /ai/{id} {
+      allow read: if request.auth.uid != null || isAdmin();
+      allow write: if request.auth.uid != null || isAdmin();
+    }
+    match /whatsappTemplates/{id} {
+      allow read;
+      allow write;
+    }
+
+	match /credits/{userId} {
+		allow read, write: if request.auth.uid != null || isAdmin();
+	}
+
+match /streams/{id} {
+		allow read: if request.auth.uid != null;
+		allow write: if request.auth.uid != null;
+	}
+
+	match /pincodes/{id} {
+		allow read: if request.auth.uid != null;
+		allow write: if request.auth.uid != null;
+	}
+
+  match /pincodesSettings/{id} {
+		allow read: if request.auth.uid != null;
+		allow write: if request.auth.uid != null;
+	}
+
+  match /influencerCouponsStats/{userId} {
+    allow read, write: if request.auth.uid != null && (isAdmin() || isInfluencer());
+    match /coupons/{couponId} {
+      allow read, write: if request.auth.uid != null && (isAdmin() || isInfluencer());
+      match /users/{uId} {
+        allow read, write: if request.auth.uid != null && (isAdmin() || isInfluencer());
+      }
+    }
+  }
+
+  match /features/influencer {
+    	allow read;
+      allow write: if request.auth.uid != null && (isAdmin() || isInfluencer());
+      match /requests/{imageId} {
+         allow read;
+         allow write: if request.auth.uid != null && (isAdmin() || isInfluencer());
+      }
+  }
+
+  match /autoships/{autoshipOrderId} {
+    allow read, write: if request.auth.uid;
+  }
+
+    match /chartTemplates/{id} {
+    	allow read;
+      allow write;
+  }
+
+  match /cashCollected/{id} {
+		  allow read: if request.auth.uid != null;
+		  allow write: if request.auth.uid != null;
+
+      match /days/{id} {
+        allow read: if request.auth.uid != null;
+        allow write: if request.auth.uid != null;
+      }
+  }
+
+    match /latestAgentOrder/{id} {
+    	allow read;
+      allow write;
+  }
+  match /latestVendorOrder/{id} {
+    	allow read;
+      allow write;
+  }
+
+  
+   match /agentLoginHours/{id} {
+    allow read: if request.auth.uid != null;
+    allow write: if request.auth.uid != null;
+              
+      match /dates/{id} {
+      allow read: if request.auth.uid != null;
+      allow write: if request.auth.uid != null;
+    }
+  }
+
+match /vendorSubscription/{id} {
+  allow read: if request.auth.uid != null;
+  allow write: if request.auth.uid != null;
+
+  match /settings/{id} {
+    allow read: if request.auth.uid != null;
+    allow write: if request.auth.uid != null;
+
+  }
+  match /plans/{id} {
+    allow read: if request.auth.uid != null;
+    allow write: if request.auth.uid != null;
+  } 
+
+  match /orders/{id} {
+    allow read: if request.auth.uid != null;
+    allow write: if request.auth.uid != null;
+  }  
+}
+match /agents/{id} {
+	allow read: if request.auth.uid != null;
+  allow write: if request.auth.uid != null;
+}
+
+match /influencers/{id} {
+	allow read: if request.auth.uid != null;
+  allow write: if request.auth.uid != null;
+}
+
+match /influencers/{id}/coupons/{couponId} {
+	allow read: if request.auth.uid != null;
+  allow write: if request.auth.uid != null;
+}
+
+match /influencers/{id}/orders/{orderId} {
+	allow read: if request.auth.uid != null;
+  allow write: if request.auth.uid != null;
+}
+
+match /vendorSubscription/{id} {
+  allow read: if request.auth.uid != null;
+  allow write: if request.auth.uid != null;
+
+  match /settings/{id} {
+    allow read: if request.auth.uid != null;
+    allow write: if request.auth.uid != null;
+
+  }
+  match /plans/{id} {
+    allow read: if request.auth.uid != null;
+    allow write: if request.auth.uid != null;
+  } 
+
+  match /orders/{id} {
+    allow read: if request.auth.uid != null;
+    allow write: if request.auth.uid != null;
+  }
+    
+}
+ match /followUps/{id} {
+    allow read: if request.auth.uid != null;
+    allow write: if request.auth.uid != null;
+  }
+
+  match /Integrations/{id} {
+    allow read, write;
+  }
+
+  match /branches/{id} {
+    allow read;
+    allow write: if request.auth.uid != null;
+  }
+
+
+  }
+}

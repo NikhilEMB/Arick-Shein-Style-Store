@@ -1,0 +1,350 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Bookings Orders</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+          <div class="searchBox">
+            <ion-input class="searchInput" type='number' placeholder="Enter Booking Id" [(ngModel)]='searchOrder'>
+            </ion-input>&nbsp;
+            <ion-button (click)='resetSearch()' size="small" fill="outline" color="danger">Clear </ion-button>
+          </div>
+          <ion-button (click)='searchBookingById()' expand="block" size="small">Search</ion-button>&nbsp;
+
+          <ng-container *ngIf='!bookingOrders'>
+            <h3 class="text-center">
+              No Booking
+            </h3>
+          </ng-container>
+
+          <div id="scroll1" *ngIf='bookingOrders'>
+            <ng-container *ngFor="let booking of bookingOrders; index as i">
+              <ion-grid (click)='viewBooking(i)' class='orderList'
+                [ngClass]="activeTile === i ? 'tile-bg-active' : 'tile-bg-inactive'">
+                <ion-row>
+                  <ion-col>
+                    <p *ngIf="booking.createdAt" style="color: gray;margin-bottom: 5px;">
+                      {{getDateTimeFormat(booking.createdAt.toDate())}}</p>
+                  </ion-col>
+                  <ion-col style="text-align: right">
+                    <p class="textCap">{{booking.status}}</p>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col class="textLeft">
+                    <span class="textCap">User : </span>
+                    <span>{{booking.user.name}}</span>
+                  </ion-col>
+                  <ion-col style="text-align: right">
+                    <span class="textCap">Id : </span>
+                    <span>{{booking.bookingId}}</span>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col class="textLeft">
+                    <span class="textCap">Name : </span>
+                    <span>{{booking.item.name}}</span>
+                  </ion-col>
+                  <ion-col style="text-align: right">
+                    <span class="textCap">Price : </span>
+                    <span>{{booking.item.price | currency: currencyCode:true:'.2-2'}}</span>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ng-container>
+          </div>
+        </ion-col>
+
+        <ion-col size="8" id="scroll2">
+          <ng-container *ngIf="!selectedOrder">
+            <h3 class="text-center">No Booking Selected !</h3>
+          </ng-container>
+
+          <ng-container *ngIf="selectedOrder">
+            <!-- Buttons Start -->
+            <ng-container *ngIf="selectedOrder.status != 'completed'">
+              <div class="justifyFlex">
+                <ng-container *ngIf="selectedOrder.status != 'rejected'">
+                  <ion-button (click)="askUpdateStatus('rejected')" color="danger">
+                    <i class="flaticon-null-19"></i>&nbsp;
+                    reject booking
+                  </ion-button>
+                </ng-container>
+
+                <div class="">
+                  <ng-container *ngIf="selectedOrder.status == 'pending'">
+                    <ion-button (click)="askUpdateStatus('accepted')" color="success">
+                      <i class="flaticon-null-20"></i>&nbsp;
+                      accept booking
+                    </ion-button>
+                  </ng-container>
+
+                  <ng-container *ngIf="selectedOrder.status == 'accepted'">
+                    <ion-button (click)="askUpdateStatus('claimed')" color="success">
+                      <i class="flaticon-null-20"></i>&nbsp;
+                      claimed
+                    </ion-button>
+                  </ng-container>
+
+                  <ng-container *ngIf="selectedOrder.status == 'claimed'">
+                    <ion-button (click)="askUpdateStatus('completed')" color="success">
+                      <i class="flaticon-null-20"></i>&nbsp;
+                      complete booking
+                    </ion-button>
+                  </ng-container>
+                </div>
+
+              </div>
+            </ng-container>
+            <!-- Buttons End -->
+
+            <!-- <ng-container>
+              <ion-button (click)="askUpdateStatus('pending')" color="success">restart booking</ion-button>
+            </ng-container> -->
+
+            <ng-container *ngIf="selectedOrder.status == 'completed'">
+              <h3 class="text-center">This booking is completed.</h3>
+            </ng-container>
+
+            <ng-container class="rejectText" *ngIf="selectedOrder.status == 'rejected'">
+              <h3 class="text-center">This booking is Rejected.</h3>
+            </ng-container>
+
+            <br>
+            <div class="bookingCard">
+              <h5>Booking Detail</h5>
+              <br>
+              <div class="">
+                <!-- <div class="bookingImg">
+                  <ion-thumbnail>
+                    <img class="loading"
+                      *ngIf="selectedOrder.coverPic && !selectedOrder.coverPic.thumb && selectedOrder.coverPic.url"
+                      src="{{selectedOrder.coverPic.url}}">
+                    <img class="loading" *ngIf="selectedOrder.coverPic && selectedOrder.coverPic.thumb"
+                      src="{{selectedOrder.coverPic.thumb}}">
+                    <img *ngIf="!selectedOrder.coverPic" src="assets/img/placeholder-img.jpg">
+                  </ion-thumbnail>
+                </div> -->
+                <div>
+                  <p><span class="textCap">Booking Id : </span>{{selectedOrder.bookingId}}</p>
+                  <br>
+                  <p *ngIf="selectedOrder.user">
+                    <span class="textCap">User Name : </span>
+                    {{selectedOrder.user.name}}
+                  </p>
+                  <p *ngIf="vendorName">
+                    <br>
+                    <span class="textCap">Vendor : </span> {{vendorName}}
+                  </p>
+                </div>
+                <div class="hr"></div>
+              </div>
+
+              <!-- Booking Schedule -->
+              <div class="" *ngIf="selectedOrder.schedule">
+                <div class="d-flex">
+                  <h5>Booking Schedule</h5>
+                  <ion-button *ngIf="selectedOrder.status== 'pending' || selectedOrder.status== 'accepted' "
+                    (click)="changeBookingSlotModal()" size="small" fill="outline">
+                    Change schedule
+                  </ion-button>
+                </div>
+                <p class="f-w-b">
+                  <span class="textCap">Booked Date : </span>
+                  {{selectedOrder.schedule.date}} at {{convert24to12(selectedOrder.schedule.slot.start)}} to
+                  {{convert24to12(selectedOrder.schedule.slot.end)}}
+                </p>
+                <br>
+                <p class="f-w-b">
+                  <span class="textCap">Booked At : </span>
+                  {{getDateTimeFormat(selectedOrder.createdAt.toDate())}}
+                </p>
+
+                <div class="hr"></div>
+              </div>
+
+              <!-- Address -->
+              <ng-container *ngIf="selectedOrder?.user.address">
+                <div class="content">
+                  <h5>Address</h5>
+                  <p>{{selectedOrder.user.address.name}},</p>
+                  <p>{{selectedOrder.user.address.address}},</p>
+                  <p>{{selectedOrder.user.address.phoneNo}}</p>
+                </div>
+                <div class="hr"></div>
+              </ng-container>
+
+              <!-- Payment -->
+              <ng-container *ngIf="selectedOrder?.payment?.mode">
+                <div class="content">
+                  <ng-container *ngIf="!isPartialPayment(); else paidPartially;">
+                    <h5>Payment</h5>
+                    <p>
+                      <span class="textCap">mode : </span>
+                      <span class="ion-text-capitalise">{{selectedOrder.payment.mode}}</span>
+                    </p>
+                    <p *ngIf="selectedOrder.payment?.status">
+                      <br>
+                      <span class="textCap">status : </span>
+                      <span class="ion-text-capitalise">{{selectedOrder.payment.status}}</span>
+                    </p>
+                    <!-- Update Payment status(Cash) -->
+                    <ng-container *ngIf="selectedOrder.payment.mode == 'cash' && !selectedOrder.payment.completed">
+                      <div class="d-flex">
+                        <p class="textCap">update status if cash received</p>
+                        <ion-button (click)="askUpdatePaymentStatus()" color="dark" fill="outline" size="small">
+                          update
+                        </ion-button>
+                      </div>
+                    </ng-container>
+                    <div class="payment-ss" *ngIf="selectedOrder.payment.mode === 'upiManual'">
+                      <br>
+                      <p>Uploaded Payment Screen Shot</p>
+                      <img [src]="selectedOrder.payment.screenshot" (click)="imgZoom(selectedOrder.payment.screenshot)">
+                    </div>
+
+                    <div class="payment-ss" *ngIf="selectedOrder.payment.mode === 'custom'">
+                      <br>
+                      <div *ngIf="selectedOrder.payment.textDetails">
+                        <p><span class="textCap">Details :</span> {{selectedOrder.payment.textDetails}}</p>
+                      </div>
+                      <div *ngIf="selectedOrder.payment.screenshot">
+                        <br>
+                        <p>Uploaded Payment Screen Shot</p>
+                        <img [src]="selectedOrder.payment.screenshot"
+                          (click)="imgZoom(selectedOrder.payment.screenshot)">
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-template #paidPartially>
+                    <h5>Payment (partial)</h5>
+
+                    <!-- online mode -->
+                    <p>
+                      <span class="textCap">Online mode: </span>
+                      <span class="ion-text-capitalize">{{selectedOrder.payment.mode}}</span>
+                    </p>
+                    <p>
+                      <span class="textCap">Amount: </span>
+                      <span>{{selectedOrder.payment.partial.online | currency: currencyCode:true:'.2-2'}}</span>
+                    </p>
+                    <p *ngIf="selectedOrder.payment?.status">
+                      <span class="textCap">status: </span>
+                      <span class="ion-text-capitalize">{{selectedOrder.payment.status}}</span>
+                    </p>
+
+                    <br>
+                    <!-- offline Mode -->
+                    <p>
+                      <span class="textCap">Offline mode: </span>
+                      <span class="ion-text-capitalize">Cash</span>
+                    </p>
+                    <p>
+                      <span class="textCap">Amount: </span>
+                      <span>{{selectedOrder.payment.partial.cod | currency: currencyCode:true:'.2-2'}}</span>
+                    </p>
+                    <p>
+                      <span class="textCap">Status: </span>
+                      <span class="ion-text-capitalize">{{selectedOrder.payment.partial.status}}</span>
+                    </p>
+                    <!-- Update Payment status(Cash) -->
+                    <ng-container *ngIf="selectedOrder.payment.partial.status !== 'completed'">
+                      <div class="d-flex">
+                        <p class="textCap">update status if cash received</p>
+                        <ion-button (click)="askUpdatePaymentStatus()" color="dark" fill="outline" size="small">
+                          update
+                        </ion-button>
+                      </div>
+                    </ng-container>
+                  </ng-template>
+                  <div class="hr"></div>
+                </div>
+              </ng-container>
+
+              <!-- Invoice -->
+              <ng-container *ngIf="selectedOrder?.invoice?.url">
+                <div class="content">
+                  <h5>Invoice</h5>
+                  <ion-item button (click)="showInvoice(selectedOrder.invoice.url)" lines="none"
+                    class="order-invoice ion-no-padding">
+                    <ion-label>
+                      <h5>View Invoice</h5>
+                    </ion-label>
+                  </ion-item>
+                </div>
+                <div class="hr"></div>
+              </ng-container>
+
+              <!-- Custom Input -->
+              <ng-container *ngIf="selectedOrder?.additionalInfo?.customInput?.value">
+                <div class="content">
+                  <h5>{{selectedOrder.additionalInfo.customInput.label}}</h5>
+                  <p>{{selectedOrder.additionalInfo.customInput.value}}</p>
+                </div>
+                <div class="hr"></div>
+              </ng-container>
+
+              <!-- Price Summary -->
+              <div class="bookingInfo">
+                <h5>Booking Info</h5>
+
+                <div class="d-flex">
+                  <span class="textCap">{{selectedOrder.item.name}}</span>
+                  <p>{{getBookingItemPrice() | currency: currencyCode:true:'.2-2'}}</p>
+                </div>
+
+                <!-- Add Ons -->
+                <div class="options" *ngIf="selectedOrder.item.addOns.totalPrice">
+                  <ng-container *ngFor="let section of selectedOrder.item.addOns.selectedOptions">
+                    <ng-container *ngFor="let option of section.options">
+                      <div class="d-flex">
+                        <span class="textCap">{{option.name}}</span>
+                        <p>{{option.price | currency: currencyCode:true:'.2-2'}}</p>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </div>
+
+                <!-- Price Summary -->
+                <div class="priceSummary">
+                  <div class="d-flex" *ngIf="selectedOrder.payment.extraChargeOnPayment?.charge as extraCharge;">
+                    <span class="textCap">
+                      {{selectedOrder.payment.extraChargeOnPayment.name || 'Payment Gateway Charge'}}
+                    </span>
+                    <p>{{extraCharge | currency: currencyCode:true:'.2-2'}}</p>
+                  </div>
+
+                  <div class="d-flex" *ngIf="getTotalAmount().totalGst as gst">
+                    <div class="">
+                      <span class="textCap">{{taxType}}</span>
+                      <small *ngIf="!selectedOrder.item.gst.isExclusive">
+                        (included)
+                      </small>
+                    </div>
+                    <p>{{gst | currency: currencyCode:true:'.2-2'}}</p>
+                  </div>
+
+                  <div class="d-flex">
+                    <span class="textCap">Total Service Price</span>
+                    <p>{{getTotalAmount().totalAmount | currency: currencyCode:true:'.2-2'}}</p>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </ng-container>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" fill="outline" class="add-btn" shape="round">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>&nbsp;&nbsp;
+    <ion-title text-center color="light">Select Type</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <p (click)="gotoProduct('single')">Single</p>
+  <p (click)="gotoProduct('variant')">Variant</p>
+  <p *ngIf = "quotationFeature" (click)="gotoProduct('quotation')">Quotation</p>
+  <p *ngIf = "appointmentFeature" (click)='gotoAppointment()'>Appointment</p>
+</ion-content>

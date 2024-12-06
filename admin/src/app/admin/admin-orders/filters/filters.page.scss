@@ -1,0 +1,16 @@
+  .statusList {
+      text-align: center;
+      p {
+          font-size: medium;
+          border: 1px solid lightgray;
+          padding: 10px;
+          margin: 8px;
+          cursor: pointer;
+          text-transform: capitalize;
+      }
+  }
+
+  .select{
+    width: 100%;
+    padding: 5px;
+  }

@@ -1,0 +1,41 @@
+.sd-service-name {
+    font-weight: bold;
+}
+
+.sr-status {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.sd-details {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: justify;
+}
+
+.sd-sections {
+    margin-top: 15px;
+}
+
+
+
+.sd-headings {
+    font-weight: bold;
+}
+
+p {
+    text-transform: none;
+}
+
+.btn-wrap{
+    text-align: right;
+}
+
+.img-container{
+    text-align: center;
+    margin-top: 16px;
+    .img-wrap{
+        width: 400px;
+    }
+}

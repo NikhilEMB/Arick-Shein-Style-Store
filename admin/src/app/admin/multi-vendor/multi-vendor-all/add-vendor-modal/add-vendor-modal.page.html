@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="templates-header-title">Add Vendor</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <div class="searchArea">
+            <input class="searchInput" [(ngModel)]="searchValue" placeholder="Search by name, phone number">
+            &nbsp;
+            <ion-button (click)='typeSenseSearchQuery()' size="small">Search</ion-button>&nbsp;
+            <!-- <ion-button (click)='clearSearch()' size="small">Show All</ion-button> -->
+          </div>
+          <!-- <div class="input-wrap">
+            <ion-label>Enter user name</ion-label>
+            <ion-col size="6" style="display: flex;align-items: center;">
+              <input placeholder="Enter name" [(ngModel)]="searchUser" style="background: white;border: 1px solid;padding: 5px;"
+                (click)='clearPhone()' (keyup.enter)='fireSearchQuery()'>&nbsp;
+
+              <input placeholder="Enter number" [maxlength]='phoneLimit' [(ngModel)]="searchUserPhone"
+                style="background: white;border: 1px solid;padding: 5px;" (click)='clearName()'
+                (keyup.enter)='fireSearchQuery()'>&nbsp;
+
+              <ion-button (click)='fireSearchQuery()' size="small">Search</ion-button>&nbsp;
+            </ion-col>
+          </div> -->
+          <!-- <ion-list class="ion-no-padding list" *ngIf="userName.length!=0" lines="none"> -->
+          <ion-list class="ion-no-padding list" *ngIf="userList.length" lines="none">
+            <ion-item class="ion-no-padding" *ngFor="let user of userList; let i = index">
+              <ng-container *ngIf="user.role ==='user'">
+                <ion-grid class="ion-no-padding">
+                  <ion-row class="ion-align-items-center">
+                    <ion-col size="2">
+                      <ion-thumbnail class="thumbnail">
+                        <img src="{{user.dP}}">
+                      </ion-thumbnail>
+                    </ion-col>
+                    <ion-col size="7">
+                      <p class="ion-text-capitalize">{{user.name}}</p>
+                      <p>{{user.phoneNo}}</p>
+                    </ion-col>
+                    <ion-col size="3">
+                      <ion-button class="btn-sml" shape="round" fill="outline" (click)="makeVendor(user.name, user.id)">Make Vendor</ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ng-container>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+</ion-content>

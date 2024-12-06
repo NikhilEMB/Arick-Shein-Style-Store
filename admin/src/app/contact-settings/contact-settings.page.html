@@ -1,0 +1,155 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Contact Page Settings</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<super-tabs no-shadow no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button (click)="showDetailsFooter(true)">
+      <ion-label>Details</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)="showDetailsFooter(false)">
+      <ion-label>Requests</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+  <super-tabs-container swipeEnabled="false">
+    <!-- Details Tab -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col size="12">
+                <div>
+                  <div class="flex-label">
+                    <ion-label>Recieve mail for every enquiry made by customer</ion-label>
+                    <ion-toggle [(ngModel)]="receiveMail"></ion-toggle>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <div>
+                  <div class="flex-label">
+                    <ion-label>Show map on contact page</ion-label>
+                    <ion-toggle [(ngModel)]="location.active"></ion-toggle>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+              <ion-row *ngIf="location.active">
+                <ion-col size="4">
+                  <div class="input-wrap">
+                    <ion-label>Latitude</ion-label>
+                    <ion-input class="form-input" [(ngModel)]="location.lat"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="4">
+                  <div class="input-wrap">
+                    <ion-label>Longitude</ion-label>
+                    <ion-input class="form-input" [(ngModel)]="location.lng"></ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="1" class="vertical-center">
+                  <p class="or-text m-t-16">OR</p>
+                </ion-col>
+                <ion-col size="3" class="vertical-center">
+                  <ion-button (click)="openMapModal()" class="m-t-16" fill="outline" shape="round" size="small">
+                    Add location through map
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            <ion-row>
+              <ion-col>
+                <h4>Store Addresses</h4>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngFor="let x of address; let i = index;">
+              <ion-col size="1" class="vertical-center">
+                <p>{{i+1}})</p>
+              </ion-col>
+              <ion-col size="10">
+                <ion-row>
+                  <ion-col size="6">
+                    <ion-input type="text" placeholder="Address Heading" class="form-input" [(ngModel)]="x.heading">
+                    </ion-input>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-input type="text" placeholder="Address" class="form-input" [(ngModel)]="x.address"></ion-input>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-input type="text" placeholder="Email" class="form-input" [(ngModel)]="x.email"></ion-input>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-input type="text" placeholder="Phone Number" class="form-input" [(ngModel)]="x.phoneNo">
+                    </ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+              <ion-col size="1" class="vertical-center">
+                <i class="flaticon-null-19 remove-icon" (click)="remove(i)"></i>
+              </ion-col>
+            </ion-row>
+            <ion-row class="ion-justify-content-center">
+              <ion-button (click)="addMore()" fill="outline" shape="round" size="small">
+                Add More Address
+              </ion-button>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+
+    <!-- Requests Tab -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-grid class="ion-no-padding data-table t-a-c" *ngIf="queries.length; else noData">
+            <ion-row class="ion-text-capitalize">
+              <ion-col size="1">SNo.</ion-col>
+              <ion-col size="3">Name</ion-col>
+              <ion-col size="2">Contact Details</ion-col>
+              <ion-col size="2">Date</ion-col>
+              <ion-col size="4">Reason</ion-col>
+            </ion-row>
+            <ion-row *ngFor="let query of queries; let i=index;">
+              <ion-col size="1"> {{i+1}} </ion-col>
+              <ion-col size="3"> {{query.name}} </ion-col>
+              <ion-col size="2"> {{query.phoneNo}} <br><br> {{query.email}}
+              </ion-col>
+              <ion-col size="2">{{query.createdAt.toDate() | date}}, {{query.createdAt.toDate() | date:'shortTime'}}</ion-col>
+              <ion-col size="4" class="t-a-l">
+                <b>Reason - </b> {{query.reason}}
+                <!-- <br>
+                <b>Other Details - </b> {{query.otherInfo}} -->
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          <ng-template #noData>
+            <div class="vertical-center">
+              No Data Available
+            </div>
+          </ng-template>
+        </div>
+      </ion-content>
+    </super-tab>
+  </super-tabs-container>
+</super-tabs>
+
+
+<ion-footer no-border class="page-footer" *ngIf="detailsFooter">
+  <div class="main-container">
+    <ion-button (click)="saveDetails()" [disabled]="disableSave()" shape="round" class="btn-1 i-start"
+      color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save Details
+    </ion-button>
+  </div>
+</ion-footer>

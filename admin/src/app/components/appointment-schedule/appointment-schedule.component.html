@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" fill="outline" class="add-btn" shape="round">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title text-center>Select Schedule</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button fill="outline" shape="round" (click)="selectDefaultSchedule()"
+    style="display: flex; width: 240px;margin: auto;">Select from default</ion-button>
+  <br><br>
+  <div style="display: flex;align-items: center;">
+    <p>No of days schedule is visible:</p>&nbsp;&nbsp;
+    <input placeholder="Enter days" style="text-align: center;border: none;border-bottom: 1px solid lightgray;"
+      type="number" [(ngModel)]='maxDays'>&nbsp;&nbsp;
+  </div>
+  <br>
+  <div *ngIf="days">
+    <div *ngFor="let item of days; let i=index" style="border-bottom: 1px solid lightgray;padding: 8px">
+      <div style="display: flex;align-items: center;">
+        <input type='checkbox' (click)="changeSchedule(i)" [checked]='item.active' />&nbsp;&nbsp;
+        <p><strong>{{item.day}}</strong></p>
+      </div>
+      <div class="scheduleList">
+        <div style="display: flex;align-items: center;">
+          <ion-datetime displayFormat="hh:mm A" pickerFormat="hh:mm A" placeholder='Start Time'
+            [(ngModel)]='time[i].start'></ion-datetime>&nbsp;&nbsp;-&nbsp;&nbsp;
+          <ion-datetime displayFormat="hh:mm A" pickerFormat="hh:mm A" placeholder='End Time' [(ngModel)]='time[i].end'>
+          </ion-datetime>&nbsp;&nbsp;
+          Limit:&nbsp;&nbsp;<input placeholder="Slot Limit" style="width: 80px;text-align: center;border: none;
+        border-bottom: 1px solid lightgray;" [(ngModel)]='time[i].slotLimit' type="number">
+        </div>&nbsp;&nbsp;
+        <ion-button (click)="addSchedule(i)" fill="outline" shape="round" size="small" color="success">
+          + Add Slot
+        </ion-button>
+      </div>
+      <div *ngIf="item.schedule && item.schedule.length > 0" style="display: flex;flex-wrap: wrap;">
+        <div *ngFor="let time of item.schedule; let j = index;">
+          <ion-chip outline color="dark">
+            <ion-label>{{time.start}} - {{time.end}} ({{time.slotLimit}})</ion-label>
+            <ion-icon name="close-circle" (click)="removeTimeSchedule(i,j)"></ion-icon>
+          </ion-chip>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer no-border>
+  <div class="main-container">
+    <ion-button class="btn-1 i-start" style="width: 100%;" (click)="submitData()">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save Schedule
+    </ion-button>
+  </div>
+</ion-footer>

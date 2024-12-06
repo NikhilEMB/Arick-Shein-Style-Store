@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons style="margin-left: -8px;" slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-menu-button style="margin-left: 8px;" slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Delete Bulk Product(s)</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col id="scroll" size="6">
+          <div class="sectionArea">
+            <h2>Provided SKU(s) / Products</h2>
+            <p class="ion-text-center" *ngIf="!detectedFields.length">
+              Please Upload CSV
+            </p>
+            <ion-card *ngIf="successSKU && successSKU.length">
+              <ion-card-header>
+                <ion-card-title>Ready to delete SKU(s)</ion-card-title>
+                <ion-card-subtitle style="color: green;">✅ Total Matched - {{successSKU.length || 0}}</ion-card-subtitle>
+                <div class="stateDiv" *ngFor="let item of successSKU; let i = index">
+                  <ion-card-subtitle style="color: green;">{{i+1}} - SKU - {{item}}</ion-card-subtitle>
+                </div>
+              </ion-card-header>
+            </ion-card>
+            <ion-card *ngIf="failSKU && failSKU.length">
+              <ion-card-header>
+                <ion-card-title>Invalid SKU(s) found!</ion-card-title>
+                <ion-card-subtitle style="color: red;">❌ Total Invalid - {{failSKU.length || 0}}</ion-card-subtitle>
+                <div class="stateDiv" *ngFor="let item of failSKU; let i = index">
+                  <ion-card-subtitle style="color: red;">{{i+1}} - SKU - {{item}}</ion-card-subtitle>
+                </div>
+              </ion-card-header>
+            </ion-card>
+          </div>
+        </ion-col>
+        <ion-col id="scroll" size="6">
+          <div class="sectionArea">
+            <h2>Instructions</h2>
+          </div>
+          <div>
+            <ol>
+              <li style="font-weight: bold">Before Uploading</li>
+                <ion-button expand="block" shape="round" mode="ios" style="margin: 10px 0 10px 0">
+                  <a href="../../../../assets/files/sample-csv-product-delete.csv" download>Download Sample CSV</a>
+                </ion-button>
+              <li style="font-weight: bold">While Uploading</li>
+              <ol>
+                <li>Make sure that the file is of .csv format.</li>
+                <li>You can use the sample csv format provided for formatting the products accordingly.</li>
+              </ol>
+              <li style="font-weight: bold">While Importing</li>
+              <ol>
+                <li>Please wait while the deletion of products is undergoing & make sure to not close this tab.</li>
+              </ol>
+            </ol>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <!-- <ion-progress-bar *ngIf="isProgressBarActive" value="progressValue" buffer="progressBuffer"></ion-progress-bar> -->
+  <ion-progress-bar *ngIf="isProgressBarActive" type="indeterminate"></ion-progress-bar>
+  <div class="main-container" style="margin-bottom: -6px">
+    <div class="upload-btn-wrapper">
+      <ion-button [disabled]="saveDisable() || isProgressBarActive" shape="round" class="btn-1 i-start" color="success" (click)="deleteProductsHandler($event, buttonState)" >
+        <i *ngIf="buttonState === 'Delete'" class="flaticon-null-20 margin-icon"></i>
+        <i *ngIf="buttonState === 'Upload'" class="flaticon-null-16"></i>
+        {{buttonState}} CSV
+      </ion-button>
+      <ng-container *ngIf="!isProgressBarActive && buttonState !== 'Delete'">
+        <input type="file" name="myfile" (change)="deleteProductsHandler($event, buttonState)"/>
+      </ng-container>
+    </div>
+  </div>
+</ion-footer>
+

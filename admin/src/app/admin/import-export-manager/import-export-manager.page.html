@@ -1,0 +1,104 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Import / Export Management</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+        <button class="accordion">
+          <div class="flexTitle">
+            <h2>Product</h2>
+            <!-- <hr> -->
+            <div style="display: flex;
+            justify-content: space-between;
+            align-items: center;">
+              <ion-button shape="round" style="padding-right: 14px;">
+                <a href="../../../assets/files/sample-csv-format.csv" download>Download CSV Format</a>
+              </ion-button>
+              <i class="flaticon-download" [ngClass]="isProductAccordion == true ? 'arrowDown' : 'arrowActive'" (click)="toggleAccordion('product')"></i>
+            </div>
+          </div>
+        </button>
+        <div class="panel" [ngClass]="isProductAccordion == true ? 'active' : ''">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <div class="flexStart">
+                  <ion-button shape="round" fill="outline" (click)="openProductCSVCreator('import products')">Import Products</ion-button>
+                  <ion-button shape="round" fill="outline" (click)="openProductCSVCreator('export products')">Export Products</ion-button>
+                  <ion-button shape="round" fill="outline" (click)="openProductCSVCreator('import products images')">Import Bulk Images</ion-button>
+                  <ion-button shape="round" fill="outline" (click)="openProductCSVCreator('delete bulk product(s)')">Delete Bulk Product(s)</ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-row>
+
+      <ion-row>
+        <button class="accordion">
+          <div class="flexTitle">
+            <h2>Orders</h2>
+            <!-- <hr> -->
+            <div style="display: flex;
+            justify-content: space-between;
+            align-items: center;">
+              <!-- <ion-button shape="round" style="padding-right: 14px;">
+                <a href="../../../assets/files/sample-csv-format.csv" download>Download CSV Format</a>
+              </ion-button> -->
+              <i class="flaticon-download" [ngClass]="isOrdersAccordion == true ? 'arrowDown' : 'arrowActive'" (click)="toggleAccordion('orders')"></i>
+            </div>
+          </div>
+        </button>
+        <div class="panel" [ngClass]="isOrdersAccordion == true ? 'active' : ''">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <div class="flexStart">
+                  <ion-button shape="round" fill="outline" (click)="openOrdersImportExport('export orders')">Export Orders</ion-button>
+                  <ion-button shape="round" fill="outline" (click)="openOrdersImportExport('import orders')">Import Orders</ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-row>
+
+      <ion-row>
+        <button class="accordion">
+          <div class="flexTitle">
+            <h2>Users</h2>
+            <!-- <hr> -->
+            <div style="display: flex;
+            justify-content: space-between;
+            align-items: center;">
+              <!-- <ion-button shape="round" style="padding-right: 14px;">
+                <a href="../../../assets/files/sample-csv-format.csv" download>Download CSV Format</a>
+              </ion-button> -->
+              <i class="flaticon-download" [ngClass]="isUsersAccordion == true ? 'arrowDown' : 'arrowActive'" (click)="toggleAccordion('users')"></i>
+            </div>
+          </div>
+        </button>
+        <div class="panel" [ngClass]="isUsersAccordion == true ? 'active' : ''">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <div class="flexStart">
+                  <ion-button shape="round" fill="outline" (click)="openUsersImportExport('export users')">Export Users</ion-button>
+                  <ion-button shape="round" fill="outline" (click)="openUsersImportExport('import users')">Import Users</ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

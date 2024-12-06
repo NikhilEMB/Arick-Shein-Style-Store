@@ -1,0 +1,1814 @@
+<ion-menu side="start" menuId="first" contentId="content1" class="custom-menu" (ionWillOpen)="menuOpen()"
+  (ionWillClose)="menuClose()">
+
+  <ion-content>
+    <div class="profile-wrapper">
+      <i class="flaticon-menu-1" (click)=menuClose()></i>
+      <div class="">
+        <img src="../../assets/img/shop-logo-color.png" alt="">
+      </div>
+    </div>
+
+    <!-- Vendor Side Menu List -->
+    <ion-list *ngIf="role === 'vendor'" lines="none" class="menu-list">
+
+      <ion-item class="inside-items" [class.showActive]="showOrders" (click)="showOrders = !showOrders">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Manage Orders</ion-label>
+        <i class="flaticon-download" [ngClass]="showOrders == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+      <div class="sub-menu" [class.subMenuActive]="showOrders">
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('vendor-orders')">
+              <i class="flaticon-shopping-bag"></i>
+              <ion-label class="main-headings">Orders</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('vendor-orders')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('appointment-orders')">
+              <i class="flaticon-business-and-finance"></i>
+              <ion-label class="main-headings">Appointments</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('appointment-orders')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+        
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('booking-orders')">
+              <i class="flaticon-business-and-finance"></i>
+              <ion-label class="main-headings">Booking orders</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('booking-orders')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+      </div>
+
+      <!-- Products option -->
+      <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('admin-products')">
+            <i class="flaticon-null-33"></i>
+            <ion-label class="main-headings">Products</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-products')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('import-export-manager')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">Import / Export Manager</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('import-export-manager')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <!-- <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('booking')">
+            <i class="flaticon-business-and-finance"></i>
+            <ion-label class="main-headings">Bookings</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('booking')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+      <!-- /Products option -->
+
+      <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('profile')">
+            <i class="flaticon-null-32"></i>
+            <ion-label class="main-headings">Profile</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('profile')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <!-- <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('vendor-report')">
+            <i class="flaticon-null-29"></i>
+            <ion-label class="main-headings">Reports</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('vendor-report')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+
+      <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('vendor-settings')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">Settings</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('vendor-settings')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('buy-vendor-membership')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">My Membership</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('buy-vendor-membership')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+
+    </ion-list>
+    <!-- /Vendor Side Menu List -->
+
+    <!-- Manager Side Menu List -->
+    <ion-list *ngIf="role === 'manager'" lines="none" class="menu-list">
+
+      <!-- Orders option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('admin-orders')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('admin-orders')">
+            <i class="flaticon-shopping-bag"></i>
+            <ion-label class="main-headings">Orders</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-orders')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Orders option -->
+
+      <!-- Products option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('admin-products')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('admin-products')">
+            <i class="flaticon-null-33"></i>
+            <ion-label class="main-headings">Products</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-products')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Products option -->
+
+      <!-- Messages option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('admin-home')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('admin-home')">
+            <i class="flaticon-null-29"></i>
+            <ion-label class="main-headings">Messages</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-home')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Messages option -->
+
+      <!-- Widgets option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('pages-setting')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('homepage-setting')">
+            <i class="flaticon-best-seller"></i>
+            <ion-label class="main-headings" style="display: flex">Page settings</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('homepage-setting')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Widgets option -->
+
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('admin-allusers')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('admin-allusers')">
+            <i class="flaticon-null-31"></i>
+            <ion-label class="main-headings">Users</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-allusers')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <!-- Categories option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('admin-categories')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('admin-categories')">
+            <i class="flaticon-squares"></i>
+            <ion-label class="main-headings">Categories</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-categories')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Categories option -->
+
+      <!-- Brands option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('all-brands')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('all-brands')">
+            <i class="flaticon-squares"></i>
+            <ion-label class="main-headings">Brands</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('all-brands')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Brands option -->
+
+      <!-- Services request option -->
+      <!-- <ion-item class="inside-items" [class.showActive]="showServices" (click)="toggleServices()"
+        *ngIf="permissionData.includes('service-requests') || permissionData.includes('all-services')">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Services</ion-label>
+        <i class="flaticon-download" [ngClass]="showServices == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+      <div class="sub-menu" [class.subMenuActive]="showServices">
+        <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('service-requests')">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('service-requests')">
+              <i class="flaticon-business-and-finance"></i>
+              <ion-label class="main-headings">Service Requests</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('service-requests')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+        <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('all-services')">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('all-services')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Services</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('all-services')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+      </div> -->
+      <!-- /Services request option -->
+
+      <!-- Out of Stock option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="loginStatus && permissionData.includes('dashboard')">
+        <div class="flexBox">
+          <ion-item (click)="goToPage('dashboard')" class="inside-items">
+            <i class="flaticon-null-33"></i>
+            <ion-label class="main-headings">Out of Stock Products</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('dashboard')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Out of Stock option -->
+
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('form-submissions')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('form-submissions')">
+            <i class="flaticon-delivery-truck"></i>
+            <ion-label class="main-headings">Form Submissions</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('form-submissions')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <!-- Coupon Codes option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('coupon-codes')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('coupon-codes')">
+            <i class="flaticon-discount-voucher"></i>
+            <ion-label class="main-headings">Coupon Codes</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('coupon-codes')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Coupon Codes option -->
+
+      <!-- Promo Banners option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('promo-popup-settings')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('promo-popup-settings')">
+            <i class="flaticon-banner"></i>
+            <ion-label class="main-headings">Promo Popup</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('promo-popup-settings')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Promo Banners option -->
+
+      <!-- Features option -->
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('feature-list')">
+        <ion-item class="inside-items" (click)="goToPage('feature-list')">
+          <i class="flaticon-business-and-finance"></i>
+          <ion-label class="main-headings">Extra Features</ion-label>
+        </ion-item>
+      </ion-menu-toggle> -->
+      <!-- /Features option -->
+
+      <!-- Delivery Settings option -->
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('delivery-settings')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('delivery-settings')">
+            <i class="flaticon-delivery-truck"></i>
+            <ion-label class="main-headings">Delivery Settings</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('delivery-settings')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+      <!-- /Delivery Settings option -->
+
+      <!-- Payment option -->
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('admin-payment-settings')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('admin-payment-settings')">
+            <i class="flaticon-credit-card"></i>
+            <ion-label class="main-headings">Payment Settings</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-payment-settings')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+      <!-- /Payment option -->
+
+      <!-- Settings option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('admin-settings')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('admin-settings')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">System Settings</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-settings')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Settings option -->
+
+      <!-- Wallet option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('wallet-settings')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('wallet-settings')">
+            <i class="flaticon-wallet-1"></i>
+            <ion-label class="main-headings">Cashback Settings</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('wallet-settings')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Wallet option -->
+
+      <!-- Referral option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="loginStatus && permissionData.includes('referral-settings')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('referral-settings')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">Referral Settings</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('referral-settings')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Referral option -->
+
+
+      <!-- Price Request option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('price-requests')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('price-requests')">
+            <i class="flaticon-discount"></i>
+            <ion-label class="main-headings">{{'SIDEMENU.price_requests' | translate }}</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('price-requests')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Price Request option -->
+
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('retailers')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('retailers')">
+            <i class="flaticon-discount-2"></i>
+            <ion-label class="main-headings">Retailers</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('retailers')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+
+      <!-- Messages option -->
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('sales-report')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('sales-report')">
+            <i class="flaticon-null-29"></i>
+            <ion-label class="main-headings">Reports</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('sales-report')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+      <!-- /Messages option -->
+
+      <!-- Offers option -->
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('offer-settings')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('offer-settings')">
+            <i class="flaticon-discount-2"></i>
+            <ion-label class="main-headings">Offers</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('offer-settings')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+      <!-- /Offers option -->
+
+      <!-- Language option -->
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('language-current')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('language-current')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">Languages</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('language-current')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+      <!-- /Language option -->
+
+      <!-- Multi Region option -->
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="loginStatus && permissionData.includes('multi-region-all')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('multi-region-all')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">Multi Regions</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('multi-region-all')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+      <!-- /Multi Region option -->
+
+      <!-- Multi Vendor option -->
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="loginStatus && permissionData.includes('multi-vendor-all')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('multi-vendor-all')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">Multi Vendors</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('multi-vendor-all')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+      <!-- /Multi Vendor option -->
+
+      <!-- Manager option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('managers')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('managers')">
+            <i class="flaticon-shopping-bag"></i>
+            <ion-label class="main-headings">Managers</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('managers')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Manager option -->
+
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('subscriptions')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('subscriptions')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">{{'SIDEMENU.subscriptions' | translate }}</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('subscriptions')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('pickup-drop') && pickDropActive">
+          <ion-item class="inside-items" (click)="goToPage('pickup-drop')">
+            <i class="flaticon-delivery-truck"></i>
+            <ion-label class="main-headings">PickUp & Drop</ion-label>
+          </ion-item>
+        </ion-menu-toggle> -->
+
+      <!-- filters option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="loginStatus && permissionData.includes('all-filters')">
+        <div class="flexBox">
+          <ion-item (click)="goToPage('all-filters')" class="inside-items">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">Filters</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('all-filters')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /filters option -->
+
+      <!-- membership option -->
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="loginStatus && permissionData.includes('membership-settings')">
+        <div class="flexBox">
+          <ion-item (click)="goToPage('membership-settings')" class="inside-items">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">Membership</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('membership-settings')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+      <!-- /membership option -->
+
+      <!-- Shiprocket option -->
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('shiprocket-settings')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('shiprocket-settings')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">Shiprocket Settings</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('shiprocket-settings')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+      <!-- /Shiprocket option -->
+
+      <!--Rating approval option -->
+      <!-- <ion-menu-toggle auto-hide="false">
+          <ion-item class="inside-items" (click)="goToPage('rating-approval')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">Rating Approval</ion-label>
+          </ion-item>
+        </ion-menu-toggle> -->
+      <!-- /Rating approval option -->
+
+      <!-- Share option -->
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="(isAndroid && playstoreUrl) || (!isAndroid && appStoreUrl)">
+          <ion-item (click)="shareApp()" class="inside-items share-option">
+            <i class="flaticon-share-1"></i>
+            <ion-label class="main-headings">Share</ion-label>
+          </ion-item>
+        </ion-menu-toggle> -->
+      <!-- /Share option -->
+
+      <!-- Settings option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('about-setting')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('about-setting')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">About Page</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('about-setting')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Settings option -->
+
+      <!-- Settings option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('website-seo')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('website-seo')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">Website Seo</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('website-seo')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Settings option -->
+
+      <!-- Help option -->
+      <!-- <ion-menu-toggle auto-hide="false">
+          <ion-item class="inside-items" (click)="goToPage('help')">
+            <i class="flaticon-question"></i>
+            <ion-label class="main-headings">Help</ion-label>
+          </ion-item>
+        </ion-menu-toggle> -->
+      <!-- /Help option -->
+
+      <!-- Feedback option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="loginStatus && permissionData.includes('all-feedbacks')">
+        <div class="flexBox">
+          <ion-item (click)="goToPage('all-feedbacks')" class="inside-items">
+            <i class="flaticon-null-29"></i>
+            <ion-label class="main-headings">Feedback</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('all-feedbacks')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Feedback option -->
+
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="loginStatus && permissionData.includes('app-usage')">
+        <div class="flexBox">
+          <ion-item (click)="goToPage('app-usage')" class="inside-items">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">App Usage</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('app-usage')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+
+      <!-- Terms&Privacy option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('admin-terms-settings')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('admin-terms-settings')">
+            <i class="flaticon-business-and-finance"></i>
+            <ion-label class="main-headings">Terms & Privacy</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-terms-settings')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('profile')">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('profile')">
+            <i class="flaticon-null-32"></i>
+            <ion-label class="main-headings">Profile</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('profile')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      <!-- /Terms&Privacy option -->
+
+      <!-- Banners option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('admin-banners')">
+        <ion-item class="inside-items" (click)="goToPage('admin-banners')">
+          <i class="flaticon-banner"></i>
+          <ion-label class="main-headings">Banners <p style="color: #f40d30">(depreciated)</p>
+          </ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+      <!-- /Banners option -->
+
+      <!-- Promo Banners option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('promo-video-settings')">
+        <ion-item class="inside-items" (click)="goToPage('promo-video-settings')">
+          <i class="flaticon-banner"></i>
+          <ion-label class="main-headings">Promo Video <p style="color: #f40d30">(depreciated)</p>
+          </ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+      <!-- /Promo Banners option -->
+
+
+      <!-- Best Sellers option -->
+      <ion-menu-toggle auto-hide="false" *ngIf="permissionData.includes('admin-best-sellers')">
+        <ion-item class="inside-items" (click)="goToPage('admin-best-sellers')">
+          <i class="flaticon-best-seller"></i>
+          <ion-label class="main-headings">Best Sellers <p style="color: #f40d30">(depreciated)</p>
+          </ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+      <!-- /Best Sellers option -->
+
+    </ion-list>
+    <!-- /Manager Side Menu List -->
+
+    <!-- Admin Side Menu List -->
+    <ion-list *ngIf="role === 'admin'" lines="none" class="menu-list">
+
+      <ion-item class="inside-items" [class.showActive]="showOrders" (click)="showOrders = !showOrders">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Manage Orders</ion-label>
+        <i class="flaticon-download" [ngClass]="showOrders == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+      <div class="sub-menu" [class.subMenuActive]="showOrders">
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('admin-orders')">
+              <i class="flaticon-shopping-bag"></i>
+              <ion-label class="main-headings">Orders</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-orders')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('appointment-orders')">
+              <i class="flaticon-business-and-finance"></i>
+              <ion-label class="main-headings">Appointments</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('appointment-orders')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('booking-orders')">
+              <i class="flaticon-business-and-finance"></i>
+              <ion-label class="main-headings">Booking orders</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('booking-orders')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+      </div>
+
+      <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('admin-home')">
+            <i class="flaticon-null-29"></i>
+            <ion-label class="main-headings">Messages</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-home')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <ion-item class="inside-items" *ngIf="showWhatsappDashboard" [class.showActive]="showWhatsapp" (click)="showWhatsapp = !showWhatsapp">
+        <!-- <i class="flaticon-null-25"></i> -->
+        <img src="../../assets/img/whatsapp.png" style="width: 21px; height: 21px;">
+        <ion-label class="main-headings">Whatsapp</ion-label>
+        <i class="flaticon-download" [ngClass]="showWhatsapp == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+      <div class="sub-menu" [class.subMenuActive]="showWhatsapp">
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('whatsapp-menu')">
+              <i class="flaticon-null-33"></i>
+              <ion-label class="main-headings">Bot Menu</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('whatsapp-menu')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ng-template #button3ModelProduct>
+          <ion-menu-toggle auto-hide="false">
+            <div class="flexBox">
+              <ion-item class="inside-items" (click)="goToPage('whatsapp-list')">
+                <i class="flaticon-business-and-finance"></i>
+                <ion-label class="main-headings">List</ion-label>
+              </ion-item>
+              <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('whatsapp-list')">
+                <i class="flaticon-play-button-1"></i>
+              </div>
+            </div>
+          </ion-menu-toggle>
+        </ng-template>
+
+        <ion-menu-toggle auto-hide="false" *ngIf="menuButton3?.model == 'service' else button3ModelProduct">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('whatsapp-list-services')">
+              <i class="flaticon-business-and-finance"></i>
+              <ion-label class="main-headings">Service List</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('whatsapp-list-services')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('whatsapp-broadcast')">
+              <i class="flaticon-business-and-finance"></i>
+              <ion-label class="main-headings">Broadcast</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('whatsapp-broadcast')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('whatsapp-settings')">
+              <i class="flaticon-squares"></i>
+              <ion-label class="main-headings">Settings</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-categories')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+      </div>
+
+      <ion-item class="inside-items" [class.showActive]="showInventory" (click)="showInventory = !showInventory">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Catalogue</ion-label>
+        <i class="flaticon-download" [ngClass]="showInventory == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+      <div class="sub-menu" [class.subMenuActive]="showInventory">
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('admin-products')">
+              <i class="flaticon-null-33"></i>
+              <ion-label class="main-headings">Products</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-products')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('booking')">
+              <i class="flaticon-business-and-finance"></i>
+              <ion-label class="main-headings">Bookings</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('booking')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('food-items')">
+              <i class="flaticon-business-and-finance"></i>
+              <ion-label class="main-headings">Food products</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('food-items')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('vouchers')">
+              <i class="flaticon-business-and-finance"></i>
+              <ion-label class="main-headings">Vouchers</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('vouchers')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('showcase')">
+              <i class="flaticon-business-and-finance"></i>
+              <ion-label class="main-headings">Showcase</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('showcase')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('product-addons')">
+              <i class="flaticon-business-and-finance"></i>
+              <ion-label class="main-headings">Add Ons</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('product-addons')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('admin-categories')">
+              <i class="flaticon-squares"></i>
+              <ion-label class="main-headings">Categories</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-categories')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('all-brands')">
+              <i class="flaticon-squares"></i>
+              <ion-label class="main-headings">Brands</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('all-brands')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <!-- <ion-item class="inside-items" [class.showActive]="showServices" (click)="toggleServices()">
+          <i class="flaticon-null-25"></i>
+          <ion-label class="main-headings">Services</ion-label>
+          <i class="flaticon-download" [ngClass]="showServices == true ? 'arrowDown' : 'arrowActive'"></i>
+        </ion-item>
+        <div class="sub-menu" [class.subMenuActive]="showServices">
+          <ion-menu-toggle auto-hide="false">
+            <div class="flexBox">
+              <ion-item class="inside-items" (click)="goToPage('service-requests')">
+                <i class="flaticon-business-and-finance"></i>
+                <ion-label class="main-headings">Service Requests</ion-label>
+              </ion-item>
+              <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('service-requests')">
+                <i class="flaticon-play-button-1"></i>
+              </div>
+            </div>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <div class="flexBox">
+              <ion-item class="inside-items" (click)="goToPage('all-services')">
+                <i class="flaticon-null-4"></i>
+                <ion-label class="main-headings">Services</ion-label>
+              </ion-item>
+              <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('all-services')">
+                <i class="flaticon-play-button-1"></i>
+              </div>
+            </div>
+          </ion-menu-toggle>
+        </div> -->
+
+        <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+          <div class="flexBox">
+            <ion-item (click)="goToPage('dashboard')" class="inside-items">
+              <i class="flaticon-null-33"></i>
+              <ion-label class="main-headings">Out of Stock Products</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('dashboard')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('product-reviews')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Product Reviews</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('product-reviews')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('form-submissions')">
+              <i class="flaticon-delivery-truck"></i>
+              <ion-label class="main-headings">Form Submissions</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('form-submissions')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+      </div>
+
+      <!-- <ion-item class="inside-items" [class.showActive]="showForm" (click)="showForm = !showForm">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Forms</ion-label>
+        <i class="flaticon-download" [ngClass]="showForm == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+
+      <div class="sub-menu" [class.subMenuActive]="showForm">
+        <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('forms')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">List</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('forms')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+        <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('form-submissions')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Submissions</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('form-submissions')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+      </div> -->
+
+      <!-- <ion-item class="inside-items" [class.showActive]="showStudio" (click)="showStudio = !showStudio">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Design Studio</ion-label>
+        <i class="flaticon-download" [ngClass]="showStudio == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+
+      <div class="sub-menu" [class.subMenuActive]="showStudio">
+        <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('design-studio')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Website</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('design-studio')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+      </div> -->
+
+      <!-- <ion-item class="inside-items" [class.showActive]="showVendors" (click)="showVendors = !showVendors">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Multi Vendors</ion-label>
+        <i class="flaticon-download" [ngClass]="showVendors == true ? 'arrowDown' : 'arrowActive'"></i>
+
+      </ion-item>
+
+      <div class="sub-menu" [class.subMenuActive]="showVendors">
+        <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('vendor-settings-admin')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Vendor Settings</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('vendor-settings-admin')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('multi-vendor-all')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Manage Vendors</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('multi-vendor-all')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('vendor-registration')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Vendor Registration</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('vendor-registration')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <!-- <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('vendor-membership')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Vendor Membership</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('vendor-membership')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+      <!-- </div> -->
+
+      <ion-item class="inside-items" [class.showActive]="showUsers" (click)="showUsers = !showUsers">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Users</ion-label>
+        <i class="flaticon-download" [ngClass]="showUsers == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+      <div class="sub-menu" [class.subMenuActive]="showUsers">
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('admin-allusers')">
+              <i class="flaticon-null-31"></i>
+              <ion-label class="main-headings">List</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-allusers')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('user-groups')">
+              <i class="flaticon-null-31"></i>
+              <ion-label class="main-headings">Groups</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('user-groups')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('cart')">
+              <i class="flaticon-null-3"></i>
+              <ion-label class="main-headings">Cart</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+      </div>
+
+      <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('branches')">
+            <i class="flaticon-business-and-finance"></i>
+            <ion-label class="main-headings">Branches</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('branches')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('sales-report')">
+            <i class="flaticon-null-29"></i>
+            <ion-label class="main-headings">Reports</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('sales-report')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('platform-videos')">
+            <i class="flaticon-best-seller"></i>
+            <ion-label class="main-headings">Instagram videos</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('platform-videos')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('pages-setting')">
+            <i class="flaticon-best-seller"></i>
+            <ion-label class="main-headings">Pages</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('pages-setting')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <!-- <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('blogs-setting')">
+            <i class="flaticon-best-seller"></i>
+            <ion-label class="main-headings">Blogs</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('blogs-setting')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+
+      <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('integrations')">
+            <i class="flaticon-business-and-finance"></i>
+            <ion-label class="main-headings">Integrations</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('integrations')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+      
+      <ion-menu-toggle auto-hide="false">
+        <div class="flexBox">
+          <ion-item class="inside-items" (click)="goToPage('import-export-manager')">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">Import / Export Manager</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('import-export-manager')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <ion-item class="inside-items" [class.showActive]="showSettings" (click)="showSettings = !showSettings">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Settings</ion-label>
+        <i class="flaticon-download" [ngClass]="showSettings == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+      <div class="sub-menu" [class.subMenuActive]="showSettings">
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('admin-attributes')">
+              <i class="flaticon-null-18"></i>
+              <ion-label class="main-headings">Attributes</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-attributes')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('appointment-settings')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Schedule Settings</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('appointment-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('contact-settings')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Contact Page Settings</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('contact-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('faq')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">FAQs</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('faq')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('delivery-settings')">
+              <i class="flaticon-delivery-truck"></i>
+              <ion-label class="main-headings">Delivery Settings</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('delivery-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('admin-payment-settings')">
+              <i class="flaticon-credit-card"></i>
+              <ion-label class="main-headings">Payment Settings</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-payment-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('admin-settings')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">System Settings</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('product-settings')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Product Settings</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('product-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('wallet-settings')">
+              <i class="flaticon-wallet-1"></i>
+              <ion-label class="main-headings">Cashback Settings</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('wallet-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('email-sms')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Email & SMS</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('email-sms')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <!-- <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('multi-region-all')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Multi Regions</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('multi-region-all')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('subscriptions')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">{{'SIDEMENU.subscriptions' | translate }}</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('subscriptions')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <ion-menu-toggle auto-hide="false" *ngIf="pickDropActive">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('pickup-drop')">
+              <i class="flaticon-delivery-truck"></i>
+              <ion-label class="main-headings">PickUp & Drop</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('pickup-drop')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+          <div class="flexBox">
+            <ion-item (click)="goToPage('all-filters')" class="inside-items">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Filters</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('all-filters')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('website-seo')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Website Seo</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('website-seo')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('shiprocket-settings')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Shiprocket Settings</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('shiprocket-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('language-current')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Language Settings</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('language-current')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('multi-countries')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Multi countries</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('multi-countries')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+        
+         <!-- Loyalty Points -->
+         <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('loyalty-points-settings')">
+              <i class="flaticon-best-seller"></i>
+              <ion-label class="main-headings">Loyalty Points</ion-label>
+            </ion-item>
+            <!-- <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('wallet-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div> -->
+          </div>
+        </ion-menu-toggle>
+        <!-- Loyalty Points -->
+
+         <!-- Sitemap -->
+         <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('sitemap')">
+              <i class="flaticon-best-seller"></i>
+              <ion-label class="main-headings">Site Map</ion-label>
+            </ion-item>
+          </div>
+        </ion-menu-toggle>
+        <!-- Sitemap -->
+      </div>
+
+      <ion-item class="inside-items" [class.showActive]="showPromotions" (click)="showPromotions = !showPromotions">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Promotional Features</ion-label>
+        <i class="flaticon-download" [ngClass]="showPromotions == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+      <div class="sub-menu" [class.subMenuActive]="showPromotions">
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('whatsapp-promotions')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Whatsapp Promotions</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('whatsapp-promotions')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('coupon-codes')">
+              <i class="flaticon-discount-voucher"></i>
+              <ion-label class="main-headings">Coupon Codes</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('coupon-codes')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <!-- <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('free-products')">
+              <i class="flaticon-discount-voucher"></i>
+              <ion-label class="main-headings">Free Products</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('free-products')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('promo-popup-settings')">
+              <i class="flaticon-banner"></i>
+              <ion-label class="main-headings">Promo Popup</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('promo-popup-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+          <div class="flexBox">
+            <ion-item (click)="goToPage('membership-settings')" class="inside-items">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Membership</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('membership-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('offer-settings')">
+              <i class="flaticon-discount-2"></i>
+              <ion-label class="main-headings">Offers</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('offer-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+
+        <!-- <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('referral-settings')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Refer & Earn</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('referral-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle> -->
+      </div>
+
+      <!-- <ion-item class="inside-items" [class.showActive]="showWholesale" (click)="showWholesale = !showWholesale">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Wholesale Features</ion-label>
+        <i class="flaticon-download" [ngClass]="showWholesale == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+      <div class="sub-menu" [class.subMenuActive]="showWholesale">
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('price-requests')">
+              <i class="flaticon-discount"></i>
+              <ion-label class="main-headings">{{'SIDEMENU.price_requests' | translate }}</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('price-requests')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('retailers')">
+              <i class="flaticon-discount-2"></i>
+              <ion-label class="main-headings">Retailers</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('retailers')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+      </div> -->
+
+      <ion-item class="inside-items" [class.showActive]="showPolicies" (click)="showPolicies = !showPolicies">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">About Us & Policies</ion-label>
+        <i class="flaticon-download" [ngClass]="showPolicies == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+      <div class="sub-menu" [class.subMenuActive]="showPolicies">
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('about-setting')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">About Page</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('about-setting')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('admin-terms-settings')">
+              <i class="flaticon-business-and-finance"></i>
+              <ion-label class="main-headings">Terms & Privacy</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('admin-terms-settings')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('profile')">
+              <i class="flaticon-null-32"></i>
+              <ion-label class="main-headings">Profile</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('profile')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+      </div>
+
+      <ion-item class="inside-items" [class.showActive]="showAdvance" (click)="toogleAdvance()">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Advance Options</ion-label>
+        <i class="flaticon-download" [ngClass]="showAdvance == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+      <div class="sub-menu" [class.subMenuActive]="showAdvance">
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('custom-code')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Custom Code</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('custom-code')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <div class="flexBox">
+            <ion-item class="inside-items" (click)="goToPage('custom-language')">
+              <i class="flaticon-null-4"></i>
+              <ion-label class="main-headings">Custom Language</ion-label>
+            </ion-item>
+            <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('custom-language')">
+              <i class="flaticon-play-button-1"></i>
+            </div>
+          </div>
+        </ion-menu-toggle>
+      </div>
+
+      <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+        <div class="flexBox">
+          <ion-item (click)="goToPage('all-feedbacks')" class="inside-items">
+            <i class="flaticon-null-29"></i>
+            <ion-label class="main-headings">Feedback</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('all-feedbacks')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle>
+
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+        <div class="flexBox">
+          <ion-item (click)="goToPage('all-support')" class="inside-items">
+            <i class="flaticon-null-29"></i>
+            <ion-label class="main-headings">Support</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('all-support')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+
+      <ion-item class="inside-items" [class.showActive]="showFeatures" (click)="showFeatures = !showFeatures">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Features</ion-label>
+        <i class="flaticon-download" [ngClass]="showFeatures == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+      <div class="sub-menu" [class.subMenuActive]="showFeatures">
+        <ion-menu-toggle auto-hide="false">
+          <ion-item (click)="openFeaturesModal('features-history')" class="inside-items">
+            <i class="flaticon-null-12"></i>
+            <ion-label class="main-headings">Features History</ion-label>
+            <i class="flaticon-play-button-1"></i>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item (click)="openFeaturesModal('upcoming-features')" class="inside-items">
+            <i class="flaticon-star"></i>
+            <ion-label class="main-headings">Upcoming Features</ion-label>
+            <i class="flaticon-play-button-1"></i>
+          </ion-item>
+        </ion-menu-toggle>
+      </div>
+
+      <!-- <ion-menu-toggle auto-hide="false">
+        <ion-item class="inside-items" (click)="goToPage('feature-list')">
+          <i class="flaticon-business-and-finance"></i>
+          <ion-label class="main-headings">Extra Features</ion-label>
+        </ion-item>
+      </ion-menu-toggle> -->
+
+      <!-- <ion-menu-toggle auto-hide="false" *ngIf="loginStatus">
+        <div class="flexBox">
+          <ion-item (click)="goToPage('app-usage')" class="inside-items">
+            <i class="flaticon-null-4"></i>
+            <ion-label class="main-headings">App Usage</ion-label>
+          </ion-item>
+          <div class="playVideo" *ngIf="isBwiClient" (click)="openVideoModal('app-usage')">
+            <i class="flaticon-play-button-1"></i>
+          </div>
+        </div>
+      </ion-menu-toggle> -->
+
+      <!-- <ion-item class="inside-items" [class.showActive]="showLegacy" (click)="showLegacy = !showLegacy">
+        <i class="flaticon-null-25"></i>
+        <ion-label class="main-headings">Legacy / Deprecated Features</ion-label>
+        <i class="flaticon-download" [ngClass]="showLegacy == true ? 'arrowDown' : 'arrowActive'"></i>
+      </ion-item>
+      <div class="sub-menu" [class.subMenuActive]="showLegacy">
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item class="inside-items" (click)="goToPage('admin-banners')">
+            <i class="flaticon-banner"></i>
+            <ion-label class="main-headings">Banners</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item class="inside-items" (click)="goToPage('promo-video-settings')">
+            <i class="flaticon-banner"></i>
+            <ion-label class="main-headings">Promo Video</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item class="inside-items" (click)="goToPage('admin-best-sellers')">
+            <i class="flaticon-best-seller"></i>
+            <ion-label class="main-headings">Best Sellers</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </div> -->
+
+    </ion-list>
+    <!-- /Admin Side Menu List -->
+
+  </ion-content>
+  <ion-footer class="sidemnu-footer">
+    <div class="userRole">
+      <p *ngIf="loginStatus" (click)="goToPage('profile')">{{userName}}</p>
+      <span *ngIf="loginStatus">( {{role}} )</span>
+    </div>
+
+    <div *ngIf="loginStatus" class="sidemenu-logout-btn">
+      <ion-button color="dark" fill="clear" (click)="logout()"><i class="flaticon-null-11"></i>Logout</ion-button>
+    </div>
+
+    <!-- <p class="app-version">App Version {{appVersionNumber}}</p> -->
+  </ion-footer>
+</ion-menu>

@@ -1,0 +1,104 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button" defaultHref="admin-home"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <super-tabs no-shadow no-border>
+    <super-tabs-toolbar slot="top">
+      <super-tab-button>
+        <ion-label>Pending</ion-label>
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>Completed</ion-label>
+      </super-tab-button>
+    </super-tabs-toolbar>
+
+    <super-tabs-container>
+      <super-tab>
+        <ion-content>
+          <div class="main-container">
+          <div class="spinner" *ngIf="showLoader; else requestsLoaded;">
+            <ion-spinner color="primary"></ion-spinner>
+          </div>
+
+          <ng-template #requestsLoaded>
+            <div class="no-data" *ngIf="!requests.length; else pendingReq;" text-center>
+              <img src="assets/img/no-category.png" alt="">
+              <h6>No requests</h6>
+            </div>
+            <ng-template #pendingReq>
+              <div class="no-data" *ngIf="!isPending; else hasPending;" text-center style="margin-left: -90px;">
+                <img src="assets/img/no-category.png" alt="">
+                <h6>No pending requests</h6>
+              </div>
+              <ng-template #hasPending>
+                <div class="sr-all-requests">
+                  <div *ngFor="let req of requests;">
+                    <div class="sr-request" *ngIf="req.status === 'Pending'">
+                      <p><strong>Service Name: </strong>{{req.serviceName}}</p>
+                      <div class="content-alignment">
+                        <p><strong>Customer Name: </strong>{{req.userName}}</p>
+                        <p><strong>Customer Contact: </strong>{{req.userPhone}}</p>
+                        <p><strong>Request Date: </strong>{{getDateTimeFormat(req.responseAt.toDate())}}</p>
+                      </div>
+                      <div class="btn-wrap">
+                        <ion-button (click)="viewDetails(req)" shape="round">
+                          View Details<span><i class="flaticon-null-7"></i></span>
+                        </ion-button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+
+            </ng-template>
+          </ng-template>
+        </div>
+        </ion-content>
+      </super-tab>
+      <super-tab>
+        <ion-content>
+          <div class="main-container">
+            <div class="no-data" *ngIf="!requests.length; else completedReq;" text-center>
+              <img src="assets/img/no-category.png" alt="">
+              <h6>No requests</h6>
+            </div>
+            <ng-template #completedReq>
+              <div class="no-data" *ngIf="!isCompleted; else hasCompleted;" text-center style="margin-left: -90px;">
+                <img src="assets/img/no-category.png" alt="">
+                <h6>No completed requests</h6>
+              </div>
+              <ng-template #hasCompleted>
+                <div class="sr-all-requests">
+                  <div *ngFor="let req of requests; let i=index;">
+                    <div class="sr-request" *ngIf="req.status === 'Completed'">
+                      <p><strong>Service Name: </strong>{{req.serviceName}}</p>
+                      <div class="content-alignment">
+                        <p><strong>Customer Name: </strong>{{req.userName}}</p>
+                        <p><strong>Customer Contact: </strong>{{req.userPhone}}</p>
+                        <p><strong>Request Date: </strong>{{getDateTimeFormat(req.responseAt.toDate())}}</p>
+                      </div>
+                      <div class="btn-wrap">
+                        <ion-button (click)="viewDetails(req)" shape="round">
+                          View Details<span><i class="flaticon-null-7"></i></span>
+                        </ion-button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+
+          </ng-template>
+        </div>
+        </ion-content>
+      </super-tab>
+    </super-tabs-container>
+  </super-tabs>
+
+</ion-content>

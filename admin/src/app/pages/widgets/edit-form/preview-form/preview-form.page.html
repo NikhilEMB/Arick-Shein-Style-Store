@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-title text-center>Form Preview</ion-title>
+    <div slot="end" style="padding: 15px">
+      <i class="flaticon-null-19" (click)="closeModal()"></i>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- form title -->
+  <div class="ion-text-center ion-text-capitalize">
+    <p><strong>{{formData.formTitle}}</strong></p>
+  </div>
+
+  <!-- form banner  -->
+    <div class="banner-img" *ngIf="formData.banner.mob || formData.banner.url">
+      <ion-img [src]="formData.banner[getBannerSrc()]"></ion-img>
+    </div>
+
+  <!-- form inputs -->
+  <div class="form-wrapper">
+      <ng-container *ngFor="let element of formData.inputs">
+        <ng-container [ngSwitch]="element.type">
+
+          <!-- text, email and numebr inputs -->
+          <ng-container *ngSwitchCase="['text', 'email', 'number'].includes(element.type) ? element.type : !element.type">
+            <ion-item lines="none">
+              <ion-label position="floating">{{element.name}}</ion-label>
+              <ion-input [type]="element.type" [ngModel]="element.name" placeholder="Please enter {{element.name}}"></ion-input>
+            </ion-item>
+          </ng-container>
+
+          <!-- date input -->
+          <ng-container *ngSwitchCase="'date'">
+            <ion-item lines="none">
+              <ion-label position="floating">{{element.name}}</ion-label>
+              <ion-datetime placeholder="Select Date" displayFormat="D MMM YYYY" [ngModel]="element.name"></ion-datetime>
+            </ion-item>
+          </ng-container>
+          
+          <!-- textarea input -->
+          <ng-container *ngSwitchCase="'textarea'">
+            <ion-item lines="none" class="valid-border">
+              <ion-label position="floating">{{element.name}}</ion-label>
+              <ion-textarea rows="4" [ngModel]="element.name" placeholder="Please enter {{element.name}}"></ion-textarea>
+            </ion-item>
+          </ng-container>
+
+          <!-- select options -->
+          <ng-container *ngSwitchCase="'select'">
+            <ion-item lines="none">
+              <ion-label position="floating">{{element.name}}</ion-label>
+              <ion-select value='' [ngModel]="element.name" [multiple]="element.multiple" placeholder="Please enter {{element.name}}">
+                <ion-select-option [value]="option" *ngFor="let option of element.options">{{option}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ng-container>
+
+        </ng-container>
+      </ng-container>
+
+      <!-- form actions buttons -->
+      <div class="ion-text-center action-btn" style="width: 80px;">
+        <ion-button expand="block" color="dark" style="padding: 5px;" disabled>
+          Reset
+        </ion-button>&nbsp;&nbsp;
+
+        <ion-button expand="block" type="submit" style="padding: 5px;" disabled>
+          {{formData.buttonName}}
+        </ion-button>
+      </div>
+
+  </div>
+
+</ion-content>

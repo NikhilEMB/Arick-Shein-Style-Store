@@ -1,0 +1,113 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Out of Stock Products</ion-title>
+  </ion-toolbar>
+  <div class="header-cart-btn">
+    <ion-button fill="outline" shape="round" class="add-btn" (click)="exportOutOfStockProducts()" size='small'>
+      <ion-icon name="md-arrow-down" slot="start"></ion-icon>
+      Export Out of Stock Products
+    </ion-button>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="main">
+    <div *ngIf="showLoader; else productsLoaded" class="spinner">
+      <ion-spinner color="primary"></ion-spinner>
+    </div>
+    <ng-template #productsLoaded>
+      <div class="no-data" *ngIf="!products.length; else showProducts" text-center>
+        <img src="assets/img/no-product.png" alt="">
+        <h6>No Products</h6>
+      </div>
+      <ng-template #showProducts>
+        <div class="list-header">
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col class="name">
+                <p>Image</p>
+              </ion-col>
+              <ion-col class="name">
+                <p>Product</p>
+              </ion-col>
+              <ion-col class="name">
+                <p>Quantity</p>
+              </ion-col>
+              <ion-col class="name">
+                <p>Action</p>
+              </ion-col>
+              <ion-col class="name">
+                <p>Delete</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+        <div class="list-container">
+          <div class="dFlex">
+            <div class="dFlex">
+              <ion-label>Select All Product</ion-label>
+              <div class="toggle-btn">
+                <label class="switch">
+                  <input type="checkbox" (click)="selectAllProducts()" [checked]="isAllProductSelect">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <ion-button (click)="askDeleteProduct()" color="danger">delete Products</ion-button>
+          </div>
+          <ion-grid>
+            <ion-row *ngFor="let item of products; let i = index" class="order-row" style="display: flex;align-items: center;">
+              <ion-col class="name">
+                <div class="product-img-wrapper">
+                  <ion-thumbnail style="margin-left: 5%;">
+                    <img class="loading" *ngIf="item.coverPic && !item.coverPic.thumb && item.coverPic.url"
+                      src="{{item.coverPic.url}}">
+                    <img class="loading" *ngIf="item.coverPic && item.coverPic.thumb" src="{{item.coverPic.thumb}}">
+                    <img *ngIf="!item.coverPic" src="assets/img/placeholder-img.jpg">
+                  </ion-thumbnail>
+                </div>
+              </ion-col>
+              <ion-col class="name">
+                  <p text-capitalize text-center>{{item.prodName}}</p>
+              </ion-col>
+              <ion-col class="name">
+                <span *ngIf="!item.isPriceList">
+                  <ion-input type="text" class='form-input' [(ngModel)]="item.productQty" style="margin-top: 0px;"></ion-input>
+                </span>&nbsp;&nbsp;
+                <div class="variant-wrapper" *ngIf="item.isPriceList">
+                  <ion-grid >
+                    <ion-row *ngFor="let variant of item.priceList; let i=index" style="align-items: center;">
+                      <ion-col class="variant-title"><div class="variant-title-text">{{variant.weight}}</div></ion-col>
+                      <ion-col class="variant-price"><ion-input  class='form-input' type="text" [(ngModel)]="variant.totalQuantity" style="margin-top: 0px;"></ion-input></ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </div>
+              </ion-col>
+              <ion-col class="name">
+                <ion-button (click)="saveProduct(item, item.id)" color="success" fill="outline" shape="round" size="small"
+                  shape="round">
+                  Update
+                </ion-button>&nbsp;&nbsp;
+                <ion-button (click)="editProduct(item.id)" class="btn-sml i-start" fill="outline"
+                  shape="round">
+                  Open Product
+                </ion-button>
+              </ion-col>
+              <ion-col class="name">
+                <div (click)="onClickCheckBox(item.id)" style="width: 100%;">
+                  <ion-label>{{item.name}}</ion-label>
+                  <ion-checkbox [checked]="editCheckBoxValue(item.id)" color="primary" slot="start">
+                  </ion-checkbox>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+</ion-content>

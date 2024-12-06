@@ -1,0 +1,137 @@
+.content-wrap {
+    .heading {
+        text-transform: capitalize;
+        opacity: 0.6;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    ion-item {
+        margin-bottom: 15px;
+
+        ion-label {
+            text-transform: capitalize;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        ion-input,
+        ion-textarea {
+            font-size: 14px;
+        }
+    }
+
+    .item-border {
+        border: 1px solid;
+        border-radius: 5px;
+        border-width: thin;
+    }
+
+    .valid-border {
+        @extend .item-border;
+        border-color: #aaa;
+    }
+
+    .invalid-border {
+        @extend .item-border;
+        border-color: var(--ion-color-danger);
+    }
+
+    .product {
+        &-image {
+            background: transparent url('src/assets/img/img-preloader.png') center no-repeat;
+            width: 100px;
+            height: 80px;
+        }
+
+        &-name {
+            font-size: 13px;
+            margin-top: 7px;
+        }
+
+        &-price {
+            color: var(--ion-color-primary);
+            font-size: 16px;
+        }
+
+        &-description {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 7px;
+            opacity: .5;
+            font-size: 12px;
+        }
+
+        &-quantity {
+            font-size: 12px;
+            margin-top: 7px;
+        }
+    }
+
+    table {
+        width: 100%;
+        font-size: 13px;
+
+        td {
+            padding: 10px 20px 10px 10px;
+            text-transform: capitalize;
+        }
+
+        tr td:nth-child(2) {
+            text-align: end;
+        }
+    }
+
+    .resale-table {
+        .tax-info {
+            text-align: center;
+            font-size: small;
+            margin: 5px 0;
+        }
+
+        table {
+            border: 1px solid #ccc;
+
+            td {
+                input {
+                    border: 1px solid #ccc;
+                    padding: 10px 5px;
+                    border-radius: 5px;
+                    background: whitesmoke;
+                    width: 100px;
+                    text-align: center;
+                    outline: none;
+                }
+            }
+
+            .bottom-border {
+                border-bottom: 1px dashed #ccc;
+            }
+        }
+    }
+
+    .profit {
+        color: var(--ion-color-success);
+        font-size: 14px;
+    }
+
+
+
+}
+
+.p-r-7 {
+    padding-right: 7px;
+}
+
+.templates-header ion-toolbar {
+    --background: none;
+}
+
+.templates-header-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+}

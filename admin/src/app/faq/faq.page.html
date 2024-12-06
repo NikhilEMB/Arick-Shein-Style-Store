@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>FAQs</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container fixed-height">
+    <ion-grid>
+      <ion-row *ngFor="let x of faq; let i = index;">
+        <ion-col size="6" class="vertical-center">
+          <div>
+            <p>{{i+1}})</p>
+          </div>
+          <ion-textarea rows="3" type="text" placeholder="Question" class="form-input" [(ngModel)]="x.quest">
+          </ion-textarea>
+        </ion-col>
+        <ion-col size="6" class="vertical-center">
+          <ion-textarea rows="3" type="text" placeholder="Answer" class="form-input" [(ngModel)]="x.ans">
+          </ion-textarea>
+          <i class="flaticon-null-19 remove-icon" (click)="remove(i)"></i>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-justify-content-center">
+        <ion-button (click)="addMore()" fill="outline" shape="round" size="small">
+          Add More FAQ
+        </ion-button>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveDetails()"  shape="round" class="btn-1 i-start"
+      color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

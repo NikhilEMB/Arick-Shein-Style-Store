@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="shop-categories" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center>your identity</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-grid class="identity margining">
+    <div class="input-box">
+            <ion-row class="ion-align-items-center">
+                    <div class="identity-input">
+                      <ion-input type="text" placeholder="Enter your name" [(ngModel)]="userName"></ion-input>
+                    </div>
+                    <div class="checkmark" *ngIf="!showLoader">
+                          <i class="flaticon-null-20" (click) = "updateUserName();"></i>
+                    </div>
+                    <div class="loader" *ngIf="showLoader">
+                      <ion-spinner color = "primary"></ion-spinner>
+                    </div>
+                  </ion-row>
+    </div>
+    
+  </ion-grid>
+</ion-content>

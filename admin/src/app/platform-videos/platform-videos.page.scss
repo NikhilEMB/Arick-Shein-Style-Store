@@ -1,0 +1,29 @@
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+ion-col.img {
+  width: 100px;
+  max-width: 100px;
+}
+ion-col.name {
+  width: calc(100% - 310px);
+  max-width: calc(100% - 300px);
+  p a {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+ion-col.action {
+  width: 128px;
+  max-width: 100px;
+  @extend .flexCenter;
+}
+ion-col.reorder {
+  width: 75px;
+  max-width: 75px;
+  @extend .flexCenter;
+}

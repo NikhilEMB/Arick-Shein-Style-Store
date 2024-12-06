@@ -1,0 +1,64 @@
+<ion-header class="modal-header">
+  <ion-toolbar>
+    <ion-title class="modal-header-title">Edit Order</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="((order | json) !== '{}') && products.length; let i=index" class="ion-padding edit-order">
+
+  <div *ngFor="let product of products; let i=index" style="background: #fff;">
+    <ion-item class="ion-no-padding" lines="none">
+
+      <div slot="start"
+        [ngStyle]="{'background': 'url(' + getProductImg(product) + ') no-repeat center', 'background-size': 'contain'}"
+        class="product-image"></div>
+
+      <ion-label>
+        <h2 class="product-price ion-text-wrap">
+          {{getProductPrice(product) | currency: currencyCode:true}}</h2>
+
+        <h3 class="product-name ion-text-wrap">{{product.name}}</h3>
+
+        <h6 class="product-description ion-text-capitalize">{{getProductDesc(product)}}</h6>
+
+        <h3 class="product-quantity" *ngIf="getProductType(product) !== 'pieces'">
+          Ordered Quantity: {{product.quantity}}</h3>
+
+      </ion-label>
+    </ion-item>
+
+    <div class="d-flex-sb">
+      <h6 class="un-qty-txt">Unavailable Qty:</h6>
+      <div class="counter">
+        <div class="counter-action">
+          <ion-icon name="remove" (click)="decrementQty(i)"></ion-icon>
+        </div>
+        <div class="counter-value">
+          {{unavailable[i]}}
+        </div>
+        <div class="counter-action">
+          <ion-icon name="add" (click)="incrementQty(i, product.quantity)"></ion-icon>
+        </div>
+      </div>
+      <div>
+        <ion-button (click)="remove(i, product.quantity)" fill="outline" size="small" shape="round">
+          <ion-icon name="trash"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <hr class="line" *ngIf="i !== (products.length - 1)">
+  </div>
+
+</ion-content>
+
+<ion-footer>
+  <ion-button (click)="saveUnavailable()" expand="block" class="footer-button">
+    Save
+  </ion-button>
+</ion-footer>

@@ -1,0 +1,116 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Appointments</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container" style="width: 100%">
+    <ion-grid>
+      <ion-row>
+        <ion-col size=4>
+          <div
+            style="height: 3vh;text-align: center;width: 100%;font-weight: bold;font-size: medium;display: flex;align-items: center;">
+            <ion-input type='number' placeholder="Enter Appointment Id"
+              style="height: 3vh;padding-top: 0px;padding-bottom: 0px;border: 1px solid lightgray;margin-left: 8px;"
+              [(ngModel)]='searchOrder'></ion-input>&nbsp;
+            <ion-button size="small" (click)='searchAppointmentById()'>Search</ion-button>&nbsp;
+            <ion-button size="small" (click)='resetSearch()'>Show All</ion-button>
+          </div>
+          <div *ngIf='appointmentList && appointmentList.length == 0'
+            style="text-align: center;width: 100%;font-size: large;font-weight: bold;">
+            <br>No Appointments
+          </div>
+          <br>
+          <div id="scroll2" *ngIf='appointmentList && appointmentList.length > 0'>
+            <div style="text-align: center;" *ngFor='let appointment of appointmentList; let i=index'>
+              <ion-grid (click)='onClickViewDetails(i)' class='orderGrid'>
+                <ion-row>
+                  <ion-col>
+                    <p *ngIf="appointment.createdAt" style="color: gray;margin-bottom: 5px;">
+                      {{getDateTimeFormat(appointment.createdAt.toDate())}}</p>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col style="text-align: left;margin-left: 15px;">
+                    <strong>User</strong> : {{appointment.user.name}}
+                  </ion-col>
+                  <ion-col>
+                    <strong>Id</strong> : <strong>{{appointment.appointmentId}}</strong>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col style="text-align: left;margin-left: 15px">
+                    <strong>Name</strong> : {{appointment.item.name}}
+                  </ion-col>
+                  <ion-col>
+                    <strong>Price</strong> : {{appointment.item.price}}
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size=8>
+          <p *ngIf="!appointmentData || appointmentData == {}"><strong>No Appointment Selected</strong></p>
+          <div *ngIf="appointmentData && appointmentData != {}">
+            <br>
+            <ion-button *ngIf="appointmentData && (!appointmentData.status || appointmentData.status != 'rejected') "
+              (click)="rejectAppointment()" shape="round" class="btn-1 i-start" color="danger" fill="outline"
+              style="display: flex;margin: auto;width: 240px;">
+              <i class="flaticon-null-19"></i>&nbsp;
+              Reject This Appointment
+            </ion-button>
+            <p *ngIf="appointmentData && appointmentData.status && appointmentData.status == 'rejected' "
+              class="rejectText">
+              Rejected
+            </p>
+            <br>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title style="text-align: center;font-weight: bold;">Appointment Details</ion-card-title>
+              </ion-card-header>
+              <ion-card-content style="padding-left: 35px;">
+                <p><strong>Id</strong>: {{appointmentData.appointmentId}}</p>
+                <br>
+                <p *ngIf="appointmentData.createdAt"><strong>Booked At</strong>:
+                  {{getDateTimeFormat(appointmentData.createdAt.toDate())}}</p>
+                <br>
+                <div *ngIf="appointmentData.item">
+                  <p><strong>Name</strong>: {{appointmentData.item.name}}</p>
+                  <br>
+                  <p><strong>Price</strong>: {{appointmentData.item.price}}</p>
+                </div>
+                <br>
+                <p *ngIf="appointmentData.user"><strong>User Name</strong>: {{appointmentData.user.name}}</p>
+                <br>
+                <p *ngIf="appointmentData.vendor"><strong>Vendor</strong>: {{vendorName}}</p>
+              </ion-card-content>
+            </ion-card>
+            <br>
+            <ion-card *ngIf="appointmentData.schedule">
+              <ion-card-header>
+                <ion-card-title style="text-align: center;font-weight: bold;">Schedule Details</ion-card-title>
+              </ion-card-header>
+              <ion-card-content style="padding-left: 35px;">
+                <div>
+                  <p><strong>Date</strong>: {{appointmentData.schedule.date}}</p>
+                  <br>
+                  <p><strong>Day</strong>: {{appointmentData.schedule.day}}</p>
+                  <br>
+                  <p><strong>From</strong>: {{appointmentData.schedule.slot.start}}</p>
+                  <br>
+                  <p><strong>To</strong>: {{appointmentData.schedule.slot.end}}</p>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

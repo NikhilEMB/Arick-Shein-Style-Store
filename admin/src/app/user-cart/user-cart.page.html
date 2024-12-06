@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="product-details" class="custom-back-button" *ngIf="routeFromProductDetailsPage"></ion-back-button>
+      <ion-back-button defaultHref="search-items" class="custom-back-button" *ngIf="routeFromSearchItemsPage"></ion-back-button>
+      <ion-menu-button class="custom-back-button" *ngIf="!routeFromProductDetailsPage && !routeFromSearchItemsPage">
+        <img src="assets/img/menu-icon-white.png" class="menu-img">
+      </ion-menu-button>
+    </ion-buttons>
+    <ion-title text-center>My Cart</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="showLoader" class="spinner">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <div class="no-data" *ngIf="noCartProducts && !showLoader; else showCartProducts" text-center>
+    <img src="assets/img/empty-cart.png" alt="">
+    <h6>No product in cart</h6>
+    <ion-button (click)="onClickStartShopping()" expand="block" color="primary">
+      Start Shopping
+    </ion-button>
+  </div>
+  <ng-template #showCartProducts>
+    <div class="products-container" *ngFor="let product of cartProducts; let i=index">
+      <div class="delete-icon" (click)="removeAlertConfirm(product.id)">
+        <i class="flaticon-null-21"></i>
+      </div>
+      <ion-list class="ion-no-padding" lines="none">
+        <ion-item class="ion-no-padding">
+          <div slot="start" 
+          [ngStyle]="{'background': 'url(' + product.img.mob + ') no-repeat center', 'background-size': 'contain'}"
+           class="product-image" (click)="goToPrdouctDetails(product.productId)"></div>
+          <ion-label>
+            <h2 class="product-price ion-text-wrap">{{product.price * product.quantity | currency: 'INR':true}}</h2>
+            <h3 class="product-name ion-text-wrap">{{product.name}}</h3>
+            <h6 class="product-description">{{product.description}}</h6>
+            <ion-grid class="ion-no-padding">
+              <ion-row class="ion-no-padding">
+                <ion-col size-xs="6" class="ion-no-padding">
+                  <ion-row class="ion-justify-content-start product-counter">
+                    <ion-col size="3" class="ion-no-padding">
+                        <ion-icon name="remove" (click)="decrementQuantity(product.quantity, i, product.id)" class="product-minus-icon"></ion-icon>
+                    </ion-col>
+                    <ion-col class="ion-no-padding">
+                        <span class="product-counter-value">{{product.quantity}}</span>
+                    </ion-col>
+                    <ion-col size="3" class="ion-no-padding">
+                        <ion-icon name="add" (click)="incrementQuantity(product.quantity, i, product.id)" class="product-add-icon"></ion-icon>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </ng-template>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="goToChat(true)">
+    <ion-fab-button size="small" color="dark">
+      <i class="flaticon-chat fab-btn-chat"></i>
+    </ion-fab-button>
+    <span class="unread-msg-badge" *ngIf="unreadAdminMsgs !== 0">{{unreadAdminMsgs}}</span>
+  </ion-fab>
+</ion-content>
+<ion-footer (click)="onClickCheckout()" *ngIf="!showLoader && !noCartProducts">
+  <ion-grid>
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <div class="app-footer-text">
+        Checkout<span><i class="flaticon-null-20 app-footer-icon"></i></span>
+    </div>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

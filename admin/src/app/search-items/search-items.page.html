@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="onClickBackBtn()">
+        <i class="flaticon-null-8"></i>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-input type="text" placeholder="Search for products" 
+      [(ngModel)]="searchProduct" (ngModelChange)="fireSearchQuery()" autocapitalize clearInput #searchInput></ion-input>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToCart()">
+        <i class="flaticon-shopping-cart"></i>
+        <span class="cart-badge" *ngIf="cartLength !== 0">{{cartLength}}</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="no-data" *ngIf="showNoProducts; else showProducts" text-center>
+    <img src="assets/img/no-product.png" alt="">
+    <h6>No products</h6>
+  </div>
+  <ng-template #showProducts>
+    <div *ngIf="showSearchLoader" class="spinner">
+      <ion-spinner color="primary"></ion-spinner>
+    </div>
+    
+    <ion-grid *ngIf="!showSearchLoader" class="ion-no-padding">
+      <ion-row>
+        <ion-col size-xs="6" size-sm="4" size-md="4" size-lg="3"
+          *ngFor="let product of products; let i = index" class="ion-no-padding">
+          <div class="grid-border" (click)="onClickProduct(product.id)" *ngIf="product.data">
+            <div>
+              <ion-thumbnail>
+                <img class="loading" *ngIf="product.data.coverPic && product.data.coverPic.mob" src="{{product.data.coverPic.mob}}">
+                <img class="loading" *ngIf="product.data.coverPic && !product.data.coverPic.mob && product.data.coverPic.url" src="{{product.data.coverPic.url}}">
+                <img *ngIf="!product.data.coverPic" src="assets/img/placeholder-img.jpg">
+              </ion-thumbnail>
+            </div>
+            <div>
+              <p class="product-name">{{product.data.prodName.trim()}}</p>
+            </div>
+            <div>
+              <p class="product-desc">{{product.data.prodDesc.trim()}}</p>
+            </div>
+            <div>
+              <p *ngIf="product.data.prodPrice !== null" class="price">
+                {{product.data.prodPrice | currency: 'INR':true:'0.0'}}</p>
+              <p *ngIf="product.data.prodPrice === null" class="price">{{0 | currency: 'INR':true}}</p>
+              </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
+</ion-content>

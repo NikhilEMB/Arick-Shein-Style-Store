@@ -1,0 +1,91 @@
+
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="offer-settings" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center *ngIf="!offerData">New offer</ion-title>
+    <ion-title text-center *ngIf="offerData">Edit offer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <div class="main-container">
+  <div class="oc-wrapper">
+    <div class="oc-data-container">
+      <div class="oc-headings">Offer Name</div>
+      <ion-input type="text" [(ngModel)]="name"></ion-input>
+    </div>
+
+    <div class="oc-data-container">
+      <div class="oc-headings">Offer Description</div>
+      <ckeditor [(ngModel)]="description" [config]="ckeConfig"></ckeditor>
+    </div>
+
+    <div class="oc-upload-imgs">
+      <div class="upload-btn-wrapper">
+        <button  class="upload-btn btn-1 i-start"> <i class="flaticon-null-16"></i>Upload (Max 3)</button>
+        <input  type="file" name="myfile" (change)="uploadImage($event.target.files)" />
+      </div>
+      <div>
+        (Best size 1500px X 900px)
+      </div>
+    </div>
+
+    <div class="img-container" *ngIf="images.length">
+        <div class="img-wrap" *ngFor="let img of images; let i=index">
+          <img class="category-img" [src]="img.url" />
+          <div class="overlay">
+            <ion-button class="btn-2 remove" shape="round" fill="clear" color="danger"
+            (click)="removeImage(i)">
+              <ion-icon name="trash" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+    </div>
+
+    
+    <ion-row>
+      <ion-col size="12">
+        <p class="left-align">Offer Linking</p>
+        <ion-list>
+          <ion-radio-group [value]="bannerData.link.type">
+              <ion-item class="bs-links" *ngFor="let link of linkTypes; let i=index;"
+                  lines="none" (click)="selectLinkType(i)">
+                  <ion-radio slot="start" [value]="link"></ion-radio>
+                  <ion-label *ngIf="link === 'subcategory'">
+                    Subcategory : <ng-container *ngIf="(link === bannerData.link.type) ">{{bannerData.link.name}}</ng-container>
+                  </ion-label>
+                  <ion-label *ngIf="link != 'subcategory'">
+                      {{link}} : <ng-container *ngIf="(link === bannerData.link.type) ">{{bannerData.link.name}}</ng-container>
+                  </ion-label>
+              </ion-item>
+          </ion-radio-group>
+
+      </ion-list>
+      </ion-col>
+    </ion-row>
+    
+
+
+  </div>
+  <div class="page-footer">
+  <ion-button (click)="saveOffer()" shape="round" class="btn-1 i-start" color="success">
+    <i class="flaticon-null-20 margin-icon"></i>
+    Save offer
+  </ion-button>
+  </div>
+  </div>
+  
+</ion-content>
+<!-- 
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveOffer()"shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save offer
+    </ion-button>
+  </div>
+</ion-footer> -->

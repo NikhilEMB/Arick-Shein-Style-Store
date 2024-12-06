@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Retailers</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <div class="no-users" *ngIf="showNoUsers" text-center> <img src="assets/img/no-user.png" alt="">
+      <h6>No users</h6>
+    </div>
+    <!-- header -->
+    <div class="list-header" *ngIf="!showNoUsers" style="top: unset;">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col class="image">
+            <p>Image</p>
+          </ion-col>
+          <ion-col class="user">
+            <p>Name | Number</p>
+          </ion-col>
+          <ion-col class="last-active">
+            <p>Date</p>
+          </ion-col>
+          <ion-col class="action">
+            <p>Action</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <!-- header -->
+
+    <!-- container -->
+    <div class="list-container">
+
+      <!-- Search Bar -->
+      <ion-searchbar animated [(ngModel)]='searchUser' placeholder="Search product..." showCancelButton="focus" mode="ios">
+      </ion-searchbar>
+      
+      <ion-list class="ion-no-padding row-border" *ngIf="!showLoader && !showNoUsers">
+        <ng-container *ngFor="let user of users | filter:searchUser; let i=index">
+          <ion-item *ngIf="user.data.subRole==='retailer'">
+            <ion-grid>
+              <ion-row class="row-background">
+                <ion-col class="image">
+                  <ion-avatar class="profile-pic"
+                    *ngIf="user.data.subRole==='retailer'"> <img
+                      src="{{user.data.dP}}" (click)="imageZoom(user.data.dP)"> </ion-avatar>
+                </ion-col>
+                <ion-col class="user">
+                  <p text-capitalize text-center>{{user.data.name}} ({{user.data.phoneNo}})</p>
+                </ion-col>
+                <ion-col class="last-active">
+                  <p text-capitalize>{{getDateTimeFormat(user.data.lastAccessAt.toDate())}}</p>
+                </ion-col>
+                <ion-col class="action">
+                  <ion-button class="btn-sml" shape="round" fill="outline" (click)="editUserRoleAlert(user, i)">
+                    Edit Role </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ng-container>
+      </ion-list>
+      <ion-grid class="row-border ion-no-padding" *ngIf="showLoader && !showNoUsers">
+        <ion-row class="row-background" *ngFor="let x of [1,2,3,4,5,6,7,8,9,10]">
+          <ion-col size="3">
+            <ion-avatar>
+              <ion-skeleton-text></ion-skeleton-text>
+            </ion-avatar>
+          </ion-col>
+          <ion-col size="3">
+            <h3>
+              <ion-skeleton-text animated style="width: 70%;margin-left: -10px;"></ion-skeleton-text>
+            </h3>
+          </ion-col>
+          <ion-col size="3">
+            <h3>
+              <ion-skeleton-text animated style="width: 90%;margin-left: -5px;"></ion-skeleton-text>
+            </h3>
+          </ion-col>
+          <ion-col size="3">
+            <h3>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+            </h3>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <!-- container -->
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreUsers($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more users...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </div>
+</ion-content>

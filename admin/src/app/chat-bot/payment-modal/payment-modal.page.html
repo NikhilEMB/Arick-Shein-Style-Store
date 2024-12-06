@@ -1,0 +1,14 @@
+<ion-content text-center>
+    <div class="pay-icon">
+      <i class="flaticon-pay"></i>
+    </div>
+    <ion-spinner color="primary" *ngIf="loader === true"></ion-spinner>
+  <div class="payment-method" *ngIf="loader === false">
+    {{paymentData.paymentInfo}}
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="bottom-button">
+    <ion-button expand="full" (click)="closeModal()">got it...!!!</ion-button>
+</div>
+</ion-footer>

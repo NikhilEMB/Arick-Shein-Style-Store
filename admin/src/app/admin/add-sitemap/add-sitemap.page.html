@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-title>add-sitemap</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="main-point-box">
+    <ion-row>
+      <!-- <ion-col class="input-box" size="12">
+        <ion-input type="text" name="point" placeholder="Enter category" [(ngModel)]="sitemapDetails.category"></ion-input>
+      </ion-col>
+
+      <ion-col class="input-box" size="12">
+        <ion-input type="text" name="point" placeholder="Enter category url" [(ngModel)]="sitemapDetails.categoryUrl"></ion-input>
+      </ion-col> -->
+
+      <ion-list class="cat-selection-box">
+        <ion-item>
+          <ion-label>Select Category</ion-label>
+          <ion-select [(ngModel)]="selectedCategory" (ionChange)="getSelectedCategory($event)" placeholder="Select Category">
+            <ion-select-option *ngFor="let cat of categories" [value]="cat"> {{cat.name}} </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+
+      <div class="search-input-bx">
+        <ion-searchbar mode="ios" placeholder="Search products" [(ngModel)]="searchProduct"
+          (ngModelChange)="fireSearchQuery()"></ion-searchbar>
+      </div>
+
+      <div class="selected-products">
+        <p *ngFor="let prd of selectedProducts; let i = index">{{prd.name}}<ion-icon (click)="removeProduct(i)" name="close-circle-outline"></ion-icon></p>
+      </div>
+
+      <ion-list *ngIf="productsData && productsData.length" class="product-list-class">
+        <ion-item *ngFor="let product of productsData; let i = index">
+          <div>
+            <img [src]="product.data.coverPic.url" alt="">
+            <ion-label>{{product.data.prodName}}</ion-label>
+          </div>
+          <ion-checkbox slot="end" (ionChange)="checkboxClick($event, product)"></ion-checkbox>
+        </ion-item>
+      </ion-list>
+
+      <div class="no-product-data" *ngIf="showNoProducts" text-center>
+        <img src="assets/img/no-product.png" alt="">
+        <h6>No products found</h6>
+      </div>
+      <div *ngIf="showSearchLoader" class="spinner">
+        <ion-spinner color="primary"></ion-spinner>
+      </div>
+
+    </ion-row>
+
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-button expand="full" color="primary" (click)="editMode ? updateSitemapData() : onClickSubmit()"
+    >Submit<ion-icon name="checkmark-circle"></ion-icon>
+  </ion-button>
+</ion-footer>

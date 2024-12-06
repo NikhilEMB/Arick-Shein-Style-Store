@@ -1,0 +1,85 @@
+.address-card{
+    background: white;
+    padding: 10px;
+    margin: 12px 12px 12px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+ion-content{
+    --background: #F2F2F2;
+}
+.user-name{
+    font-size: 15px;
+}
+.address{
+    font-size: 13px;
+}
+.phone-no{
+    font-size: 13px;
+}
+.spinner{
+    text-align: center;
+    margin-top: 50%;
+}
+ion-list{
+    border-radius: 5px;
+}
+.products-heading{
+    font-size: 14px;
+    text-transform: uppercase;
+    opacity: .7;
+    padding: 10px 0px 5px;
+}
+.products-container{
+    margin: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    position: relative;
+}
+.product-image{
+    background: transparent url('https://s5.gifyu.com/images/loaderbb19efcc2749e115.gif') center no-repeat;
+    width: 100px;
+    height: 80px;
+}
+.product-name{
+    font-size: 13px;
+    margin-top: 7px;
+}
+.product-price{
+    color: var(--ion-color-primary);
+    font-size: 16px;
+}
+.product-description{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 7px;
+    opacity: .5;
+    margin-bottom: -3px;
+    font-size: 12px;
+}
+.product-quantity{
+    font-size: 12px;
+}
+
+ion-grid ion-row{
+    justify-content: flex-end;;
+}
+
+.order-status{
+    text-align: end;
+    font-size: 13px;
+    text-transform: uppercase;
+    padding: 10px 0px 5px;
+}
+.line{
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: #ccc;
+    height: 1px;
+    opacity: .4;
+}

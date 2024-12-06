@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start"
+      class="menu-btn">
+      <ion-icon slot="icon-only"
+        name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>loyalty-points-settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content style="--background: white;">
+  <div style="padding: 20px 30px;">
+    <ion-grid>
+      <ion-row>
+
+        <ion-col>
+          <div class="input-wrap active-toggle">
+            <ion-label>Active</ion-label>
+            <ion-toggle [(ngModel)]="data.active"></ion-toggle>
+          </div>
+        </ion-col>
+  
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Conversion Rate (1 loyalty point is equal to how much RS)</ion-label>
+            <ion-input type="number" class="form-input" [(ngModel)]="data.conversionRate" autocapitalize></ion-input>
+          </div>
+        </ion-col>
+
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Minimum Order Amount</ion-label>
+            <ion-input type="number" class="form-input" [(ngModel)]="data.minOrderAmount" autocapitalize></ion-input>
+          </div>
+        </ion-col>
+  
+        <ion-col size="12">
+          <div class="input-wrap">
+            <ion-label>Loyalty Point is what Percentage of Order Amount</ion-label>
+            <ion-input class="form-input" type="number" [(ngModel)]="data.percentRate"></ion-input>
+          </div>
+        </ion-col>
+  
+        <ion-col size="12">
+          <h6>Redeem</h6>
+        </ion-col>
+  
+        <ion-col size="6">
+          <div class="input-wrap">
+            <ion-label>Min order amount</ion-label>
+            <ion-input type="number" class="form-input" [(ngModel)]="data.redeem.minOrderAmt"></ion-input>
+          </div>
+        </ion-col>
+  
+        <ion-col size="6">
+          <div class="input-wrap">
+            <ion-label>How much % of order amount user can redeem loyalty points</ion-label>
+            <ion-input class="form-input" type="number" [(ngModel)]="data.redeem.percent"></ion-input>
+          </div>
+        </ion-col>
+
+        <ion-col size="12">
+          <ion-button (click)="saveSettings()" shape="round" class="btn-1 i-start" color="success">
+            <i class="flaticon-null-20 margin-icon"></i> Save
+          </ion-button>
+        </ion-col>
+  
+      </ion-row>
+    </ion-grid>
+  
+  </div>
+</ion-content>

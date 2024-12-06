@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start">
+      <img src="../../../assets/img/shop-logo.png" />
+    </div>
+    <ion-title>Instagram Videos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+
+        <ion-col size="4">
+          <div class="upload-btn-wrapper" style="display: block;margin-top: 12px;">
+            <button class="upload-btn i-start"> <i class="flaticon-null-16"></i>upload video</button>
+            <input type="file" (change)="uploadDocument($event, 'video')" accept="video/*" />
+          </div>
+          <ng-container *ngIf="video">
+            <iframe [src]="video | safeItem: 'resourceUrl'"></iframe>
+          </ng-container>
+        </ion-col>
+
+        <ion-col size="4">
+          <div class="upload-btn-wrapper" style="display: block;margin-top: 12px;">
+            <button class="upload-btn i-start"> <i class="flaticon-null-16"></i>upload Thumb</button>
+            <input type="file" (change)="uploadDocument($event, 'image')" accept="image/*" />
+          </div>
+          <ng-container *ngIf="thumb">
+            <img [src]="thumb">
+          </ng-container>
+        </ion-col>
+
+        <ion-col size="4" class="flexCenter">
+          <ion-button (click)="addItem()">Add video</ion-button>
+        </ion-col>
+
+      </ion-row>
+
+      <ion-row style="margin-top: 4rem;">
+        <ion-col size="12">
+          <h3 text-center>{{instagramVideos.length ? 'Instagram Videos': 'No Videos Found'}}</h3>
+        </ion-col>
+        <ion-col size="12">
+          <ng-container *ngIf="instagramVideos.length">
+            <ion-list class="ion-no-padding row-border">
+              <ion-reorder-group (ionItemReorder)="itemReorder($event)" [disabled]="instagramVideos.length==1"
+                class="ion-no-padding">
+                <ion-item *ngFor="let item of instagramVideos; index as i">
+                  <ion-grid class="ion-no-padding">
+                    <ion-row>
+                      <ion-col class="img">
+                        <ion-thumbnail style="margin-left: 5%;" class="thumbnail">
+                          <img [src]="item.thumbnail">
+                        </ion-thumbnail>
+                      </ion-col>
+                      <ion-col class="name">
+                        <p class="ion-text-capitalize">
+                          <a [href]="item.link" target="_blank">{{item.link}}</a>
+                        </p>
+                      </ion-col>
+                      <ion-col class="action">
+                        <ion-button class="action-btn" fill="clear" (click)="deleteItem(item.link)">
+                          <i class="flaticon-null-21" slot="icon-only"></i>
+                        </ion-button>
+                      </ion-col>
+                      <ion-col class="reorder">
+                        <ion-reorder>
+                          <div class="flat-sort">
+                            <i class="flaticon-menu"></i>
+                          </div>
+                        </ion-reorder>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </ion-reorder-group>
+            </ion-list>
+          </ng-container>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="save()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

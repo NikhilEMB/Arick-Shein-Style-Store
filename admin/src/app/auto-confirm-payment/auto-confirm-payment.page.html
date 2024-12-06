@@ -1,0 +1,113 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="chat-bot" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center *ngIf="orderData">Order Payment</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="orderData">
+  <br>
+  <div class="price-card">
+    <p class="price-details">Price Details</p>
+    <hr class="line">
+    <ion-grid class="ion-no-padding">
+      <ion-row class="ion-justify-content-between ion-no-padding">
+        <ion-col class="ion-no-padding">
+          <p class="total-items">Price ({{getTotalItems()}} items)</p>
+        </ion-col>
+        <ion-col class="ion-no-padding price-total">
+          <p>{{orderData.productsPrice | currency: 'INR':true:'0.0'}}</p>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-no-padding" *ngIf="orderData.couponDiscount !== 0">
+        <ion-col class="ion-no-padding">
+          <p class="total-items">Coupon Discount</p>
+        </ion-col>
+        <ion-col class="ion-no-padding price-total">
+          <p style="color: var(--ion-color-success);">{{orderData.couponDiscount | currency: 'INR':true:'0.0'}}</p>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-no-padding">
+        <ion-col class="ion-no-padding">
+          <p class="total-items">Delivery</p>
+        </ion-col>
+        <ion-col class="ion-no-padding price-total">
+          <p *ngIf="orderData.delivery !== 0">{{orderData.delivery | currency: 'INR':true:'0.0'}}</p>
+          <p *ngIf="orderData.delivery === 0" style="color: var(--ion-color-success);">Free</p>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-no-padding" *ngIf="orderData.defaultGst !== 0">
+        <ion-col class="ion-no-padding">
+          <p class="total-items">GST</p>
+        </ion-col>
+        <ion-col class="ion-no-padding price-total">
+          <p>{{orderData.defaultGst | currency: 'INR':true:'0.0'}}</p>
+        </ion-col>
+      </ion-row>
+
+      <hr class="line">
+      <ion-row class="ion-no-padding">
+        <ion-col class="ion-no-padding">
+          <p class="total-estimated">Total Amount</p>
+        </ion-col>
+        <ion-col class="ion-no-padding estimated-price">
+          <p>{{orderData.totalAmountToPaid | currency: 'INR':true:'0.0'}}</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div class="payment-methods">
+    <p class="payment-modes">Payment Modes</p>
+    <hr class="line">
+    <div class="spinner" *ngIf="showLoader; else modesLoaded">
+      <ion-spinner color="primary"></ion-spinner>
+    </div>
+    <ng-template #modesLoaded>
+      <ion-list lines="none">
+        <ion-item button (click)="onClickPaymentMode('cash')" detail class="ion-no-padding ion-item">
+          <ion-label>
+            <h4>Cash On Delivery</h4>
+          </ion-label>
+        </ion-item>
+        <ion-item button (click)="onClickPaymentMode('paytm')" detail *ngIf="paytmActive" class="ion-no-padding ion-item">
+          <ion-label>
+            <h4>Paytm</h4>
+          </ion-label>
+        </ion-item>
+  
+        <ion-item button (click)="onClickPaymentMode('card')" detail *ngIf="razorpayActive"
+          class="ion-no-padding ion-item">
+          <ion-label class="ion-text-wrap">
+            <h4>Credit/Debit Cards</h4>
+          </ion-label>
+        </ion-item>
+  
+        <ion-item button (click)="onClickPaymentMode('wallet')" detail *ngIf="razorpayActive"
+          class="ion-no-padding ion-item">
+          <ion-label class="ion-text-wrap">
+            <h4>Wallets</h4>
+          </ion-label>
+        </ion-item>
+  
+        <ion-item button (click)="onClickPaymentMode('upi')" detail *ngIf="razorpayActive"
+          class="ion-no-padding ion-item">
+          <ion-label class="ion-text-wrap">
+            <h4>UPI</h4>
+          </ion-label>
+        </ion-item>
+  
+        <ion-item button (click)="onClickPaymentMode('netbanking')" detail *ngIf="razorpayActive" class="ion-no-padding">
+          <ion-label class="ion-text-wrap">
+            <h4>Netbanking</h4>
+          </ion-label>
+        </ion-item>
+  
+      </ion-list>
+    </ng-template>    
+  </div>
+</ion-content>

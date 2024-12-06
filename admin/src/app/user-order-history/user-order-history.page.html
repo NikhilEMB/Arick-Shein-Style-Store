@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button class="custom-back-button">
+        <img src="assets/img/menu-icon-white.png" class="menu-img">
+      </ion-menu-button>
+    </ion-buttons>
+    <ion-title text-center>My Orders</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="showLoader" class="spinner">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <div class="no-data" *ngIf="noOrders && !showLoader && !orders.length; else showOrders" text-center>
+    <img src="assets/img/no-orders.png" alt="">
+    <h6>No orders</h6>
+  </div>
+  <ng-template #showOrders>
+    <div *ngFor="let order of orders; let i=index">
+      <div class="uo-order-id">
+        Order Id: ORD{{order.orderId}}
+      </div>
+      <div class="uo-products-container">
+        <div class="uo-placed-on">
+          Placed On {{order.createdAt.toDate() | date}}
+        </div>
+        <hr class="line">
+        <ion-list class="ion-no-padding" lines="none" *ngIf="order?.products[0]">
+          <ion-item class="ion-no-padding">
+            <div slot="start"
+            [ngStyle]="{'background': 'url(' + order.products[0].img.mob + ') no-repeat center', 'background-size': 'contain'}"
+             class="uo-product-image">
+             <div class="uo-more" *ngIf="order.products.length > 1">+ {{order.products.length - 1}} more</div></div>
+            <ion-label>
+              <h2 class="uo-product-price ion-text-wrap">{{order.totalAmountToPaid | currency: 'INR':true}}</h2>
+              <h3 class="uo-product-name ion-text-wrap">{{order.products[0].name}} <span *ngIf="order.products.length > 1">+ {{order.products.length - 1}} more</span>
+              </h3>
+              <h5 *ngIf="order.status === 'Pending'">Placed<span><i class="flaticon-null-20"></i></span></h5>
+              <h5 *ngIf="order.status === 'Rejected'">Rejected<span><i class="flaticon-null-19"></i></span></h5>
+              <h5 *ngIf="order.status === 'Confirmed'">Confirmed<span><i class="flaticon-null-20"></i></span></h5>
+              <h5 *ngIf="order.status === 'Cancelled'">Cancelled<span><i class="flaticon-null-19"></i></span></h5>
+              <h5 *ngIf="order.status === 'Dispatched'">Dispatched<span><i class="flaticon-null-20"></i></span></h5>
+              <h5 *ngIf="order.status === 'Delivered'">Delivered<span><i class="flaticon-null-20"></i></span></h5>
+              <h5 *ngIf="order.status === 'Returned'">Returned<span><i class="flaticon-null-20"></i></span></h5>
+            </ion-label>
+          </ion-item>
+            <div class="uo-action-btn" *ngIf="order.deliveryStatus === 'inProgress' && (order.status === 'Confirmed' || order.status === 'Dispatched'); else showOnlyViewOrder">
+              <ion-grid class="ion-no-padding">
+                <ion-row class="ion-no-padding">
+                  <ion-col size="6" class="ion-no-padding">
+                    <ion-button (click)="onClickViewDetails(order.orderId)" size="small" fill="clear">
+                      View Order <i class="flaticon-null-7"></i>
+                    </ion-button>
+                  </ion-col>
+                  <ion-col size="6" class="ion-no-padding">
+                    <ion-button (click)="onClickTrackOrder(order.deliveryAgentId, order.deliveryLatLng)" size="small" color="dark" fill="clear">
+                      Track Order <i class="flaticon-null-7"></i>
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+            <ng-template #showOnlyViewOrder>
+              <div class="uo-view-details-btn">
+                <ion-button (click)="onClickViewDetails(order.orderId)" size="small" fill="clear">
+                  View Order <i class="flaticon-null-7"></i>
+                </ion-button>
+              </div>
+            </ng-template>
+        </ion-list>
+      </div>
+    </div>
+  </ng-template>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="goToChat(true)">
+    <ion-fab-button size="small" color="dark">
+      <i class="flaticon-chat fab-btn-chat"></i>
+    </ion-fab-button>
+    <span class="unread-msg-badge" *ngIf="unreadAdminMsgs !== 0">{{unreadAdminMsgs}}</span>
+  </ion-fab>
+</ion-content>

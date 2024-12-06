@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button" defaultHref="admin-home"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">App Usage</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <div class="spinner" *ngIf="showLoader; else dataLoaded;">
+      <ion-spinner color="primary"></ion-spinner>
+    </div>
+    <ng-template #dataLoaded>
+      <div class="usage-item-wrapper">
+        <div class="usage-item content-alignment" *ngFor="let alt of analytics">
+          <ion-text class="usage-item-name">{{alt.name}}: &nbsp;</ion-text>
+          <ion-text class="usage-item-count">{{alt.data.count}} / {{alt.data.total}}</ion-text>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</ion-content>

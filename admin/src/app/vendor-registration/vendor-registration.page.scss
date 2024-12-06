@@ -1,0 +1,14 @@
+.green{
+    color: var(--ion-color-success);
+}
+.data-table{  
+    ion-col{
+    border: 1px solid gray;
+    padding-top: 10px;
+    padding-bottom: 10px
+  }
+  
+  ion-row:first-child{
+    background: lightgray
+  }
+}

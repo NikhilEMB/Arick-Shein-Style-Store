@@ -1,0 +1,45 @@
+.fix-height{
+  max-height: calc(100vh - 315px);
+    overflow-y: scroll;
+    padding: 16px;
+}
+.justify-content{
+  display: flex;
+  justify-content: space-between;
+}
+
+.state-wrapper {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.state-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.flaticon-null-13 {
+  opacity: .6;
+}
+.flaticon-null-13::before {
+  font-size: 12px;
+}
+.extra-charges {
+  display: flex;
+  align-items: baseline;
+  margin-top: 12px;
+}
+.form-input {
+  margin-top: 0;
+}
+.colorPicker{
+  max-width: 10rem; 
+  margin-right: 20px;
+  padding: 0;
+  border: 0;
+}

@@ -1,0 +1,65 @@
+ion-content{
+    --background:#fff;
+}
+.templates-header ion-toolbar {
+    --background: none;
+}
+
+.templates-header-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.template-name{
+    --detail-icon-color: var(--ion-color-primary);
+    --detail-icon-opacity: 1;
+    --detail-icon-font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5%;
+}
+
+.select-temp {
+    opacity: .7;
+    font-size: 14px;
+    text-transform: capitalize;
+}
+.select-type {
+    opacity: .7;
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+.select-type span {
+    margin-left: 3%;
+}
+
+.select-wrapper ion-icon {
+    font-size: 20px;
+    margin-right: 4px;
+}
+
+.selects-wrapper ion-checkbox {
+    margin-left: 8px;
+}
+
+.temp-spinner {
+    text-align: center;
+    position: relative;
+    top: 30%;
+}
+
+.no-temp {
+    text-align: center;
+}
+
+.bottom-add-btn {
+    background-color: white;
+}
+
+.selects-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

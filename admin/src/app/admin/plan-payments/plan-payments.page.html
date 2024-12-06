@@ -1,0 +1,135 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Plans and Payments</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs no-shadow no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Plan Details</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Do Payment</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Payment History</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+  <super-tabs-container swipeEnabled="false">
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <br>
+          <div style="display: flex; padding-left: 62px; padding-right: 62px; justify-content: space-around;">
+            <strong>Current Plan : </strong><p>(Plus Plan)</p>
+            <br>
+            <strong>Due Amount : </strong><p>Rs 500</p>
+            <br>
+            <strong>Due Date : </strong><p>31/12/2020</p>
+          </div>
+          <br>
+          <div id="rowDisplay" style="justify-content: center">
+            <button (click)="gotoCompletePayment()" style="margin-left: 0px">Pay Now</button>
+          </div>
+          <br>
+          <div id="container">
+              <strong>Select Plans & Add Ons</strong>
+          </div>
+            <br>
+            <div id="rowDisplayCard">
+              <div>
+                <ion-card id="plan">
+                  <ion-card-header>
+                    <ion-card-title>Lite</ion-card-title>
+                  </ion-card-header>
+                
+                  <ion-card-content>
+                    <p>Rs {{liteAmount}} / year</p>
+                  </ion-card-content>
+            
+                  <ion-footer>
+                    <ion-toolbar>
+                      <p (click)="gotoDetails('lite')">More Details</p>
+                    </ion-toolbar>
+                  </ion-footer>
+                </ion-card>
+                <button (click)="changeAmount('lite')">Select</button>
+              </div>
+              <div>
+                <ion-card id="plan">
+                  <ion-card-header>
+                    <ion-card-title>Plus</ion-card-title>
+                  </ion-card-header>
+                
+                  <ion-card-content>
+                    <p>Rs {{plusAmount}} / year</p>
+                  </ion-card-content>
+            
+                  <ion-footer>
+                    <ion-toolbar>
+                      <p (click)="gotoDetails('plus')">More Details</p>
+                    </ion-toolbar>
+                  </ion-footer>
+                </ion-card>
+                <button (click)="changeAmount('plus')">Select</button>
+              </div>
+              <div>
+                <ion-card id="plan">
+                  <ion-card-header>
+                    <ion-card-title>Premium</ion-card-title>
+                  </ion-card-header>
+                
+                  <ion-card-content>
+                    <p>Rs {{premiumAmount}} / year</p>
+                  </ion-card-content>
+            
+                  <ion-footer>
+                    <ion-toolbar>
+                      <p (click)="gotoDetails('premium')">More Details</p>
+                    </ion-toolbar>
+                  </ion-footer>
+                </ion-card>
+                <button (click)="changeAmount('premium')">Select</button>
+              </div>
+            </div>
+        </div>
+      </ion-content>
+    </super-tab>
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <br>
+          <strong>Amount</strong>
+          <ion-input type="number" class="form-input" placeholder="Enter amount to pay"></ion-input>
+          <div id="rowDisplay" style="justify-content: center">
+            <button (click)="gotoCompletePayment()" style="margin-left: 0px">Continue to Payment</button>
+          </div>
+        </div>
+      </ion-content>
+    </super-tab>
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <ion-card>
+            <ion-card-content id="purchaseDetails">
+              <div>
+                <p>Amount : Rs 5,000</p>
+                <p>Date : 10/11/2020</p>
+                <p>Plan Purchased</p>
+              </div>
+              <div>
+                <p><ion-icon name="checkmark-circle-outline"></ion-icon> Success</p>
+                <button><ion-icon name="arrow-down-outline"></ion-icon>Invoice</button>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </ion-content>
+    </super-tab>
+  </super-tabs-container> 
+</super-tabs>

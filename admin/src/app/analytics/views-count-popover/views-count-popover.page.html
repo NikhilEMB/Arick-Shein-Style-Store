@@ -1,0 +1,17 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>views-count-popover</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content>
+  <div class="container">
+    <ng-container *ngIf="isFetching">
+      <ion-spinner name="dots"></ion-spinner>
+    </ng-container>
+
+    <ng-container *ngIf="!isFetching">
+      <p>Total views : <b>{{viewsCount}}</b></p>
+    </ng-container>
+  </div>
+</ion-content>

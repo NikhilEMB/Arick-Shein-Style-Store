@@ -1,0 +1,28 @@
+<ion-header class="templates-header">
+  <ion-toolbar>
+    <ion-title class="templates-header-title">States</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-text-center">
+    <ion-searchbar mode="ios" placeholder="Search any state" inputmode="text" [(ngModel)]="searchState"></ion-searchbar>
+  </div>
+
+  <div class="spinner" *ngIf="showLoader">
+    <ion-spinner name="dots"></ion-spinner>
+  </div>
+
+  <ion-list lines="none" *ngIf="!showLoader">
+    <ion-item *ngFor="let s of states | filter: searchState;" (click)="onClickState(s)">
+      <ion-label>{{s.state}}</ion-label>
+      <ion-radio value="s"></ion-radio>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

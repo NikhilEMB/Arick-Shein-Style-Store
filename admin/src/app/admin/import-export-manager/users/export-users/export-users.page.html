@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons style="margin-left: -8px;" slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <ion-menu-button style="margin-left: 8px;" slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Export Users</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+
+        <ion-col id="scroll" size="6">
+          <div class="sectionArea">
+            <h2>Configure Export Scheme</h2>
+            <div>
+              <!-- *** NEW FILTERS -->
+              <ion-card style="border-radius: 12px; background-color: #ddd;">
+                <ion-card-header style="display: flex; justify-content: center; padding-bottom: 8px;">
+                  <ion-card-title style="font-size: 20px; display: block;">Filters</ion-card-title>
+                </ion-card-header>
+                <ion-card-header style="display: flex; justify-content: center; padding-top: 0;">
+                  <ion-card-subtitle style="display: block;">Select preferred user roles</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-card-title style="padding-bottom: 8px;">Roles</ion-card-title>
+                  <div style="display: flex; justify-content: space-between;"> 
+                    <select class="customSelect" style="width: 100%;" (change)="setUserStatus($event.target.value)">
+                      <option value="all" selected>All</option>
+                      <option value="admin">Admin</option>
+                      <option value="manager">Manager</option>
+                      <option value="vendor">Vendor</option>
+                      <option value="deliveryAgent">Delivery Agent</option>
+                      <option value="user">User</option>
+                    </select>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col size="6">
+          <div class="sectionArea">
+            <h2>Instructions</h2>
+          </div>
+          <div style="margin-top: 10px;">
+            <ol>
+              <li>Select the desired user role for export.</li>
+              <li>Click on Export Users for exporting the filtered users.</li>
+            </ol>
+          </div>
+        </ion-col>
+        
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer no-border class="page-footer" style="border-top: 1px solid #ccc;">
+  <div class="main-container" style="display: flex; align-content: center; justify-content: space-between; align-items: center;">
+    <p style="font-size: 16px; font-weight: bold;">Total Users Found : {{totalUsers.length}}</p>
+    <ion-button shape="round" class="btn-1 i-start" color="success" [disabled]="saveDisable()" (click)="exportUsersHandler()">
+      Export Users
+    </ion-button>
+  </div>
+</ion-footer>

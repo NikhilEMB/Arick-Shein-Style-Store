@@ -1,0 +1,22 @@
+.spinner {
+    text-align: center;
+    margin-top: 45%;
+}
+
+.offers-content{
+    --background: #F2F2F2;
+}
+
+.offer-images {
+    background: transparent url('../../assets/img/img-preloader.png') center no-repeat;
+    min-height: 25vh;
+    width: 100%;
+}
+
+.offer-card {
+    background: white;
+    margin-bottom: 8%;
+    ion-card-title {
+        font-size: 18px;
+    }
+}

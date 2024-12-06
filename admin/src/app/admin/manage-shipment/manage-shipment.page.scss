@@ -1,0 +1,203 @@
+ion-grid{
+  background: #fff;
+}
+
+.heading {
+font-weight: 600;
+color: #666;
+}
+
+.input-wrap {
+ion-label {
+  text-transform: capitalize;
+  @extend .heading;
+}
+}
+
+.integration-txt {
+font-size: 18px;
+.value {
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+}
+
+super-tabs-toolbar {
+  .check-icon {
+      color: var(--ion-color-success);
+      font-size: 32px;
+  }
+  .step-count {
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      background: #3F51B5;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 5px;
+  }
+}
+
+.table-heading {
+  font-size: 1.5em;
+  margin: 0.5em 0 0.75em;
+  text-align: center;
+  opacity: .8;
+}
+
+table {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table caption {
+  font-size: 1.5em;
+  margin: .5em 0 .75em;
+}
+
+table tr {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: .35em;
+}
+
+table th,
+table td {
+  padding: .625em;
+  text-align: center;
+}
+
+table th {
+  font-size: .85em;
+  letter-spacing: .1em;
+  text-transform: capitalize;
+}
+
+.tracking-link {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  p {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
+
+  .copy-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 15px;
+    cursor: pointer;
+    ion-icon {
+      font-size: 20px;
+    }
+    ion-text {
+      opacity: .8;
+    }
+  }
+}
+
+.url-links {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  margin-right: 15px;
+  text-transform: capitalize;
+  ion-button {
+    margin-top: 20px;
+  }
+}
+
+.recommended-courier-txt {
+  font-size: 17px;
+  margin: 20px 0;
+  span {
+    font-weight: bold;
+  }
+}
+
+.tracking-events {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  max-width: 30%;
+  padding: 10px;
+  margin: 20px 0;
+  .event {
+    &:not(:last-child) {border-bottom: 1px solid #ccc;}
+    margin: 10px 0;
+    p {
+      margin-bottom: 10px;
+    }
+    .time {
+      font-weight: bold;
+    }
+    .location {
+      font-style: italic;
+    }
+  }
+}
+
+.default-courier {
+  font-size: 18px;
+  text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+  table {
+    border: 0;
+  }
+
+  table caption {
+    font-size: 1.3em;
+  }
+  
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+  }
+  
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: .8em;
+    text-align: right;
+  }
+  
+  table td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  table td:last-child {
+    border-bottom: 0;
+  }
+}

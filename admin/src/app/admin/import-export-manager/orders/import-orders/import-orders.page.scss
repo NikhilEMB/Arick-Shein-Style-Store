@@ -1,0 +1,95 @@
+.main-container {
+  width: 100%;
+  padding: 0
+}
+
+#scroll1 {
+  overflow: hidden;
+  height: 75vh;
+  border-right: 1px solid lightgray;
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+#scroll2 {
+  overflow: hidden;
+  height: 86vh;
+  &:hover {
+    overflow-y: auto;
+  }
+}
+
+#scroll {
+  overflow: hidden;
+  height: calc(100vh - 157px);
+  // height: 100vh;
+  border-right: 1px solid lightgray;
+  &:hover {
+    overflow-y: auto;
+  }
+}
+.sectionArea{
+  h2 {
+    text-align: center;
+  }
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 24px;
+}
+
+#mainField {
+  margin: 0 4px 8px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#mainFieldSelect {
+  height: 34px;
+  margin: 0 4px 8px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#subField {
+  margin: 0 8px 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hide {
+  visibility: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.5s linear;
+}
+
+#fieldSelection {
+  margin: 0 4px 8px 8px;
+}
+
+.customSelect {
+  width: 70%;
+  border-color: #ccc;
+  border-radius: 12px;
+  height: 25px;
+}
+
+ion-datetime {
+  --padding-top: 0px
+}
+
+li {
+  font-size: 14px;
+}

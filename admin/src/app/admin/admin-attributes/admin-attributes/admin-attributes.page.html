@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start">
+      <img src="../../../assets/img/shop-logo.png" />
+    </div>
+    <ion-title>Attributes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+  <div class="main-container" style="width: 100%;">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="2" class="btnArea">
+          <div class="statusList">
+            <button (click)="showProductAttributes()"
+              [ngClass]="dataType=='productAttr'? 'activeBtn':''">Products</button>
+            <button (click)="showUserAttributes()" [ngClass]="dataType=='userAttr'? 'activeBtn':''">User</button>
+          </div>
+        </ion-col>
+        <ion-col size="10" class="displayArea" *ngIf="dataType == 'productAttr'">
+          <div class="alignCenter">
+            <h2>Product Attributes</h2>
+            <ion-button (click)="saveAttrData()" shape="round" class="btn-1 i-start" color="success">
+              <i class="flaticon-null-20 margin-icon"></i>
+              Save
+            </ion-button>
+          </div>
+          <div class="dFlex">
+            <div class="inputField">
+              <label for="">Field Name</label>
+              <input [(ngModel)]="productInput" type="text" required>
+            </div>
+
+            <ion-button (click)="addField()" [disabled]="!productInput"><i class="flaticon-plus"></i>
+              Add
+            </ion-button>
+          </div>
+
+          <h4>List of attributes for products</h4>
+          <div class="resultArea">
+            <table>
+              <thead>
+                <th>#</th>
+                <th>Field Name</th>
+                <th>Action</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of productArray, index as i">
+                  <td>{{i + 1}}</td>
+                  <td><span style="font-weight: bold;">{{item}}</span>
+                    <ng-container *ngIf="subValues[item]">
+                      <br>
+                      <div *ngFor="let subValue of subValues[item]; let j=index">
+                        {{subValue}} 
+                        <i class="flaticon-null-21 cursor-p" (click)="deleteSubValue(item,j)"></i>
+                      </div>
+                    </ng-container>
+
+                  </td>
+                  <td>
+                    <ion-button (click)="deleteField(i)" style="margin-right: 10px;"><i class="flaticon-null-21"></i></ion-button>
+                    <ion-button fill="outline" shape="round" size="small" (click)="addValueAlert(item)">Add value</ion-button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ion-col>
+
+        <ion-col size="10" class="displayArea" *ngIf="dataType == 'userAttr'">
+          <h4>Coming soon !</h4>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-title>Add New</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col style="text-align: center;">
+        <div class="upload-btn-wrapper">
+          <ion-button class="btn-2 i-start" style="margin-right: 0px;">
+            <i class="flaticon-null-16"></i>&nbsp;Add Images
+          </ion-button>
+          <input type="file" name="myfile" accept="image/x-png,image/gif,image/jpeg" (change)="openDocSelected($event.target.files, 'img')" />
+        </div>&nbsp;
+      </ion-col>
+
+      <ion-col style="text-align: center;">
+        <div class="upload-btn-wrapper">
+          <ion-button class="btn-2 i-start" style="margin-right: 0px;">
+            <i class="flaticon-null-16"></i>&nbsp;Upload PDF
+          </ion-button>
+          <input type="file" accept=".pdf" (change)="openDocSelected($event.target.files, 'doc')" />
+        </div>&nbsp;
+      </ion-col>
+    </ion-row>
+
+    <!-- <ion-row *ngIf="addSupportDetails.attachments">
+      <ion-col size="3" offset="1" *ngFor="let urlImage of addSupportDetails.attachments">
+        <div>
+          <img [src]="urlImage" alt="Issues Image">
+        </div>
+      </ion-col>
+    </ion-row> -->
+    <ion-row *ngIf="addSupportDetails.attachments">
+      <ion-col size="4" *ngFor="let urlImage of addSupportDetails.attachments.imageUrl">
+        <div class="imgBox">
+          <img [src]="urlImage" alt="Image" (click)="imgZoom(urlImage)">
+        </div>
+      </ion-col>
+      <ion-col size="4" *ngIf="addSupportDetails.attachments.pdfUrl">
+        <div class="imgBox" style="padding: 44px;">
+          <ion-button (click)="openDocument()">Uploaded Document <br><ion-icon name="cloud-download"></ion-icon></ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <div class="input-wrap">
+          <label>Title</label>
+          <ion-input class="form-input" type="text" placeholder="Write title here" [(ngModel)]="addSupportDetails.title">
+          </ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <div class="input-wrap">
+          <label>Description</label>
+          <ion-textarea class="form-input" rows="6" cols="20" placeholder="Write a description..."
+            [(ngModel)]="addSupportDetails.description"></ion-textarea>
+        </div>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-button expand="full" color="danger" (click)="onClickSubmit()"
+    [disabled]="!addSupportDetails.title && !addSupportDetails.description">Submit<ion-icon name="checkmark-circle"></ion-icon>
+  </ion-button>
+</ion-footer>

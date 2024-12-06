@@ -1,0 +1,167 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>{{'ADMIN_BANNERS.header_text' | translate}} 
+      <p style="font-size: 16px !important">*Note: Please use homepage (from sidemenu) for this feature if your system has been updated after 15th Feb</p></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<super-tabs>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Web Banners</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>App Banners</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container>
+    <!-- app banner -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <div *ngIf="showWebLoader; else showWebBanners" class="spinner">
+            <ion-spinner color="primary"></ion-spinner>
+          </div>
+          <ng-template #showWebBanners>
+            <!-- heading -->
+            <div class="list-header">
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-col class="img">
+                    <p>image</p>
+                  </ion-col>
+                  <ion-col class="name">
+                    <p>name</p>
+                  </ion-col>
+                  <ion-col class="action">
+                    <p>Action</p>
+                  </ion-col>
+                  <ion-col class="status">
+                    <p>Status</p>
+
+                  </ion-col>
+
+                </ion-row>
+              </ion-grid>
+            </div>
+            <!-- heading -->
+            <div class="list-container">
+            
+              <ion-list class="ion-no-padding row-border">
+                <ion-item *ngFor="let banner of bannersLength ; let i = index">
+                  <ion-grid class="ion-no-padding">
+                    <ion-row>
+                      <ion-col class="img">
+                        <ion-thumbnail class="thumbnail">
+                          <ion-img [src]="getWebBannerImage(i)"></ion-img>
+                        </ion-thumbnail>
+                      </ion-col>
+                      <ion-col class="name">
+                        <p class="ion-text-capitalize">Image {{i + 1}}</p>
+                      </ion-col>
+                      <ion-col class="action">
+                        <ion-button class="action-btn" fill="clear" (click)="editBanner(banner, i , 'web')">
+                          <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                        </ion-button>
+                      </ion-col>
+                      <ion-col class="status">
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox" (click)="changeStatus($event, i, 'web')" [checked]="getWebBannerStatus(i)">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </ion-list>
+            </div>
+          </ng-template>
+        </div>
+      </ion-content>
+    </super-tab>
+    <!-- app banner ends-->
+
+    <!-- web banner -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <div *ngIf="showAppLoader; else showAppBanners" class="spinner">
+            <ion-spinner color="primary"></ion-spinner>
+          </div>
+          <ng-template #showAppBanners>
+            <!-- heading -->
+            <div class="list-header">
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-col class="img">
+                    <p>image</p>
+                  </ion-col>
+                  <ion-col class="name">
+                    <p>name</p>
+                  </ion-col>
+                  <ion-col class="action">
+                    <p>Action</p>
+                  </ion-col>
+                  <ion-col class="status">
+                    <p>Status</p>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+            <!-- heading -->
+            <div class="list-container">
+              <div class="add-btn-wrap">
+               <!-- <ion-button shape="round" (click)="addAppBanner()">
+                  Add Banner
+                </ion-button>-->
+              </div>
+              <ion-list class="ion-no-padding row-border">
+                <ion-item *ngFor="let banner of bannersLength ; let i = index">
+                  <ion-grid class="ion-no-padding">
+                    <ion-row>
+                      <ion-col class="img">
+                        <ion-thumbnail class="thumbnail">
+                          <ion-img [src]="getAppBannerImage(i)"></ion-img>
+                        </ion-thumbnail>
+                      </ion-col>
+                      <ion-col class="name">
+                        <p class="ion-text-capitalize">Image{{i + 1}}</p>
+                      </ion-col>
+                      <ion-col class="action">
+                        <ion-button class="action-btn" fill="clear" (click)="editBanner(banner, i, 'app')">
+                          <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                        </ion-button>
+                        <!--<ion-button class="action-btn" fill="clear" (click)="deleteBannerConfirm(banner, 'app', i)">
+                          <i class="flaticon-null-21" slot="icon-only"></i>
+                        </ion-button>-->
+                      </ion-col>
+                      <ion-col class="status">
+                        <div class="toggle-btn">
+                          <label class="switch">
+                            <input type="checkbox" (click)="changeStatus($event, i, 'app')" [checked]="getAppBannerStatus(i)">
+                            <span class="slider round"></span>
+                          </label>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </ion-list>
+            </div>
+          </ng-template>
+        </div>
+      </ion-content>
+    </super-tab>
+    <!-- web banner ends-->
+
+
+  </super-tabs-container>
+</super-tabs>

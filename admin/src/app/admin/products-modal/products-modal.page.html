@@ -1,0 +1,53 @@
+<ion-header no-border>
+  <div class="cc-modal-header">
+    <div class="cc-search">
+      <ion-input type="text" placeholder="Search for products..." [(ngModel)]="productName"
+      (ionChange)="fireSearchQuery()"></ion-input>
+    </div>
+    <div>
+      <i class="flaticon-null-19" (click)="closeModal()"></i>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content>
+    <ion-list class="ion-no-padding list" *ngIf="productList.length" lines="none">
+      <ion-item class="ion-no-padding" *ngFor="let item of productList; let i = index">
+        <ion-grid class="ion-no-padding">
+          <ion-row class="ion-align-items-center">
+            <ion-col size="3">
+              <ion-thumbnail style="margin-left: 5%;" class="thumbnail">
+                <img class="loading" *ngIf="item.coverPic && !item.coverPic.thumb && item.coverPic.url"
+                  src="{{item.coverPic.url}}">
+                <img class="loading" *ngIf="item.coverPic && item.coverPic.thumb"
+                  src="{{item.coverPic.thumb}}">
+                <img *ngIf="!item.coverPic" src="assets/img/placeholder-img.jpg">
+              </ion-thumbnail>
+            </ion-col>
+            <ion-col size="6">
+              <p class="ion-text-capitalize ion-text-center">{{item.prodName}}</p>
+              <p class="ion-text-capitalize ion-text-center">Price:
+                {{item.discountedPrice | currency: currencyCode:true}}</p>
+            </ion-col>
+            <ion-col size="3">
+              <ng-container *ngIf="!item?.added">
+                <ion-button class="btn-sml" shape="round" fill="outline" (click)="addProduct(item)" *ngIf="!item.isPriceList">Add
+                </ion-button>
+              </ng-container>
+              <ion-button class="btn-sml" shape="round" fill="outline" color="success" *ngIf="item?.added">Added</ion-button>
+              <ion-button class="btn-sml" shape="round" fill="outline" (click)="addProduct(item)" *ngIf="item.isPriceList">Select Variant</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveBundleProduct()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer>

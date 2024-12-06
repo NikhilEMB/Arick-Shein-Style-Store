@@ -1,0 +1,43 @@
+.value-input {
+    max-width: 60%;
+}
+
+.c-b-link {
+  padding: 10px;
+  ion-text {
+    margin-left: 5px;
+  }
+  .flaticon-null-5::before {
+    font-size: 18px;
+    opacity: .6;
+  }
+}
+
+.toggle{
+  display: flex;
+  margin: 0% auto
+}
+
+.data-field{
+  display: block;
+}
+
+ion-input{
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.border{
+  border: 1px solid gray;
+  cursor: pointer
+}
+
+ion-col{
+  border: 1px solid gray;
+  padding-top: 10px;
+  padding-bottom: 10px
+}
+
+ion-row:first-child{
+  background: lightgray
+}

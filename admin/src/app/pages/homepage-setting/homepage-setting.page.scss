@@ -1,0 +1,21 @@
+.widget-type{color: #999;margin-left: 12px;}
+.section{
+    display: block;
+    justify-content: center;
+    padding: 10px
+}
+.sectionBlock{
+    display: flex;
+    justify-content: space-between;
+    width: 1000px
+}
+ion-list{
+    display: flex;
+    margin-top: -20px;
+    margin-left: 10px
+}
+.crop{
+    overflow: hidden;
+    width: 200px;
+    text-overflow: ellipsis;
+}

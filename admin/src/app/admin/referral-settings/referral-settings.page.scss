@@ -1,0 +1,43 @@
+.main{
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 30px;
+    background: white;
+    text-align: center;
+    width: 60vw;
+    margin: 0% auto
+}
+
+.active{
+    font-size: large;
+    display: inline-flex;
+    justify-content: space-between;
+    width: 200px
+}
+
+input{
+    margin-top: 10px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 30px;
+    padding: 10px
+}
+
+ion-toggle{
+    margin-top: -10px
+}
+
+.cashback {
+    &-type {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        .flat {
+            margin-right: 10px;
+        }
+        .percent {
+            margin-left: 10px;
+        }
+    }
+}

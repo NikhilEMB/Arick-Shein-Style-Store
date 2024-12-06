@@ -1,0 +1,1018 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo"
+      slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">{{vendorDetails.name}} (Vendor)
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs no-shadow no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Details</ion-label>
+    </super-tab-button>
+    <super-tab-button *ngIf="multipleVendorInvoices">
+      <ion-label>Invoice Settings</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)="loadProducts()">
+      <ion-label>Products</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)="loadOrders()">
+      <ion-label>Orders</ion-label>
+    </super-tab-button>
+    <super-tab-button (click)="loadReports()">
+      <ion-label>Reports</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+  <super-tabs-container swipeEnabled="false">
+
+    <super-tab>
+      <ion-content>
+        <div class="main-btn">
+          <ion-button (click)="saveVendor()"
+            shape="round"
+            class="btn-1 i-start"
+            color="success">
+            <i class="flaticon-null-20 margin-icon"></i>
+            Save Details
+          </ion-button>
+        </div>
+        <ion-row>
+          <ion-col size="2" id="scroll1">
+            <div class="statusList">
+              <div *ngIf="details.length">
+                <p style="z-index: 1000" *ngFor='let item of details; let idx=index'
+                  (click)="onClickStatustItem(idx,item)"
+                  [ngStyle]="{'background-color': activeProjectIndex === idx ? 'var(--ion-color-categories-background)' : 'white' }">
+                  {{item}}
+                </p>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="10">
+            <div class="main-container" style="border-left: none;">
+              <ion-row>
+                <ion-col size="12">
+                  <ion-row *ngIf="buttonActive === 'Profile'">
+                    <ion-col size="4">
+                      <div class="input-wrap">
+                        <ion-label>Display name of Vendor</ion-label>
+                        <ion-input class="form-input"
+                          [(ngModel)]="vendorDetails.displayName"></ion-input>
+                      </div>
+                    </ion-col>
+                    <ion-col size="4">
+                      <div class="flex-space-between" style="justify-content: space-evenly">
+                        <div>
+                          <ion-label>Display Profile</ion-label>
+                        </div>
+                        <div class="upload-btn-wrapper">
+                          <button [disabled]="vendorDetails.image.url"
+                            class="upload-btn btn-1 i-start"
+                            (click)="uploadImage($event.target.files)"> <i
+                              class="flaticon-null-16"></i>Upload Profile Image</button>
+                          <input [disabled]="vendorDetails.image.url" type="file" accept="image/*" name="myfile"
+                            (change)="uploadImage($event.target.files)" />
+                        </div>
+                      </div>
+                      <br>
+                      <div class="img-container">
+                        <div class="no-img"
+                          *ngIf="!vendorDetails.image.url">
+                          <p>No attached image</p>
+                        </div>
+                        <div *ngIf="vendorDetails && vendorDetails.image.url">
+                          <div class="img-wrap">
+                            <img class="category-img"
+                              [src]="vendorDetails.image.url" />
+                            <div class="overlay">
+                              <ion-button class="btn-2 remove"
+                                shape="round"
+                                fill="clear"
+                                color="danger"
+                                (click)="removeImage()">
+                                <ion-icon name="trash"
+                                  slot="icon-only"></ion-icon>
+                              </ion-button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ion-col>
+                    <ion-col size="4">
+                      <div class="input-wrap">
+                        <div style="display: flex; justify-content: center">
+                          <p>Show user details to vendor</p>&nbsp;&nbsp;
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input color="primary"
+                                type="checkbox"
+                                [checked]="vendorDetails.showUserDetails"
+                                (click)="showUserDetailsToVendor()">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div class="input-wrap">
+                        <ion-label>Description</ion-label>
+                        <ion-textarea class="form-input" rows="6" cols="20"
+                          [(ngModel)]="vendorDetails.description"></ion-textarea>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6" style="margin-top: 8px;">
+                      <div
+                        *ngIf='vendorDetails && vendorDetails.vendorAddress && vendorDetails.vendorAddress.address'
+                        style="border: 1px solid lightgray;padding: 8px;">
+                        <b>Current Address</b>
+                        <ion-button (click)="openAreaModal()" style="margin-bottom: 5px; margin-left: 8px;">
+                          Add Location of Vendor through Map
+                        </ion-button>
+                        <br><br>
+                        <ion-row>
+                          <ion-col size="2">
+                            <p>Address:</p>
+                          </ion-col>
+                          <ion-col size="10">
+                            <ion-input class="form-input"
+                            [(ngModel)]="vendorDetails.vendorAddress.address.address">
+                          </ion-input>
+                          </ion-col>
+
+                          <ion-col size="2">
+                            <p>State:</p>
+                          </ion-col>
+                          <ion-col size="10">
+                            <ion-input class="form-input"
+                            [(ngModel)]="vendorDetails.vendorAddress.address.state">
+                          </ion-input>
+                          </ion-col>
+
+                          <ion-col size="2">
+                            <p>City:</p>
+                          </ion-col>
+                          <ion-col size="10">
+                            <ion-input class="form-input"
+                            [(ngModel)]="vendorDetails.vendorAddress.address.city">
+                          </ion-input>
+                          </ion-col>
+
+                          <ion-col size="2">
+                            <p>Pincode:</p>
+                          </ion-col>
+                          <ion-col size="10">
+                            <ion-input class="form-input" type="number"
+                            [(ngModel)]="vendorDetails.vendorAddress.address.pincode">
+                          </ion-input>
+                          </ion-col>
+                        </ion-row> 
+                      </div>
+                    </ion-col>
+                    <ion-col size="12" *ngIf="vendorDetails.qrCode">
+                      <p>Vendor Profile QR Code</p>
+                      <div class="uploaded-doc-imgs">
+                        <a (click)="openImg(vendorDetails.qrCode)">
+                          <ion-img [src]="vendorDetails.qrCode"></ion-img>
+                        </a>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row *ngIf="buttonActive === 'Region'">
+                    <ion-col size="6">
+                      <div class="data-field" style="align-items: center; justify-content: start;">
+                        <p>Region</p>
+                        <ion-row>
+                          <ion-col size="12">
+                            <ion-select class="regionSelect"
+                              *ngIf="regions && regionsAvailable"
+                              (ionChange)="addRegion($event)"
+                              placeholder="Select Region"
+                              [disabled]="regionsAvailable && regionsAvailable.length == 0">
+                              <ion-select-option [value]="region.id"
+                                *ngFor="let region of regionsAvailable">{{region.name}}
+                              </ion-select-option>
+                            </ion-select>
+                            <p class="m-l-5-p info-txt"
+                              *ngIf="regionsAvailable && regionsAvailable.length == 0">
+                              No regions
+                              available. Regions should be active and not assigned to
+                              any vendor</p>
+                          </ion-col>
+                        </ion-row>
+                      </div>
+                    </ion-col>
+                    <ion-col size="6">
+                      <div class="data-field" style="justify-content: space-evenly; align-items: center;">
+                        <p>Current Region</p>
+                        <ion-row>
+                          <ion-col size="12">
+                            <p>{{currentRegion}}</p>
+                            <button class="removeBtn"
+                              (click)="removeRegion()">Remove</button>
+                          </ion-col>
+                        </ion-row>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row *ngIf="buttonActive === 'Categories & Brands'">
+                    <ion-col size="12">
+                      <div *ngIf="!showNoCategories"
+                        style="padding-left: 10px; margin-left: 20px;">
+                        <ion-text color="danger">
+                          <p>Select Categories & Brands under which vendor can upload
+                            products.</p>
+                        </ion-text>
+                      </div>
+                      <div
+                        style="display: flex;flex-wrap: nowrap;flex-direction: row;align-content: center;justify-content: space-around;align-items: flex-start;margin-left: 20px; border-left: 1px solid #ccc;">
+                        <div class="categories-container">
+                          <div class="no-data"
+                            *ngIf="showNoCategories"
+                            text-center>
+                            <img src="assets/img/no-category.png"
+                              alt="">
+                            <h6>No categories</h6>
+                          </div>
+                          <!-- <div class="product-search-wrap" *ngIf="!showNoCategories">
+                            <ion-searchbar [(ngModel)]="searchCategory" mode="ios"></ion-searchbar>
+                          </div> -->
+                          <div class="categories-wrapper"
+                            *ngIf="!showNoCategories">
+                            <ion-list>
+                              <ion-list-header>
+                                <ion-label class="np-list-header"
+                                  style="font-size: 16px;font-weight: bold;">Categories
+                                </ion-label>
+                              </ion-list-header>
+                              <div *ngFor="let category of categories">
+                                <div
+                                  style="display: flex;justify-content: space-between;align-items: center;">
+                                  <ion-item
+                                    (click)="onClickCategoryCheckBox(category.id)"
+                                    style="width: 100%;">
+                                    <ion-label>{{category.name}}</ion-label>
+                                    <ion-checkbox color="primary"
+                                      slot="start"
+                                      [checked]="editCheckBoxValue(category.id)">
+                                    </ion-checkbox>
+                                  </ion-item>
+                                  <div (click)="getSubcategories(category.id)"
+                                    slot="end"
+                                    style="z-index: 9999;margin-right: 3%;opacity: .8;"
+                                    *ngIf="category.isSubcategories">
+                                    <i class="flaticon-null-13"
+                                      *ngIf="(listOfSubcategoriesInView.hasOwnProperty(category.id) && !listOfSubcategoriesInView[category.id].active) || !listOfSubcategoriesInView.hasOwnProperty(category.id)"></i>
+                                    <i class="flaticon-null-14"
+                                      *ngIf="listOfSubcategoriesInView.hasOwnProperty(category.id) && listOfSubcategoriesInView[category.id].active"></i>
+                                  </div>
+                                </div>
+                                <div
+                                  *ngIf="(listOfSubcategories[category.id] && listOfSubcategories[category.id].length) && listOfSubcategoriesInView[category.id].active"
+                                  style="margin-left: 10%;">
+                                  <ng-container *ngFor="let subCat of listOfSubcategories[category.id]">
+                                    <div style="display: flex;justify-content: space-between;align-items: center;">
+                                      <ion-item (click)="onClickCategoryCheckBox(subCat.id)" style="width: 100%;">
+                                        <ion-label>{{subCat.name}}</ion-label>
+                                        <ion-checkbox color="primary" slot="start"[checked]="editCheckBoxValue(subCat.id)"></ion-checkbox>
+                                      </ion-item>
+                                      <!-- Sub-SubCategory Start -->
+                                      <div (click)="getSubOfSubCategories(category.id, subCat.id)" slot="end"
+                                        style="z-index: 9999;margin-right: 3%;opacity: .8;" *ngIf="subCat.isSubcategories">
+                                        <i class="flaticon-null-13" *ngIf="!subOfSubCategoryToggle[subCat.id]?.active"></i>
+                                        <i class="flaticon-null-14" *ngIf="subOfSubCategoryToggle[subCat.id]?.active"></i>
+                                      </div>
+                                    </div>
+                                    <ng-container *ngIf="subOfSubCategoryToggle[subCat.id]?.active && subOfSubCategories[subCat.id].length">
+                                      <div style="margin-left: 10%;">
+                                        <ng-container *ngFor="let subSubCat of subOfSubCategories[subCat.id]">
+                                          <ion-item (click)="onClickCategoryCheckBox(subSubCat.id)">
+                                            <ion-label>{{subSubCat.name}}</ion-label>
+                                            <ion-checkbox color="primary" slot="start" [checked]="editCheckBoxValue(subSubCat.id)"></ion-checkbox>
+                                          </ion-item>
+                                        </ng-container>
+                                      </div>
+                                    </ng-container>
+                                    <!-- Sub-SubCategory End -->
+                                  </ng-container>
+                                </div>
+                              </div>
+                            </ion-list>
+                          </div>
+        
+                        </div>
+                        <div class="brands-container">
+                          <!-- <div class="product-search-wrap" *ngIf="!showNoBrands">
+                            <ion-searchbar [(ngModel)]="searchBrand" mode="ios"></ion-searchbar>
+                          </div> -->
+                          <ion-list *ngIf="!showNoBrands && brands.length">
+                            <ion-list-header>
+                              <ion-label class="np-list-header"
+                                style="font-size: 16px;font-weight: bold;">Brands
+                              </ion-label>
+                            </ion-list-header>
+                            <div *ngFor="let brand of brands">
+                              <ion-item (click)="onClickBrandCheckBox(brand.id)"
+                                style="width: 100%;">
+                                <ion-label>{{brand.name}}</ion-label>
+                                <ion-checkbox color="primary"
+                                  slot="start"
+                                  [checked]="editBrandCheckBoxValue(brand.id)">
+                                </ion-checkbox>
+                              </ion-item>
+                            </div>
+                          </ion-list>
+                        </div>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                  <div *ngIf="buttonActive === 'Settings'">
+                    <ion-row>
+                      <ion-col size="6">
+                        <div class="data-field" style="justify-content: flex-start;">
+                          <p>Active</p>
+                          <div class="toggle-btn">
+                            <label class="switch">
+                              <input type="checkbox"
+                                *ngIf="receivedVendorData"
+                                (click)="toggleActive()"
+                                [checked]="receivedVendorData.active">
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                        </div>
+                      </ion-col>
+                      <ion-col size="6">
+                        <div class="data-field" style="justify-content: flex-start; align-items: center">
+                          <p>Copy products of this vendor</p>
+                          <ion-row>
+                            <ion-col size="12">
+                              <button class="removeBtn"
+                                (click)="copyProducts()">Select Products</button>
+                            </ion-col>
+                          </ion-row>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                  
+                      <!-- <ion-col size="12">
+                        <div class="input-wrap">
+                          <ion-label>Address</ion-label>
+                          <ion-textarea type="text" class="form-input" [(ngModel)]="vendorDetails.address"></ion-textarea>
+                        </div>
+                      </ion-col> -->
+                      <ion-col size="6">
+                        <div class="input-wrap">
+                          <div style="display: flex">
+                            <ion-label>Auto approve all products added by vendor</ion-label>
+                            <ion-toggle
+                              [(ngModel)]="vendorDetails.approveAllProducts">
+                            </ion-toggle>
+                          </div>
+                        </div>
+                      </ion-col>
+                      <ion-col size="6">
+                        <div class="input-wrap">
+                          <div style="display: flex">
+                            <ion-label>Max products vendor can add
+                            </ion-label>
+                            <input type="number"
+                              [(ngModel)]="vendorDetails.productLimit"
+                              style="width: 150px;text-align: center; margin-left: 5px;" />
+                          </div>
+                        </div>
+                      </ion-col>
+                      <ion-col size="6">
+                        <div class="input-wrap">
+                          <div style="display: flex">
+                            <ion-label>Max no of appoiments allowed for vendor
+                            </ion-label>
+                            <input type="number"
+                              [(ngModel)]="vendorDetails.appointmentSlotLimit"
+                              style="width: 150px;text-align: center; margin-left: 6px;" />
+                          </div>
+                        </div>
+                      </ion-col>
+                      <ion-col size="6">
+                        <div class="input-wrap">
+                          <div style="display: flex">
+                            <ion-label>Minimum Order Amount
+                            </ion-label>
+                            <input type="number"
+                              [(ngModel)]="vendorDetails.minOrderAmount"
+                              style="width: 150px;text-align: center; margin-left: 6px;" />
+                          </div>
+                        </div>
+                      </ion-col>
+                      <ion-col size="6">
+                        <div class="input-wrap">
+                          <div style="display: flex">
+                            <ion-label>Vendor Exclusive</ion-label>
+                            <ion-toggle [(ngModel)]="vendorDetails.isExclusive">
+                            </ion-toggle>
+                          </div>
+                        </div>
+                        <ion-text color="danger">
+                          <p>Note: This feature will allow order from only one vendor
+                          </p>
+                        </ion-text>
+                      </ion-col>
+                      <ion-col size="6">
+                        <div class="input-wrap">
+                          <ion-label>Delivery Integration Pickup Id</ion-label>
+                          <ion-input class="form-input"
+                            [(ngModel)]="vendorDetails.deliveryIntegration.pickupId"></ion-input>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="isUniversal">
+                      <ion-col>
+                        <div class="input-wrap">
+                        <ion-label>Slug Name <ion-text color="danger">(<b class="cursor-p" 
+                          (click)="sharedService.presentSlugAlert()">CLICK HERE</b> for Slug Instructions)</ion-text>
+                        </ion-label>
+                         <ion-input type="text" class="form-input" [(ngModel)]='slug.name'></ion-input>
+                      </div>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-content>
+    </super-tab>
+
+    <!-- Invoice Settings -->
+    <super-tab *ngIf="multipleVendorInvoices">
+      <ion-content>
+        <div class="main-container">
+          <ion-row>
+            <ion-col size="12">
+              <div class="input-wrap">
+                <ion-label>Billing Name</ion-label>
+                <ion-input class="form-input"
+                  [(ngModel)]="invoiceSettings.billingName"></ion-input>
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <div class="input-wrap">
+                <ion-label>Billing Address</ion-label>
+                <ion-input class="form-input"
+                  [(ngModel)]="invoiceSettings.address"></ion-input>
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <div class="input-wrap">
+                <ion-label>Telephone Number</ion-label>
+                <ion-input class="form-input"
+                  [(ngModel)]="invoiceSettings.phoneNo"></ion-input>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="input-wrap">
+                <ion-label>GST Number</ion-label>
+                <ion-input class="form-input"
+                  [(ngModel)]="invoiceSettings.gstNo"></ion-input>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="input-wrap">
+                <ion-label>PAN Number</ion-label>
+                <ion-input class="form-input"
+                  [(ngModel)]="invoiceSettings.panNo"></ion-input>
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <div class="input-wrap">
+                <ion-label>Custom Message In Invoice</ion-label>
+                <ion-textarea rows="4"
+                  type="text"
+                  class="form-input"
+                  [(ngModel)]="invoiceSettings.customMessage"></ion-textarea>
+              </div>
+            </ion-col>
+
+            <ion-col size="12">
+              <div class="data-field">
+                <p>Show admin logo on invoice</p>
+                <div class="toggle-btn">
+                  <label class="switch">
+                    <input type="checkbox"
+                      (click)="showAdminLogoToggle()"
+                      [checked]="invoiceSettings.logo.adminLogo">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" [hidden]="invoiceSettings.logo.adminLogo">
+              <div class="justify-content">
+                <p>Logo (for Invoice) (Max Size: 200px by 200px)
+                  <ion-text color="danger">
+                    <p>Only image files are allowed</p>
+                  </ion-text>
+                </p>
+                <div class="upload-btn-wrapper">
+                  <button *ngIf="!invoiceSettings.logo.url"
+                    class="upload-btn btn-1 i-start"> <i
+                      class="flaticon-null-16"></i>Upload</button>
+                  <input *ngIf="!invoiceSettings.logo.url"
+                    type="file"
+                    name="myfile"
+                    (change)="uploadInvoiceImg($event.target.files, 'logo')"
+                    accept="image/*" />
+                </div>
+                <ion-button (click)="removeImg('logo')"
+                  fill="outline"
+                  color="dark"
+                  shape="round"
+                  size="small"
+                  *ngIf="invoiceSettings.logo.url">
+                  Remove
+                </ion-button>
+              </div>
+              <div *ngIf="invoiceSettings.logo.url"
+                class="ion-text-center">
+                <img src="{{invoiceSettings.logo.url}}"
+                  class="sign-img">
+              </div>
+            </ion-col>
+
+            <ion-col>
+              <div class="justify-content">
+                <p>Authorized Signatory (for Invoice) (Max Size: 200px by
+                  200px)<ion-text color="danger">
+                    <p>Only image files are allowed</p>
+                  </ion-text>
+                </p>
+                <div class="upload-btn-wrapper">
+                  <button *ngIf="!invoiceSettings.signature"
+                    class="upload-btn btn-1 i-start"> <i
+                      class="flaticon-null-16"></i>Upload</button>
+                  <input *ngIf="!invoiceSettings.signature"
+                    type="file"
+                    name="myfile"
+                    (change)="uploadInvoiceImg($event.target.files,'sign')"
+                    accept="image/*" />
+                </div>
+                <!-- <ion-button (click)="openImageActionSheet('sign')" fill="outline" shape="round" size="small" *ngIf="!signature">
+                  Upload
+                </ion-button> -->
+                <ion-button (click)="removeImg('sign')"
+                  fill="outline"
+                  color="dark"
+                  shape="round"
+                  size="small"
+                  *ngIf="invoiceSettings.signature">
+                  Remove
+                </ion-button>
+              </div>
+              <div *ngIf="invoiceSettings.signature"
+                class="ion-text-center">
+                <img src="{{invoiceSettings.signature}}"
+                  class="sign-img">
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+        <ion-footer no-border
+          class="page-footer">
+          <div class="main-container">
+            <ion-button (click)="saveVendor()"
+              shape="round"
+              class="btn-1 i-start"
+              color="success">
+              <i class="flaticon-null-20 margin-icon"></i>
+              Save Invoice Settings
+            </ion-button>
+          </div>
+        </ion-footer>
+      </ion-content>
+    </super-tab>
+
+    <!-- Products Tab -->
+    <super-tab>
+      <ion-content class="ion-no-padding">
+        <div class="main-container">
+          <div class="no-data"
+            *ngIf="showNoProducts"
+            text-center>
+            <img src="assets/img/no-product.png"
+              alt="">
+            <h6>No products</h6>
+          </div>
+          <!-- <div *ngIf="showSearchLoader" class="spinner">
+      <ion-spinner color="primary"></ion-spinner>
+    </div> -->
+
+          <!-- heading -->
+
+          <div class="list-header"
+            *ngIf="!showNoProducts">
+            <ion-grid class="ion-no-padding">
+              <ion-row class="ion-align-items-center ion-justify-content-center"
+                class="total-products">
+                <ion-col size="4"
+                  style="text-align: left;font-size: larger;text-decoration: underline;">
+                  Total Products: {{productsData.length}}
+                </ion-col>
+                <ion-col size="8">
+                  <div class="vertical-center"
+                    style="margin-top: -20px;">
+                    <!-- <b style="font-size: larger;">Commission:</b> -->
+                    <ion-label>Set Single Commission For All Products(%):
+                    </ion-label>
+                    <ion-list class="commission-list">
+                      <ion-radio-group [value]="commissionType">
+                        <ion-item class="bs-links"
+                          lines="none">
+                          <!-- <ion-radio slot="start" value="single"></ion-radio> -->
+                          <ion-input type="number"
+                            class="form-input"
+                            style="width: 100px;"
+                            [(ngModel)]="singleCommission"></ion-input>
+                        </ion-item>
+                        <ion-item class="bs-links"
+                          lines="none">
+                          <ion-button (click)="setCommission()"
+                            fill="outline"
+                            shape="round"
+                            size="small">
+                            Set
+                          </ion-button>
+                          <!-- <ion-radio slot="start" value="productWise"></ion-radio>
+                          <ion-label>Product Wise</ion-label> -->
+                        </ion-item>
+                      </ion-radio-group>
+                    </ion-list>
+                  </div>
+                </ion-col>
+                <!-- <ion-col size="6" style="text-align: end;" *ngIf="totalProductsLoader">
+            <ion-spinner name="dots" style="width: 20px;"></ion-spinner>
+          </ion-col> -->
+              </ion-row>
+              <ion-row>
+                <ion-col class="img">
+                  <p>Image</p>
+                </ion-col>
+                <ion-col class="name">
+                  <p>Name</p>
+                </ion-col>
+                <ion-col class="price">
+                  <p>Price</p>
+                </ion-col>
+                <ion-col class="price">
+                  <p>Commission(%)</p>
+                </ion-col>
+                <ion-col class="price">
+                  <p>Approved</p>
+                </ion-col>
+                <ion-col class="action">
+                  <p>Action</p>
+                </ion-col>
+                <ion-col class="action">
+                  <p>Edit</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <!-- heading -->
+          <!-- product  list Start -->
+          <div class="list-container"
+            *ngIf="productsData && productsData.length !== 0 && !showNoProducts">
+            <!-- Search Bar -->
+            <ion-searchbar animated [(ngModel)]='searchProduct' placeholder="Search product..." showCancelButton="focus" mode="ios"></ion-searchbar>
+
+            <ion-list class="categories-list">
+              <ion-item class="ion-no-padding"
+                no-lines
+                no-border
+                *ngFor="let item of productsData | filter: searchProduct; let i = index">
+                <div class="detail-wrapper">
+                  <div class="product-wrapper">
+                    <ion-grid class="ion-no-padding ion-align-items-center">
+
+                      <ion-row class="row-background ion-align-items-center">
+                        <ion-col class="img">
+                          <ion-thumbnail style="margin-left: 5%;"
+                            class="product-img-wrapper">
+                            <img class="loading"
+                              *ngIf="item.coverPic && !item.coverPic.thumb && item.coverPic.url"
+                              src="{{item.coverPic.url}}">
+                            <img class="loading"
+                              *ngIf="item.coverPic && item.coverPic.thumb"
+                              src="{{item.coverPic.thumb}}">
+                            <img *ngIf="!item.coverPic"
+                              src="assets/img/placeholder-img.jpg">
+                          </ion-thumbnail>
+                        </ion-col>
+                        <ion-col class="name">
+                          <div
+                            [ngClass]="{'product-active': item.status, 'product-inactive': !item.status}">
+                          </div>
+                          <p text-capitalize
+                            text-center>{{item.prodName}}</p>
+                        </ion-col>
+                        <ion-col class="price">
+                          <p *ngIf="!(item.priceList && item.priceList.length)">
+                            {{item.prodPrice}}</p>
+                          <p *ngIf="(item.priceList && item.priceList.length)">
+                            {{item.priceList[0].price}}</p>
+                        </ion-col>
+                        <ion-col class="price">
+                          <span>
+                            <ion-input type="number"
+                              class="form-input"
+                              [(ngModel)]="item.commission"></ion-input>
+                          </span>
+                        </ion-col>
+                        <ion-col class="action">
+                          <ion-toggle [(ngModel)]="item.approved"></ion-toggle>
+                        </ion-col>
+                        <ion-col class="action">
+                          <ion-button (click)="saveProduct(item, item.id)"
+                            color="success"
+                            fill="outline"
+                            shape="round"
+                            size="small">
+                            Save
+                          </ion-button>
+                        </ion-col>
+                        <ion-col class="action">
+                          <ion-button class="action-btn" fill="clear" (click)="editProduct(item)">
+                            <i class="flaticon-pencil-edit-button" slot="icon-only"></i>
+                          </ion-button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </div>
+                  <!-- <div class="variant-wrapper" *ngIf="item.isPriceList">
+              <ion-grid >
+                <ion-row *ngFor="let variant of item.priceList; let i=index">
+                  <ion-col class="variant-title"><div class="variant-title-text">{{variant.weight}}</div></ion-col>
+                  <ion-col class="price"><ion-input class="form-input" type="number" [(ngModel)]="variant.price"></ion-input></ion-col>
+                  <ion-col class="price"><ion-input class="form-input" type="number" [(ngModel)]="variant.price"></ion-input></ion-col>
+                  <ion-col class="action"></ion-col>
+                </ion-row>
+              </ion-grid>
+            </div> -->
+                </div>
+              </ion-item>
+            </ion-list>
+
+            <!-- <ion-grid *ngIf="productsData && productsData.length !== 0 && !showNoProducts">
+      <ion-row>
+        <ion-col style="text-align: start;">
+          <ion-button (click)="loadPreviousProducts()" size="small" shape="round" [disabled]="noPreviousProducts">
+            <span><i class="flaticon-null-8"></i></span>Previous
+          </ion-button>
+        </ion-col>
+        <ion-col style="text-align: end;">
+          <ion-button (click)="loadMoreProducts()" size="small" shape="round" [disabled]="noMoreProducts">
+            Next <span><i class="flaticon-null-7"></i></span>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid> -->
+          </div>
+          <!-- product  list End-->
+          <ion-grid class="row-border ion-no-padding"
+            *ngIf="productsData.length === 0 && !showNoProducts">
+            <ion-row class="row-background"
+              *ngFor="let x of [1,2,3,4,5,6,7,8,9,10]">
+              <ion-col size="5">
+                <ion-thumbnail>
+                  <ion-skeleton-text style="margin: auto;"></ion-skeleton-text>
+                </ion-thumbnail>
+              </ion-col>
+              <ion-col size="7">
+                <h3>
+                  <ion-skeleton-text animated
+                    style="width: 90%;margin: auto;"></ion-skeleton-text>
+                </h3>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+    <!-- Orders Tab -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+
+          <div class="footerBtn">
+            <ion-button (click)='checkProductToDeliver()'>
+              Check products to deliver
+            </ion-button>
+          </div>
+          
+            <div style="display: flex;align-items: center;">
+              <select id="days"
+                (change)="selectDate($event.target.value)">
+                <option value=7
+                  selected>Last 7 days</option>
+                <option value=30>Last 30 days</option>
+              </select>&nbsp;&nbsp;
+              <p>OR</p>&nbsp;&nbsp;
+              <div
+                style="display: flex;align-items: center;justify-content: space-between;">
+                <strong style="font-size: medium;">From:</strong>&nbsp;<input
+                  type="date"
+                  [(ngModel)]='startDate'
+                  style="width: 80%;">
+              </div>&nbsp;&nbsp;
+              <div
+                style="display: flex;align-items: center;justify-content: space-between;">
+                <strong style="font-size: medium;">To:</strong>&nbsp;<input
+                  type="date"
+                  [(ngModel)]='endDate'
+                  style="width: 80%;">
+              </div>&nbsp;&nbsp;&nbsp;&nbsp;
+              <div class="footerBtn">
+                <ion-button (click)='filterOrder()'
+                  style="margin: 0px;">
+                  Filter Orders
+                </ion-button>&nbsp;&nbsp;
+                <ion-button (click)='clearFilter()'
+                  style="margin: 0px;">
+                  Clear Dates
+                </ion-button>
+              </div>
+            </div>
+            <br>
+            <div class="no-data"
+              *ngIf="!orders.length && !vendorOrdersLoading; else showOrders"
+              text-center>
+              <img src="assets/img/no-orders.png"
+                alt="">
+              <h6>No Orders</h6>
+            </div>
+            <ng-template #showOrders>
+              <div class="list-header">
+                <ion-grid class="ion-no-padding">
+                  <ion-row>
+                    <ion-col class="name">
+                      <p>Customer</p>
+                    </ion-col>
+                    <ion-col class="name">
+                      <p>Products</p>
+                    </ion-col>
+                    <ion-col class="name">
+                      <p>Vendor Amount</p>
+                    </ion-col>
+                    <ion-col class="id">
+                      <p>Order ID</p>
+                    </ion-col>
+                    <ion-col class="date">
+                      <p>Date</p>
+                    </ion-col>
+                    <ion-col class="status">
+                      <p>Status</p>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </div>
+              <br>
+              <div class="list-container-orders">
+                <div *ngIf="vendorOrdersLoading" class="spinner">
+                  <ion-spinner color="primary"></ion-spinner>
+                </div>
+                <ng-container *ngIf="!vendorOrdersLoading">
+                  <ion-grid>
+                    <ng-container *ngFor="let order of orders; let i=index">
+                      <ion-row class="order-row"
+                        *ngIf="order.details"
+                        (click)="onClickViewOrder(order.details.orderId)">
+                        <ion-col class="name">
+                          {{order.details.userName}}
+                        </ion-col>
+                        <ion-col class="name">
+                          <p *ngIf="order.products[0]">{{order.products[0].name}}
+                            <span *ngIf="order.products.length > 1">+
+                              {{order.products.length - 1}} more</span>
+                          </p>
+                        </ion-col>
+                        <ion-col class="name">
+                          {{order.details.totalAmountToPaid}}
+                        </ion-col>
+                        <ion-col class="id">
+                          <p>{{order.details.orderId}}</p>
+                        </ion-col>
+                        <ion-col class="date">
+                          <p>{{order.order.createdAt.toDate() | date :'short'}}</p>
+                        </ion-col>
+                        <ion-col class="status"
+                          [ngClass]="order.details.status">
+                          <p>{{order.details.status}}</p>
+                        </ion-col>
+                      </ion-row>
+                    </ng-container>
+                    <br>
+                    <p><strong>Total order amount for vendor</strong>:
+                      {{totalOrderAmt.toFixed(2)}}</p>
+                    <br>
+                  </ion-grid>
+                </ng-container>
+              </div>
+  
+            </ng-template>
+          
+          <ion-infinite-scroll threshold="100px"
+            (ionInfinite)="loadMoreOrders($event)">
+            <ion-infinite-scroll-content loadingSpinner="bubbles"
+              loadingText="Loading more orders...">
+            </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        </div>
+      </ion-content>
+    </super-tab>
+    <super-tab>
+      <ion-content>
+        <div class="main-container">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="6">
+                <ion-item>
+                  <ion-label>Start Date</ion-label>
+                  <ion-datetime displayFormat="DD MM YYYY"
+                    [max]="endDate"
+                    placeholder="Select Date"
+                    [(ngModel)]="startDate"></ion-datetime>
+                </ion-item>
+              </ion-col>
+              <ion-col size="6">
+                <ion-item>
+                  <ion-label>End Date</ion-label>
+                  <ion-datetime displayFormat="DD MM YYYY"
+                    [min]="startDate"
+                    placeholder="Select Date"
+                    [(ngModel)]="endDate"></ion-datetime>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col style="text-align: center">
+                <ion-button style="margin-right: 10px"
+                  (click)="getReport()">Generate Report</ion-button>
+                <ion-button color="tertiary"
+                  (click)="exportReport()">Export Generated Report</ion-button>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="reports.length">
+              <ion-col size="6"
+                class="ion-text-center">
+                <h3>Total Price</h3>
+                <p>{{totalPrice | currency: currencyCode:true}}</p>
+              </ion-col>
+              <ion-col size="6"
+                class="ion-text-center">
+                <h3>Total Commission</h3>
+                <p>{{totalCommission | currency: currencyCode:true}}</p>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="reports.length; else noData">
+              <ion-col>
+                <div class="report-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th class="items">Product</th>
+                        <th class="sales">Sales</th>
+                        <th class="items">No. of items Sold</th>
+                        <th class="items">Total Commission</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let report of reports; let i=index">
+                        <tr *ngFor="let product of report.products">
+                          <td>{{product.name}}</td>
+                          <td>{{product.sales | currency: currencyCode:true}}
+                          </td>
+                          <td>{{product.quantity}}</td>
+                          <td>{{product.commission}}</td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ng-template #noData>
+              <p class="t-a-c m-t-16">No Data Available</p>
+            </ng-template>
+          </ion-grid>
+        </div>
+      </ion-content>
+    </super-tab>
+  </super-tabs-container>
+</super-tabs>

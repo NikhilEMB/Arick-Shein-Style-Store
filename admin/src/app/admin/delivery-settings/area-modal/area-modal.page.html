@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add Area</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <div class="input-wrap">
+          <ion-label>Store Address</ion-label>
+          <ion-textarea type="text" row="3" class="form-input" [(ngModel)]="address.address">
+          </ion-textarea>
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div>
+          <p>City</p>
+          <ion-input type="text" class="form-input" [(ngModel)]="address.city"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="2">
+        <div>
+          <p>Pincode</p>
+          <ion-input type="number" class="form-input" [(ngModel)]="address.pincode"></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div>
+          <p>State</p>
+          <div class="form-input state-wrapper" (click)="openStateModal()">
+            <div *ngIf="address.state">{{address.state}}</div>
+            <div *ngIf="!address.state">Select State</div>
+            <div>
+              <i class="flaticon-null-13"></i>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="12" style="text-align: center;">
+        <div>
+          <ion-button (click)="getLatLong()" [disabled]="disableShowArea()" shape="round" size="small">
+            Show Address on map
+          </ion-button>
+          <ion-text color="danger" *ngIf="showMap">
+            <p>Note: Drag the map to change the center</p>
+          </ion-text>
+          <br>
+        </div>
+      </ion-col>
+      <ion-col size="12" *ngIf="showMap">
+        <div id="centerMarker">
+          <img src="../../../../assets/img/location.png" title="Current center for region" />
+        </div>
+        <google-map height="500px" width="100%" [center]="center" #GoogleMap (centerChanged)='centerChanged()'>
+        </google-map>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+
+<ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveArea()" shape="round" [disabled]="disableSave()" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Done
+    </ion-button>
+  </div>
+</ion-footer>

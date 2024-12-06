@@ -1,0 +1,122 @@
+.ion-thumbnail {
+  width: 100%;
+  height: auto;
+}
+
+ion-col.img {
+  width: 100px;
+  max-width: 100px;
+}
+ion-col.name {
+  width: calc(100% - 310px);
+  max-width: calc(100% - 300px);
+}
+ion-col.action {
+  width: 128px;
+  max-width: 100px;
+}
+ion-col.reorder {
+  width: 75px;
+  max-width: 75px;
+}
+.product-active {
+  background-color: green;
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 30px;
+  border: 1px solid green;
+  margin-right: 5px;
+}
+.product-inactive {
+  background-color: red;
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 30px;
+  border: 1px solid red;
+  margin-right: 5px;
+}
+
+.categoryGrid:hover {
+  background: var(--ion-color-categories-background);
+}
+
+#middleColumn {
+  border-left: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+}
+
+#middleRightColumn {
+  border-right: 1px solid lightgray;
+}
+
+#scroll1 {
+  overflow: hidden;
+  height: 75vh;
+}
+
+#scroll2 {
+  overflow: hidden;
+  height: 75vh;
+}
+
+#scroll3 {
+  overflow: hidden;
+  height: 75vh;
+}
+
+#scroll1:hover,
+#scroll2:hover,
+#scroll3:hover {
+  overflow-y: auto;
+}
+
+ion-grid.hoverGrid:hover {
+  background-color: var(--ion-color-categories-background);
+}
+.titleArea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 5vh;
+}
+.titleFont {
+  font-size: medium;
+  font-weight: bold;
+}
+.inputArea {
+  height: 5vh;
+  text-align: center;
+  width: 100%;
+  font-weight: bold;
+  font-size: medium;
+  display: flex;
+  align-items: center;
+}
+.inputSearch {
+  height: 4vh;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border: 1px solid lightgray;
+}
+.flexStart {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flexEnd {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.main-row {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}

@@ -1,0 +1,233 @@
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+  }
+  
+  .upload-btn {
+    color: #fff;
+      background-color: var(--ion-color-primary);
+      padding: 8px 20px;
+      border-radius: 42px;
+      font-size: 16px;
+      font-weight: 400;
+      cursor: pointer;
+      height: 42px;
+      margin-left: 16px;
+  
+  }
+  
+  .upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    z-index: 99;
+  }
+  
+  
+  .product-color-name {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: capitalize;
+  }
+  
+  .color-selected {
+    display: flex;
+  }
+  
+  .color-code {
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+    min-width: 40px;
+  }
+  
+  .input-border{
+    border: 1px solid lightgray;
+    text-align: center
+  }
+  
+  ion-select{
+    border: 1px solid lightgray
+  }
+  
+  .form-input{
+    border: 1px solid gray;
+    background: var(--ion-color-light);
+    margin-top: 12px;
+    border-radius: 8px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+  }
+  .flex{
+    display: flex;
+    align-items: center;
+  }
+  
+  .product-search-wrap
+  {
+    text-align: center;
+    ion-searchbar{
+      width: 300px;
+      max-width: 100%;
+      margin: auto;
+    }
+  }
+  
+  /* width */
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+  
+  .filters-col{
+    border: 1px solid lightgray;
+    padding: 8px
+  }
+  
+  .list-header{
+    position: static;
+    margin:36px auto;
+  }
+  
+  .list-container{margin: 0;}
+  
+  ion-col.img{
+    width: calc(100% - 400px);
+    max-width: calc(100% - 400px);
+    text-align: center
+  }
+  ion-col.action{
+    width: 200px;
+    max-width: 200px;
+  }
+  ion-col.reorder{
+    width: 200px;
+    max-width: 200px;
+    text-align: center
+  }
+  
+  .info-txt {
+    color: red;
+    font-size: 14px;
+    font-weight: bold
+  }
+  
+  .m-l-5-p {
+    text-align: center
+  }
+  
+  .widget-type{color: #999;margin-left: 12px;}
+  .section{
+      display: block;
+      justify-content: center;
+      padding: 10px
+  }
+  .sectionBlock{
+      display: flex;
+      justify-content: space-between;
+      width: 1000px
+  }
+  .crop{
+      overflow: hidden;
+      width: 200px;
+      text-overflow: ellipsis;
+  }
+  
+  .padding-start-16{
+    --padding-start: 16px!important
+  }
+  
+  #scroll1{
+    overflow: hidden;
+    height: 80vh
+   }
+  
+   #scroll1:hover{
+    overflow-y: auto
+   }
+  
+   #scroll2{
+    overflow: hidden;
+    height: 75vh;
+   }
+  
+   #scroll2:hover{
+    overflow-y: auto
+   }
+  
+   @media screen and(min-height: 1200px) {
+    #scroll1{
+      height: 92vh;
+     }
+    #scroll2{
+      height: 87vh;
+     }
+   }
+  
+   .statusList{
+    text-align: center;
+    p{
+      font-size: medium;
+      border: 1px solid lightgray;
+      padding: 10px;
+      margin: 8px;
+      cursor: pointer;
+    }
+  }
+
+  .groupInput {
+    border: none;
+    border-bottom: 1px solid;
+    padding: 5px;
+    text-align: center;
+  }
+  
+  .groupSelect { 
+    width: 150px;
+  }
+  
+  .groupDisplay {
+    display: flex;
+    margin-left: 12px;
+  }
+  
+  .variantGroups {
+    margin-top: 0px !important;
+    text-align: center;
+  }
+  
+  .remove-icon{
+    cursor: pointer;
+    color: var(--ion-color-danger);
+    font-size: 16px;
+  }
+
+    
+  .variantImageSelect { 
+    border: 1px solid;
+    text-align: center;
+    max-width: 100%;
+    margin-top: 12px;
+  }

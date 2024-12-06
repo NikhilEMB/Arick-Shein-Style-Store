@@ -1,0 +1,29 @@
+.user-wrapper{
+    border: #aaa 1px solid;
+    margin-bottom: 16px;
+    .title{
+        background: #ddd;
+       
+    }
+}
+
+.roles{
+    padding: 16px;
+    .roles-list{
+        display: flex;
+        ion-item{
+            --background: #ccc;
+            border-radius: 100px;
+            margin-right: 8px;
+        }
+    }
+}
+
+
+.btn-wrap{
+    text-align: right;
+    padding: 16px;
+    ion-button{
+        margin-left: 16px;
+    }
+}

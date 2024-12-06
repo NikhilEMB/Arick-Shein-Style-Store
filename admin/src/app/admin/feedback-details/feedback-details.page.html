@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="all-feedbacks" class="custom-back-button" (click)="dismissModal()"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center>Feedback</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h6><strong>Description:</strong></h6>
+  <div class="fd-desc">
+    {{this.desc}}
+  </div>
+
+  <div *ngIf="images.length;">
+    <h6><strong>Images:</strong></h6>
+    <ion-slides pager="true" [options]="feedSlideOpts" loop="true" class="fd-images-wrapper">
+      <ion-slide *ngFor="let img of images; let i = index;" (click)="imageZoom(images, i)">
+        <div *ngIf="img.mob" class="fd-images"
+          [ngStyle]="{'background': 'url(' + img.mob + ') no-repeat center', 'background-size': 'contain'}"></div>
+        <div *ngIf="!img.mob && img.url" class="offer-images"
+          [ngStyle]="{'background': 'url(' + img.url + ') no-repeat center', 'background-size': 'contain'}"></div>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+
+</ion-content>

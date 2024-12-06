@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button class="custom-back-button">
+        <img src="assets/img/menu-icon-white.png" class="menu-img">
+      </ion-menu-button>
+    </ion-buttons>
+    <ion-title text-center>Offers</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="offers-content">
+
+  <div class="spinner" *ngIf="showLoader; else offersLoaded;">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+
+  <ng-template #offersLoaded>
+    <div class="no-data ion-text-center" *ngIf="!allOffers.length; else offersHasLength;">
+      <img src="assets/img/no-category.png" alt="">
+      <h6>No offers</h6>
+    </div>
+    <ng-template #offersHasLength>
+      <ion-card *ngFor="let offer of allOffers" class="offer-card">
+        <img img-preloader="{{offer.images[0].mob}}" *ngIf="offer.images && offer.images.length === 1; else useSlider" class="offer-images">
+        <ng-template #useSlider>
+          <ion-slides pager="true" [options]="offerSlideOpts" loop="true" *ngIf="offer.images && offer.images.length">
+            <ion-slide *ngFor="let img of offer.images; let i = index;">
+              <div class="offer-images"
+                [ngStyle]="{'background': 'url(' + img.mob + ') no-repeat center', 'background-size': 'contain'}"></div>
+            </ion-slide>
+          </ion-slides>
+        </ng-template>
+        <ion-card-header>
+          <ion-card-title>{{offer.name}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content [innerHtml]="offer.description" *ngIf="offer.description">
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+  </ng-template>
+
+</ion-content>

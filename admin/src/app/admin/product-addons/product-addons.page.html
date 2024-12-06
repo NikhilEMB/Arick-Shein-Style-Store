@@ -1,0 +1,139 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start">
+      <img src="../../../assets/img/shop-logo.png" />
+    </div>
+    <ion-title>Product Addons</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4" id="scroll1">
+          <ion-button class="addTempBtn" expand='block' (click)="addTemplate()">Add Template</ion-button>
+          <div class="groupWrapper">
+            <div class="groupItem" *ngFor="let item of addOnsData; index as i " (click)="changeAddOn(i)"
+              [ngClass]="activeTile === i ? 'tile-bg-active' : 'tile-bg-inactive'">
+              <div class="itemFlex">
+                <p class="groupName">{{item.name}}</p>
+              </div>
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col size="8" id="scroll2">
+          <ng-container *ngIf="selectedAddOn;">
+            <ion-col size="12">
+              <div style="text-align: center;">
+                <ion-button (click)="saveAddOns()" shape="round" class="btn-1 i-start" color="success">
+                  <i class="flaticon-null-20 margin-icon"></i>
+                  Save
+                </ion-button>
+                <br><br>
+              </div>
+              <div class="input-wrap">
+                <div class="flex-space-between">
+                  <ion-label>Template Name</ion-label>
+                  <ion-button color="danger" *ngIf="selectedAddOn?.id" (click)="askConfirmDelete()">Delete Template
+                  </ion-button>
+                </div>
+                <ion-input class="form-input" type="text" [(ngModel)]="selectedAddOn.name" placeholder="Template name">
+                </ion-input>
+              </div>
+            </ion-col>
+            <ng-container *ngFor="let item of selectedAddOn.sections; index as i">
+              <ion-row class="sectionBox">
+                <ion-col size="12">
+                  <div class="input-wrap">
+                    <div class="flex-space-between">
+                      <ion-label for="">Section Name</ion-label>
+                      <ion-button color="danger" (click)="removeSection(i)">Delete Section</ion-button>
+                    </div>
+                    <ion-input class="form-input" type="text" [(ngModel)]="item.name" placeholder="Section name">
+                    </ion-input>
+                  </div>
+                </ion-col>
+                <ion-col size="12">
+                  <div class="flexJustify">
+                    <div class="flex">
+                      <div class="toggle-btn">
+                        <label class="switch">
+                          <input type="checkbox" [checked]="item.active" (click)="toggleCheckBox(i,'active')">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                      <ion-label>Active</ion-label>
+                    </div>
+                    <div class="flex">
+                      <div class="toggle-btn">
+                        <label class="switch">
+                          <input type="checkbox" [checked]="item.multiple" (click)="toggleCheckBox(i,'multiple')">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                      <ion-label>Allow user to select multiple options</ion-label>
+                    </div>
+                    <div class="flex">
+                      <div class="toggle-btn">
+                        <label class="switch">
+                          <input type="checkbox" [checked]="item.required" (click)="toggleCheckBox(i,'required')">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                      <ion-label>Mandatory</ion-label>
+                    </div>
+                  </div>
+
+                  <div class="optionsList">
+                    <div class="inputWrapper">
+                      <input class="slotInput" type="text" #name placeholder="Option name">
+                      <input class="slotInput" type="number" #price placeholder="Enter price">
+                    </div>
+                    <ion-button fill="outline" color="dark" (click)="addOption(i, name, price)">
+                      add option
+                    </ion-button>
+                  </div>
+
+                  <div class="optionsList" *ngFor="let option of item.options;index as j">
+                    <div class="inputWrapper">
+                      <input class="slotInput" type="text" [(ngModel)]="option.name" placeholder="Option name">
+                      <input class="slotInput" type="number" [(ngModel)]="option.price" placeholder="Enter price">
+                    </div>
+                    <ion-button class="slotBtn" fill="clear" (click)="removeOption(i,j)">
+                      <i class="flaticon-null-21"></i>
+                    </ion-button>
+                  </div>
+
+                </ion-col>
+              </ion-row>
+            </ng-container>
+
+            <ion-row class="flexCenter">
+              <ion-col size="6">
+                <ion-button expand="block" (click)="addSection()">add section</ion-button>
+              </ion-col>
+            </ion-row>
+          </ng-container>
+          <ng-container *ngIf="!selectedAddOn;">
+            <h3 class="text-center">No Template Found !</h3>
+          </ng-container>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </div>
+</ion-content>
+
+<!-- <ion-footer no-border class="page-footer">
+  <div class="main-container">
+    <ion-button (click)="saveAddOns()" shape="round" class="btn-1 i-start" color="success">
+      <i class="flaticon-null-20 margin-icon"></i>
+      Save
+    </ion-button>
+  </div>
+</ion-footer> -->

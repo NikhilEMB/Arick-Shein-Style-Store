@@ -1,0 +1,27 @@
+.vertical-align-end{
+    display: flex;
+    align-items: end;
+    justify-content: center;
+}
+.red{
+  color: red;
+}
+.arrowDown, .arrowActive {
+  font-size: 14px !important;
+}
+.arrowActive {
+  transform: rotate(-90deg);
+}
+
+.data-table{  
+    ion-col{
+    border: 1px solid gray;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    user-select: text;
+  }
+  
+  ion-row:first-child{
+    background: lightgray
+  }
+}

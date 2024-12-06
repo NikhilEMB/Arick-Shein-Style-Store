@@ -1,0 +1,147 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title>Wallet / cashback's Setting</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<super-tabs no-shadow no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Settings</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>Cashbacks</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+
+  <super-tabs-container>
+    <super-tab>
+      <ion-content class="content-wrapper">
+        <div class="main-container">
+        <div class="spinner" *ngIf="showLoader; else walletDataLoaded;">
+          <ion-spinner color="primary"></ion-spinner>
+        </div>
+
+        <ng-template #walletDataLoaded>
+          <ion-list lines="none">
+
+            <ion-item>
+              <ion-label>Active</ion-label>
+              <div class="toggle-btn" slot="end">
+                <label class="switch" style="top: 0px;">
+                  <input type="checkbox" (click)="walletActiveToggle()" [checked]="active">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </ion-item>
+
+            <ion-item>
+              <ion-label class="ion-text-wrap">Maximum amount in user's wallet</ion-label>
+              <ion-input slot="end" class="input-box" type="number" [(ngModel)]="maxUserWalletAmnt"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label class="ion-text-wrap">Minimum order amount to use cashback</ion-label>
+              <ion-input slot="end" class="input-box" type="number" [(ngModel)]="minOrderAmnt"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label class="ion-text-wrap">Maximum amount can be used from cashback in an order</ion-label>
+              <ion-input slot="end" class="input-box" type="number" [(ngModel)]="maxWalletAmntPerOrder"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label class="ion-text-wrap">Amount as Cashback for new users</ion-label>
+              <ion-input slot="end" class="input-box" type="number" [(ngModel)]="newUserWalletAmnt"></ion-input>
+            </ion-item>
+
+            <div class="btn-wrap">
+              <ion-button (click)="addWalletAmountAlert()" fill="outline" shape="round">
+                add money to all user's wallet
+              </ion-button>
+            </div>
+
+          </ion-list>
+        </ng-template>
+        <div class="page-footer">
+          <ion-button (click)="saveWalletSettings()"shape="round" class="btn-1 i-start" color="success">
+            <i class="flaticon-null-20 margin-icon"></i>
+            Save
+          </ion-button>
+        </div>
+      </div>
+      </ion-content>
+      <!-- <ion-footer no-border class="page-footer">
+        <div class="main-container">
+          <ion-button (click)="saveWalletSettings()"shape="round" class="btn-1 i-start" color="success">
+            <i class="flaticon-null-20 margin-icon"></i>
+            Save
+          </ion-button>
+        </div>
+      </ion-footer> -->
+    </super-tab>
+
+    <super-tab>
+      <ion-content class="content-wrapper">
+        <div class="main-container">
+        <div class="spinner" *ngIf="showCashbackLoader; else cashbacksListLoaded;">
+          <ion-spinner color="primary"></ion-spinner>
+        </div>
+        <ion-row class="btn-wrap">
+          <ion-button (click)="addCashbackAlert()" fill="outline" shape="round" size="small">
+            Add Cashback
+          </ion-button>
+        </ion-row>
+        <ng-template #cashbacksListLoaded>
+          <div *ngIf="!cashbacks.length; else cashbacksHasLength;" class="no-cashbacks">
+            No data in Cashback List
+          </div>
+          <ng-template #cashbacksHasLength>
+            <ion-list lines="none">
+              <div style="text-align: center;">
+                <ion-label>Cashback List</ion-label>
+              </div>
+              <div *ngFor="let cb of cashbacks; let i = index;">
+                <ion-item>
+                  <ion-label>Cashback {{i + 1}}</ion-label>
+                  <ion-icon name="trash" (click)="deleteCashbackConfirm(cb.id)"></ion-icon>
+                </ion-item>
+                <ion-item>
+                  <ion-label class="ion-text-wrap">Order Amount</ion-label>
+                  <ion-input slot="end" class="input-box" [value]="cb.orderAmount" readOnly (click)="showEditToast()"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label class="ion-text-wrap">Cashback</ion-label>
+                  <ion-input slot="end" class="input-box" [value]="cb.cashback" readOnly (click)="showEditToast()"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label class="ion-text-wrap">No. of times cashback issued to a user</ion-label>
+                  <ion-input slot="end" class="input-box" [value]="cb.perUser" readOnly (click)="showEditToast()"></ion-input>
+                </ion-item>
+                <ion-item-divider *ngIf="i !== (cashbacks.length - 1)"></ion-item-divider>
+              </div>
+            </ion-list>
+          </ng-template>
+        </ng-template>
+        </div>
+      </ion-content>
+      <!-- <div class="footer-super-tabs">
+        <ion-footer (click)="addCashbackAlert()">
+          <ion-grid>
+            <ion-row class="ion-justify-content-center ion-align-items-center">
+              <div class="app-footer-text">
+                add new<span><i class="flaticon-null-20 app-footer-icon"></i></span>
+              </div>
+            </ion-row>
+          </ion-grid>
+        </ion-footer>
+      </div> -->
+    </super-tab>
+
+  </super-tabs-container>
+</super-tabs>
+

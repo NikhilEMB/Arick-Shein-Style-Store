@@ -1,0 +1,156 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title text-center>Email & SMS Settings</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<super-tabs no-shadow no-border>
+  <super-tabs-toolbar slot="top">
+    <super-tab-button>
+      <ion-label>Email Settings</ion-label>
+    </super-tab-button>
+    <super-tab-button>
+      <ion-label>SMS Settings</ion-label>
+    </super-tab-button>
+  </super-tabs-toolbar>
+  <super-tabs-container swipeEnabled="false">
+    <!-- Email Tab -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <div class="flex-label">
+                    <ion-label>Send Custom Emails with Sendgrid</ion-label>
+                    <ion-toggle [(ngModel)]="emailSettings.active"></ion-toggle>
+                  </div>
+                </div>
+              </ion-col>
+              <ion-col size="12" *ngIf="emailSettings.active">
+                <div class="input-wrap">
+                  <ion-label>Email</ion-label>
+                  <ion-input class="form-input" [(ngModel)]="emailSettings.email"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12" *ngIf="emailSettings.active">
+                <div class="input-wrap">
+                  <ion-label>API Key</ion-label>
+                  <ion-input type="text" class="form-input" [(ngModel)]="emailSettings.apiKey"></ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+      <ion-footer no-border class="page-footer">
+        <div class="main-container">
+          <ion-button (click)="saveEmailSettings()" [disabled] = disableEmailSave()
+            shape="round" class="btn-1 i-start" color="success">
+            <i class="flaticon-null-20 margin-icon"></i>
+            Save Email Settings
+          </ion-button>
+        </div>
+      </ion-footer>
+    </super-tab>
+
+    <!-- SMS Tab -->
+    <super-tab>
+      <ion-content>
+        <div class="main-container fixed-height">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <div class="input-wrap">
+                  <div class="flex-label">
+                    <ion-label>Send Custom SMS with Twilio</ion-label>
+                    <ion-toggle [(ngModel)]="smsSettings.active"></ion-toggle>
+                  </div>
+                </div>
+              </ion-col>
+              <ion-col size="12" *ngIf="smsSettings.active">
+                <div class="input-wrap">
+                  <ion-label>Account SID</ion-label>
+                  <ion-input type="text" class="form-input" [(ngModel)]="smsSettings.accountSid"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12" *ngIf="smsSettings.active">
+                <div class="input-wrap">
+                  <ion-label>Auth Token</ion-label>
+                  <ion-input type="text" class="form-input" [(ngModel)]="smsSettings.authToken"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12" *ngIf="smsSettings.active">
+                <div class="input-wrap">
+                  <ion-label>Valid Twilio number</ion-label>
+                  <ion-input type="text" class="form-input" placeholder="Ex: +1312626****" [(ngModel)]="smsSettings.twilioNumber"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12">
+                <div class="flex-label">
+                  <ion-label>Set your own msg91 credentials:</ion-label>
+                  <ion-toggle [(ngModel)]="smsSettings.msg91.active"></ion-toggle>
+                </div>
+              </ion-col>
+              <ion-col size="12" *ngIf="smsSettings.msg91.active">
+                <div class="input-wrap">
+                  <ion-label>SMS Sender Id:</ion-label>
+                  <ion-input type="text" class="form-input" [(ngModel)]="smsSettings.msg91.smsSenderId"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12" *ngIf="smsSettings.msg91.active">
+                <div class="input-wrap">
+                  <ion-label>SMS Key:</ion-label>
+                  <ion-input type="text" class="form-input" [(ngModel)]="smsSettings.msg91.smsKey"></ion-input>
+                </div>
+              </ion-col>
+              <br>
+              <p *ngIf="smsSettings.msg91.active" style="text-decoration: underline;margin: 5px;">Template Ids</p>
+              <br>
+              <ion-col size="12" *ngIf="smsSettings.msg91.active">
+                <div class="input-wrap">
+                  <ion-label>Confirmed: </ion-label>
+                  <ion-input type="text" class="form-input" [(ngModel)]="smsSettings.msg91.templateId.confirmed"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12" *ngIf="smsSettings.msg91.active">
+                <div class="input-wrap">
+                  <ion-label>Cancelled: </ion-label>
+                  <ion-input type="text" class="form-input" [(ngModel)]="smsSettings.msg91.templateId.cancelled"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12" *ngIf="smsSettings.msg91.active">
+                <div class="input-wrap">
+                  <ion-label>Delivered: </ion-label>
+                  <ion-input type="text" class="form-input" [(ngModel)]="smsSettings.msg91.templateId.delivered"></ion-input>
+                </div>
+              </ion-col>
+              <ion-col size="12" *ngIf="smsSettings.msg91.active">
+                <div class="input-wrap">
+                  <ion-label>Dispatched: </ion-label>
+                  <ion-input type="text" class="form-input" [(ngModel)]="smsSettings.msg91.templateId.dispatched"></ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-content>
+      <ion-footer no-border class="page-footer">
+        <div class="main-container">
+          <ion-button (click)="saveSmsSettings()" [disabled]="disableSmsSave()"
+            shape="round" class="btn-1 i-start" color="success">
+            <i class="flaticon-null-20 margin-icon"></i>
+            Save SMS Settings
+          </ion-button>
+        </div>
+      </ion-footer>
+    </super-tab>
+
+  </super-tabs-container>
+</super-tabs>

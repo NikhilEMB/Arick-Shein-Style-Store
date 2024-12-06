@@ -1,0 +1,63 @@
+
+  ion-toggle{
+      margin-top: -10px
+  }
+
+  .toggle{
+    display: flex;
+    margin: 0% auto
+  }
+  
+  .data-field{
+    display: block;
+  }
+
+.list-header{
+    position: relative;
+    width: 53.5vw;
+}
+
+.list-container{
+    margin-top: 90px;
+    width: 52vw;
+    ion-grid{
+        ion-row{
+        border-bottom: var(--ion-color-medium) 1px solid;
+        // margin-left: 5vw;
+        ion-col{
+            justify-content: center;
+            display: inline-flex;
+        }
+        }
+    }
+}
+
+.f-d-c {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .m-s-btn {
+    margin-top: 15px;
+    }
+}
+
+.name{
+    width: 60vw;
+    max-width: 60vw;
+}
+
+ion-input{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+  ion-col{
+    border: 1px solid gray;
+    padding-top: 10px;
+    padding-bottom: 10px
+  }
+  
+  ion-row:first-child{
+    background: lightgray
+  }

@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-menu-button slot="start" class="menu-btn">
+      <ion-icon slot="icon-only" name="menu"></ion-icon>
+    </ion-menu-button>
+    <div class="header-logo" slot="start"><img src="../../../assets/img/shop-logo.png"></div>
+    <ion-title class="ion-text-center">Blogs</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main-container">
+    <div class="flexInput">
+      <input [(ngModel)]='newPageName' placeholder="Enter name of blog" />
+      <ion-button (click)="addPage()" class="btn-sml i-start m-s-btn">
+        + Add Blog
+      </ion-button>
+    </div>
+
+    <div class="list-header">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col class="name">
+            <p>Name</p>
+          </ion-col>
+          <ion-col class="name">
+            <p>Sections</p>
+          </ion-col>
+          <ion-col class="name">
+            <p>Action</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <!-- heading -->
+    <div class="list-container">
+      <ion-grid class="ion-no-padding">
+        <ng-container *ngFor="let item of pages; index as i">
+          <ion-row class="alignCenter">
+            <ion-col class="name">
+              <p class="ion-text-capitalize" *ngIf="item.name">{{item.name}}</p>
+            </ion-col>
+            <ion-col class="name">
+              <p class="ion-text-capitalize" *ngIf="item.sections">{{item.sections.length}}</p>
+              <p class="ion-text-capitalize" *ngIf="!item.sections">0</p>
+            </ion-col>
+            <ion-col class="action">
+              <ion-button (click)="editPage(item.id,item.name)" class="btn-sml i-start" fill="outline" shape="round">
+                Edit
+              </ion-button>&nbsp;&nbsp;
+              <ion-button (click)="deletePage(item.id)" class="btn-sml i-start m-s-btn" fill="outline" shape="round">
+                Delete
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ng-container>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>
