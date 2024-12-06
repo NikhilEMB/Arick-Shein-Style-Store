@@ -66,9 +66,9 @@ function getShopifyReceiverCreds () {
   return {
     status: true,
     data: {
-      storeName: 'miniwesst.myshopify.com',
-      apiKey: '92a9cb6e288a9d7d961ca929172628ba',
-      accessToken: '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'
+      storeName: '',
+      apiKey: '',
+      accessToken: ''
     }
   }
 }
